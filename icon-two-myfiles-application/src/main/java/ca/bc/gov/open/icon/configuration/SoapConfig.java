@@ -29,7 +29,7 @@ import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
 @Configuration
 @Slf4j
 public class SoapConfig extends WsConfigurerAdapter {
-
+public static final String SOAP_NAMESPACE =  "http://reeks.bcgov/ICON2_MyFiles.Source.MyFiles.ws:MyFiles";
     @Bean
     public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(
             ApplicationContext applicationContext) {
