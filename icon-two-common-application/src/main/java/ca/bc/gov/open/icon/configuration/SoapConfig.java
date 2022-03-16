@@ -152,4 +152,25 @@ public class SoapConfig extends WsConfigurerAdapter {
         wsdl11Definition.setWsdl(new ClassPathResource("wsdl/TomStoneInfo.wsdl"));
         return wsdl11Definition;
     }
+
+    @Bean(name = "ICON2.Source.TrustAccount.ws.provider:TrustAccount")
+    public Wsdl11Definition TrustAccountWSDL() {
+        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/TrustAccount.wsdl"));
+        return wsdl11Definition;
+    }
+
+    @Bean(name = "ICON2.Source.Version.ws.provider:PackageInfo")
+    public Wsdl11Definition PackageInfoWSDL() {
+        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/PackageInfo.wsdl"));
+        return wsdl11Definition;
+    }
+
+    @Bean(name = "ICON2.Source.VisitSchedule.ws.provider:VisitSchedule")
+    public Wsdl11Definition VisitScheduleWSDL() {
+        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/VisitSchedule.wsdl"));
+        return wsdl11Definition;
+    }
 }

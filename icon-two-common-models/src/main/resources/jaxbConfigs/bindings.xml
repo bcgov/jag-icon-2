@@ -54,5 +54,23 @@
         </jxb:schemaBindings>
     </jxb:bindings>
 
+    <jxb:bindings schemaLocation="../xsdSchemas/trustaccount-models-1.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="ca.bc.gov.open.icon.trustaccount"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../xsdSchemas/packageinfo-models-1.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="ca.bc.gov.open.icon.packageinfo"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../xsdSchemas/visitschedule-models-1.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="ca.bc.gov.open.icon.visitschedule"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
 
 </jxb:bindings>
