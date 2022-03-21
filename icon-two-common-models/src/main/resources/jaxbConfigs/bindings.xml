@@ -72,5 +72,11 @@
         </jxb:schemaBindings>
     </jxb:bindings>
 
+    <jxb:bindings schemaLocation="../xsdSchemas/myinfo-models-1.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="ca.bc.gov.open.icon.myinfo"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
 
 </jxb:bindings>
