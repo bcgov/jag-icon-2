@@ -1,6 +1,10 @@
 package ca.bc.gov.open.icon.controllers;
 
 import ca.bc.gov.open.icon.audit.*;
+import ca.bc.gov.open.icon.auth.GetHasFunctionalAbility;
+import ca.bc.gov.open.icon.auth.GetHasFunctionalAbilityResponse;
+import ca.bc.gov.open.icon.auth.GetPreAuthorizeClient;
+import ca.bc.gov.open.icon.auth.GetPreAuthorizeClientResponse;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
@@ -33,7 +37,7 @@ public class AuthenticationController {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public AuthenticationControllerController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public AuthenticationController(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
@@ -117,7 +121,7 @@ public class AuthenticationController {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/logout-executed");
-        HttpEntity<LogoutExecuted> payload = new HttpEntity<>( logoutExecuted, new HttpHeaders());
+        HttpEntity<LogoutExcecuted> payload = new HttpEntity<>( logoutExecuted, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -144,5 +148,142 @@ public class AuthenticationController {
         }
     }
 
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @ResponsePayload
+    public IdleTimeoutExecutedResponse idleTimeoutExecuted (
+            @RequestPayload IdleTimeoutExecuted idleTimeoutExecuted )
+            throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "auth/idle-timeout-executed");
+        HttpEntity<IdleTimeoutExecuted> payload = new HttpEntity<>( idleTimeoutExecuted, new HttpHeaders());
+
+        try {
+            HttpEntity<Status> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            Status.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "idleTimeoutExecuted")));
+            IdleTimeoutExecutedResponse out = new  IdleTimeoutExecutedResponse();
+            out.setStatus(resp.getBody());
+            return out;
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "idleTimeoutExecuted",
+                                    ex.getMessage(),
+                                    idleTimeoutExecuted)));
+            throw new ORDSException();
+        }
+    }
+
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @ResponsePayload
+    public PrimaryAuthenticationCompletedResponse primaryAuthenticationCompleted (
+            @RequestPayload PrimaryAuthenticationCompleted primaryAuthenticationCompleted )
+            throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "auth/primary-auth-completed");
+        HttpEntity<PrimaryAuthenticationCompleted> payload = new HttpEntity<>( primaryAuthenticationCompleted, new HttpHeaders());
+
+        try {
+            HttpEntity<Status> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            Status.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "primaryAuthenticationCompleted")));
+            PrimaryAuthenticationCompletedResponse out = new  PrimaryAuthenticationCompletedResponse();
+            out.setStatus(resp.getBody());
+            return out;
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "primaryAuthenticationCompleted",
+                                    ex.getMessage(),
+                                    primaryAuthenticationCompleted)));
+            throw new ORDSException();
+        }
+    }
+
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @ResponsePayload
+    public GetPreAuthorizeClientResponse getPreAuthorizeClient (
+            @RequestPayload GetPreAuthorizeClient getPreAuthorizeClient )
+            throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "auth/pre-auth-client");
+        HttpEntity<GetPreAuthorizeClient> payload = new HttpEntity<>( getPreAuthorizeClient, new HttpHeaders());
+
+        try {
+            HttpEntity<GetPreAuthorizeClientResponse> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            GetPreAuthorizeClientResponse.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getPreAuthorizeClient")));
+            GetPreAuthorizeClientResponse out = new  GetPreAuthorizeClientResponse();
+            return out;
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getPreAuthorizeClient",
+                                    ex.getMessage(),
+                                    getPreAuthorizeClient)));
+            throw new ORDSException();
+        }
+    }
+
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @ResponsePayload
+    public GetHasFunctionalAbilityResponse getHasFunctionalAbility (
+            @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility )
+            throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability");
+        HttpEntity<GetHasFunctionalAbility> payload = new HttpEntity<>( getHasFunctionalAbility, new HttpHeaders());
+
+        try {
+            HttpEntity<GetHasFunctionalAbilityResponse> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            GetHasFunctionalAbilityResponse.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
+            GetHasFunctionalAbilityResponse out = new  GetHasFunctionalAbilityResponse();
+            return out;
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getHasFunctionalAbility",
+                                    ex.getMessage(),
+                                    getHasFunctionalAbility)));
+            throw new ORDSException();
+        }
+    }
 
 }
