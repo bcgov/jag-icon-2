@@ -30,6 +30,8 @@ import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
 @Slf4j
 public class SoapConfig extends WsConfigurerAdapter {
 
+    public static final String SOAP_NAMESPACE = "";
+
     @Bean
     public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(
             ApplicationContext applicationContext) {
