@@ -281,4 +281,39 @@ public class AuditController {
         }
     }
 
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @ResponsePayload
+    public HealthServiceRequestSubmittedResponse healthServiceRequestSubmitted (
+            @RequestPayload HealthServiceRequest healthServiceRequestSubmitted
+    )
+            throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "audit/session-parameters");
+        HttpEntity<GetSessionParameters> payload = new HttpEntity<>( getSessionParameters, new HttpHeaders());
+
+        try {
+            HttpEntity< GetSessionParametersResponse> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            GetSessionParametersResponse.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getSessionParameters")));
+            GetSessionParametersResponse out = new  GetSessionParametersResponse();
+            return out;
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getSessionParameters",
+                                    ex.getMessage(),
+                                    getSessionParameters)));
+            throw new ORDSException();
+        }
+    }
+
 }
