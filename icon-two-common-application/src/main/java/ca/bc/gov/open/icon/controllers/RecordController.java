@@ -49,11 +49,11 @@ public class RecordController {
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "record/record-completed");
+                UriComponentsBuilder.fromHttpUrl(host + "record/completed");
         HttpEntity<RecordCompleted> payload = new HttpEntity<>( recordCompleted, new HttpHeaders());
 
         try {
-            HttpEntity<RecordCompletedResponse resp =
+            HttpEntity<RecordCompletedResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
@@ -85,11 +85,11 @@ public class RecordController {
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "record/record-exception");
+                UriComponentsBuilder.fromHttpUrl(host + "record/exception");
         HttpEntity<RecordException> payload = new HttpEntity<>( recordException, new HttpHeaders());
 
         try {
-            HttpEntity<RecordExceptionResponse resp =
+            HttpEntity<RecordExceptionResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,

@@ -35,268 +35,194 @@ import java.util.Set;
 @Endpoint
 @Slf4j
 public class MessageController {
-    @Value("${icon.host}")
-    private String host = "https://127.0.0.1/";
+  @Value("${icon.host}")
+  private String host = "https://127.0.0.1/";
 
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+  private final RestTemplate restTemplate;
+  private final ObjectMapper objectMapper;
 
-    @Autowired
-    public MessageController(RestTemplate restTemplate, ObjectMapper objectMapper) {
-        this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
+  @Autowired
+  public MessageController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    this.restTemplate = restTemplate;
+    this.objectMapper = objectMapper;
+  }
+
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public MessageAccessedResponse messageAccessed(@RequestPayload MessageAccessed messageAccessed)
+      throws JsonProcessingException {
+
+    UriComponentsBuilder builder =
+        UriComponentsBuilder.fromHttpUrl(host + "message/accessed");
+    HttpEntity<MessageAccessed> payload = new HttpEntity<>(messageAccessed, new HttpHeaders());
+
+    try {
+      HttpEntity<Status> resp =
+          restTemplate.exchange(builder.toUriString(), HttpMethod.POST, payload, Status.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "messageAccessed")));
+      MessageAccessedResponse out = new MessageAccessedResponse();
+      out.setStatus(resp.getBody());
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS",
+                  "messageAccessed",
+                  ex.getMessage(),
+                  messageAccessed)));
+      throw new ORDSException();
     }
+  }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public GetMessageResponse getMessage(@RequestPayload GetMessage getMessage)
+      throws JsonProcessingException {
 
-    public MessageAccessedResponse messageAccessed (
-            @RequestPayload MessageAccessed messageAccessed
-    )
-            throws JsonProcessingException {
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/response");
+    HttpEntity<GetMessage> payload = new HttpEntity<>(getMessage, new HttpHeaders());
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/message-accessed");
-        HttpEntity<MessageAccessed> payload = new HttpEntity<>( messageAccessed, new HttpHeaders());
-
-        try {
-            HttpEntity<Status resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            Status.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "messageAccessed")));
-            MessageAccessedResponse out = new MessageAccessedResponse();
-            out.setStatus(resp.getBody());
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "messageAccessed",
-                                    ex.getMessage(),
-                                    messageAccessed)));
-            throw new ORDSException();
-        }
+    try {
+      HttpEntity<GetMessageResponse> resp =
+          restTemplate.exchange(
+              builder.toUriString(), HttpMethod.POST, payload, GetMessageResponse.class);
+      log.info(
+          objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getMessage")));
+      GetMessageResponse out = new GetMessageResponse();
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS", "getMessage", ex.getMessage(), getMessage)));
+      throw new ORDSException();
     }
+  }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public SetMessageDateResponse setMessageDate(@RequestPayload SetMessageDate setMessageDate)
+      throws JsonProcessingException {
 
-    public GetMessageResponse getMessage (
-            @RequestPayload GetMessage getMessage
-    )
-            throws JsonProcessingException {
+    UriComponentsBuilder builder =
+        UriComponentsBuilder.fromHttpUrl(host + "message/date");
+    HttpEntity<SetMessageDate> payload = new HttpEntity<>(setMessageDate, new HttpHeaders());
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/get-message");
-        HttpEntity<GetMessage> payload = new HttpEntity<>( getMessage, new HttpHeaders());
-
-        try {
-            HttpEntity<GetMessageResponse resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                           GetMessageResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getMessage")));
-            GetMessageResponse out = new GetMessageResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getMessage",
-                                    ex.getMessage(),
-                                    getMessage)));
-            throw new ORDSException();
-        }
+    try {
+      HttpEntity<SetMessageDateResponse> resp =
+          restTemplate.exchange(
+              builder.toUriString(), HttpMethod.POST, payload, SetMessageDateResponse.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "setMessageDate")));
+      SetMessageDateResponse out = new SetMessageDateResponse();
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS", "setMessageDate", ex.getMessage(), setMessageDate)));
+      throw new ORDSException();
     }
+  }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public SetMessageDetailsResponse setMessageDetails(
+      @RequestPayload SetMessageDetails setMessageDetails) throws JsonProcessingException {
 
-    public SetMessageDateResponse setMessageDate (
-            @RequestPayload SetMessageDate setMessageDate
-    )
-            throws JsonProcessingException {
+    UriComponentsBuilder builder =
+        UriComponentsBuilder.fromHttpUrl(host + "message/details");
+    HttpEntity<SetMessageDetails> payload = new HttpEntity<>(setMessageDetails, new HttpHeaders());
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/set-message-date");
-        HttpEntity<SetMessageDate> payload = new HttpEntity<>( setMessageDate, new HttpHeaders());
-
-        try {
-            HttpEntity<SetMessageDateResponse resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            SetMessageDateResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "setMessageDate")));
-            SetMessageDateResponse out = new SetMessageDateResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "setMessageDate",
-                                    ex.getMessage(),
-                                    setMessageDate)));
-            throw new ORDSException();
-        }
+    try {
+      HttpEntity<SetMessageDetailsResponse> resp =
+          restTemplate.exchange(
+              builder.toUriString(), HttpMethod.POST, payload, SetMessageDetailsResponse.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "setMessageDetails")));
+      SetMessageDetailsResponse out = new SetMessageDetailsResponse();
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS",
+                  "setMessageDetails",
+                  ex.getMessage(),
+                  setMessageDetails)));
+      throw new ORDSException();
     }
+  }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public GetMessagesResponse getMessages(@RequestPayload GetMessages getMessages)
+      throws JsonProcessingException {
 
-    public SetMessageDetailsResponse setMessageDetails (
-            @RequestPayload SetMessageDetails setMessageDetails
-    )
-            throws JsonProcessingException {
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/responses");
+    HttpEntity<GetMessages> payload = new HttpEntity<>(getMessages, new HttpHeaders());
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/set-message-details");
-        HttpEntity<SetMessageDetails> payload = new HttpEntity<>( setMessageDetails, new HttpHeaders());
-
-        try {
-            HttpEntity<SetMessageDetailsResponse resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            SetMessageDetailsResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "setMessageDetails")));
-            SetMessageDetailsResponse out = new SetMessageDetailsResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "setMessageDetails",
-                                    ex.getMessage(),
-                                    setMessageDetails)));
-            throw new ORDSException();
-        }
+    try {
+      HttpEntity<GetMessagesResponse> resp =
+          restTemplate.exchange(
+              builder.toUriString(), HttpMethod.POST, payload, GetMessagesResponse.class);
+      log.info(
+          objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getMessages")));
+      GetMessagesResponse out = new GetMessagesResponse();
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS", "getMessages", ex.getMessage(), getMessages)));
+      throw new ORDSException();
     }
+  }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public GetMessageDetailsResponse getMessageDetails(
+      @RequestPayload GetMessageDetails getMessageDetails) throws JsonProcessingException {
 
-    public GetMessagesResponse getMessages (
-            @RequestPayload GetMessages getMessages
-    )
-            throws JsonProcessingException {
+    UriComponentsBuilder builder =
+        UriComponentsBuilder.fromHttpUrl(host + "message/details");
+    HttpEntity<GetMessageDetails> payload = new HttpEntity<>(getMessageDetails, new HttpHeaders());
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/get-messages");
-        HttpEntity<GetMessages> payload = new HttpEntity<>( getMessages, new HttpHeaders());
-
-        try {
-            HttpEntity<GetMessagesResponse resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetMessagesResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getMessages")));
-            GetMessagesResponse out = new GetMessagesResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getMessages",
-                                    ex.getMessage(),
-                                    getMessages)));
-            throw new ORDSException();
-        }
+    try {
+      HttpEntity<GetMessageDetailsResponse> resp =
+          restTemplate.exchange(
+              builder.toUriString(), HttpMethod.POST, payload, GetMessageDetailsResponse.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "getMessageDetails")));
+      GetMessageDetailsResponse out = new GetMessageDetailsResponse();
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS",
+                  "getMessageDetails",
+                  ex.getMessage(),
+                  getMessageDetails)));
+      throw new ORDSException();
     }
-
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
-
-    public GetMessageDetailsResponse getMessageDetails (
-            @RequestPayload GetMessageDetails getMessageDetails
-    )
-            throws JsonProcessingException {
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/get-messages-details");
-        HttpEntity<GetMessageDetails> payload = new HttpEntity<>( getMessageDetails, new HttpHeaders());
-
-        try {
-            HttpEntity<GetMessageDetailsResponse resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetMessageDetailsResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getMessageDetails")));
-            GetMessageDetailsResponse out = new GetMessageDetailsResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getMessageDetails",
-                                    ex.getMessage(),
-                                    getMessageDetails)));
-            throw new ORDSException();
-        }
-    }
-
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
-
-    public GetMessageDetailsResponse getMessageDetails (
-            @RequestPayload GetMessageDetails getMessageDetails
-    )
-            throws JsonProcessingException {
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/get-messages-details");
-        HttpEntity<GetMessageDetails> payload = new HttpEntity<>( getMessageDetails, new HttpHeaders());
-
-        try {
-            HttpEntity<GetMessageDetailsResponse resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetMessageDetailsResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getMessageDetails")));
-            GetMessageDetailsResponse out = new GetMessageDetailsResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getMessageDetails",
-                                    ex.getMessage(),
-                                    getMessageDetails)));
-            throw new ORDSException();
-        }
-    }
+  }
 }

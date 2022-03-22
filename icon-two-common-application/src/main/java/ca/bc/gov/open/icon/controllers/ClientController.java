@@ -31,116 +31,108 @@ import provider.ws.tombstoneinfo.source.icon2.tombstoneinfo.GetTombStoneInfoResp
 @Endpoint
 @Slf4j
 public class ClientController {
-    @Value("${icon.host}")
-    private String host = "https://127.0.0.1/";
+  @Value("${icon.host}")
+  private String host = "https://127.0.0.1/";
 
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+  private final RestTemplate restTemplate;
+  private final ObjectMapper objectMapper;
 
-    @Autowired
-    public ClientController(RestTemplate restTemplate, ObjectMapper objectMapper) {
-        this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
+  @Autowired
+  public ClientController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    this.restTemplate = restTemplate;
+    this.objectMapper = objectMapper;
+  }
+
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public GetTombStoneInfoResponse getTombStoneInfo(
+      @RequestPayload GetTombStoneInfo getTombStoneInfo) throws JsonProcessingException {
+
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info");
+    HttpEntity<GetTombStoneInfo> payload = new HttpEntity<>(getTombStoneInfo, new HttpHeaders());
+
+    try {
+      HttpEntity<GetTombStoneInfoResponse> resp =
+          restTemplate.exchange(
+              builder.toUriString(), HttpMethod.POST, payload, GetTombStoneInfoResponse.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "getTombStoneInfo")));
+      GetTombStoneInfoResponse out = new GetTombStoneInfoResponse();
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS",
+                  "getTombStoneInfo",
+                  ex.getMessage(),
+                  getTombStoneInfo)));
+      throw new ORDSException();
     }
+  }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
-    public GetTombStoneInfoResponse getTombStoneInfo (
-            @RequestPayload GetTombStoneInfo getTombStoneInfo )
-            throws JsonProcessingException {
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public GetTrustAccountResponse getTrustAccount(@RequestPayload GetTrustAccount getTrustAccount)
+      throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "auth/tombstone-info");
-        HttpEntity<GetTombStoneInfo> payload = new HttpEntity<>( getTombStoneInfo, new HttpHeaders());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/trust-account");
+    HttpEntity<GetTrustAccount> payload = new HttpEntity<>(getTrustAccount, new HttpHeaders());
 
-        try {
-            HttpEntity<GetTombStoneInfoResponse> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetTombStoneInfoResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getTombStoneInfo")));
-            GetTombStoneInfoResponse out = new GetTombStoneInfoResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getTombStoneInfo",
-                                    ex.getMessage(),
-                                    getTombStoneInfo)));
-            throw new ORDSException();
-        }
+    try {
+      HttpEntity<GetTrustAccountResponse> resp =
+          restTemplate.exchange(
+              builder.toUriString(), HttpMethod.POST, payload, GetTrustAccountResponse.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "getTrustAccount")));
+      GetTrustAccountResponse out = new GetTrustAccountResponse();
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS",
+                  "getTrustAccount",
+                  ex.getMessage(),
+                  getTrustAccount)));
+      throw new ORDSException();
     }
+  }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
-    public GetTrustAccountResponse getTrustAccount (
-            @RequestPayload GetTrustAccount getTrustAccount )
-            throws JsonProcessingException {
+  @PayloadRoot(
+      namespace = SoapConfig.SOAP_NAMESPACE,
+      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+  @ResponsePayload
+  public GetVisitScheduleResponse getVisitSchedule(
+      @RequestPayload GetVisitSchedule getVisitSchedule) throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "trustaccount);
-        HttpEntity<GetTrustAccount> payload = new HttpEntity<>( getTrustAccount, new HttpHeaders());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule");
+    HttpEntity<GetVisitSchedule> payload = new HttpEntity<>(getVisitSchedule, new HttpHeaders());
 
-        try {
-            HttpEntity<GetTrustAccountResponse> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetTrustAccountResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getTrustAccount")));
-            GetTrustAccountResponse out = new GetTrustAccountResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getTrustAccount",
-                                    ex.getMessage(),
-                                    getTrustAccount)));
-            throw new ORDSException();
-        }
+    try {
+      HttpEntity<GetVisitScheduleResponse> resp =
+          restTemplate.exchange(
+              builder.toUriString(), HttpMethod.POST, payload, GetVisitScheduleResponse.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "getVisitSchedule")));
+      GetVisitScheduleResponse out = new GetVisitScheduleResponse();
+      return out;
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS",
+                  "getVisitSchedule",
+                  ex.getMessage(),
+                  getVisitSchedule)));
+      throw new ORDSException();
     }
-
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
-    public GetVisitScheduleResponse getVisitSchedule (
-            @RequestPayload GetVisitSchedule getVisitSchedule )
-            throws JsonProcessingException {
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "visit-schedule);
-                        HttpEntity<GetTrustAccount> payload = new HttpEntity<>( getVisitSchedule, new HttpHeaders());
-
-        try {
-            HttpEntity<GetVisitScheduleResponse> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetVisitScheduleResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getVisitSchedule")));
-            GetVisitScheduleResponse out = new GetVisitScheduleResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getVisitSchedule",
-                                    ex.getMessage(),
-                                    getVisitSchedule)));
-            throw new ORDSException();
-        }
-    }}
+  }
+}

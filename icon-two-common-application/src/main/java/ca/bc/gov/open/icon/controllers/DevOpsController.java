@@ -24,17 +24,15 @@ import provider.ws.tombstoneinfo.source.icon2.tombstoneinfo.GetTombStoneInfoResp
 @Endpoint
 @Slf4j
 public class DevOpsController {
-    {
-        @Value("${icon.host}")
-        private String host = "https://127.0.0.1/";
+    @Value("${icon.host}")
+    private String host = "https://127.0.0.1/";
 
-        private final RestTemplate restTemplate;
-        private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ClientController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public DevOpsController(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
-
 }

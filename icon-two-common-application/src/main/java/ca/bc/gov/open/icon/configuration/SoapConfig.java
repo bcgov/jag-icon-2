@@ -176,10 +176,10 @@ public class SoapConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
-    @Bean(name = "ICON2.Source.MyInfo.ws.provider:MyInfo")
-    public Wsdl11Definition MyInfoWSDL() {
+    @Bean(name = "ICON2.Source.ClientServices.ws.provider:MyInfo")
+    public Wsdl11Definition ClientServicesWSDL() {
         SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
-        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/MyInfo.wsdl"));
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/ClientServices.wsdl"));
         return wsdl11Definition;
     }
 }
