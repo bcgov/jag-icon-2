@@ -44,6 +44,7 @@ public class AuthenticationController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
+
     public ReauthenticationFailedResponse reauthenticationFailed (
             @RequestPayload ReauthenticationFailed reauthenticationFailed )
             throws JsonProcessingException {
@@ -79,6 +80,7 @@ public class AuthenticationController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
+
     public ReauthenticationSucceededResponse reauthenticationSucceeded (
             @RequestPayload ReauthenticationSucceeded reauthenticationSucceeded )
             throws JsonProcessingException {
@@ -115,6 +117,7 @@ public class AuthenticationController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
+
     public LogoutExcecutedResponse logoutExecuted (
             @RequestPayload LogoutExcecuted logoutExecuted )
             throws JsonProcessingException {
@@ -150,6 +153,7 @@ public class AuthenticationController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
+
     public IdleTimeoutExecutedResponse idleTimeoutExecuted (
             @RequestPayload IdleTimeoutExecuted idleTimeoutExecuted )
             throws JsonProcessingException {
@@ -185,6 +189,7 @@ public class AuthenticationController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
+
     public PrimaryAuthenticationCompletedResponse primaryAuthenticationCompleted (
             @RequestPayload PrimaryAuthenticationCompleted primaryAuthenticationCompleted )
             throws JsonProcessingException {
@@ -220,6 +225,7 @@ public class AuthenticationController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
+
     public GetPreAuthorizeClientResponse getPreAuthorizeClient (
             @RequestPayload GetPreAuthorizeClient getPreAuthorizeClient )
             throws JsonProcessingException {
@@ -254,6 +260,7 @@ public class AuthenticationController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
+
     public GetHasFunctionalAbilityResponse getHasFunctionalAbility (
             @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility )
             throws JsonProcessingException {

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+        targetNamespace="http://ws.phis.health.com">
+    <element name="synchronizeClient">
+        <complexType>
+            <sequence>
+                <element name="csNumber" type="xsd:string"/>
+                <element name="surname" type="xsd:string"/>
+                <element name="givenName1" type="xsd:string"/>
+                <element name="givenName2" type="xsd:string"/>
+                <element name="birthDate" type="xsd:string"/>
+                <element name="gender" type="xsd:string"/>
+                <element name="photoGuid" type="xsd:string"/>
+                <element name="probableDischargeDate" type="xsd:string"/>
+                <element name="outLocation" type="xsd:string"/>
+                <element name="outReason" type="xsd:string"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="synchronizeClientResponse">
+        <complexType/>
+    </element>
+    <element name="debug">
+        <complexType>
+            <sequence>
+                <element name="csNumber" type="xsd:string"/>
+                <element name="surname" type="xsd:string"/>
+                <element name="givenName1" type="xsd:string"/>
+                <element name="givenName2" type="xsd:string"/>
+                <element name="birthDate" type="xsd:string"/>
+                <element name="gender" type="xsd:string"/>
+                <element name="photoGuid" type="xsd:string"/>
+                <element name="probableDischargeDate" type="xsd:string"/>
+                <element name="outLocation" type="xsd:string"/>
+                <element name="outReason" type="xsd:string"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="debugResponse">
+        <complexType>
+            <sequence>
+                <element name="debugReturn" type="impl:ClientServiceDebug"/>
+            </sequence>
+        </complexType>
+    </element>
+    <complexType name="ClientInfo">
+        <sequence>
+            <element name="gender" nillable="true" type="xsd:string"/>
+            <element name="csNumber" nillable="true" type="xsd:string"/>
+            <element name="surname" nillable="true" type="xsd:string"/>
+            <element name="probableDischargeDate" nillable="true" type="xsd:string"/>
+            <element name="givenName2" nillable="true" type="xsd:string"/>
+            <element name="outLocation" nillable="true" type="xsd:string"/>
+            <element name="photoGuid" nillable="true" type="xsd:string"/>
+            <element name="outReason" nillable="true" type="xsd:string"/>
+            <element name="birthDate" nillable="true" type="xsd:string"/>
+            <element name="givenName1" nillable="true" type="xsd:string"/>
+        </sequence>
+    </complexType>
+    <complexType name="ClientServiceDebug">
+        <sequence>
+            <element name="inputValues" nillable="true" type="impl:ClientInfo"/>
+            <element name="pacValues" nillable="true" type="impl:ClientInfo"/>
+        </sequence>
+    </complexType>
+</schema>

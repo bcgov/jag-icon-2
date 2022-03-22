@@ -1,17 +1,14 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.audit.*;
+import ca.bc.gov.open.icon.auth.GetDeviceInfo;
+import ca.bc.gov.open.icon.auth.GetDeviceInfoResponse;
+import ca.bc.gov.open.icon.auth.GetUserInfo;
+import ca.bc.gov.open.icon.auth.GetUserInfoResponse;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
-import ca.bc.gov.open.icon.myfiles.*;
-import ca.bc.gov.open.icon.myinfo.GetClientHistory;
-import ca.bc.gov.open.icon.myinfo.GetClientHistoryResponse;
-import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
-import ca.bc.gov.open.icon.packageinfo.GetPackageInfoResponse;
-import ca.bc.gov.open.icon.session.GetSessionParameters;
-import ca.bc.gov.open.icon.session.GetSessionParametersResponse;
+import ca.bc.gov.open.icon.myinfo.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +23,12 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import provider.ws.healthservicerequest.source.icon2.hsr.GetHSRCount;
+import provider.ws.healthservicerequest.source.icon2.hsr.GetHSRCountResponse;
 
 @Endpoint
 @Slf4j
-public class AuditController {
+public class InformationController {
     @Value("${icon.host}")
     private String host = "https://127.0.0.1/";
 
@@ -37,7 +36,7 @@ public class AuditController {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public AuditController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public InformationController(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
@@ -45,34 +44,35 @@ public class AuditController {
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
-    public EServiceAccessedResponse  eServiceAccessed (
-            @RequestPayload EServiceAccessed eServiceAccessed)
+    public GetUserInfoResponse getUserInfo (
+            @RequestPayload GetUserInfo getUserInfo
+    )
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-accessed");
-        HttpEntity<EServiceAccessed> payload = new HttpEntity<>( eServiceAccessed, new HttpHeaders());
+                UriComponentsBuilder.fromHttpUrl(host + "information/get-user-info");
+        HttpEntity<GetUserInfo> payload = new HttpEntity<>( getUserInfo, new HttpHeaders());
 
         try {
-            HttpEntity<EServiceAccessedResponse> resp =
+            HttpEntity<GetUserInfoResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            EServiceAccessedResponse.class);
+                            GetUserInfoResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "eServiceAccessed")));
-            EServiceAccessedResponse out = new EServiceAccessedResponse();
+                            new RequestSuccessLog("Request Success", "getUserInfo")));
+            GetUserInfoResponse out = new GetUserInfoResponse();
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "eServiceAccessed",
+                                    "getUserInfo",
                                     ex.getMessage(),
-                                    eServiceAccessed)));
+                                    getUserInfo)));
             throw new ORDSException();
         }
     }
@@ -80,34 +80,35 @@ public class AuditController {
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
-    public HomeScreenAccessedResponse homeScreenAccessed (
-            @RequestPayload HomeScreenAccessed homeScreenAccessed )
+    public GetDeviceInfoResponse getDeviceInfo (
+            @RequestPayload GetDeviceInfo getDeviceInfo
+    )
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/home-service-accessed");
-        HttpEntity<EServiceAccessed> payload = new HttpEntity<>( homeScreenAccessed , new HttpHeaders());
+                UriComponentsBuilder.fromHttpUrl(host + "information/get-device-info");
+        HttpEntity<GetDeviceInfo> payload = new HttpEntity<>( getDeviceInfo, new HttpHeaders());
 
         try {
-            HttpEntity<HomeScreenAccessedResponse> resp =
+            HttpEntity<GetDeviceInfoResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            HomeScreenAccessedResponse.class);
+                            GetDeviceInfoResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "homeScreenAccessed")));
-            HomeScreenAccessedResponse out = new HomeScreenAccessedResponse();
+                            new RequestSuccessLog("Request Success", "getDeviceInfo")));
+            GetDeviceInfoResponse out = new GetDeviceInfoResponse();
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "homeScreenAccessed",
+                                    "getDeviceInfo",
                                     ex.getMessage(),
-                                    homeScreenAccessed)));
+                                    getDeviceInfo)));
             throw new ORDSException();
         }
     }
@@ -115,34 +116,35 @@ public class AuditController {
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
-    public SessionTimeoutExecutedResponse sessionTimeoutExecuted (
-            @RequestPayload SessionTimeoutExecuted sessionTimeoutExecuted )
+    public GetOrdersResponse getOrders (
+            @RequestPayload GetOrders getOrders
+    )
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/session-timeout");
-        HttpEntity<SessionTimeoutExecuted> payload = new HttpEntity<>( sessionTimeoutExecuted , new HttpHeaders());
+                UriComponentsBuilder.fromHttpUrl(host + "information/get-orders");
+        HttpEntity<GetOrders> payload = new HttpEntity<>( getOrders , new HttpHeaders());
 
         try {
-            HttpEntity<SessionTimeoutExecutedResponse> resp =
+            HttpEntity<GetOrdersResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            SessionTimeoutExecutedResponse.class);
+                            GetOrdersResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "sessionTimeoutExecuted")));
-            SessionTimeoutExecutedResponse out = new SessionTimeoutExecutedResponse();
+                            new RequestSuccessLog("Request Success", "getOrders")));
+            GetOrdersResponse out = new GetOrdersResponse();
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "sessionTimeoutExecuted",
+                                    "getOrders",
                                     ex.getMessage(),
-                                    sessionTimeoutExecuted)));
+                                    getOrders)));
             throw new ORDSException();
         }
     }
@@ -150,35 +152,35 @@ public class AuditController {
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
-    public EServiceFunctionAccessedResponse eServiceFunctionAccessed (
-            @RequestPayload EServiceFunctionAccessed eServiceFunctionAccessed )
+    public GetProgramsResponse getPrograms (
+            @RequestPayload GetPrograms getPrograms
+    )
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-function-access");
-        HttpEntity<EServiceFunctionAccessed> payload = new HttpEntity<>( eServiceFunctionAccessed , new HttpHeaders());
+                UriComponentsBuilder.fromHttpUrl(host + "information/get-programs");
+        HttpEntity<GetPrograms> payload = new HttpEntity<>( getPrograms , new HttpHeaders());
 
         try {
-            HttpEntity<Status> resp =
+            HttpEntity<GetProgramsResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            Status.class);
+                            GetProgramsResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "eServiceFunctionAccessed")));
-            EServiceFunctionAccessedResponse out = new EServiceFunctionAccessedResponse();
-            out.setStatus(resp.getBody());
+                            new RequestSuccessLog("Request Success", "getPrograms")));
+            GetProgramsResponse out = new GetProgramsResponse();
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "eServiceFunctionAccessed",
+                                    "getPrograms",
                                     ex.getMessage(),
-                                    eServiceFunctionAccessed)));
+                                    getPrograms)));
             throw new ORDSException();
         }
     }
@@ -186,34 +188,35 @@ public class AuditController {
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
-    public GetClientHistoryResponse getClientHistory (
-            @RequestPayload GetClientHistory getClientHistory )
+    public GetLocationsResponse getLocations (
+            @RequestPayload GetLocations getLocations
+    )
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-function-access");
-        HttpEntity<GetClientHistory> payload = new HttpEntity<>( getClientHistory, new HttpHeaders());
+                UriComponentsBuilder.fromHttpUrl(host + "information/get-locations");
+        HttpEntity<GetLocations> payload = new HttpEntity<>( getLocations, new HttpHeaders());
 
         try {
-            HttpEntity<GetClientHistoryResponse> resp =
+            HttpEntity<GetLocationsResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            GetClientHistoryResponse.class);
+                            GetLocationsResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getClientHistory")));
-            GetClientHistoryResponse out = new GetClientHistoryResponse();
+                            new RequestSuccessLog("Request Success", "getLocations")));
+            GetLocationsResponse out = new GetLocationsResponse();
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "getClientHistory",
+                                    "getLocations",
                                     ex.getMessage(),
-                                    getClientHistory)));
+                                    getLocations)));
             throw new ORDSException();
         }
     }
@@ -221,34 +224,72 @@ public class AuditController {
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
-    public GetPackageInfoResponse getPackageInfo (
-            @RequestPayload GetPackageInfo getPackageInfo )
+    public GetConditionsResponse getConditions (
+            @RequestPayload GetConditions getConditions
+    )
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/package-info");
-        HttpEntity<GetPackageInfo> payload = new HttpEntity<>( getPackageInfo, new HttpHeaders());
+                UriComponentsBuilder.fromHttpUrl(host + "information/get-conditions");
+        HttpEntity<GetConditions> payload = new HttpEntity<>( getConditions, new HttpHeaders());
 
         try {
-            HttpEntity< GetPackageInfoResponse> resp =
+            HttpEntity<GetConditionsResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            GetPackageInfoResponse.class);
+                           GetConditionsResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getPackageInfo")));
-            GetPackageInfoResponse out = new  GetPackageInfoResponse();
+                            new RequestSuccessLog("Request Success", "getConditions")));
+            GetConditionsResponse out = new GetConditionsResponse();
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "getPackageInfo",
+                                    "getConditions",
                                     ex.getMessage(),
-                                    getPackageInfo)));
+                                    getConditions)));
+            throw new ORDSException();
+        }
+    }
+
+
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @ResponsePayload
+
+    public GetOrdersConditionsResponse getOrdersConditions (
+            @RequestPayload GetOrdersConditions getOrdersConditions
+    )
+            throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "information/get-conditions");
+        HttpEntity<GetOrdersConditions> payload = new HttpEntity<>( getOrdersConditions, new HttpHeaders());
+
+        try {
+            HttpEntity<GetOrdersConditionsResponse resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            GetOrdersConditionsResponse.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getOrdersConditions")));
+            GetOrdersConditionsResponse out = new GetOrdersConditionsResponse();
+            return out;
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getOrdersConditions",
+                                    ex.getMessage(),
+                                    getOrdersConditions)));
             throw new ORDSException();
         }
     }
@@ -256,34 +297,35 @@ public class AuditController {
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
-    public GetSessionParametersResponse getSessionParameters (
-            @RequestPayload GetSessionParameters getSessionParameters )
+    public GetDatesResponse getDates (
+            @RequestPayload GetDates getDates
+    )
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/session-parameters");
-        HttpEntity<GetSessionParameters> payload = new HttpEntity<>( getSessionParameters, new HttpHeaders());
+                UriComponentsBuilder.fromHttpUrl(host + "information/get-dates");
+        HttpEntity<GetDates> payload = new HttpEntity<>( getDates, new HttpHeaders());
 
         try {
-            HttpEntity< GetSessionParametersResponse> resp =
+            HttpEntity<GetDatesResponse resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            GetSessionParametersResponse.class);
+                            GetDatesResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getSessionParameters")));
-            GetSessionParametersResponse out = new  GetSessionParametersResponse();
+                            new RequestSuccessLog("Request Success", "getDates")));
+            GetDatesResponse out = new GetDatesResponse();
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "getSessionParameters",
+                                    "getDates",
                                     ex.getMessage(),
-                                    getSessionParameters)));
+                                    getDates)));
             throw new ORDSException();
         }
     }
