@@ -43,8 +43,8 @@ public class AuditController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
+      localPart = "eServiceAccessed")
   @ResponsePayload
   public EServiceAccessedResponse eServiceAccessed(
       @RequestPayload EServiceAccessed eServiceAccessed) throws JsonProcessingException {
@@ -54,13 +54,13 @@ public class AuditController {
     HttpEntity<EServiceAccessed> payload = new HttpEntity<>(eServiceAccessed, new HttpHeaders());
 
     try {
-      HttpEntity<EServiceAccessedResponse> resp =
-          restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, EServiceAccessedResponse.class);
+      HttpEntity<Status> resp =
+          restTemplate.exchange(builder.toUriString(), HttpMethod.POST, payload, Status.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "eServiceAccessed")));
       EServiceAccessedResponse out = new EServiceAccessedResponse();
+      out.setStatus(resp.getBody());
       return out;
     } catch (Exception ex) {
       log.error(
@@ -75,24 +75,26 @@ public class AuditController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
+      localPart = "homeScreenAccessed")
   @ResponsePayload
   public HomeScreenAccessedResponse homeScreenAccessed(
       @RequestPayload HomeScreenAccessed homeScreenAccessed) throws JsonProcessingException {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "audit/home-screen-accessed");
-    HttpEntity<HomeScreenAccessed> payload = new HttpEntity<>(homeScreenAccessed, new HttpHeaders());
+    HttpEntity<HomeScreenAccessed> payload =
+        new HttpEntity<>(homeScreenAccessed, new HttpHeaders());
 
     try {
-      HttpEntity<HomeScreenAccessedResponse> resp =
+      HttpEntity<Status> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, HomeScreenAccessedResponse.class);
+              builder.toUriString(), HttpMethod.POST, payload, Status.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "homeScreenAccessed")));
       HomeScreenAccessedResponse out = new HomeScreenAccessedResponse();
+      out.setStatus(resp.getBody());
       return out;
     } catch (Exception ex) {
       log.error(
@@ -107,8 +109,8 @@ public class AuditController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
+      localPart = "sessionTimeoutExecuted")
   @ResponsePayload
   public SessionTimeoutExecutedResponse sessionTimeoutExecuted(
       @RequestPayload SessionTimeoutExecuted sessionTimeoutExecuted)
@@ -119,16 +121,17 @@ public class AuditController {
         new HttpEntity<>(sessionTimeoutExecuted, new HttpHeaders());
 
     try {
-      HttpEntity<SessionTimeoutExecutedResponse> resp =
+      HttpEntity<Status> resp =
           restTemplate.exchange(
               builder.toUriString(),
               HttpMethod.POST,
               payload,
-              SessionTimeoutExecutedResponse.class);
+              Status.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "sessionTimeoutExecuted")));
       SessionTimeoutExecutedResponse out = new SessionTimeoutExecutedResponse();
+      out.setStatus(resp.getBody());
       return out;
     } catch (Exception ex) {
       log.error(
@@ -143,8 +146,8 @@ public class AuditController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit"
+      localPart = "eServiceFunctionAccessed")
   @ResponsePayload
   public EServiceFunctionAccessedResponse eServiceFunctionAccessed(
       @RequestPayload EServiceFunctionAccessed eServiceFunctionAccessed)
@@ -177,25 +180,25 @@ public class AuditController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
+      localPart = "getClientHistory")
   @ResponsePayload
   public GetClientHistoryResponse getClientHistory(
       @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-function-access");
-    HttpEntity<GetClientHistory> payload = new HttpEntity<>(getClientHistory, new HttpHeaders());
+        UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-function-access")
+                .queryParam("xmlString", getClientHistory.getXMLString())
+                .queryParam("userTokenString", getClientHistory.getUserTokenString());
 
     try {
       HttpEntity<GetClientHistoryResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetClientHistoryResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetClientHistoryResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getClientHistory")));
-      GetClientHistoryResponse out = new GetClientHistoryResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -209,24 +212,22 @@ public class AuditController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Version.ws.provider:PackageInfo",
+      localPart = "getPackageInfo")
   @ResponsePayload
   public GetPackageInfoResponse getPackageInfo(@RequestPayload GetPackageInfo getPackageInfo)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "audit/package-info");
-    HttpEntity<GetPackageInfo> payload = new HttpEntity<>(getPackageInfo, new HttpHeaders());
 
     try {
       HttpEntity<GetPackageInfoResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetPackageInfoResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetPackageInfoResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getPackageInfo")));
-      GetPackageInfoResponse out = new GetPackageInfoResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -237,8 +238,8 @@ public class AuditController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Common.ws.provider:SessionParameter",
+      localPart = "getSessionParameters")
   @ResponsePayload
   public GetSessionParametersResponse getSessionParameters(
       @RequestPayload GetSessionParameters getSessionParameters) throws JsonProcessingException {
@@ -251,12 +252,11 @@ public class AuditController {
     try {
       HttpEntity<GetSessionParametersResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetSessionParametersResponse.class);
+              builder.toUriString(), HttpMethod.GET, payload, GetSessionParametersResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getSessionParameters")));
-      GetSessionParametersResponse out = new GetSessionParametersResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
