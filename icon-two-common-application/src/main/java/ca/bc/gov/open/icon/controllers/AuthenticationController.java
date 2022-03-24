@@ -42,7 +42,7 @@ public class AuthenticationController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit", localPart = "reauthenticationFailed")
     @ResponsePayload
 
     public ReauthenticationFailedResponse reauthenticationFailed (
@@ -78,7 +78,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit", localPart = "reauthenticationSucceeded")
     @ResponsePayload
 
     public ReauthenticationSucceededResponse reauthenticationSucceeded (
@@ -87,7 +87,9 @@ public class AuthenticationController {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/reauthentication-succeeded");
-        HttpEntity<ReauthenticationSucceeded> payload = new HttpEntity<>( reauthenticationSucceeded, new HttpHeaders());
+        Reauthentication inner = reauthenticationSucceeded != null && reauthenticationSucceeded.getReauthentication() != null
+                ? reauthenticationSucceeded.getReauthentication() : new Reauthentication();
+        HttpEntity<Reauthentication> payload = new HttpEntity<>( inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -99,6 +101,7 @@ public class AuthenticationController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "reauthenticationSucceeded")));
+
             ReauthenticationSucceededResponse out = new  ReauthenticationSucceededResponse();
             out.setStatus(resp.getBody());
             return out;
@@ -115,7 +118,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit", localPart = "logoutExecuted")
     @ResponsePayload
 
     public LogoutExcecutedResponse logoutExecuted (
@@ -124,7 +127,8 @@ public class AuthenticationController {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/logout-executed");
-        HttpEntity<LogoutExcecuted> payload = new HttpEntity<>( logoutExecuted, new HttpHeaders());
+        Logout inner = logoutExecuted != null && logoutExecuted.getLogout() != null ? logoutExecuted.getLogout() : new Logout();
+        HttpEntity<Logout> payload = new HttpEntity<>( inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -151,7 +155,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit", localPart = "idleTimeoutExecuted")
     @ResponsePayload
 
     public IdleTimeoutExecutedResponse idleTimeoutExecuted (
@@ -160,7 +164,11 @@ public class AuthenticationController {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/idle-timeout-executed");
-        HttpEntity<IdleTimeoutExecuted> payload = new HttpEntity<>( idleTimeoutExecuted, new HttpHeaders());
+    IdleTimeout inner =
+        idleTimeoutExecuted != null && idleTimeoutExecuted.getIdleTimeout() != null
+            ? idleTimeoutExecuted.getIdleTimeout()
+            : new IdleTimeout();
+        HttpEntity<IdleTimeout> payload = new HttpEntity<>( inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -187,16 +195,17 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit", localPart = "primaryAuthentication") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
     public PrimaryAuthenticationCompletedResponse primaryAuthenticationCompleted (
-            @RequestPayload PrimaryAuthenticationCompleted primaryAuthenticationCompleted )
+            @RequestPayload PrimaryAuthenticationCompleted primaryAuthentication )
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/primary-auth-completed");
-        HttpEntity<PrimaryAuthenticationCompleted> payload = new HttpEntity<>( primaryAuthenticationCompleted, new HttpHeaders());
+        PrimaryAuthentication inner = primaryAuthentication != null && primaryAuthentication.getPrimaryAuthentication() : new PrimaryAuthentication();
+        HttpEntity<PrimaryAuthentication> payload = new HttpEntity<>( inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -207,7 +216,7 @@ public class AuthenticationController {
                             Status.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "primaryAuthenticationCompleted")));
+                            new RequestSuccessLog("Request Success", "primaryAuthentication")));
             PrimaryAuthenticationCompletedResponse out = new  PrimaryAuthenticationCompletedResponse();
             out.setStatus(resp.getBody());
             return out;
@@ -216,9 +225,9 @@ public class AuthenticationController {
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "primaryAuthenticationCompleted",
+                                    "primaryAuthentication",
                                     ex.getMessage(),
-                                    primaryAuthenticationCompleted)));
+                                    primaryAuthentication)));
             throw new ORDSException();
         }
     }
