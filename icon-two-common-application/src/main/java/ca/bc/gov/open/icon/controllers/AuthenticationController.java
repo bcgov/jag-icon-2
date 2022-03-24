@@ -204,7 +204,9 @@ public class AuthenticationController {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/primary-auth-completed");
-        PrimaryAuthentication inner = primaryAuthentication != null && primaryAuthentication.getPrimaryAuthentication() : new PrimaryAuthentication();
+    PrimaryAuthentication inner =
+        primaryAuthentication != null && primaryAuthentication.getPrimaryAuthentication() != null
+            ? primaryAuthentication.getPrimaryAuthentication() : new PrimaryAuthentication();
         HttpEntity<PrimaryAuthentication> payload = new HttpEntity<>( inner, new HttpHeaders());
 
         try {
@@ -232,7 +234,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth", localPart = "getPreAuthorizeClient")
     @ResponsePayload
 
     public GetPreAuthorizeClientResponse getPreAuthorizeClient (
@@ -247,14 +249,15 @@ public class AuthenticationController {
             HttpEntity<GetPreAuthorizeClientResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.POST,
+                            HttpMethod.GET,
                             payload,
                             GetPreAuthorizeClientResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getPreAuthorizeClient")));
             GetPreAuthorizeClientResponse out = new  GetPreAuthorizeClientResponse();
-            return out;
+            return resp.getBody();
+
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -267,7 +270,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth", localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
     public GetHasFunctionalAbilityResponse getHasFunctionalAbility (
@@ -275,21 +278,25 @@ public class AuthenticationController {
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability");
+                UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability")
+                        .queryParam("xmlString", getHasFunctionalAbility.getXMLString())
+                        .queryParam("userTokenString", getHasFunctionalAbility.getUserTokenString());
         HttpEntity<GetHasFunctionalAbility> payload = new HttpEntity<>( getHasFunctionalAbility, new HttpHeaders());
+
+
 
         try {
             HttpEntity<GetHasFunctionalAbilityResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.POST,
+                            HttpMethod.GET,
                             payload,
                             GetHasFunctionalAbilityResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
             GetHasFunctionalAbilityResponse out = new  GetHasFunctionalAbilityResponse();
-            return out;
+      return resp.getBody();
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
