@@ -86,7 +86,6 @@ public class ClientController {
             .queryParam("xmlString", getTrustAccount.getXMLString())
             .queryParam("userTokenString", getTrustAccount.getUserTokenString());
 
-
     try {
       HttpEntity<GetTrustAccountResponse> resp =
           restTemplate.exchange(
@@ -108,24 +107,24 @@ public class ClientController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.VisitSchedule.ws.provider:VisitSchedule",
+      localPart = "getVisitScheduleResponse")
   @ResponsePayload
   public GetVisitScheduleResponse getVisitSchedule(
       @RequestPayload GetVisitSchedule getVisitSchedule) throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule");
-    HttpEntity<GetVisitSchedule> payload = new HttpEntity<>(getVisitSchedule, new HttpHeaders());
-
-    try {
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule")
+            .queryParam("xmlString",getVisitSchedule.getXMLString())
+            .queryParam("userTokenString", getVisitSchedule.getUserTokenString());
+        try {
       HttpEntity<GetVisitScheduleResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetVisitScheduleResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetVisitScheduleResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getVisitSchedule")));
       GetVisitScheduleResponse out = new GetVisitScheduleResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
