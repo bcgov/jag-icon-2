@@ -44,24 +44,25 @@ public class ClientController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo",
+      localPart = "getTombStoneInfo")
   @ResponsePayload
   public GetTombStoneInfoResponse getTombStoneInfo(
       @RequestPayload GetTombStoneInfo getTombStoneInfo) throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info");
-    HttpEntity<GetTombStoneInfo> payload = new HttpEntity<>(getTombStoneInfo, new HttpHeaders());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info")
+            .queryParam("xmlString", getTombStoneInfo.getXMLString());
 
     try {
       HttpEntity<GetTombStoneInfoResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetTombStoneInfoResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetTombStoneInfoResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getTombStoneInfo")));
       GetTombStoneInfoResponse out = new GetTombStoneInfoResponse();
-      return out;
+      return resp.getBody();
+      //return out;
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -75,24 +76,25 @@ public class ClientController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.TrustAccount.ws.provider:TrustAccount",
+      localPart = "getTrustAccount")
   @ResponsePayload
   public GetTrustAccountResponse getTrustAccount(@RequestPayload GetTrustAccount getTrustAccount)
       throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/trust-account");
-    HttpEntity<GetTrustAccount> payload = new HttpEntity<>(getTrustAccount, new HttpHeaders());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/trust-account")
+            .queryParam("xmlString", getTrustAccount.getXMLString())
+            .queryParam("userTokenString", getTrustAccount.getUserTokenString());
+
 
     try {
       HttpEntity<GetTrustAccountResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetTrustAccountResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetTrustAccountResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getTrustAccount")));
-      GetTrustAccountResponse out = new GetTrustAccountResponse();
-      return out;
+          return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
