@@ -42,20 +42,20 @@ public class InformationController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth",
+      localPart = "getUserInfo")
   @ResponsePayload
   public GetUserInfoResponse getUserInfo(@RequestPayload GetUserInfo getUserInfo)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
-    HttpEntity<GetUserInfo> payload = new HttpEntity<>(getUserInfo, new HttpHeaders());
-
-    try {
+        UriComponentsBuilder.fromHttpUrl(host + "information/user-info")
+                .queryParam("xmlString", getUserInfo.getXMLString())
+                .queryParam("UserTokenString", getUserInfo.getUserTokenString());
+       try {
       HttpEntity<GetUserInfoResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetUserInfoResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetUserInfoResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getUserInfo")));
       GetUserInfoResponse out = new GetUserInfoResponse();
@@ -70,25 +70,25 @@ public class InformationController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth",
+      localPart = "getDeviceInfo")
   @ResponsePayload
   public GetDeviceInfoResponse getDeviceInfo(@RequestPayload GetDeviceInfo getDeviceInfo)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
-    HttpEntity<GetDeviceInfo> payload = new HttpEntity<>(getDeviceInfo, new HttpHeaders());
-
-    try {
+        UriComponentsBuilder.fromHttpUrl(host + "information/device-info")
+                .queryParam("xmlString", getDeviceInfo.getXMLString())
+                .queryParam("userTokenString", getDeviceInfo.getUserTokenString());
+        try {
       HttpEntity<GetDeviceInfoResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetDeviceInfoResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetDeviceInfoResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getDeviceInfo")));
       GetDeviceInfoResponse out = new GetDeviceInfoResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -99,8 +99,8 @@ public class InformationController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
+      localPart = "")
   @ResponsePayload
   public GetOrdersResponse getOrders(@RequestPayload GetOrders getOrders)
       throws JsonProcessingException {
@@ -127,7 +127,7 @@ public class InformationController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
+      namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
       localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
   @ResponsePayload
   public GetProgramsResponse getPrograms(@RequestPayload GetPrograms getPrograms)
@@ -155,7 +155,7 @@ public class InformationController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
+      namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
       localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
   @ResponsePayload
   public GetLocationsResponse getLocations(@RequestPayload GetLocations getLocations)
@@ -184,7 +184,7 @@ public class InformationController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
+      namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
       localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
   @ResponsePayload
   public GetConditionsResponse getConditions(@RequestPayload GetConditions getConditions)
@@ -213,7 +213,7 @@ public class InformationController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
+      namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
       localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
   @ResponsePayload
   public GetOrdersConditionsResponse getOrdersConditions(
@@ -246,7 +246,7 @@ public class InformationController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
+      namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
       localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
   @ResponsePayload
   public GetDatesResponse getDates(@RequestPayload GetDates getDates)

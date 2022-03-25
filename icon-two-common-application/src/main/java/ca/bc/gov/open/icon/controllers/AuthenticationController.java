@@ -264,7 +264,6 @@ public class AuthenticationController {
         UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability")
             .queryParam("xmlString", getHasFunctionalAbility.getXMLString())
             .queryParam("userTokenString", getHasFunctionalAbility.getUserTokenString());
-   // HttpEntity<GetHasFunctionalAbility> payload = new HttpEntity<>(getHasFunctionalAbility, new HttpHeaders());
 
     try {
       HttpEntity<GetHasFunctionalAbilityResponse> resp =

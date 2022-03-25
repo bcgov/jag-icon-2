@@ -62,7 +62,6 @@ public class ClientController {
               new RequestSuccessLog("Request Success", "getTombStoneInfo")));
       GetTombStoneInfoResponse out = new GetTombStoneInfoResponse();
       return resp.getBody();
-      //return out;
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(

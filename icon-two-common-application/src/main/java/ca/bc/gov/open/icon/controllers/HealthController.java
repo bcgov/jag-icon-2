@@ -1,8 +1,6 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.audit.HealthServiceRequest;
-import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmittedResponse;
-import ca.bc.gov.open.icon.audit.Status;
+import ca.bc.gov.open.icon.audit.*;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
@@ -41,16 +39,22 @@ public class HealthController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
+      localPart = "HealthServiceRequestSubmitted")
   @ResponsePayload
   public HealthServiceRequestSubmittedResponse healthServiceRequestSubmitted(
-      @RequestPayload HealthServiceRequest healthServiceRequestSubmitted)
+      @RequestPayload HealthServiceRequestSubmitted healthServiceRequestSubmitted)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "health/service-rqst-submitted");
-    HttpEntity<HealthServiceRequest> payload =
+
+    HealthServiceRequest inner =
+            healthServiceRequestSubmitted != null && healthServiceRequestSubmitted.getHealthServiceRequest() != null
+                    ? healthServiceRequestSubmitted.getHealthServiceRequest()
+                    : new HealthServiceRequest();
+    HttpEntity<HealthServiceRequest> payload = new HttpEntity<>(inner, new HttpHeaders());
+    HttpEntity<HealthServiceRequestSubmitted> payload =
         new HttpEntity<>(healthServiceRequestSubmitted, new HttpHeaders());
 
     try {
@@ -75,30 +79,30 @@ public class HealthController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.HealthServiceRequest.ws.provider:HSR",
+      localPart = "getHealthServiceRequestHistory") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
   @ResponsePayload
   public GetHealthServiceRequestHistoryResponse getHealthServiceRequestHistory(
       @RequestPayload GetHealthServiceRequestHistory getHealthServiceRequestHistory)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "health/service-rqst-history");
-    HttpEntity<GetHealthServiceRequestHistory> payload =
-        new HttpEntity<>(getHealthServiceRequestHistory, new HttpHeaders());
+        UriComponentsBuilder.fromHttpUrl(host + "health/service-rqst-history")
+                .queryParam("xmlString", getHealthServiceRequestHistory.getXMLString())
+                .queryParam("userTokenString", getHealthServiceRequestHistory.getUserTokenString());
 
     try {
       HttpEntity<GetHealthServiceRequestHistoryResponse> resp =
           restTemplate.exchange(
               builder.toUriString(),
-              HttpMethod.POST,
-              payload,
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
               GetHealthServiceRequestHistoryResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getHealthServiceRequestHistory")));
       GetHealthServiceRequestHistoryResponse out = new GetHealthServiceRequestHistoryResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -112,23 +116,24 @@ public class HealthController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.HealthServiceRequest.ws.provider:HSR",
+      localPart = "publishHSR")
   @ResponsePayload
   public PublishHSRResponse publishHSR(@RequestPayload PublishHSR publishHSR)
       throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
-    HttpEntity<PublishHSR> payload = new HttpEntity<>(publishHSR, new HttpHeaders());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr")
+            .queryParam( "xmlString", publishHSR.getXMLString())
+            .queryParam("UserTokenString", publishHSR.setUserTokenString());
 
     try {
       HttpEntity<PublishHSRResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, PublishHSRResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), PublishHSRResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "publishHSR")));
       PublishHSRResponse out = new PublishHSRResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -139,23 +144,24 @@ public class HealthController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.HealthServiceRequest.ws.provider:HSR",
+      localPart = "getHSRCount")
   @ResponsePayload
   public GetHSRCountResponse getHSRCount(@RequestPayload GetHSRCount getHSRCount)
       throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "health/hsr-count");
-    HttpEntity<GetHSRCount> payload = new HttpEntity<>(getHSRCount, new HttpHeaders());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "health/hsr-count")
+            .queryParam("xmlString", getHSRCount.getXMLString())
+            .queryParam("userTokenString", getHSRCount.getUserTokenString());
 
     try {
       HttpEntity<GetHSRCountResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetHSRCountResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetHSRCountResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getHSRCount")));
       GetHSRCountResponse out = new GetHSRCountResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(

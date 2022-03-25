@@ -40,7 +40,7 @@ public class ErrorHandlingController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Common.ws.provider:ErrorHandling", localPart = "setErrorMessageResponse") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
     @ResponsePayload
 
     public SetErrorMessageResponse setErrorMessage (

@@ -1,100 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        <xsd:schema targetNamespace="ICON2.Source.MyInfo.ws.provider:MyInfo" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="ICON2.Source.MyInfo.ws.provider:MyInfo">
-            <xsd:complexType name="getOrders">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                    <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getOrdersResponse">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="Error">
-                <xsd:sequence>
-                    <xsd:element name="Reason" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getPrograms">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                    <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getProgramsResponse">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getLocations">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                    <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getLocationsResponse">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getClientHistory">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                    <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getClientHistoryResponse">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getConditions">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                    <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getConditionsResponse">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getOrdersConditions">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                    <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getOrdersConditionsResponse">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getDates">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                    <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:complexType name="getDatesResponse">
-                <xsd:sequence>
-                    <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-            <xsd:element name="getPrograms" type="tns:getPrograms"/>
-            <xsd:element name="getProgramsResponse" type="tns:getProgramsResponse"/>
-            <xsd:element name="Error" type="tns:Error"/>
-            <xsd:element name="getLocations" type="tns:getLocations"/>
-            <xsd:element name="getLocationsResponse" type="tns:getLocationsResponse"/>
-            <xsd:element name="getOrders" type="tns:getOrders"/>
-            <xsd:element name="getOrdersResponse" type="tns:getOrdersResponse"/>
-            <xsd:element name="getDates" type="tns:getDates"/>
-            <xsd:element name="getDatesResponse" type="tns:getDatesResponse"/>
-            <xsd:element name="getClientHistory" type="tns:getClientHistory"/>
-            <xsd:element name="getClientHistoryResponse" type="tns:getClientHistoryResponse"/>
-            <xsd:element name="getConditions" type="tns:getConditions"/>
-            <xsd:element name="getConditionsResponse" type="tns:getConditionsResponse"/>
-            <xsd:element name="getOrdersConditions" type="tns:getOrdersConditions"/>
-            <xsd:element name="getOrdersConditionsResponse" type="tns:getOrdersConditionsResponse"/>
-        </xsd:schema>
+<xsd:schema targetNamespace="ICON2.Source.MyInfo.ws.provider:MyInfo" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="ICON2.Source.MyInfo.ws.provider:MyInfo">
+
+    <xsd:element name="getOrders">
+        <xsd:complexType name="getOrders">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getOrdersResponse">
+        <xsd:complexType name="getOrdersResponse">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Error">
+        <xsd:complexType name="Error">
+            <xsd:sequence>
+                <xsd:element name="Reason" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <xsd:element name="getPrograms">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getProgramsResponse">
+        <xsd:complexType name="getProgramsResponse">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getLocations">
+        <xsd:complexType name="getLocations">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getLocationsResponse">
+        <xsd:complexType name="getLocationsResponse">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getClientHistory">
+        <xsd:complexType name="getClientHistory">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getClientHistoryResponse">
+        <xsd:complexType name="getClientHistoryResponse">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getConditions">
+        <xsd:complexType name="getConditions">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getConditionsResponse">
+        <xsd:complexType name="getConditionsResponse">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getOrdersConditions">
+        <xsd:complexType name="getOrdersConditions">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getOrdersConditionsResponse">
+        <xsd:complexType name="getOrdersConditionsResponse">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getDates">
+        <xsd:complexType name="getDates">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getDatesResponse">
+        <xsd:complexType name="getDatesResponse">
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
