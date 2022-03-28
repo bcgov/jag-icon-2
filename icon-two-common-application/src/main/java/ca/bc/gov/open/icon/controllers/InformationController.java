@@ -50,16 +50,19 @@ public class InformationController {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "information/user-info")
-                .queryParam("xmlString", getUserInfo.getXMLString())
-                .queryParam("userTokenString", getUserInfo.getUserTokenString());
-       try {
+            .queryParam("xmlString", getUserInfo.getXMLString())
+            .queryParam("userTokenString", getUserInfo.getUserTokenString());
+    try {
       HttpEntity<GetUserInfoResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetUserInfoResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetUserInfoResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getUserInfo")));
       GetUserInfoResponse out = new GetUserInfoResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -78,12 +81,15 @@ public class InformationController {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "information/device-info")
-                .queryParam("xmlString", getDeviceInfo.getXMLString())
-                .queryParam("userTokenString", getDeviceInfo.getUserTokenString());
-        try {
+            .queryParam("xmlString", getDeviceInfo.getXMLString())
+            .queryParam("userTokenString", getDeviceInfo.getUserTokenString());
+    try {
       HttpEntity<GetDeviceInfoResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetDeviceInfoResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetDeviceInfoResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getDeviceInfo")));
@@ -107,18 +113,21 @@ public class InformationController {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "information/orders")
-                .queryParam("xmlString", getOrders.getXMLString())
-                .queryParam("userTokenString",getOrders.getUserTokenString());
+            .queryParam("xmlString", getOrders.getXMLString())
+            .queryParam("userTokenString", getOrders.getUserTokenString());
     HttpEntity<GetOrders> payload = new HttpEntity<>(getOrders, new HttpHeaders());
 
     try {
       HttpEntity<GetOrdersResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetOrdersResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetOrdersResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getOrders")));
       GetOrdersResponse out = new GetOrdersResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -137,18 +146,21 @@ public class InformationController {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "information/programs")
-                .queryParam("xmlString", getPrograms.getXMLString())
-                .queryParam("userTokenString", getPrograms.getUserTokenString());
+            .queryParam("xmlString", getPrograms.getXMLString())
+            .queryParam("userTokenString", getPrograms.getUserTokenString());
     HttpEntity<GetPrograms> payload = new HttpEntity<>(getPrograms, new HttpHeaders());
 
     try {
       HttpEntity<GetProgramsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetProgramsResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetProgramsResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getPrograms")));
       GetProgramsResponse out = new GetProgramsResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -167,19 +179,22 @@ public class InformationController {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "information/locations")
-                .queryParam("xmlString", getLocations.getXMLString())
-                .queryParam("userTokenString", getLocations.getUserTokenString());
+            .queryParam("xmlString", getLocations.getXMLString())
+            .queryParam("userTokenString", getLocations.getUserTokenString());
     HttpEntity<GetLocations> payload = new HttpEntity<>(getLocations, new HttpHeaders());
 
     try {
       HttpEntity<GetLocationsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetLocationsResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetLocationsResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getLocations")));
       GetLocationsResponse out = new GetLocationsResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -198,19 +213,22 @@ public class InformationController {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "information/conditions")
-                .queryParam("xmlString", getConditions.getXMLString())
-                .queryParam("userTokenString", getConditions.getUserTokenString());
+            .queryParam("xmlString", getConditions.getXMLString())
+            .queryParam("userTokenString", getConditions.getUserTokenString());
     HttpEntity<GetConditions> payload = new HttpEntity<>(getConditions, new HttpHeaders());
 
     try {
       HttpEntity<GetConditionsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetConditionsResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetConditionsResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getConditions")));
       GetConditionsResponse out = new GetConditionsResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -229,20 +247,23 @@ public class InformationController {
 
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions")
-                .queryParam("xmlString", getOrdersConditions.getXMLString())
-                .queryParam("userTokenString", getOrdersConditions.getUserTokenString());
+            .queryParam("xmlString", getOrdersConditions.getXMLString())
+            .queryParam("userTokenString", getOrdersConditions.getUserTokenString());
     HttpEntity<GetOrdersConditions> payload =
         new HttpEntity<>(getOrdersConditions, new HttpHeaders());
 
     try {
       HttpEntity<GetOrdersConditionsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetOrdersConditionsResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetOrdersConditionsResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getOrdersConditions")));
       GetOrdersConditionsResponse out = new GetOrdersConditionsResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -271,11 +292,14 @@ public class InformationController {
     try {
       HttpEntity<GetDatesResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetDatesResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetDatesResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getDates")));
       GetDatesResponse out = new GetDatesResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
