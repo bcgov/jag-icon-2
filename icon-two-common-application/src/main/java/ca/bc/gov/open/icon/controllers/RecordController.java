@@ -25,91 +25,79 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.util.Map;
+
 @Endpoint
 @Slf4j
 public class RecordController {
-    @Value("${icon.host}")
-    private String host = "https://127.0.0.1/";
+  @Value("${icon.host}")
+  private String host = "https://127.0.0.1/";
 
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+  private final RestTemplate restTemplate;
+  private final ObjectMapper objectMapper;
 
-    @Autowired
-    public RecordController(RestTemplate restTemplate, ObjectMapper objectMapper) {
-        this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
+  @Autowired
+  public RecordController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    this.restTemplate = restTemplate;
+    this.objectMapper = objectMapper;
+  }
+
+  @PayloadRoot(
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "recordCompleted")
+  @ResponsePayload
+  public RecordCompletedResponse recordCompleted(@RequestPayload RecordCompleted recordCompleted)
+      throws JsonProcessingException {
+
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "record/completed");
+    HttpEntity<RecordCompleted> payload = new HttpEntity<>(recordCompleted, new HttpHeaders());
+
+    try {
+      HttpEntity<Map> resp =
+          restTemplate.exchange(builder.toUriString(), HttpMethod.POST, payload, Map.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "recordCompleted")));
+      return new RecordCompletedResponse();
+
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS",
+                  "recordCompleted",
+                  ex.getMessage(),
+                  recordCompleted)));
+      throw new ORDSException();
     }
+  }
 
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
+  @PayloadRoot(
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "recordException")
+  @ResponsePayload
+  public RecordExceptionResponse recordException(@RequestPayload RecordException recordException)
+      throws JsonProcessingException {
 
-    public RecordCompletedResponse recordCompleted (
-            @RequestPayload RecordCompleted recordCompleted
-    )
-            throws JsonProcessingException {
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "record/exception");
+    HttpEntity<RecordException> payload = new HttpEntity<>(recordException, new HttpHeaders());
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "record/completed");
-        HttpEntity<RecordCompleted> payload = new HttpEntity<>( recordCompleted, new HttpHeaders());
-
-        try {
-            HttpEntity<RecordCompletedResponse> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            RecordCompletedResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "recordCompleted")));
-            RecordCompletedResponse out = new RecordCompletedResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "recordCompleted",
-                                    ex.getMessage(),
-                                    recordCompleted)));
-            throw new ORDSException();
-        }
+    try {
+      HttpEntity<Map> resp =
+          restTemplate.exchange(builder.toUriString(), HttpMethod.POST, payload, Map.class);
+      log.info(
+          objectMapper.writeValueAsString(
+              new RequestSuccessLog("Request Success", "recordException")));
+      return new RecordExceptionResponse();
+    } catch (Exception ex) {
+      log.error(
+          objectMapper.writeValueAsString(
+              new OrdsErrorLog(
+                  "Error received from ORDS",
+                  "recordException",
+                  ex.getMessage(),
+                  recordException)));
+      throw new ORDSException();
     }
-
-    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
-    @ResponsePayload
-
-    public RecordExceptionResponse recordException (
-            @RequestPayload RecordException recordException
-    )
-            throws JsonProcessingException {
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "record/exception");
-        HttpEntity<RecordException> payload = new HttpEntity<>( recordException, new HttpHeaders());
-
-        try {
-            HttpEntity<RecordExceptionResponse> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            RecordExceptionResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "recordException")));
-            RecordExceptionResponse out = new RecordExceptionResponse();
-            return out;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "recordException",
-                                    ex.getMessage(),
-                                    recordException)));
-            throw new ORDSException();
-        }
-    }
-
+  }
 }

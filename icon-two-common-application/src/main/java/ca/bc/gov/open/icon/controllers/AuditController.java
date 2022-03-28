@@ -146,7 +146,7 @@ public class AuditController {
   }
 
   @PayloadRoot(
-      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit"
+      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
       localPart = "eServiceFunctionAccessed")
   @ResponsePayload
   public EServiceFunctionAccessedResponse eServiceFunctionAccessed(

@@ -39,8 +39,8 @@ public class ReportingController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
+      localPart = "eReportAnswersSubmitted")
   @ResponsePayload
   public EReportAnswersSubmittedResponse eReportAnswersSubmitted(
       @RequestPayload EReportAnswersSubmitted eReportAnswersSubmitted)
@@ -73,30 +73,29 @@ public class ReportingController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "getReportingCmpltInstruction")
   @ResponsePayload
   public GetReportingCmpltInstructionResponse getReportingCmpltInstruction(
       @RequestPayload GetReportingCmpltInstruction getReportingCmpltInstruction)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "reporting/complete-instruction");
-    HttpEntity<GetReportingCmpltInstruction> payload =
-        new HttpEntity<>(getReportingCmpltInstruction, new HttpHeaders());
+        UriComponentsBuilder.fromHttpUrl(host + "reporting/complete-instruction")
+            .queryParam("xmlString", getReportingCmpltInstruction.getXMLString())
+            .queryParam("userTokenString", getReportingCmpltInstruction.getUserTokenString());
 
     try {
       HttpEntity<GetReportingCmpltInstructionResponse> resp =
           restTemplate.exchange(
               builder.toUriString(),
-              HttpMethod.POST,
-              payload,
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
               GetReportingCmpltInstructionResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getReportingCmpltInstruction")));
-      GetReportingCmpltInstructionResponse out = new GetReportingCmpltInstructionResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -109,16 +108,14 @@ public class ReportingController {
     }
   }
 
-
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "")
   @ResponsePayload
   public GetLocationsResponse getLocationsResponse(
       @RequestPayload GetLocations getLocationsResponse) throws JsonProcessingException {
 
-    UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "reporting/locations");
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "reporting/locations");
     HttpEntity<GetLocations> payload = new HttpEntity<>(getLocationsResponse, new HttpHeaders());
 
     try {
@@ -129,7 +126,7 @@ public class ReportingController {
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getLocationsResponse")));
       GetLocationsResponse out = new GetLocationsResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -143,8 +140,8 @@ public class ReportingController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "submitAnswers")
   @ResponsePayload
   public SubmitAnswersResponse submitAnswers(@RequestPayload SubmitAnswers submitAnswers)
       throws JsonProcessingException {
@@ -160,8 +157,7 @@ public class ReportingController {
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "submitAnswers")));
-      SubmitAnswersResponse out = new SubmitAnswersResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -172,25 +168,29 @@ public class ReportingController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "getAppointment")
   @ResponsePayload
   public GetAppointmentResponse getAppointment(@RequestPayload GetAppointment getAppointment)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "reporting/appointment");
-    HttpEntity<GetAppointment> payload = new HttpEntity<>(getAppointment, new HttpHeaders());
+        UriComponentsBuilder.fromHttpUrl(host + "reporting/appointment")
+            .queryParam("xmlString", getAppointment.getXMLString())
+            .queryParam("userTokenString", getAppointment.getUserTokenString());
 
     try {
       HttpEntity<GetAppointmentResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetAppointmentResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetAppointmentResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getAppointment")));
-      GetAppointmentResponse out = new GetAppointmentResponse();
-      return out;
+
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -201,25 +201,29 @@ public class ReportingController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "getQuestions")
   @ResponsePayload
   public GetQuestionsResponse getQuestions(@RequestPayload GetQuestions getQuestions)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "reporting/questions");
-    HttpEntity<GetQuestions> payload = new HttpEntity<>(getQuestions, new HttpHeaders());
+        UriComponentsBuilder.fromHttpUrl(host + "reporting/questions")
+            .queryParam("xmlString", getQuestions.getXMLString())
+            .queryParam("userTokenString", getQuestions.getUserTokenString());
 
     try {
       HttpEntity<GetQuestionsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetQuestionsResponse.class);
+              builder.toUriString(),
+              HttpMethod.GET,
+              new HttpEntity<>(new HttpHeaders()),
+              GetQuestionsResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getQuestions")));
-      GetQuestionsResponse out = new GetQuestionsResponse();
-      return out;
+
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -230,23 +234,24 @@ public class ReportingController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "getStatus")
   @ResponsePayload
   public GetStatusResponse getStatus(@RequestPayload GetStatus getStatus)
       throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "reporting/status");
-    HttpEntity<GetStatus> payload = new HttpEntity<>(getStatus, new HttpHeaders());
+    UriComponentsBuilder builder =
+        UriComponentsBuilder.fromHttpUrl(host + "reporting/status")
+            .queryParam("xmlString", getStatus.getXMLString())
+            .queryParam("userTokenString", getStatus.getUserTokenString());
 
     try {
       HttpEntity<GetStatusResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetStatusResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetStatusResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getStatus")));
-      GetStatusResponse out = new GetStatusResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
