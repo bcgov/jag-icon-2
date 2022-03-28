@@ -48,8 +48,8 @@ public class MessageController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
+      localPart = "MessageAccessed")
   @ResponsePayload
   public MessageAccessedResponse messageAccessed(@RequestPayload MessageAccessed messageAccessed)
       throws JsonProcessingException {
@@ -80,23 +80,24 @@ public class MessageController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "getMessage")
   @ResponsePayload
   public GetMessageResponse getMessage(@RequestPayload GetMessage getMessage)
       throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/response");
-    HttpEntity<GetMessage> payload = new HttpEntity<>(getMessage, new HttpHeaders());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/response")
+            .queryParam("xmlString", getMessage.getXMLString())
+            .queryParam("userTokenString", getMessage.getUserTokenString());
 
     try {
       HttpEntity<GetMessageResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetMessageResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetMessageResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getMessage")));
-      GetMessageResponse out = new GetMessageResponse();
-      return out;
+
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -107,8 +108,8 @@ public class MessageController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+      localPart = "setMessageDetails")
   @ResponsePayload
   public SetMessageDateResponse setMessageDate(@RequestPayload SetMessageDate setMessageDate)
       throws JsonProcessingException {
@@ -120,12 +121,12 @@ public class MessageController {
     try {
       HttpEntity<SetMessageDateResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, SetMessageDateResponse.class);
+              builder.toUriString(), HttpMethod.POST, new HttpEntity<>(new HttpHeaders()), SetMessageDateResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "setMessageDate")));
-      SetMessageDateResponse out = new SetMessageDateResponse();
-      return out;
+
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -136,8 +137,8 @@ public class MessageController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
+      localPart = "setMessageDetails")
   @ResponsePayload
   public SetMessageDetailsResponse setMessageDetails(
       @RequestPayload SetMessageDetails setMessageDetails) throws JsonProcessingException {
@@ -153,8 +154,7 @@ public class MessageController {
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "setMessageDetails")));
-      SetMessageDetailsResponse out = new SetMessageDetailsResponse();
-      return out;
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -168,23 +168,25 @@ public class MessageController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
+      localPart = "getMessages")
   @ResponsePayload
   public GetMessagesResponse getMessages(@RequestPayload GetMessages getMessages)
       throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/responses");
-    HttpEntity<GetMessages> payload = new HttpEntity<>(getMessages, new HttpHeaders());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/responses")
+            .queryParam("xmlString", getMessages.getXMLString())
+            .queryParam("userTokenString", getMessages.getUserTokenString());
+
 
     try {
       HttpEntity<GetMessagesResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetMessagesResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetMessagesResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getMessages")));
-      GetMessagesResponse out = new GetMessagesResponse();
-      return out;
+
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
@@ -195,25 +197,27 @@ public class MessageController {
   }
 
   @PayloadRoot(
-      namespace = SoapConfig.SOAP_NAMESPACE,
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
+      localPart = "getMessageDetails")
   @ResponsePayload
   public GetMessageDetailsResponse getMessageDetails(
       @RequestPayload GetMessageDetails getMessageDetails) throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "message/details");
-    HttpEntity<GetMessageDetails> payload = new HttpEntity<>(getMessageDetails, new HttpHeaders());
+        UriComponentsBuilder.fromHttpUrl(host + "message/details")
+                .queryParam("xmlString", getMessageDetails.getXMLString())
+                .queryParam("userTokenString", getMessageDetails.getUserTokenString());
+
 
     try {
       HttpEntity<GetMessageDetailsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetMessageDetailsResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetMessageDetailsResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getMessageDetails")));
-      GetMessageDetailsResponse out = new GetMessageDetailsResponse();
-      return out;
+
+      return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(
