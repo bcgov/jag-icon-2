@@ -51,7 +51,7 @@ public class InformationController {
     UriComponentsBuilder builder =
         UriComponentsBuilder.fromHttpUrl(host + "information/user-info")
                 .queryParam("xmlString", getUserInfo.getXMLString())
-                .queryParam("UserTokenString", getUserInfo.getUserTokenString());
+                .queryParam("userTokenString", getUserInfo.getUserTokenString());
        try {
       HttpEntity<GetUserInfoResponse> resp =
           restTemplate.exchange(
@@ -100,19 +100,21 @@ public class InformationController {
 
   @PayloadRoot(
       namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-      localPart = "")
+      localPart = "getOrders")
   @ResponsePayload
   public GetOrdersResponse getOrders(@RequestPayload GetOrders getOrders)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "information/orders");
+        UriComponentsBuilder.fromHttpUrl(host + "information/orders")
+                .queryParam("xmlString", getOrders.getXMLString())
+                .queryParam("userTokenString",getOrders.getUserTokenString());
     HttpEntity<GetOrders> payload = new HttpEntity<>(getOrders, new HttpHeaders());
 
     try {
       HttpEntity<GetOrdersResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetOrdersResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetOrdersResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getOrders")));
       GetOrdersResponse out = new GetOrdersResponse();
@@ -128,19 +130,21 @@ public class InformationController {
 
   @PayloadRoot(
       namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      localPart = "getPrograms")
   @ResponsePayload
   public GetProgramsResponse getPrograms(@RequestPayload GetPrograms getPrograms)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "information/programs");
+        UriComponentsBuilder.fromHttpUrl(host + "information/programs")
+                .queryParam("xmlString", getPrograms.getXMLString())
+                .queryParam("userTokenString", getPrograms.getUserTokenString());
     HttpEntity<GetPrograms> payload = new HttpEntity<>(getPrograms, new HttpHeaders());
 
     try {
       HttpEntity<GetProgramsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetProgramsResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetProgramsResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getPrograms")));
       GetProgramsResponse out = new GetProgramsResponse();
@@ -156,19 +160,21 @@ public class InformationController {
 
   @PayloadRoot(
       namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      localPart = "getLocations")
   @ResponsePayload
   public GetLocationsResponse getLocations(@RequestPayload GetLocations getLocations)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "information/locations");
+        UriComponentsBuilder.fromHttpUrl(host + "information/locations")
+                .queryParam("xmlString", getLocations.getXMLString())
+                .queryParam("userTokenString", getLocations.getUserTokenString());
     HttpEntity<GetLocations> payload = new HttpEntity<>(getLocations, new HttpHeaders());
 
     try {
       HttpEntity<GetLocationsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetLocationsResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetLocationsResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getLocations")));
@@ -185,19 +191,21 @@ public class InformationController {
 
   @PayloadRoot(
       namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      localPart = "getConditions")
   @ResponsePayload
   public GetConditionsResponse getConditions(@RequestPayload GetConditions getConditions)
       throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "information/conditions");
+        UriComponentsBuilder.fromHttpUrl(host + "information/conditions")
+                .queryParam("xmlString", getConditions.getXMLString())
+                .queryParam("userTokenString", getConditions.getUserTokenString());
     HttpEntity<GetConditions> payload = new HttpEntity<>(getConditions, new HttpHeaders());
 
     try {
       HttpEntity<GetConditionsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetConditionsResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetConditionsResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getConditions")));
@@ -214,20 +222,22 @@ public class InformationController {
 
   @PayloadRoot(
       namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      localPart = "getOrdersConditions")
   @ResponsePayload
   public GetOrdersConditionsResponse getOrdersConditions(
       @RequestPayload GetOrdersConditions getOrdersConditions) throws JsonProcessingException {
 
     UriComponentsBuilder builder =
-        UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions");
+        UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions")
+                .queryParam("xmlString", getOrdersConditions.getXMLString())
+                .queryParam("userTokenString", getOrdersConditions.getUserTokenString());
     HttpEntity<GetOrdersConditions> payload =
         new HttpEntity<>(getOrdersConditions, new HttpHeaders());
 
     try {
       HttpEntity<GetOrdersConditionsResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetOrdersConditionsResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetOrdersConditionsResponse.class);
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getOrdersConditions")));
@@ -247,18 +257,21 @@ public class InformationController {
 
   @PayloadRoot(
       namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-      localPart = "") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+      localPart = "getDates")
   @ResponsePayload
   public GetDatesResponse getDates(@RequestPayload GetDates getDates)
       throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "information/dates");
+    UriComponentsBuilder builder =
+        UriComponentsBuilder.fromHttpUrl(host + "information/dates")
+            .queryParam("xmlString", getDates.getXMLString())
+            .queryParam("userTokenString", getDates.getUserTokenString());
     HttpEntity<GetDates> payload = new HttpEntity<>(getDates, new HttpHeaders());
 
     try {
       HttpEntity<GetDatesResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.POST, payload, GetDatesResponse.class);
+              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetDatesResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "getDates")));
       GetDatesResponse out = new GetDatesResponse();
