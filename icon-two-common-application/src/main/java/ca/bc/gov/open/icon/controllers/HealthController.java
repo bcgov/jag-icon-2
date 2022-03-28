@@ -3,6 +3,7 @@ package ca.bc.gov.open.icon.controllers;
 import ca.bc.gov.open.icon.audit.*;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.message.SetMessageDetails;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.session.GetSessionParameters;
@@ -54,8 +55,6 @@ public class HealthController {
                     ? healthServiceRequestSubmitted.getHealthServiceRequest()
                     : new HealthServiceRequest();
     HttpEntity<HealthServiceRequest> payload = new HttpEntity<>(inner, new HttpHeaders());
-    HttpEntity<HealthServiceRequestSubmitted> payload =
-        new HttpEntity<>(healthServiceRequestSubmitted, new HttpHeaders());
 
     try {
       HttpEntity<Status> resp =
@@ -101,7 +100,7 @@ public class HealthController {
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getHealthServiceRequestHistory")));
-      GetHealthServiceRequestHistoryResponse out = new GetHealthServiceRequestHistoryResponse();
+
       return resp.getBody();
     } catch (Exception ex) {
       log.error(
@@ -122,18 +121,16 @@ public class HealthController {
   public PublishHSRResponse publishHSR(@RequestPayload PublishHSR publishHSR)
       throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr")
-            .queryParam( "xmlString", publishHSR.getXMLString())
-            .queryParam("UserTokenString", publishHSR.setUserTokenString());
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
+    HttpEntity<PublishHSR> payload = new HttpEntity<>(publishHSR, new HttpHeaders());
 
     try {
       HttpEntity<PublishHSRResponse> resp =
           restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), PublishHSRResponse.class);
+              builder.toUriString(), HttpMethod.POST, payload, PublishHSRResponse.class);
       log.info(
           objectMapper.writeValueAsString(new RequestSuccessLog("Request Success", "publishHSR")));
-      PublishHSRResponse out = new PublishHSRResponse();
-      return resp.getBody();
+          return resp.getBody();
     } catch (Exception ex) {
       log.error(
           objectMapper.writeValueAsString(

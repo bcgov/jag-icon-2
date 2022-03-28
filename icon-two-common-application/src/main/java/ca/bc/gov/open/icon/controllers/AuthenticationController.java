@@ -237,7 +237,7 @@ public class AuthenticationController {
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getPreAuthorizeClient")));
-      GetPreAuthorizeClientResponse out = new GetPreAuthorizeClientResponse();
+
       return resp.getBody();
 
     } catch (Exception ex) {
@@ -275,7 +275,7 @@ public class AuthenticationController {
       log.info(
           objectMapper.writeValueAsString(
               new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
-      GetHasFunctionalAbilityResponse out = new GetHasFunctionalAbilityResponse();
+
       return resp.getBody();
     } catch (Exception ex) {
       log.error(
