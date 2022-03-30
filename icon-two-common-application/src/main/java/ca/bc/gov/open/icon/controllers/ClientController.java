@@ -1,9 +1,5 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.audit.ReauthenticationFailed;
-import ca.bc.gov.open.icon.audit.ReauthenticationFailedResponse;
-import ca.bc.gov.open.icon.audit.Status;
-import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -31,108 +27,120 @@ import provider.ws.tombstoneinfo.source.icon2.tombstoneinfo.GetTombStoneInfoResp
 @Endpoint
 @Slf4j
 public class ClientController {
-  @Value("${icon.host}")
-  private String host = "https://127.0.0.1/";
+    @Value("${icon.host}")
+    private String host = "https://127.0.0.1/";
 
-  private final RestTemplate restTemplate;
-  private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
-  @Autowired
-  public ClientController(RestTemplate restTemplate, ObjectMapper objectMapper) {
-    this.restTemplate = restTemplate;
-    this.objectMapper = objectMapper;
-  }
-
-  @PayloadRoot(
-      namespace = "http://reeks.bcgov/ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo",
-      localPart = "getTombStoneInfo")
-  @ResponsePayload
-  public GetTombStoneInfoResponse getTombStoneInfo(
-      @RequestPayload GetTombStoneInfo getTombStoneInfo) throws JsonProcessingException {
-
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info")
-            .queryParam("xmlString", getTombStoneInfo.getXMLString());
-
-    try {
-      HttpEntity<GetTombStoneInfoResponse> resp =
-          restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetTombStoneInfoResponse.class);
-      log.info(
-          objectMapper.writeValueAsString(
-              new RequestSuccessLog("Request Success", "getTombStoneInfo")));
-      GetTombStoneInfoResponse out = new GetTombStoneInfoResponse();
-      return resp.getBody();
-    } catch (Exception ex) {
-      log.error(
-          objectMapper.writeValueAsString(
-              new OrdsErrorLog(
-                  "Error received from ORDS",
-                  "getTombStoneInfo",
-                  ex.getMessage(),
-                  getTombStoneInfo)));
-      throw new ORDSException();
+    @Autowired
+    public ClientController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+        this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
-  }
 
-  @PayloadRoot(
-      namespace = "http://reeks.bcgov/ICON2.Source.TrustAccount.ws.provider:TrustAccount",
-      localPart = "getTrustAccount")
-  @ResponsePayload
-  public GetTrustAccountResponse getTrustAccount(@RequestPayload GetTrustAccount getTrustAccount)
-      throws JsonProcessingException {
+    @PayloadRoot(
+            namespace = "http://reeks.bcgov/ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo",
+            localPart = "getTombStoneInfo")
+    @ResponsePayload
+    public GetTombStoneInfoResponse getTombStoneInfo(
+            @RequestPayload GetTombStoneInfo getTombStoneInfo) throws JsonProcessingException {
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/trust-account")
-            .queryParam("xmlString", getTrustAccount.getXMLString())
-            .queryParam("userTokenString", getTrustAccount.getUserTokenString());
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info")
+                        .queryParam("xmlString", getTombStoneInfo.getXMLString());
 
-    try {
-      HttpEntity<GetTrustAccountResponse> resp =
-          restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetTrustAccountResponse.class);
-      log.info(
-          objectMapper.writeValueAsString(
-              new RequestSuccessLog("Request Success", "getTrustAccount")));
-          return resp.getBody();
-    } catch (Exception ex) {
-      log.error(
-          objectMapper.writeValueAsString(
-              new OrdsErrorLog(
-                  "Error received from ORDS",
-                  "getTrustAccount",
-                  ex.getMessage(),
-                  getTrustAccount)));
-      throw new ORDSException();
-    }
-  }
-
-  @PayloadRoot(
-      namespace = "http://reeks.bcgov/ICON2.Source.VisitSchedule.ws.provider:VisitSchedule",
-      localPart = "getVisitScheduleResponse")
-  @ResponsePayload
-  public GetVisitScheduleResponse getVisitSchedule(
-      @RequestPayload GetVisitSchedule getVisitSchedule) throws JsonProcessingException {
-
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule")
-            .queryParam("xmlString",getVisitSchedule.getXMLString())
-            .queryParam("userTokenString", getVisitSchedule.getUserTokenString());
         try {
-      HttpEntity<GetVisitScheduleResponse> resp =
-          restTemplate.exchange(
-              builder.toUriString(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), GetVisitScheduleResponse.class);
-      log.info(
-          objectMapper.writeValueAsString(
-              new RequestSuccessLog("Request Success", "getVisitSchedule")));
-      GetVisitScheduleResponse out = new GetVisitScheduleResponse();
-      return resp.getBody();
-    } catch (Exception ex) {
-      log.error(
-          objectMapper.writeValueAsString(
-              new OrdsErrorLog(
-                  "Error received from ORDS",
-                  "getVisitSchedule",
-                  ex.getMessage(),
-                  getVisitSchedule)));
-      throw new ORDSException();
+            HttpEntity<GetTombStoneInfoResponse> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.GET,
+                            new HttpEntity<>(new HttpHeaders()),
+                            GetTombStoneInfoResponse.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getTombStoneInfo")));
+            GetTombStoneInfoResponse out = new GetTombStoneInfoResponse();
+            return resp.getBody();
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getTombStoneInfo",
+                                    ex.getMessage(),
+                                    getTombStoneInfo)));
+            throw new ORDSException();
+        }
     }
-  }
+
+    @PayloadRoot(
+            namespace = "http://reeks.bcgov/ICON2.Source.TrustAccount.ws.provider:TrustAccount",
+            localPart = "getTrustAccount")
+    @ResponsePayload
+    public GetTrustAccountResponse getTrustAccount(@RequestPayload GetTrustAccount getTrustAccount)
+            throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "client/trust-account")
+                        .queryParam("xmlString", getTrustAccount.getXMLString())
+                        .queryParam("userTokenString", getTrustAccount.getUserTokenString());
+
+        try {
+            HttpEntity<GetTrustAccountResponse> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.GET,
+                            new HttpEntity<>(new HttpHeaders()),
+                            GetTrustAccountResponse.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getTrustAccount")));
+            return resp.getBody();
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getTrustAccount",
+                                    ex.getMessage(),
+                                    getTrustAccount)));
+            throw new ORDSException();
+        }
+    }
+
+    @PayloadRoot(
+            namespace = "http://reeks.bcgov/ICON2.Source.VisitSchedule.ws.provider:VisitSchedule",
+            localPart = "getVisitScheduleResponse")
+    @ResponsePayload
+    public GetVisitScheduleResponse getVisitSchedule(
+            @RequestPayload GetVisitSchedule getVisitSchedule) throws JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule")
+                        .queryParam("xmlString", getVisitSchedule.getXMLString())
+                        .queryParam("userTokenString", getVisitSchedule.getUserTokenString());
+        try {
+            HttpEntity<GetVisitScheduleResponse> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.GET,
+                            new HttpEntity<>(new HttpHeaders()),
+                            GetVisitScheduleResponse.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getVisitSchedule")));
+            GetVisitScheduleResponse out = new GetVisitScheduleResponse();
+            return resp.getBody();
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getVisitSchedule",
+                                    ex.getMessage(),
+                                    getVisitSchedule)));
+            throw new ORDSException();
+        }
+    }
 }

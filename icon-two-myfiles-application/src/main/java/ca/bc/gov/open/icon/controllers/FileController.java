@@ -38,8 +38,7 @@ public class FileController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "getClientClaims")
     @ResponsePayload
-    public GetClientClaimsResponse getClientClaims (
-            @RequestPayload GetClientClaims getClientClaims)
+    public GetClientClaimsResponse getClientClaims(@RequestPayload GetClientClaims getClientClaims)
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
@@ -57,7 +56,7 @@ public class FileController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getClientClaims")));
             GetClientClaimsResponse out = new GetClientClaimsResponse();
-      out.setClaims(resp.getBody());
+            out.setClaims(resp.getBody());
             return out;
         } catch (Exception ex) {
             log.error(
@@ -73,13 +72,13 @@ public class FileController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "getCsNumsByDate")
     @ResponsePayload
-    public GetCsNumsByDateResponse getCsNumsByDate (
-            @RequestPayload GetCsNumsByDate getCsNumsByDate)
+    public GetCsNumsByDateResponse getCsNumsByDate(@RequestPayload GetCsNumsByDate getCsNumsByDate)
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "files/csnumsbydate")
-                        .queryParam("startDate", getCsNumsByDate.getStartDate()).queryParam("endDate",getCsNumsByDate.getEndDate());
+                        .queryParam("startDate", getCsNumsByDate.getStartDate())
+                        .queryParam("endDate", getCsNumsByDate.getEndDate());
 
         try {
             HttpEntity<GetCsNumsByDateResponse> resp =
@@ -107,13 +106,13 @@ public class FileController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "getAgencyFile")
     @ResponsePayload
-    public GetAgencyFileResponse getAgencyFile (
-            @RequestPayload GetAgencyFile getAgencyFile)
+    public GetAgencyFileResponse getAgencyFile(@RequestPayload GetAgencyFile getAgencyFile)
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "files/agency-file")
-                        .queryParam("agencyFileNo", getAgencyFile.getAgencyFileNo()).queryParam("agencyIdCd",getAgencyFile.getAgencyIdCd());
+                        .queryParam("agencyFileNo", getAgencyFile.getAgencyFileNo())
+                        .queryParam("agencyIdCd", getAgencyFile.getAgencyIdCd());
 
         try {
             HttpEntity<AgencyFile> resp =
@@ -142,8 +141,7 @@ public class FileController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "getClientInfo")
     @ResponsePayload
-    public GetClientInfoResponse getClientInfo (
-            @RequestPayload GetClientInfo getClientInfo)
+    public GetClientInfoResponse getClientInfo(@RequestPayload GetClientInfo getClientInfo)
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
@@ -177,13 +175,11 @@ public class FileController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "setMessage")
     @ResponsePayload
-    public SetMessageResponse setMessage (
-            @RequestPayload SetMessage setMessage)
+    public SetMessageResponse setMessage(@RequestPayload SetMessage setMessage)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "files/message");
-        HttpEntity<SetMessage> payload = new HttpEntity<>( setMessage, new HttpHeaders());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "files/message");
+        HttpEntity<SetMessage> payload = new HttpEntity<>(setMessage, new HttpHeaders());
 
         try {
             HttpEntity<SetMessageResponse> resp =
@@ -212,13 +208,11 @@ public class FileController {
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "setDisclosure")
     @ResponsePayload
-    public SetDisclosureResponse setDisclosure (
-            @RequestPayload SetDisclosure setDisclosure)
+    public SetDisclosureResponse setDisclosure(@RequestPayload SetDisclosure setDisclosure)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "files/disclosure");
-        HttpEntity<SetDisclosure> payload = new HttpEntity<>( setDisclosure, new HttpHeaders());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "files/disclosure");
+        HttpEntity<SetDisclosure> payload = new HttpEntity<>(setDisclosure, new HttpHeaders());
 
         try {
             HttpEntity<SetDisclosureResponse> resp =
@@ -244,5 +238,4 @@ public class FileController {
             throw new ORDSException();
         }
     }
-
 }

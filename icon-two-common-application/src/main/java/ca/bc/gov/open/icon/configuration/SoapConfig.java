@@ -142,9 +142,7 @@ public class SoapConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
-//    PAC wsdl is missing
-
-
+    //    PAC wsdl is missing
 
     @Bean(name = "ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo")
     public Wsdl11Definition TombStoneWSDL() {
