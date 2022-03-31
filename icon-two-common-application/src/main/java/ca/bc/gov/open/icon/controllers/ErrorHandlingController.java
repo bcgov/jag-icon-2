@@ -1,8 +1,5 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.configuration.SoapConfig;
-import ca.bc.gov.open.icon.ereporting.GetStatus;
-import ca.bc.gov.open.icon.ereporting.GetStatusResponse;
 import ca.bc.gov.open.icon.error.SetErrorMessage;
 import ca.bc.gov.open.icon.error.SetErrorMessageResponse;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
@@ -10,6 +7,7 @@ import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +20,6 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-
-import java.util.Map;
 
 @Endpoint
 @Slf4j
@@ -40,25 +36,20 @@ public class ErrorHandlingController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(namespace = "http://reeks.bcgov/ICON2.Source.Common.ws.provider:ErrorHandling", localPart = "setErrorMessageResponse") //ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+    @PayloadRoot(
+            namespace = "http://reeks.bcgov/ICON2.Source.Common.ws.provider:ErrorHandling",
+            localPart = "setErrorMessageResponse")
     @ResponsePayload
-
-    public SetErrorMessageResponse setErrorMessage (
-            @RequestPayload SetErrorMessage setErrorMessage
-    )
+    public SetErrorMessageResponse setErrorMessage(@RequestPayload SetErrorMessage setErrorMessage)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "error/message");
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "error/message");
         HttpEntity<SetErrorMessage> payload = new HttpEntity<>(setErrorMessage, new HttpHeaders());
 
         try {
             HttpEntity<Map> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            Map.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Map.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setErrorMessage")));
