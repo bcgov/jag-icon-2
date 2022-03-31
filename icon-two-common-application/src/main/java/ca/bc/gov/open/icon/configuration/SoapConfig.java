@@ -100,17 +100,10 @@ public class SoapConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
-    @Bean(name = "ICON2.Source.Common.ws.provider:ErrorHandling")
-    public Wsdl11Definition errorWSDL() {
+    @Bean(name = "ICON2.Source.ClientServices.ws.provider:MyInfo")
+    public Wsdl11Definition ClientServicesWSDL() {
         SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
-        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/ErrorHandling.wsdl"));
-        return wsdl11Definition;
-    }
-
-    @Bean(name = "ICON2.Source.Common.ws.provider:SessionParameter")
-    public Wsdl11Definition sessionWSDL() {
-        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
-        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/SessionParameter.wsdl"));
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/ClientServices.wsdl"));
         return wsdl11Definition;
     }
 
@@ -118,6 +111,13 @@ public class SoapConfig extends WsConfigurerAdapter {
     public Wsdl11Definition eReportingWSDL() {
         SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
         wsdl11Definition.setWsdl(new ClassPathResource("wsdl/EReporting.wsdl"));
+        return wsdl11Definition;
+    }
+
+    @Bean(name = "ICON2.Source.Common.ws.provider:ErrorHandling")
+    public Wsdl11Definition errorWSDL() {
+        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/ErrorHandling.wsdl"));
         return wsdl11Definition;
     }
 
@@ -142,7 +142,19 @@ public class SoapConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
-    //    PAC wsdl is missing
+    @Bean(name = "ICON2.Source.Version.ws.provider:PackageInfo")
+    public Wsdl11Definition PackageInfoWSDL() {
+        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/PackageInfo.wsdl"));
+        return wsdl11Definition;
+    }
+
+    @Bean(name = "ICON2.Source.Common.ws.provider:SessionParameter")
+    public Wsdl11Definition sessionWSDL() {
+        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/SessionParameter.wsdl"));
+        return wsdl11Definition;
+    }
 
     @Bean(name = "ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo")
     public Wsdl11Definition TombStoneWSDL() {
@@ -158,24 +170,10 @@ public class SoapConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
-    @Bean(name = "ICON2.Source.Version.ws.provider:PackageInfo")
-    public Wsdl11Definition PackageInfoWSDL() {
-        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
-        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/PackageInfo.wsdl"));
-        return wsdl11Definition;
-    }
-
     @Bean(name = "ICON2.Source.VisitSchedule.ws.provider:VisitSchedule")
     public Wsdl11Definition VisitScheduleWSDL() {
         SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
         wsdl11Definition.setWsdl(new ClassPathResource("wsdl/VisitSchedule.wsdl"));
-        return wsdl11Definition;
-    }
-
-    @Bean(name = "ICON2.Source.ClientServices.ws.provider:MyInfo")
-    public Wsdl11Definition ClientServicesWSDL() {
-        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
-        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/ClientServices.wsdl"));
         return wsdl11Definition;
     }
 }
