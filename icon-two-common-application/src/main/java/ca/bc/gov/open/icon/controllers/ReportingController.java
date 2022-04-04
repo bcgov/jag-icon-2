@@ -113,7 +113,7 @@ public class ReportingController {
 
     @PayloadRoot(
             namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
-            localPart = "")
+            localPart = "getLocations")
     @ResponsePayload
     public GetLocationsResponse getLocationsResponse(
             @RequestPayload GetLocations getLocationsResponse) throws JsonProcessingException {

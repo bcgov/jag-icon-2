@@ -269,7 +269,7 @@ public class AuthenticationController {
 
     @PayloadRoot(
             namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth",
-            localPart = "")
+            localPart = "getHasFunctionalAbility")
     @ResponsePayload
     public GetHasFunctionalAbilityResponse getHasFunctionalAbility(
             @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility)
