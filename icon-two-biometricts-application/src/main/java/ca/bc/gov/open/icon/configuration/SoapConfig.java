@@ -92,5 +92,4 @@ public class SoapConfig extends WsConfigurerAdapter {
         wsdl11Definition.setWsdl(new ClassPathResource("wsdl/biometrics.wsdl"));
         return wsdl11Definition;
     }
-
 }

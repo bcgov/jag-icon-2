@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="ICON2.Source.TrustAccount.ws.provider:TrustAccount"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="ICON2.Source.TrustAccount.ws.provider:TrustAccount">
+    <xsd:element name="getTrustAccount">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getTrustAccountResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Error">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Reason" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
