@@ -150,7 +150,7 @@ public class SoapConfig extends WsConfigurerAdapter {
     }
 
     @Bean(name = "ICON2.Source.Common.ws.provider:SessionParameter")
-    public Wsdl11Definition sessionWSDL() {
+    public Wsdl11Definition SessionWSDL() {
         SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
         wsdl11Definition.setWsdl(new ClassPathResource("wsdl/SessionParameter.wsdl"));
         return wsdl11Definition;
