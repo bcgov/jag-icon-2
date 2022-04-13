@@ -82,7 +82,7 @@ public class SoapConfig extends WsConfigurerAdapter {
         props.put(SOAPMessage.WRITE_XML_DECLARATION, "true");
         SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
         messageFactory.setMessageProperties(props);
-        messageFactory.setSoapVersion(SoapVersion.SOAP_11);
+        messageFactory.setSoapVersion(SoapVersion.SOAP_12);
         return messageFactory;
     }
 
