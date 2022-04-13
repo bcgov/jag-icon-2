@@ -43,10 +43,13 @@ public class InformationController {
             throws JsonProcessingException {
 
         // fetch the inmost UserInfo layer
-        var out =
-                getUserInfo.getXMLString() != null ? getUserInfo.getXMLString() : new UserInfoOut();
-        var in = out.getUserInfo() != null ? out.getUserInfo() : new UserInfoInner();
-        var inner = in.getUserInfo() != null ? in.getUserInfo() : new UserInfo();
+        var inner =
+                getUserInfo.getXMLString() != null
+                                && getUserInfo.getXMLString().getUserInfo() != null
+                                && getUserInfo.getXMLString().getUserInfo().getUserInfo() != null
+                        ? getUserInfo.getXMLString().getUserInfo().getUserInfo()
+                        : new UserInfo();
+
         HttpEntity<UserInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         UriComponentsBuilder builder =
@@ -97,7 +100,6 @@ public class InformationController {
             throws JsonProcessingException {
 
         // fetch the inmost DeviceInfo layer
-
         DeviceInfo inner =
                 (getDeviceInfo.getXMLString() != null
                                 && getDeviceInfo.getXMLString().getDeviceInfo() != null
