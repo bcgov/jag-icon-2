@@ -1,10 +1,7 @@
 package ca.bc.gov.open.icon.controllers;
 
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.auth.GetHasFunctionalAbility;
-import ca.bc.gov.open.icon.auth.GetHasFunctionalAbilityResponse;
-import ca.bc.gov.open.icon.auth.GetPreAuthorizeClient;
-import ca.bc.gov.open.icon.auth.GetPreAuthorizeClientResponse;
+import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -230,69 +227,49 @@ public class AuthenticationController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth",
+            namespace = "ICON2.Source.Authorization.ws.provider:AuthAuth",
             localPart = "getPreAuthorizeClient")
     @ResponsePayload
     public GetPreAuthorizeClientResponse getPreAuthorizeClient(
             @RequestPayload GetPreAuthorizeClient getPreAuthorizeClient)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "auth/pre-auth-client");
-        HttpEntity<GetPreAuthorizeClient> payload =
-                new HttpEntity<>(getPreAuthorizeClient, new HttpHeaders());
+        // fetch the inmost DeviceInfo layer
+        var inner = getPreAuthorizeClient.getXMLString() != null &&
+                getPreAuthorizeClient.getXMLString().getPreAuthorize() != null &&
+                getPreAuthorizeClient.getXMLString().getPreAuthorize().getPreAuthorize() != null ?
+                getPreAuthorizeClient.getXMLString().getPreAuthorize().getPreAuthorize() : new PreAuthorizeClient() ;
+
+        HttpEntity<PreAuthorizeClient> payload = new HttpEntity<>(inner, new HttpHeaders());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "auth/pre-auth-client");
 
         try {
-            HttpEntity<GetPreAuthorizeClientResponse> resp =
+            HttpEntity<PreAuthorizeClient> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
+                            HttpMethod.POST,
                             payload,
-                            GetPreAuthorizeClientResponse.class);
+                            PreAuthorizeClient.class);
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog(
+                                    "Request Success", objectMapper.writeValueAsString(inner))));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getPreAuthorizeClient")));
 
-            return resp.getBody();
+            var getPreAuthorizeClientResponse = new GetPreAuthorizeClientResponse();
+            var outResp = new PreAuthorizeClientOut();
+            var inResp = new PreAuthorizeClientInner();
 
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getPreAuthorizeClient",
-                                    ex.getMessage(),
-                                    getPreAuthorizeClient)));
-            throw new ORDSException();
-        }
-    }
+            inResp.setPreAuthorize(resp.getBody());
+            outResp.setPreAuthorize(inResp);
+            getPreAuthorizeClientResponse.setXMLString(outResp);
+            return getPreAuthorizeClientResponse;
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth",
-            localPart = "getHasFunctionalAbility")
-    @ResponsePayload
-    public GetHasFunctionalAbilityResponse getHasFunctionalAbility(
-            @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility)
-            throws JsonProcessingException {
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability")
-                        .queryParam("xmlString", getHasFunctionalAbility.getXMLString())
-                        .queryParam(
-                                "userTokenString", getHasFunctionalAbility.getUserTokenString());
-
-        try {
-            HttpEntity<GetHasFunctionalAbilityResponse> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetHasFunctionalAbilityResponse.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
-
-            return resp.getBody();
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -300,8 +277,61 @@ public class AuthenticationController {
                                     "Error received from ORDS",
                                     "getHasFunctionalAbility",
                                     ex.getMessage(),
-                                    getHasFunctionalAbility)));
+                                    inner)));
             throw new ORDSException();
         }
     }
+
+    @PayloadRoot(
+            namespace = "ICON2.Source.Authorization.ws.provider:AuthAuth",
+            localPart = "getHasFunctionalAbility")
+    @ResponsePayload
+    public GetHasFunctionalAbilityResponse getHasFunctionalAbility(
+            @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility)
+            throws JsonProcessingException {
+
+        // fetch the inmost DeviceInfo layer
+        var inner = getHasFunctionalAbility;
+        HttpEntity<GetHasFunctionalAbility> payload = new HttpEntity<>(inner, new HttpHeaders());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability");
+
+        try {
+            HttpEntity<HasFunctionalAbility> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            HasFunctionalAbility.class);
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog(
+                                    "Request Success", objectMapper.writeValueAsString(inner))));
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
+
+            var getHasFunctionalAbilityResponse = new GetHasFunctionalAbilityResponse();
+            var outResp = new HasFunctionalAbilityOut();
+            var inResp = new HasFunctionalAbilityInner();
+
+            inResp.setHasFunctionalAbility(resp.getBody());
+            outResp.setHasFunctionalAbility(inResp);
+            getHasFunctionalAbilityResponse.setXMLString(outResp);
+            return getHasFunctionalAbilityResponse;
+
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getHasFunctionalAbility",
+                                    ex.getMessage(),
+                                    inner)));
+            throw new ORDSException();
+        }
+    }
+
 }

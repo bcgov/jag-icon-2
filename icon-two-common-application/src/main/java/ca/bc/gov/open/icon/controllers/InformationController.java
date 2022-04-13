@@ -1,9 +1,6 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.auth.GetDeviceInfo;
-import ca.bc.gov.open.icon.auth.GetDeviceInfoResponse;
-import ca.bc.gov.open.icon.auth.GetUserInfo;
-import ca.bc.gov.open.icon.auth.GetUserInfoResponse;
+import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -39,28 +36,48 @@ public class InformationController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth",
+            namespace = "ICON2.Source.Authorization.ws.provider:AuthAuth",
             localPart = "getUserInfo")
     @ResponsePayload
     public GetUserInfoResponse getUserInfo(@RequestPayload GetUserInfo getUserInfo)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/user-info")
-                        .queryParam("xmlString", getUserInfo.getXMLString())
-                        .queryParam("userTokenString", getUserInfo.getUserTokenString());
+        // fetch the inmost UserInfo layer
+        var out = getUserInfo.getXMLString() != null ? getUserInfo.getXMLString() : new UserInfoOut();
+        var in = out.getUserInfo()!= null ? out.getUserInfo() : new UserInfoInner();
+        var inner = in.getUserInfo()!= null ? in.getUserInfo() : new UserInfo();
+        HttpEntity<UserInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
+
         try {
-            HttpEntity<GetUserInfoResponse> resp =
+
+            HttpEntity<UserInfo> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetUserInfoResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            UserInfo.class);
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog(
+                                    "Request Success", objectMapper.writeValueAsString(inner))));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getUserInfo")));
 
-            return resp.getBody();
+            var getUserInfoResponse = new GetUserInfoResponse();
+            var outResp = new UserInfoOut();
+            var inResp = new UserInfoInner();
+            var innerResp = resp.getBody();
+
+            inResp.setUserInfo(innerResp);
+            outResp.setUserInfo(inResp);
+            getUserInfoResponse.setXMLString(outResp);
+
+            return getUserInfoResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -68,34 +85,57 @@ public class InformationController {
                                     "Error received from ORDS",
                                     "getUserInfo",
                                     ex.getMessage(),
-                                    getUserInfo)));
+                                    inner)));
             throw new ORDSException();
         }
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Authorization.ws.provider:AuthAuth",
+            namespace = "ICON2.Source.Authorization.ws.provider:AuthAuth",
             localPart = "getDeviceInfo")
     @ResponsePayload
     public GetDeviceInfoResponse getDeviceInfo(@RequestPayload GetDeviceInfo getDeviceInfo)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/device-info")
-                        .queryParam("xmlString", getDeviceInfo.getXMLString())
-                        .queryParam("userTokenString", getDeviceInfo.getUserTokenString());
+        // fetch the inmost DeviceInfo layer
+
+       DeviceInfo inner = (getDeviceInfo.getXMLString() != null  &&
+                           getDeviceInfo.getXMLString().getDeviceInfo() != null &&
+                            getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo() != null ?
+                            getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo() :
+                            new DeviceInfo());
+
+        HttpEntity<DeviceInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
+
         try {
-            HttpEntity<GetDeviceInfoResponse> resp =
+            HttpEntity<DeviceInfo> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetDeviceInfoResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            DeviceInfo.class);
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog(
+                                    "Request Success", objectMapper.writeValueAsString(inner))));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getDeviceInfo")));
 
-            return resp.getBody();
+
+            var getDeviceInfoResponse = new GetDeviceInfoResponse();
+            var outResp = new DeviceInfoOut();
+            var inResp = new DeviceInfoInner();
+
+            inResp.setDeviceInfo(resp.getBody());
+            outResp.setDeviceInfo(inResp);
+            getDeviceInfoResponse.setXMLString(outResp);
+            return getDeviceInfoResponse;
+
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -103,7 +143,7 @@ public class InformationController {
                                     "Error received from ORDS",
                                     "getDeviceInfo",
                                     ex.getMessage(),
-                                    getDeviceInfo)));
+                                    inner)));
             throw new ORDSException();
         }
     }
