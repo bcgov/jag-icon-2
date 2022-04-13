@@ -235,14 +235,21 @@ public class AuthenticationController {
             throws JsonProcessingException {
 
         // fetch the inmost DeviceInfo layer
-        var inner = getPreAuthorizeClient.getXMLString() != null &&
-                getPreAuthorizeClient.getXMLString().getPreAuthorize() != null &&
-                getPreAuthorizeClient.getXMLString().getPreAuthorize().getPreAuthorize() != null ?
-                getPreAuthorizeClient.getXMLString().getPreAuthorize().getPreAuthorize() : new PreAuthorizeClient() ;
+        var inner =
+                getPreAuthorizeClient.getXMLString() != null
+                                && getPreAuthorizeClient.getXMLString().getPreAuthorize() != null
+                                && getPreAuthorizeClient
+                                                .getXMLString()
+                                                .getPreAuthorize()
+                                                .getPreAuthorize()
+                                        != null
+                        ? getPreAuthorizeClient.getXMLString().getPreAuthorize().getPreAuthorize()
+                        : new PreAuthorizeClient();
 
         HttpEntity<PreAuthorizeClient> payload = new HttpEntity<>(inner, new HttpHeaders());
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "auth/pre-auth-client");
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "auth/pre-auth-client");
 
         try {
             HttpEntity<PreAuthorizeClient> resp =
@@ -294,7 +301,8 @@ public class AuthenticationController {
         var inner = getHasFunctionalAbility;
         HttpEntity<GetHasFunctionalAbility> payload = new HttpEntity<>(inner, new HttpHeaders());
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability");
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability");
 
         try {
             HttpEntity<HasFunctionalAbility> resp =
@@ -333,5 +341,4 @@ public class AuthenticationController {
             throw new ORDSException();
         }
     }
-
 }

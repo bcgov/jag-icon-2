@@ -43,21 +43,20 @@ public class InformationController {
             throws JsonProcessingException {
 
         // fetch the inmost UserInfo layer
-        var out = getUserInfo.getXMLString() != null ? getUserInfo.getXMLString() : new UserInfoOut();
-        var in = out.getUserInfo()!= null ? out.getUserInfo() : new UserInfoInner();
-        var inner = in.getUserInfo()!= null ? in.getUserInfo() : new UserInfo();
+        var out =
+                getUserInfo.getXMLString() != null ? getUserInfo.getXMLString() : new UserInfoOut();
+        var in = out.getUserInfo() != null ? out.getUserInfo() : new UserInfoInner();
+        var inner = in.getUserInfo() != null ? in.getUserInfo() : new UserInfo();
         HttpEntity<UserInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
 
         try {
 
             HttpEntity<UserInfo> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            UserInfo.class);
+                            builder.toUriString(), HttpMethod.POST, payload, UserInfo.class);
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -99,23 +98,23 @@ public class InformationController {
 
         // fetch the inmost DeviceInfo layer
 
-       DeviceInfo inner = (getDeviceInfo.getXMLString() != null  &&
-                           getDeviceInfo.getXMLString().getDeviceInfo() != null &&
-                            getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo() != null ?
-                            getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo() :
-                            new DeviceInfo());
+        DeviceInfo inner =
+                (getDeviceInfo.getXMLString() != null
+                                && getDeviceInfo.getXMLString().getDeviceInfo() != null
+                                && getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo()
+                                        != null
+                        ? getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo()
+                        : new DeviceInfo());
 
         HttpEntity<DeviceInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
 
         try {
             HttpEntity<DeviceInfo> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            DeviceInfo.class);
+                            builder.toUriString(), HttpMethod.POST, payload, DeviceInfo.class);
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -125,7 +124,6 @@ public class InformationController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getDeviceInfo")));
-
 
             var getDeviceInfoResponse = new GetDeviceInfoResponse();
             var outResp = new DeviceInfoOut();
