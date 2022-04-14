@@ -1,11 +1,15 @@
 package icon.controllers;
 
 import ca.bc.gov.open.icon.audit.*;
+import ca.bc.gov.open.icon.auth.DeviceInfoInner;
+import ca.bc.gov.open.icon.auth.DeviceInfoOut;
+import ca.bc.gov.open.icon.auth.GetDeviceInfoResponse;
+import ca.bc.gov.open.icon.auth.UserInfo;
+import ca.bc.gov.open.icon.clientservice.ClientInfo;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
-import ca.bc.gov.open.icon.myinfo.GetClientHistory;
-import ca.bc.gov.open.icon.myinfo.GetClientHistoryResponse;
+import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfoResponse;
 import ca.bc.gov.open.icon.session.GetSessionParameters;
@@ -173,28 +177,42 @@ public class AuditController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
+            namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo",
             localPart = "getClientHistory")
     @ResponsePayload
     public GetClientHistoryResponse getClientHistory(
             @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
 
+        ClientHistory inner =
+                getClientHistory.getXMLString() != null
+                        && getClientHistory.getXMLString().getClientHistory() != null
+                        && getClientHistory.getXMLString().getClientHistory().getClientHistory() != null
+                        ? getClientHistory.getXMLString().getClientHistory().getClientHistory()
+                        : new ClientHistory();
+
+        HttpEntity<ClientHistory> payload = new HttpEntity<>(inner, new HttpHeaders());
+
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-function-access")
-                        .queryParam("xmlString", getClientHistory.getXMLString())
-                        .queryParam("userTokenString", getClientHistory.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "audit/client-history");
 
         try {
-            HttpEntity<GetClientHistoryResponse> resp =
+            HttpEntity<ClientHistory> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetClientHistoryResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            ClientHistory.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getClientHistory")));
-            return resp.getBody();
+
+            GetClientHistoryResponse getClientHistoryResponse = new GetClientHistoryResponse();
+            ClientHistoryOuter outResp = new ClientHistoryOuter();
+            ClientHistoryInner inResp = new ClientHistoryInner();
+            inResp.setClientHistory(resp.getBody());
+            outResp.setClientHistory(inResp);
+            getClientHistoryResponse.setXMLString(outResp);
+            return getClientHistoryResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
