@@ -27,10 +27,11 @@
     </repositories>
 
     <modules>
-        <module>icon-two-common-application</module>
         <module>icon-two-myfiles-application</module>
-        <module>icon-two-biometricts-application</module>
+        <module>icon-two-biometrics-application</module>
         <module>icon-two-common-models</module>
+        <module>icon-two-common-application-1-1</module>
+        <module>icon-two-common-application-1-2</module>
     </modules>
 
     <build>
