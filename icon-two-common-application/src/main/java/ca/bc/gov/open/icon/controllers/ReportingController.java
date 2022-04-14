@@ -1,5 +1,6 @@
 package ca.bc.gov.open.icon.controllers;
 
+import ca.bc.gov.open.icon.audit.EReportAnswers;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
@@ -37,18 +38,20 @@ public class ReportingController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "eReportAnswersSubmitted")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "eReportAnswersSubmitted")
     @ResponsePayload
     public EReportAnswersSubmittedResponse eReportAnswersSubmitted(
             @RequestPayload EReportAnswersSubmitted eReportAnswersSubmitted)
             throws JsonProcessingException {
 
+        var inner =
+                eReportAnswersSubmitted.getEReportAnswers() != null
+                        ? eReportAnswersSubmitted.getEReportAnswers()
+                        : new EReportAnswers();
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/ereport-answers-submitted");
-        HttpEntity<EReportAnswersSubmitted> payload =
-                new HttpEntity<>(eReportAnswersSubmitted, new HttpHeaders());
+        HttpEntity<EReportAnswers> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -67,7 +70,7 @@ public class ReportingController {
                                     "Error received from ORDS",
                                     "eReportAnswersSubmitted",
                                     ex.getMessage(),
-                                    eReportAnswersSubmitted)));
+                                    inner)));
             throw new ORDSException();
         }
     }

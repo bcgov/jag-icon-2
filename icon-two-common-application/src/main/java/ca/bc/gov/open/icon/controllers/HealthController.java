@@ -36,7 +36,7 @@ public class HealthController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
+            namespace = "ICON2.Source.Audit.ws:Record",
             localPart = "HealthServiceRequestSubmitted")
     @ResponsePayload
     public HealthServiceRequestSubmittedResponse healthServiceRequestSubmitted(

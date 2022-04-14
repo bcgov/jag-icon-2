@@ -111,9 +111,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "logoutExecuted")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "logoutExecuted")
     @ResponsePayload
     public LogoutExcecutedResponse logoutExecuted(@RequestPayload LogoutExcecuted logoutExecuted)
             throws JsonProcessingException {
@@ -148,9 +146,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "idleTimeoutExecuted")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "idleTimeoutExecuted")
     @ResponsePayload
     public IdleTimeoutExecutedResponse idleTimeoutExecuted(
             @RequestPayload IdleTimeoutExecuted idleTimeoutExecuted)

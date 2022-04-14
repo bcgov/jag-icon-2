@@ -41,9 +41,7 @@ public class AuditController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "eServiceAccessed")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "eServiceAccessed")
     @ResponsePayload
     public EServiceAccessedResponse eServiceAccessed(
             @RequestPayload EServiceAccessed eServiceAccessed) throws JsonProcessingException {
@@ -75,9 +73,7 @@ public class AuditController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "homeScreenAccessed")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "homeScreenAccessed")
     @ResponsePayload
     public HomeScreenAccessedResponse homeScreenAccessed(
             @RequestPayload HomeScreenAccessed homeScreenAccessed) throws JsonProcessingException {
@@ -144,16 +140,14 @@ public class AuditController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "eServiceFunctionAccessed")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "eServiceFunctionAccessed")
     @ResponsePayload
     public EServiceFunctionAccessedResponse eServiceFunctionAccessed(
             @RequestPayload EServiceFunctionAccessed eServiceFunctionAccessed)
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-function-access");
+                UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-function-accessed");
         HttpEntity<EServiceFunctionAccessed> payload =
                 new HttpEntity<>(eServiceFunctionAccessed, new HttpHeaders());
 
