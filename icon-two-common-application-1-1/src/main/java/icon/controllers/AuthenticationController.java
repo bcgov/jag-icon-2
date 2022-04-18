@@ -1,7 +1,6 @@
 package icon.controllers;
 
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;

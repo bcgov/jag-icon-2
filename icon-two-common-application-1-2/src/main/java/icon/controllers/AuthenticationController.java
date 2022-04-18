@@ -293,9 +293,8 @@ public class AuthenticationController {
             @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility)
             throws JsonProcessingException {
 
-        // fetch the inmost DeviceInfo layer
-        var inner = getHasFunctionalAbility;
-        HttpEntity<GetHasFunctionalAbility> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<GetHasFunctionalAbility> payload =
+                new HttpEntity<>(getHasFunctionalAbility, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability");
@@ -311,7 +310,8 @@ public class AuthenticationController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
+                                    "Request Success",
+                                    objectMapper.writeValueAsString(getHasFunctionalAbility))));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -333,7 +333,7 @@ public class AuthenticationController {
                                     "Error received from ORDS",
                                     "getHasFunctionalAbility",
                                     ex.getMessage(),
-                                    inner)));
+                                    getHasFunctionalAbility)));
             throw new ORDSException();
         }
     }

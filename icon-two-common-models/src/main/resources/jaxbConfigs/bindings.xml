@@ -24,6 +24,18 @@
         </jxb:schemaBindings>
     </jxb:bindings>
 
+    <jxb:bindings schemaLocation="../xsdSchemas/tombstone-models-1.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="ca.bc.gov.open.icon.tombstone"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../xsdSchemas/hsr-models-1.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="ca.bc.gov.open.icon.hsr"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
     <jxb:bindings schemaLocation="../xsdSchemas/auth-models-1.xsd">
         <jxb:schemaBindings>
             <jxb:package name="ca.bc.gov.open.icon.auth"/>
