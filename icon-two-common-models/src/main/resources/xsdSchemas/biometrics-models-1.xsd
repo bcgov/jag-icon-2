@@ -11,13 +11,13 @@
                 <xsd:element name="credentialRef" nillable="true" type="xsd:string"/>
                 <xsd:element name="issuanceID" nillable="true" type="xsd:string"/>
                 <xsd:element name="enrollmentURL" nillable="true" type="xsd:string"/>
-                <xsd:element name="expiry" nillable="true" type="xsd:string"/>
+                <xsd:element name="expiry" nillable="true" type="xsd:dateTime"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
     <xsd:element name="removeTemplateResponse">
-        <xsd:complexType name="removeTemplateResponse">
+        <xsd:complexType>
             <xsd:sequence>
             </xsd:sequence>
         </xsd:complexType>
@@ -139,7 +139,7 @@
                 <xsd:element name="csNum" nillable="true" type="xsd:string"/>
                 <xsd:element name="issuanceID" nillable="true" type="xsd:string"/>
                 <xsd:element name="enrollmentURL" nillable="true" type="xsd:string"/>
-                <xsd:element name="expiry" nillable="true" type="xsd:string"/>
+                <xsd:element name="expiry" nillable="true" type="xsd:dateTime"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -160,7 +160,7 @@
                 <xsd:element name="csNum" nillable="true" type="xsd:string"/>
                 <xsd:element name="issuanceID" nillable="true" type="xsd:string"/>
                 <xsd:element name="enrollmentURL" nillable="true" type="xsd:string"/>
-                <xsd:element name="expiry" nillable="true" type="xsd:string"/>
+                <xsd:element name="expiry" nillable="true" type="xsd:dateTime"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -194,7 +194,7 @@
         <xsd:sequence>
             <xsd:element name="id" nillable="true" type="xsd:string"/>
             <xsd:element name="url" nillable="true" type="xsd:string"/>
-            <xsd:element name="expiryDate" nillable="true" type="xsd:string"/>
+            <xsd:element name="expiryDate" nillable="true" type="xsd:dateTime"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -208,7 +208,7 @@
                 <xsd:element name="csNumFrom" nillable="true" type="xsd:string"/>
                 <xsd:element name="issuanceID" nillable="true" type="xsd:string"/>
                 <xsd:element name="enrollmentURL" nillable="true" type="xsd:string"/>
-                <xsd:element name="expiry" nillable="true" type="xsd:string"/>
+                <xsd:element name="expiry" nillable="true" type="xsd:dateTime"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
