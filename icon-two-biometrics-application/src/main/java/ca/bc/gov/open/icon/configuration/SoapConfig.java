@@ -30,66 +30,63 @@ import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
 @Slf4j
 public class SoapConfig extends WsConfigurerAdapter {
 
-    @Bean
-    public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(
-            ApplicationContext applicationContext) {
-        MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-        servlet.setApplicationContext(applicationContext);
-        servlet.setTransformWsdlLocations(true);
-        return new ServletRegistrationBean<>(servlet, "/ws/*");
-    }
+  @Bean
+  public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(
+      ApplicationContext applicationContext) {
+    MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+    servlet.setApplicationContext(applicationContext);
+    servlet.setTransformWsdlLocations(true);
+    return new ServletRegistrationBean<>(servlet, "/ws/*");
+  }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(0, createMappingJacksonHttpMessageConverter());
-        return restTemplate;
-    }
+  @Bean
+  public RestTemplate restTemplate() {
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.getMessageConverters().add(0, createMappingJacksonHttpMessageConverter());
+    return restTemplate;
+  }
 
-    private MappingJackson2HttpMessageConverter createMappingJacksonHttpMessageConverter() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(objectMapper());
-        return converter;
-    }
+  private MappingJackson2HttpMessageConverter createMappingJacksonHttpMessageConverter() {
+    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+    converter.setObjectMapper(objectMapper());
+    return converter;
+  }
 
-    @Bean
-    @Primary
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return objectMapper;
-    }
+  @Bean
+  @Primary
+  public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    return objectMapper;
+  }
 
-    @Bean
-    public WebServiceTemplate webServiceTemplate() {
-        WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-        Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-        webServiceTemplate.setMessageFactory(messageFactory());
-        jaxb2Marshaller.setContextPaths(
-                "ca.bc.gov.open.adobe.ws",
-                "ca.bc.gov.open.adobe.scp",
-                "ca.bc.gov.open.adobe.diagnostic");
-        webServiceTemplate.setMarshaller(jaxb2Marshaller);
-        webServiceTemplate.setUnmarshaller(jaxb2Marshaller);
-        webServiceTemplate.afterPropertiesSet();
-        return webServiceTemplate;
-    }
+  @Bean
+  public WebServiceTemplate webServiceTemplate() {
+    WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+    Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
+    webServiceTemplate.setMessageFactory(messageFactory());
+    jaxb2Marshaller.setContextPaths("ca.bc.gov.open.icon.biometrics");
+    webServiceTemplate.setMarshaller(jaxb2Marshaller);
+    webServiceTemplate.setUnmarshaller(jaxb2Marshaller);
+    webServiceTemplate.afterPropertiesSet();
+    return webServiceTemplate;
+  }
 
-    @Bean
-    public SaajSoapMessageFactory messageFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(SOAPMessage.WRITE_XML_DECLARATION, "true");
-        SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
-        messageFactory.setMessageProperties(props);
-        messageFactory.setSoapVersion(SoapVersion.SOAP_11);
-        return messageFactory;
-    }
+  @Bean
+  public SaajSoapMessageFactory messageFactory() {
+    Map<String, Object> props = new HashMap<>();
+    props.put(SOAPMessage.WRITE_XML_DECLARATION, "true");
+    SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
+    messageFactory.setMessageProperties(props);
+    messageFactory.setSoapVersion(SoapVersion.SOAP_11);
+    return messageFactory;
+  }
 
-    @Bean(name = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics")
-    public Wsdl11Definition diagnosticWSDL() {
-        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
-        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/biometrics.wsdl"));
-        return wsdl11Definition;
-    }
+  @Bean(name = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics")
+  public Wsdl11Definition diagnosticWSDL() {
+    SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
+    wsdl11Definition.setWsdl(new ClassPathResource("wsdl/biometrics.wsdl"));
+    return wsdl11Definition;
+  }
 }

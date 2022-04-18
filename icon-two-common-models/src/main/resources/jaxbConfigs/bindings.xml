@@ -30,6 +30,12 @@
         </jxb:schemaBindings>
     </jxb:bindings>
 
+    <jxb:bindings schemaLocation="../xsdSchemas/iis-models-1.xsd">
+        <jxb:schemaBindings>
+            <jxb:package name="ca.bc.gov.open.icon.iis"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
     <jxb:bindings schemaLocation="../xsdSchemas/error-handling-models-1.xsd">
         <jxb:schemaBindings>
             <jxb:package name="ca.bc.gov.open.icon.error"/>
