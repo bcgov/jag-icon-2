@@ -3,6 +3,8 @@ package icon.controllers;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
+import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoResponse;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccountResponse;
 import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
@@ -21,8 +23,6 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import provider.ws.tombstoneinfo.source.icon2.tombstoneinfo.GetTombStoneInfo;
-import provider.ws.tombstoneinfo.source.icon2.tombstoneinfo.GetTombStoneInfoResponse;
 
 @Endpoint
 @Slf4j
