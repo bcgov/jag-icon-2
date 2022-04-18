@@ -184,7 +184,7 @@ public class AuthenticationController {
 
     @PayloadRoot(
             namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "primaryAuthentication") // ask Ethan later about  SoapConfig.SOAP_NAMESPACE
+            localPart = "primaryAuthentication")
     @ResponsePayload
     public PrimaryAuthenticationCompletedResponse primaryAuthenticationCompleted(
             @RequestPayload PrimaryAuthenticationCompleted primaryAuthentication)
