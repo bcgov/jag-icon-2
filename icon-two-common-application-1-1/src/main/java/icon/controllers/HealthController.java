@@ -5,6 +5,7 @@ import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmitted;
 import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.hsr.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,7 +22,6 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import provider.ws.healthservicerequest.source.icon2.hsr.*;
 
 @Endpoint
 @Slf4j
@@ -175,7 +175,6 @@ public class HealthController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getHSRCount")));
-            GetHSRCountResponse out = new GetHSRCountResponse();
             return resp.getBody();
         } catch (Exception ex) {
             log.error(
