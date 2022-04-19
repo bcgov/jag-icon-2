@@ -34,9 +34,7 @@ public class AuthenticationController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "reauthenticationFailed")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "ReauthenticationFailed")
     @ResponsePayload
     public ReauthenticationFailedResponse reauthenticationFailed(
             @RequestPayload ReauthenticationFailed reauthenticationFailed)
@@ -70,8 +68,8 @@ public class AuthenticationController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "reauthenticationSucceeded")
+            namespace = "ICON2.Source.Audit.ws:Record",
+            localPart = "ReauthenticationSucceeded")
     @ResponsePayload
     public ReauthenticationSucceededResponse reauthenticationSucceeded(
             @RequestPayload ReauthenticationSucceeded reauthenticationSucceeded)
@@ -110,7 +108,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "logoutExecuted")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "LogoutExcecuted")
     @ResponsePayload
     public LogoutExcecutedResponse logoutExecuted(@RequestPayload LogoutExcecuted logoutExecuted)
             throws JsonProcessingException {
@@ -145,7 +143,7 @@ public class AuthenticationController {
         }
     }
 
-    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "idleTimeoutExecuted")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "IdleTimeoutExecuted")
     @ResponsePayload
     public IdleTimeoutExecutedResponse idleTimeoutExecuted(
             @RequestPayload IdleTimeoutExecuted idleTimeoutExecuted)
@@ -182,8 +180,8 @@ public class AuthenticationController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "primaryAuthentication")
+            namespace = "ICON2.Source.Audit.ws:Record",
+            localPart = "PrimaryAuthenticationCompleted")
     @ResponsePayload
     public PrimaryAuthenticationCompletedResponse primaryAuthenticationCompleted(
             @RequestPayload PrimaryAuthenticationCompleted primaryAuthentication)
