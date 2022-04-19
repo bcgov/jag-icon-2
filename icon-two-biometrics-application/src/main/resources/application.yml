@@ -3,7 +3,12 @@ security:
     password: ${BASIC_AUTH_PASS}
     username: ${BASIC_AUTH_USER}
 icon:
-  host: ${ORDS_HOST}
+  ords-host: ${ORDS_HOST}
+  iis-host: ${IIS_HOST}
+  ips-host: ${IPS_HOST}
+  bsc-host: ${BCS_HOST}
+  online-service-id: ${ONLINE_SERVICE_ID}
+
 management:
   endpoints:
     web:
