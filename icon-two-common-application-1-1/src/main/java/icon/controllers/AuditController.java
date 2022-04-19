@@ -183,14 +183,7 @@ public class AuditController {
     public GetClientHistoryResponse getClientHistory(
             @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
 
-        ClientHistory inner =
-                getClientHistory.getXMLString() != null
-                        && getClientHistory.getXMLString().getClientHistory() != null
-                        && getClientHistory.getXMLString().getClientHistory().getClientHistory() != null
-                        ? getClientHistory.getXMLString().getClientHistory().getClientHistory()
-                        : new ClientHistory();
-
-        HttpEntity<ClientHistory> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<GetClientHistory> payload = new HttpEntity<>(getClientHistory, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/client-history");

@@ -116,7 +116,7 @@ public class ReportingController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getLocations")
     @ResponsePayload
     public GetLocationsResponse getLocationsResponse(
