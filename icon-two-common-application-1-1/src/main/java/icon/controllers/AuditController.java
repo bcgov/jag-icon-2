@@ -1,11 +1,6 @@
 package icon.controllers;
 
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.auth.DeviceInfoInner;
-import ca.bc.gov.open.icon.auth.DeviceInfoOut;
-import ca.bc.gov.open.icon.auth.GetDeviceInfoResponse;
-import ca.bc.gov.open.icon.auth.UserInfo;
-import ca.bc.gov.open.icon.clientservice.ClientInfo;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -183,7 +178,8 @@ public class AuditController {
     public GetClientHistoryResponse getClientHistory(
             @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
 
-        HttpEntity<GetClientHistory> payload = new HttpEntity<>(getClientHistory, new HttpHeaders());
+        HttpEntity<GetClientHistory> payload =
+                new HttpEntity<>(getClientHistory, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/client-history");
@@ -191,10 +187,7 @@ public class AuditController {
         try {
             HttpEntity<ClientHistory> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            ClientHistory.class);
+                            builder.toUriString(), HttpMethod.POST, payload, ClientHistory.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getClientHistory")));

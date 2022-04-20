@@ -5,13 +5,11 @@ import ca.bc.gov.open.icon.models.serializers.InstantSerializer;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.soap.SOAPMessage;
-
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;

@@ -5,16 +5,46 @@
     <xsd:element name="getOrders">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:ordersOuter"/>
+                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:complexType name="ordersOuter">
+        <xsd:sequence>
+            <xsd:element name="Orders" nillable="true" type="tns:ordersInner"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ordersInner">
+        <xsd:sequence>
+            <xsd:element name="Orders" type="tns:orders"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="orders">
+        <xsd:sequence>
+            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="OrdersInfo" type="tns:ordersInfo"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ordersInfo">
+        <xsd:sequence>
+            <xsd:element name="audoId" nillable="true" type="xsd:string"/>
+            <xsd:element name="description" nillable="true" type="xsd:string"/>
+            <xsd:element name="adultYouth" nillable="true" type="xsd:string"/>
+            <xsd:element name="orderNum" type="xsd:string"/>
+            <xsd:element name="startDate" type="xsd:dateTime"/>
+            <xsd:element name="endDate" type="xsd:dateTime"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name="getOrdersResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:ordersOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -31,16 +61,47 @@
     <xsd:element name="getPrograms">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:programsOuter"/>
+                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:complexType name="programsOuter">
+        <xsd:sequence>
+            <xsd:element name="Programs" nillable="true" type="tns:programsInner"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="programsInner">
+        <xsd:sequence>
+            <xsd:element name="Programs" type="tns:programs"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="programs">
+        <xsd:sequence>
+            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
+            <xsd:element name="instCommStatusFilter" nillable="true" type="xsd:string"/>
+            <xsd:element name="Row" nillable="true" type="tns:row"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="ProgramInfo" type="tns:programInfo"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="programInfo">
+        <xsd:sequence>
+            <xsd:element name="instCommStatus" nillable="true" type="xsd:string"/>
+            <xsd:element name="programName" type="xsd:string"/>
+            <xsd:element name="Location" nillable="true" type="tns:location"/>
+            <xsd:element name="endDate" type="xsd:dateTime"/>
+            <xsd:element name="outcome" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name="getProgramsResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:programsOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -56,7 +117,7 @@
 
     <xsd:complexType name="locationsOuter">
         <xsd:sequence>
-            <xsd:element name="Locations" type="tns:locationsInner"/>
+            <xsd:element name="Locations" nillable="true" type="tns:locationsInner"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -101,13 +162,13 @@
 
     <xsd:complexType name="userTokenOuter">
         <xsd:sequence>
-            <xsd:element name="UserToken" type="tns:userTokenInner"/>
+            <xsd:element name="UserToken" nillable="true" type="tns:userTokenInner"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="userTokenInner">
         <xsd:sequence>
-            <xsd:element name="UserToken" type="tns:userToken"/>
+            <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -127,7 +188,7 @@
 
     <xsd:complexType name="clientHistoryOuter">
         <xsd:sequence>
-            <xsd:element name="ClientHistory" type="tns:clientHistoryInner"/>
+            <xsd:element name="ClientHistory" nillable="true" type="tns:clientHistoryInner"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -287,16 +348,54 @@
     <xsd:element name="getOrdersConditions">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:ordersConditionsOuter"/>
+                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:complexType name="ordersConditionsOuter">
+        <xsd:sequence>
+            <xsd:element name="OrdersConditions" nillable="true" type="tns:ordersConditionsInner"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ordersConditionsInner">
+        <xsd:sequence>
+            <xsd:element name="OrdersConditions" type="tns:ordersConditions"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ordersConditions">
+        <xsd:sequence>
+            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="OrdersConditionsDetails" nillable="true" type="tns:ordersConditionsDetails"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ordersConditionsDetails">
+        <xsd:sequence>
+            <xsd:element name="audoId" nillable="true" type="xsd:string"/>
+            <xsd:element name="description" nillable="true" type="xsd:string"/>
+            <xsd:element name="adultYouth" nillable="true" type="xsd:string"/>
+            <xsd:element name="orderNum" type="xsd:string"/>
+            <xsd:element name="startDate" type="xsd:dateTime"/>
+            <xsd:element name="endDate" type="xsd:dateTime"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="ConditionDetails" nillable="true" type="tns:conditionDetails"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="conditionDetails">
+        <xsd:sequence>
+            <xsd:element name="condition" type="xsd:string"/>
+            <xsd:element name="details" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name="getOrdersConditionsResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:ordersConditionsOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
