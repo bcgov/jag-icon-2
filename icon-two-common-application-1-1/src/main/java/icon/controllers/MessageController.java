@@ -41,9 +41,7 @@ public class MessageController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "MessageAccessed")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "MessageAccessed")
     @ResponsePayload
     public MessageAccessedResponse messageAccessed(@RequestPayload MessageAccessed messageAccessed)
             throws JsonProcessingException {

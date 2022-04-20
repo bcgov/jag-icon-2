@@ -71,7 +71,7 @@ public class AuditController {
         }
     }
 
-    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "homeScreenAccessed")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "HomeScreenAccessed")
     @ResponsePayload
     public HomeScreenAccessedResponse homeScreenAccessed(
             @RequestPayload HomeScreenAccessed homeScreenAccessed) throws JsonProcessingException {
@@ -103,9 +103,7 @@ public class AuditController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Audit.ws.provider:Audit",
-            localPart = "sessionTimeoutExecuted")
+    @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "SessionTimeoutExecuted")
     @ResponsePayload
     public SessionTimeoutExecutedResponse sessionTimeoutExecuted(
             @RequestPayload SessionTimeoutExecuted sessionTimeoutExecuted)

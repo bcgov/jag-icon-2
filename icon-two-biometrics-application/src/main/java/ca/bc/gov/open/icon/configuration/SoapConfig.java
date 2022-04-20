@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.xml.soap.SOAPMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -67,13 +68,16 @@ public class SoapConfig extends WsConfigurerAdapter {
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
         webServiceTemplate.setMessageFactory(messageFactory());
         jaxb2Marshaller.setContextPaths(
-                "ca.bc.gov.open.adobe.ws",
-                "ca.bc.gov.open.adobe.scp",
-                "ca.bc.gov.open.adobe.diagnostic");
+                "ca.bc.gov.open.icon.iis", "ca.bc.gov.open.icon.ips", "ca.bc.gov.open.icon.bcs");
         webServiceTemplate.setMarshaller(jaxb2Marshaller);
         webServiceTemplate.setUnmarshaller(jaxb2Marshaller);
         webServiceTemplate.afterPropertiesSet();
         return webServiceTemplate;
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
     @Bean
