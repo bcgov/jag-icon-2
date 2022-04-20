@@ -148,30 +148,31 @@ public class InformationController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-            localPart = "getOrders")
+    @PayloadRoot(namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo", localPart = "getOrders")
     @ResponsePayload
     public GetOrdersResponse getOrders(@RequestPayload GetOrders getOrders)
             throws JsonProcessingException {
 
+        HttpEntity<GetOrders> payload = new HttpEntity<>(getOrders, new HttpHeaders());
+
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/orders")
-                        .queryParam("xmlString", getOrders.getXMLString())
-                        .queryParam("userTokenString", getOrders.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "information/orders");
 
         try {
-            HttpEntity<GetOrdersResponse> resp =
+            HttpEntity<Orders> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetOrdersResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Orders.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getOrders")));
 
-            return resp.getBody();
+            GetOrdersResponse getOrdersResponse = new GetOrdersResponse();
+            OrdersOuter outResp = new OrdersOuter();
+            OrdersInner inResp = new OrdersInner();
+            inResp.setOrders(resp.getBody());
+            outResp.setOrders(inResp);
+            getOrdersResponse.setXMLString(outResp);
+            return getOrdersResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -184,30 +185,30 @@ public class InformationController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-            localPart = "getPrograms")
+    @PayloadRoot(namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo", localPart = "getPrograms")
     @ResponsePayload
     public GetProgramsResponse getPrograms(@RequestPayload GetPrograms getPrograms)
             throws JsonProcessingException {
 
+        HttpEntity<GetPrograms> payload = new HttpEntity<>(getPrograms, new HttpHeaders());
+
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/programs")
-                        .queryParam("xmlString", getPrograms.getXMLString())
-                        .queryParam("userTokenString", getPrograms.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "information/programs");
 
         try {
-            HttpEntity<GetProgramsResponse> resp =
+            HttpEntity<Programs> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetProgramsResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Programs.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getPrograms")));
-
-            return resp.getBody();
+            GetProgramsResponse getProgramsResponse = new GetProgramsResponse();
+            ProgramsOuter outResp = new ProgramsOuter();
+            ProgramsInner inResp = new ProgramsInner();
+            inResp.setPrograms(resp.getBody());
+            outResp.setPrograms(inResp);
+            getProgramsResponse.setXMLString(outResp);
+            return getProgramsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -220,30 +221,31 @@ public class InformationController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-            localPart = "getLocations")
+    @PayloadRoot(namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo", localPart = "getLocations")
     @ResponsePayload
     public GetLocationsResponse getLocations(@RequestPayload GetLocations getLocations)
             throws JsonProcessingException {
 
+        HttpEntity<GetLocations> payload = new HttpEntity<>(getLocations, new HttpHeaders());
+
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/locations")
-                        .queryParam("xmlString", getLocations.getXMLString())
-                        .queryParam("userTokenString", getLocations.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "information/locations");
 
         try {
-            HttpEntity<GetLocationsResponse> resp =
+            HttpEntity<Locations> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetLocationsResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Locations.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getLocations")));
 
-            return resp.getBody();
+            GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
+            LocationsOuter outResp = new LocationsOuter();
+            LocationsInner inResp = new LocationsInner();
+            inResp.setLocations(resp.getBody());
+            outResp.setLocations(inResp);
+            getLocationsResponse.setXMLString(outResp);
+            return getLocationsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -256,30 +258,30 @@ public class InformationController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-            localPart = "getConditions")
+    @PayloadRoot(namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo", localPart = "getConditions")
     @ResponsePayload
     public GetConditionsResponse getConditions(@RequestPayload GetConditions getConditions)
             throws JsonProcessingException {
 
+        HttpEntity<GetConditions> payload = new HttpEntity<>(getConditions, new HttpHeaders());
+
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/conditions")
-                        .queryParam("xmlString", getConditions.getXMLString())
-                        .queryParam("userTokenString", getConditions.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "information/conditions");
 
         try {
-            HttpEntity<GetConditionsResponse> resp =
+            HttpEntity<Conditions> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetConditionsResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Conditions.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getConditions")));
-
-            return resp.getBody();
+            GetConditionsResponse getConditionsResponse = new GetConditionsResponse();
+            ConditionsOuter outResp = new ConditionsOuter();
+            ConditionsInner inResp = new ConditionsInner();
+            inResp.setConditions(resp.getBody());
+            outResp.setConditions(inResp);
+            getConditionsResponse.setXMLString(outResp);
+            return getConditionsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -293,30 +295,37 @@ public class InformationController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
+            namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo",
             localPart = "getOrdersConditions")
     @ResponsePayload
     public GetOrdersConditionsResponse getOrdersConditions(
             @RequestPayload GetOrdersConditions getOrdersConditions)
             throws JsonProcessingException {
 
+        HttpEntity<GetOrdersConditions> payload =
+                new HttpEntity<>(getOrdersConditions, new HttpHeaders());
+
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions")
-                        .queryParam("xmlString", getOrdersConditions.getXMLString())
-                        .queryParam("userTokenString", getOrdersConditions.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions");
 
         try {
-            HttpEntity<GetOrdersConditionsResponse> resp =
+            HttpEntity<OrdersConditions> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetOrdersConditionsResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            OrdersConditions.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getOrdersConditions")));
-
-            return resp.getBody();
+            GetOrdersConditionsResponse getOrdersConditionsResponse =
+                    new GetOrdersConditionsResponse();
+            OrdersConditionsOuter outResp = new OrdersConditionsOuter();
+            OrdersConditionsInner inResp = new OrdersConditionsInner();
+            inResp.setOrdersConditions(resp.getBody());
+            outResp.setOrdersConditions(inResp);
+            getOrdersConditionsResponse.setXMLString(outResp);
+            return getOrdersConditionsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -329,30 +338,30 @@ public class InformationController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.MyInfo.ws.provider:MyInfo",
-            localPart = "getDates")
+    @PayloadRoot(namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo", localPart = "getDates")
     @ResponsePayload
     public GetDatesResponse getDates(@RequestPayload GetDates getDates)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/dates")
-                        .queryParam("xmlString", getDates.getXMLString())
-                        .queryParam("userTokenString", getDates.getUserTokenString());
+        HttpEntity<GetDates> payload = new HttpEntity<>(getDates, new HttpHeaders());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "information/dates");
 
         try {
-            HttpEntity<GetDatesResponse> resp =
+            HttpEntity<Dates> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetDatesResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Dates.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getDates")));
 
-            return resp.getBody();
+            GetDatesResponse getDatesResponse = new GetDatesResponse();
+            DatesOuter outResp = new DatesOuter();
+            DatesInner inResp = new DatesInner();
+            inResp.setDates(resp.getBody());
+            outResp.setDates(inResp);
+            getDatesResponse.setXMLString(outResp);
+            return getDatesResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
