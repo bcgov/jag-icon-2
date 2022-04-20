@@ -252,7 +252,7 @@
             <xsd:element name="instCommType" nillable="true" type="xsd:string"/>
             <xsd:element name="phone" nillable="true" type="xsd:string"/>
             <xsd:element name="fax" nillable="true" type="xsd:string"/>
-            <xsd:element name="Address" nillable="true" type="tns:address"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="Address" nillable="true" type="tns:address"/>
         </xsd:sequence>
     </xsd:complexType>
 
