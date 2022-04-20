@@ -142,7 +142,7 @@ public class MessageController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
+            namespace = "ICON2.Source.Message.ws.provider:Message",
             localPart = "setMessageDetails")
     @ResponsePayload
     public SetMessageDetailsResponse setMessageDetails(
@@ -176,7 +176,7 @@ public class MessageController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
+            namespace = "ICON2.Source.Message.ws.provider:Message",
             localPart = "getMessages")
     @ResponsePayload
     public GetMessagesResponse getMessages(@RequestPayload GetMessages getMessages)
@@ -212,7 +212,7 @@ public class MessageController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
+            namespace = "ICON2.Source.Message.ws.provider:Message",
             localPart = "getMessageDetails")
     @ResponsePayload
     public GetMessageDetailsResponse getMessageDetails(
