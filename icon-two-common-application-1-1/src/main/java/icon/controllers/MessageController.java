@@ -142,27 +142,31 @@ public class MessageController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
+            namespace = "ICON2.Source.Message.ws.provider:Message",
             localPart = "setMessageDetails")
     @ResponsePayload
     public SetMessageDetailsResponse setMessageDetails(
             @RequestPayload SetMessageDetails setMessageDetails) throws JsonProcessingException {
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/details");
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "message/details/set");
         HttpEntity<SetMessageDetails> payload =
                 new HttpEntity<>(setMessageDetails, new HttpHeaders());
 
         try {
-            HttpEntity<SetMessageDetailsResponse> resp =
+            HttpEntity<Messages> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            SetMessageDetailsResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Messages.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDetails")));
-            return resp.getBody();
+            SetMessageDetailsResponse setMessageDetailsResponse = new SetMessageDetailsResponse();
+            MessagesOuter outResp = new MessagesOuter();
+            MessagesInner inResp = new MessagesInner();
+            inResp.setMessages(resp.getBody());
+            outResp.setMessages(inResp);
+            setMessageDetailsResponse.setXMLString(outResp);
+            return setMessageDetailsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -175,30 +179,29 @@ public class MessageController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
-            localPart = "getMessages")
+    @PayloadRoot(namespace = "ICON2.Source.Message.ws.provider:Message", localPart = "getMessages")
     @ResponsePayload
     public GetMessagesResponse getMessages(@RequestPayload GetMessages getMessages)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/responses")
-                        .queryParam("xmlString", getMessages.getXMLString())
-                        .queryParam("userTokenString", getMessages.getUserTokenString());
+        HttpEntity<GetMessages> payload = new HttpEntity<>(getMessages, new HttpHeaders());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/responses");
 
         try {
-            HttpEntity<GetMessagesResponse> resp =
+            HttpEntity<Messages> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetMessagesResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Messages.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessages")));
-
-            return resp.getBody();
+            GetMessagesResponse getMessagesResponse = new GetMessagesResponse();
+            MessagesOuter outResp = new MessagesOuter();
+            MessagesInner inResp = new MessagesInner();
+            inResp.setMessages(resp.getBody());
+            outResp.setMessages(inResp);
+            getMessagesResponse.setXMLString(outResp);
+            return getMessagesResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -212,29 +215,31 @@ public class MessageController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Message.ws.provider:Message",
+            namespace = "ICON2.Source.Message.ws.provider:Message",
             localPart = "getMessageDetails")
     @ResponsePayload
     public GetMessageDetailsResponse getMessageDetails(
             @RequestPayload GetMessageDetails getMessageDetails) throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/details")
-                        .queryParam("xmlString", getMessageDetails.getXMLString())
-                        .queryParam("userTokenString", getMessageDetails.getUserTokenString());
+        HttpEntity<GetMessageDetails> payload =
+                new HttpEntity<>(getMessageDetails, new HttpHeaders());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/details");
 
         try {
-            HttpEntity<GetMessageDetailsResponse> resp =
+            HttpEntity<Messages> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetMessageDetailsResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Messages.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessageDetails")));
-
-            return resp.getBody();
+            GetMessageDetailsResponse getMessageDetailsResponse = new GetMessageDetailsResponse();
+            MessagesOuter outResp = new MessagesOuter();
+            MessagesInner inResp = new MessagesInner();
+            inResp.setMessages(resp.getBody());
+            outResp.setMessages(inResp);
+            getMessageDetailsResponse.setXMLString(outResp);
+            return getMessageDetailsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
