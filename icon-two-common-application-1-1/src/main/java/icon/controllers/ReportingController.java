@@ -5,10 +5,10 @@ import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
+import ca.bc.gov.open.icon.ereporting.Locations.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
-import ca.bc.gov.open.icon.myinfo.GetLocationsResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +77,7 @@ public class ReportingController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getReportingCmpltInstruction")
     @ResponsePayload
     public GetReportingCmpltInstructionResponse getReportingCmpltInstruction(
@@ -85,24 +85,30 @@ public class ReportingController {
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "reporting/complete-instruction")
-                        .queryParam("xmlString", getReportingCmpltInstruction.getXMLString())
-                        .queryParam(
-                                "userTokenString",
-                                getReportingCmpltInstruction.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "reporting/complete-instruction");
+        HttpEntity<GetReportingCmpltInstruction> payload =
+                new HttpEntity<>(getReportingCmpltInstruction, new HttpHeaders());
 
         try {
-            HttpEntity<GetReportingCmpltInstructionResponse> resp =
+            HttpEntity<ReportingCmpltInstruction> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetReportingCmpltInstructionResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            ReportingCmpltInstruction.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog(
                                     "Request Success", "getReportingCmpltInstruction")));
-            return resp.getBody();
+
+            GetReportingCmpltInstructionResponse getReportingCmpltInstructionResponse =
+                    new GetReportingCmpltInstructionResponse();
+            ReportingCmpltInstructionOuter outResp = new ReportingCmpltInstructionOuter();
+            ReportingCmpltInstructionInner inResp = new ReportingCmpltInstructionInner();
+            inResp.setReportingCmpltInstruction(resp.getBody());
+            outResp.setReportingCmpltInstruction(inResp);
+            getReportingCmpltInstructionResponse.setXMLString(outResp);
+            return getReportingCmpltInstructionResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -119,25 +125,28 @@ public class ReportingController {
             namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getLocations")
     @ResponsePayload
-    public GetLocationsResponse getLocationsResponse(
-            @RequestPayload GetLocations getLocationsResponse) throws JsonProcessingException {
+    public GetLocationsResponse getLocationsResponse(@RequestPayload GetLocations getLocations)
+            throws JsonProcessingException {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/locations");
-        HttpEntity<GetLocations> payload =
-                new HttpEntity<>(getLocationsResponse, new HttpHeaders());
+        HttpEntity<GetLocations> payload = new HttpEntity<>(getLocations, new HttpHeaders());
 
         try {
-            HttpEntity<GetLocationsResponse> resp =
+            HttpEntity<Locations> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetLocationsResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Locations.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getLocationsResponse")));
-            return resp.getBody();
+
+            GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
+            LocationsOuter outResp = new LocationsOuter();
+            LocationsInner inResp = new LocationsInner();
+            inResp.setLocations(resp.getBody());
+            outResp.setLocations(inResp);
+            getLocationsResponse.setXMLString(outResp);
+            return getLocationsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -145,13 +154,13 @@ public class ReportingController {
                                     "Error received from ORDS",
                                     "getLocationsResponse",
                                     ex.getMessage(),
-                                    getLocationsResponse)));
+                                    getLocations)));
             throw new ORDSException();
         }
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "submitAnswers")
     @ResponsePayload
     public SubmitAnswersResponse submitAnswers(@RequestPayload SubmitAnswers submitAnswers)
@@ -162,16 +171,20 @@ public class ReportingController {
         HttpEntity<SubmitAnswers> payload = new HttpEntity<>(submitAnswers, new HttpHeaders());
 
         try {
-            HttpEntity<SubmitAnswersResponse> resp =
+            HttpEntity<Report> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            SubmitAnswersResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Report.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "submitAnswers")));
-            return resp.getBody();
+
+            SubmitAnswersResponse submitAnswersResponse = new SubmitAnswersResponse();
+            ReportOuter outResp = new ReportOuter();
+            ReportInner inResp = new ReportInner();
+            inResp.setEReport(resp.getBody());
+            outResp.setReport(inResp);
+            submitAnswersResponse.setXMLString(outResp);
+            return submitAnswersResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -185,29 +198,34 @@ public class ReportingController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getAppointment")
     @ResponsePayload
     public GetAppointmentResponse getAppointment(@RequestPayload GetAppointment getAppointment)
             throws JsonProcessingException {
 
+        HttpEntity<GetAppointment> payload = new HttpEntity<>(getAppointment, new HttpHeaders());
+
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "reporting/appointment")
-                        .queryParam("xmlString", getAppointment.getXMLString())
-                        .queryParam("userTokenString", getAppointment.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "reporting/appointment");
 
         try {
-            HttpEntity<GetAppointmentResponse> resp =
+
+            HttpEntity<Appointment> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetAppointmentResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Appointment.class);
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getAppointment")));
 
-            return resp.getBody();
+            GetAppointmentResponse getClientHistoryResponse = new GetAppointmentResponse();
+            AppointmentOuter outResp = new AppointmentOuter();
+            AppointmentInner inResp = new AppointmentInner();
+            inResp.setAppointment(resp.getBody());
+            outResp.setAppointment(inResp);
+            getClientHistoryResponse.setXMLString(outResp);
+            return getClientHistoryResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -221,29 +239,31 @@ public class ReportingController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getQuestions")
     @ResponsePayload
     public GetQuestionsResponse getQuestions(@RequestPayload GetQuestions getQuestions)
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "reporting/questions")
-                        .queryParam("xmlString", getQuestions.getXMLString())
-                        .queryParam("userTokenString", getQuestions.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "reporting/questions");
+        HttpEntity<GetQuestions> payload = new HttpEntity<>(getQuestions, new HttpHeaders());
 
         try {
-            HttpEntity<GetQuestionsResponse> resp =
+            HttpEntity<Report> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetQuestionsResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Report.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getQuestions")));
 
-            return resp.getBody();
+            GetQuestionsResponse getQuestionsResponse = new GetQuestionsResponse();
+            ReportOuter outResp = new ReportOuter();
+            ReportInner inResp = new ReportInner();
+            inResp.setEReport(resp.getBody());
+            outResp.setReport(inResp);
+            getQuestionsResponse.setXMLString(outResp);
+            return getQuestionsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -257,28 +277,33 @@ public class ReportingController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getStatus")
     @ResponsePayload
     public GetStatusResponse getStatus(@RequestPayload GetStatus getStatus)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "reporting/status")
-                        .queryParam("xmlString", getStatus.getXMLString())
-                        .queryParam("userTokenString", getStatus.getUserTokenString());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "reporting/status");
+        HttpEntity<GetStatus> payload = new HttpEntity<>(getStatus, new HttpHeaders());
 
         try {
-            HttpEntity<GetStatusResponse> resp =
+            HttpEntity<ca.bc.gov.open.icon.ereporting.Status> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetStatusResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            ca.bc.gov.open.icon.ereporting.Status.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getStatus")));
-            return resp.getBody();
+                            new RequestSuccessLog("Request Success", "getQuestions")));
+
+            GetStatusResponse getStatusResponse = new GetStatusResponse();
+            StatusOuter outResp = new StatusOuter();
+            StatusInner inResp = new StatusInner();
+            inResp.setStatus(resp.getBody());
+            outResp.setStatus(inResp);
+            getStatusResponse.setXMLString(outResp);
+            return getStatusResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(

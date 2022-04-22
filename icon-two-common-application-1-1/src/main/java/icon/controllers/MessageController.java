@@ -3,10 +3,7 @@ package icon.controllers;
 import ca.bc.gov.open.icon.audit.MessageAccessed;
 import ca.bc.gov.open.icon.audit.MessageAccessedResponse;
 import ca.bc.gov.open.icon.audit.Status;
-import ca.bc.gov.open.icon.ereporting.GetMessage;
-import ca.bc.gov.open.icon.ereporting.GetMessageResponse;
-import ca.bc.gov.open.icon.ereporting.SetMessageDate;
-import ca.bc.gov.open.icon.ereporting.SetMessageDateResponse;
+import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.message.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
@@ -72,29 +69,34 @@ public class MessageController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getMessage")
     @ResponsePayload
     public GetMessageResponse getMessage(@RequestPayload GetMessage getMessage)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "message/response")
-                        .queryParam("xmlString", getMessage.getXMLString())
-                        .queryParam("userTokenString", getMessage.getUserTokenString());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/response");
+        HttpEntity<GetMessage> payload = new HttpEntity<>(getMessage, new HttpHeaders());
 
         try {
-            HttpEntity<GetMessageResponse> resp =
+            HttpEntity<AppointmentMessage> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetMessageResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            AppointmentMessage.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessage")));
 
-            return resp.getBody();
+            GetMessageResponse getMessageResponse = new GetMessageResponse();
+            AppointmentMessageOuter outResp = new AppointmentMessageOuter();
+            AppointmentMessageInner inResp = new AppointmentMessageInner();
+            inResp.setAppointmentMessage(resp.getBody());
+            outResp.setAppointmentMessage(inResp);
+            getMessageResponse.setXMLString(outResp);
+            return getMessageResponse;
+
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -108,8 +110,8 @@ public class MessageController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
-            localPart = "setMessageDetails")
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
+            localPart = "setMessageDate")
     @ResponsePayload
     public SetMessageDateResponse setMessageDate(@RequestPayload SetMessageDate setMessageDate)
             throws JsonProcessingException {
@@ -118,17 +120,23 @@ public class MessageController {
         HttpEntity<SetMessageDate> payload = new HttpEntity<>(setMessageDate, new HttpHeaders());
 
         try {
-            HttpEntity<SetMessageDateResponse> resp =
+            HttpEntity<AppointmentMessage> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
-                            new HttpEntity<>(new HttpHeaders()),
-                            SetMessageDateResponse.class);
+                            payload,
+                            AppointmentMessage.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDate")));
 
-            return resp.getBody();
+            SetMessageDateResponse getMessageDateResponse = new SetMessageDateResponse();
+            AppointmentMessageOuter outResp = new AppointmentMessageOuter();
+            AppointmentMessageInner inResp = new AppointmentMessageInner();
+            inResp.setAppointmentMessage(resp.getBody());
+            outResp.setAppointmentMessage(inResp);
+            getMessageDateResponse.setXMLString(outResp);
+            return getMessageDateResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
