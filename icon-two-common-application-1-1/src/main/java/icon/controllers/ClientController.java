@@ -4,10 +4,16 @@ import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
+import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo2;
+import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoRequest;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoResponse;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
+import ca.bc.gov.open.icon.trustaccount.GetTrustAccount2;
+import ca.bc.gov.open.icon.trustaccount.GetTrustAccountRequest;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccountResponse;
 import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
+import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule2;
+import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleRequest;
 import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,20 +53,25 @@ public class ClientController {
             @RequestPayload GetTombStoneInfo getTombStoneInfo) throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info")
-                        .queryParam("xmlString", getTombStoneInfo.getXMLString());
+                UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info");
+        HttpEntity<GetTombStoneInfoRequest> payload = new HttpEntity<>(getTombStoneInfo.getXMLString().getTombStoneInfo(), new HttpHeaders());
 
         try {
-            HttpEntity<GetTombStoneInfoResponse> resp =
+            HttpEntity<GetTombStoneInfoRequest> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetTombStoneInfoResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            GetTombStoneInfoRequest.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getTombStoneInfo")));
-            return resp.getBody();
+               GetTombStoneInfoResponse getTombStoneInfoResponseOut = new GetTombStoneInfoResponse();
+               GetTombStoneInfo2 getTombStoneInfoOut = new GetTombStoneInfo2();
+               getTombStoneInfoOut.setTombStoneInfo(resp.getBody());
+               getTombStoneInfoResponseOut.setXMLString(getTombStoneInfoOut);
+               return getTombStoneInfoResponseOut;
+
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -81,21 +92,26 @@ public class ClientController {
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/trust-account")
-                        .queryParam("xmlString", getTrustAccount.getXMLString())
-                        .queryParam("userTokenString", getTrustAccount.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "client/trust-account");
 
+        HttpEntity<GetTrustAccount> payload = new HttpEntity<>(getTrustAccount, new HttpHeaders());
         try {
-            HttpEntity<GetTrustAccountResponse> resp =
+            HttpEntity<GetTrustAccountRequest> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetTrustAccountResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            GetTrustAccountRequest.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getTrustAccount")));
-            return resp.getBody();
+
+            GetTrustAccountResponse getTrustAccountResponseOut = new GetTrustAccountResponse();
+            GetTrustAccount2 getTrustAccountInner = new GetTrustAccount2();
+            getTrustAccountInner.setTrustAccount(resp.getBody());
+            getTrustAccountResponseOut.setXMLString(getTrustAccountInner);
+            return getTrustAccountResponseOut;
+
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -116,20 +132,25 @@ public class ClientController {
             @RequestPayload GetVisitSchedule getVisitSchedule) throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule")
-                        .queryParam("xmlString", getVisitSchedule.getXMLString())
-                        .queryParam("userTokenString", getVisitSchedule.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule");
+        HttpEntity<GetVisitSchedule> payload = new HttpEntity<>(getVisitSchedule, new HttpHeaders());
         try {
-            HttpEntity<GetVisitScheduleResponse> resp =
+            HttpEntity<GetVisitScheduleRequest> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetVisitScheduleResponse.class);
+                            HttpMethod.POST,
+                            payload,
+                            GetVisitScheduleRequest.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getVisitSchedule")));
-            return resp.getBody();
+
+            GetVisitScheduleResponse getVisitScheduleResponseOut = new GetVisitScheduleResponse();
+            GetVisitSchedule2 getVisitScheduleInner = new GetVisitSchedule2();
+            getVisitScheduleInner.setVisitSchedule(resp.getBody());
+            getVisitScheduleResponseOut.setXMLString(getVisitScheduleInner);
+            return getVisitScheduleResponseOut;
+
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
