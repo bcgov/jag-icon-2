@@ -24,10 +24,10 @@
 
     <xsd:complexType name="userInfo">
         <xsd:sequence>
-            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
-            <xsd:element name="lastName" nillable="true" type="xsd:string"/>
-            <xsd:element name="firstName" nillable="true" type="xsd:string"/>
-            <xsd:element name="latestPhoto" nillable="true" type="xsd:string"/>
+            <xsd:element name="csNum" type="xsd:string"/>
+            <xsd:element name="lastName" type="xsd:string"/>
+            <xsd:element name="firstName" type="xsd:string"/>
+            <xsd:element name="latestPhoto" type="xsd:string"/>
             <xsd:element name="locationCD" nillable="true" type="xsd:string"/>
             <xsd:element name="businessRole" nillable="true" type="xsd:string"/>
             <xsd:element name="SessionInfo" nillable="true" type="tns:sessionInfo"/>
@@ -159,7 +159,7 @@
 
     <xsd:complexType name="hasFunctionalAbility">
         <xsd:sequence>
-            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
+            <xsd:element name="csNum" type="xsd:string"/>
             <xsd:element name="FunctionalAbility" nillable="true" type="tns:functionalAbility"/>
             <xsd:element name="enabled" nillable="true" type="xsd:string"/>
         </xsd:sequence>
