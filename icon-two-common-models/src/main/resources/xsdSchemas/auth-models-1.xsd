@@ -12,13 +12,13 @@
 
     <xsd:complexType name="userInfoOut">
         <xsd:sequence>
-            <xsd:element name="userInfo" nillable="true" type="tns:userInfoInner"/>
+            <xsd:element name="UserInfo" nillable="true" type="tns:userInfoInner"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="userInfoInner">
         <xsd:sequence>
-            <xsd:element name="userInfo" nillable="true" type="tns:userInfo"/>
+            <xsd:element name="UserInfo" nillable="true" type="tns:userInfo"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -30,8 +30,8 @@
             <xsd:element name="latestPhoto" nillable="true" type="xsd:string"/>
             <xsd:element name="locationCD" nillable="true" type="xsd:string"/>
             <xsd:element name="businessRole" nillable="true" type="xsd:string"/>
-            <xsd:element name="sessionInfo" nillable="true" type="tns:sessionInfo"/>
-            <xsd:element name="serviceInfo" nillable="true" type="tns:serviceInfo" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="SessionInfo" nillable="true" type="tns:sessionInfo"/>
+            <xsd:element name="ServiceInfo" nillable="true" type="tns:serviceInfo" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -47,8 +47,8 @@
             <xsd:element name="name" nillable="true" type="xsd:string"/>
             <xsd:element name="description" nillable="true" type="xsd:string"/>
             <xsd:element name="urn" nillable="true" type="xsd:string"/>
-            <xsd:element name="sessionInfo" nillable="true" type="tns:sessionInfo"/>
-            <xsd:element name="functionalAbility" nillable="true" type="tns:functionalAbility" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="SessionInfo" nillable="true" type="tns:sessionInfo"/>
+            <xsd:element name="FunctionalAbility" nillable="true" type="tns:functionalAbility" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -85,13 +85,13 @@
 
     <xsd:complexType name="deviceInfoOut">
         <xsd:sequence>
-            <xsd:element name="deviceInfo" nillable="true" type="tns:deviceInfoInner"/>
+            <xsd:element name="DeviceInfo" nillable="true" type="tns:deviceInfoInner"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="deviceInfoInner">
         <xsd:sequence>
-            <xsd:element name="deviceInfo" nillable="true" type="tns:deviceInfo"/>
+            <xsd:element name="DeviceInfo" nillable="true" type="tns:deviceInfo"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -105,7 +105,7 @@
             <xsd:element name="pollActiveInterval" nillable="true" type="xsd:string"/>
             <xsd:element name="pollSleepInterval" nillable="true" type="xsd:string"/>
             <xsd:element name="certificateName" nillable="true" type="xsd:string"/>
-            <xsd:element name="serviceCodes" nillable="true" type="tns:serviceCodes" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="ServiceCodes" nillable="true" type="tns:serviceCodes" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -134,25 +134,25 @@
 
     <xsd:complexType name="hasFunctionalAbilityOut">
         <xsd:sequence>
-            <xsd:element name="hasFunctionalAbility" nillable="true" type="tns:hasFunctionalAbilityInner"/>
+            <xsd:element name="HasFunctionalAbility" nillable="true" type="tns:hasFunctionalAbilityInner"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="userTokenOut">
         <xsd:sequence>
-            <xsd:element name="userToken" nillable="true" type="tns:userTokenInner"/>
+            <xsd:element name="UserToken" nillable="true" type="tns:userTokenInner"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="hasFunctionalAbilityInner">
         <xsd:sequence>
-            <xsd:element name="hasFunctionalAbility" nillable="true" type="tns:hasFunctionalAbility"/>
+            <xsd:element name="HasFunctionalAbility" nillable="true" type="tns:hasFunctionalAbility"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="userTokenInner">
         <xsd:sequence>
-            <xsd:element name="userToken" nillable="true" type="tns:userToken"/>
+            <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -160,7 +160,7 @@
     <xsd:complexType name="hasFunctionalAbility">
         <xsd:sequence>
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
-            <xsd:element name="functionalAbility" nillable="true" type="tns:functionalAbility"/>
+            <xsd:element name="FunctionalAbility" nillable="true" type="tns:functionalAbility"/>
             <xsd:element name="enabled" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
@@ -168,15 +168,15 @@
 
     <xsd:complexType name="userToken">
         <xsd:sequence>
-            <xsd:element name="remoteClientBrowserType" nillable="true" type="xsd:string"/>
-            <xsd:element name="remoteClientHostName" nillable="true" type="xsd:string"/>
-            <xsd:element name="remoteClientIPAddress" nillable="true" type="xsd:string"/>
-            <xsd:element name="userIdentifier" nillable="true" type="xsd:string"/>
-            <xsd:element name="authoritativePartyIdentifier" nillable="true" type="xsd:string"/>
-            <xsd:element name="biometricsSignature" nillable="true" type="xsd:string"/>
-            <xsd:element name="csNumber" nillable="true" type="xsd:string"/>
-            <xsd:element name="siteMinderSessionID" nillable="true" type="xsd:string"/>
-            <xsd:element name="siteMinderTransactionID" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientBrowserType" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientHostName" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientIPAddress" nillable="true" type="xsd:string"/>
+            <xsd:element name="UserIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="AuthoritativePartyIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="BiometricsSignature" nillable="true" type="xsd:string"/>
+            <xsd:element name="CSNumber" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderSessionID" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderTransactionID" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -198,18 +198,19 @@
 
     <xsd:complexType name="PreAuthorizeClientOut">
         <xsd:sequence>
-            <xsd:element name="preAuthorize" nillable="true" type="tns:PreAuthorizeClientInner"/>
+            <xsd:element name="PreAuthorizeClient" nillable="true" type="tns:PreAuthorizeClientInner"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="PreAuthorizeClientInner">
         <xsd:sequence>
-            <xsd:element name="preAuthorize" nillable="true" type="tns:PreAuthorizeClient"/>
+            <xsd:element name="PreAuthorizeClient" nillable="true" type="tns:PreAuthorizeClient"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="PreAuthorizeClient">
         <xsd:sequence>
+            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
             <xsd:element name="isAllowed" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
