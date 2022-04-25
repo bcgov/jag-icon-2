@@ -78,15 +78,15 @@
 
     <xsd:complexType name="userToken">
         <xsd:sequence>
-            <xsd:element name="remoteClientBrowserType" type="xsd:string"/>
-            <xsd:element name="remoteClientHostName" type="xsd:string"/>
-            <xsd:element name="remoteClientIPAddress" type="xsd:string"/>
-            <xsd:element name="userIdentifier" type="xsd:string"/>
-            <xsd:element name="authoritativePartyIdentifier" type="xsd:string"/>
-            <xsd:element name="biometricsSignature" type="xsd:string"/>
-            <xsd:element name="csNumber" type="xsd:string"/>
-            <xsd:element name="siteMinderSessionID" type="xsd:string"/>
-            <xsd:element name="siteMinderTransactionID" type="xsd:string"/>
+            <xsd:element name="RemoteClientBrowserType" type="xsd:string"/>
+            <xsd:element name="RemoteClientHostName" type="xsd:string"/>
+            <xsd:element name="RemoteClientIPAddress" type="xsd:string"/>
+            <xsd:element name="UserIdentifier" type="xsd:string"/>
+            <xsd:element name="AuthoritativePartyIdentifier" type="xsd:string"/>
+            <xsd:element name="BiometricsSignature" type="xsd:string"/>
+            <xsd:element name="CSNumber" type="xsd:string"/>
+            <xsd:element name="SiteMinderSessionID" type="xsd:string"/>
+            <xsd:element name="SiteMinderTransactionID" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 
