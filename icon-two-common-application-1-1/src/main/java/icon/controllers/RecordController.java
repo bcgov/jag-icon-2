@@ -1,9 +1,6 @@
 package icon.controllers;
 
-import ca.bc.gov.open.icon.ereporting.RecordCompleted;
-import ca.bc.gov.open.icon.ereporting.RecordCompletedResponse;
-import ca.bc.gov.open.icon.ereporting.RecordException;
-import ca.bc.gov.open.icon.ereporting.RecordExceptionResponse;
+import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -39,14 +36,29 @@ public class RecordController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "recordCompleted")
     @ResponsePayload
     public RecordCompletedResponse recordCompleted(@RequestPayload RecordCompleted recordCompleted)
             throws JsonProcessingException {
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "record/completed");
-        HttpEntity<RecordCompleted> payload = new HttpEntity<>(recordCompleted, new HttpHeaders());
+
+        var inner =
+                recordCompleted.getXMLString() != null
+                                && recordCompleted.getXMLString().getClientLogNotification() != null
+                                && recordCompleted
+                                                .getXMLString()
+                                                .getClientLogNotification()
+                                                .getClientLogNotification()
+                                        != null
+                        ? recordCompleted
+                                .getXMLString()
+                                .getClientLogNotification()
+                                .getClientLogNotification()
+                        : new ClientLogNotification();
+
+        HttpEntity<ClientLogNotification> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Map> resp =
@@ -70,13 +82,28 @@ public class RecordController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.EReporting.ws.provider:EReporting",
+            namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "recordException")
     @ResponsePayload
     public RecordExceptionResponse recordException(@RequestPayload RecordException recordException)
             throws JsonProcessingException {
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "record/exception");
+
+        var inner =
+                recordException.getXMLString() != null
+                                && recordException.getXMLString() != null
+                                && recordException
+                                                .getXMLString()
+                                                .getClientLogNotification()
+                                                .getClientLogNotification()
+                                        != null
+                        ? recordException
+                                .getXMLString()
+                                .getClientLogNotification()
+                                .getClientLogNotification()
+                        : new ClientLogNotification();
+
         HttpEntity<RecordException> payload = new HttpEntity<>(recordException, new HttpHeaders());
 
         try {

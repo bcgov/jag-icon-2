@@ -233,13 +233,17 @@ public class AuthenticationController {
         // fetch the inmost DeviceInfo layer
         var inner =
                 getPreAuthorizeClient.getXMLString() != null
-                                && getPreAuthorizeClient.getXMLString().getPreAuthorize() != null
+                                && getPreAuthorizeClient.getXMLString().getPreAuthorizeClient()
+                                        != null
                                 && getPreAuthorizeClient
                                                 .getXMLString()
-                                                .getPreAuthorize()
-                                                .getPreAuthorize()
+                                                .getPreAuthorizeClient()
+                                                .getPreAuthorizeClient()
                                         != null
-                        ? getPreAuthorizeClient.getXMLString().getPreAuthorize().getPreAuthorize()
+                        ? getPreAuthorizeClient
+                                .getXMLString()
+                                .getPreAuthorizeClient()
+                                .getPreAuthorizeClient()
                         : new PreAuthorizeClient();
 
         HttpEntity<PreAuthorizeClient> payload = new HttpEntity<>(inner, new HttpHeaders());
@@ -268,8 +272,8 @@ public class AuthenticationController {
             var outResp = new PreAuthorizeClientOut();
             var inResp = new PreAuthorizeClientInner();
 
-            inResp.setPreAuthorize(resp.getBody());
-            outResp.setPreAuthorize(inResp);
+            inResp.setPreAuthorizeClient(resp.getBody());
+            outResp.setPreAuthorizeClient(inResp);
             getPreAuthorizeClientResponse.setXMLString(outResp);
             return getPreAuthorizeClientResponse;
 
