@@ -38,7 +38,7 @@ public class ErrorHandlingController {
 
     @PayloadRoot(
             namespace = "http://reeks.bcgov/ICON2.Source.Common.ws.provider:ErrorHandling",
-            localPart = "setErrorMessageResponse")
+            localPart = "setErrorMessage")
     @ResponsePayload
     public SetErrorMessageResponse setErrorMessage(@RequestPayload SetErrorMessage setErrorMessage)
             throws JsonProcessingException {
