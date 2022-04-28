@@ -7,8 +7,7 @@ import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfoResponse;
-import ca.bc.gov.open.icon.session.GetSessionParameters;
-import ca.bc.gov.open.icon.session.GetSessionParametersResponse;
+import ca.bc.gov.open.icon.session.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -243,29 +242,52 @@ public class AuditController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.Common.ws.provider:SessionParameter",
+            namespace = "ICON2.Source.Common.ws.provider:SessionParameter",
             localPart = "getSessionParameters")
     @ResponsePayload
     public GetSessionParametersResponse getSessionParameters(
             @RequestPayload GetSessionParameters getSessionParameters)
             throws JsonProcessingException {
 
+        SessionParameterInner inner =
+                getSessionParameters.getXMLString() != null
+                                && getSessionParameters.getXMLString().getSessionParameters()
+                                        != null
+                                && getSessionParameters
+                                                .getXMLString()
+                                                .getSessionParameters()
+                                                .getSessionParameters()
+                                        != null
+                        ? getSessionParameters
+                                .getXMLString()
+                                .getSessionParameters()
+                                .getSessionParameters()
+                        : new SessionParameterInner();
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/session-parameters");
-        HttpEntity<GetSessionParameters> payload =
-                new HttpEntity<>(getSessionParameters, new HttpHeaders());
+        HttpEntity<SessionParameterInner> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
-            HttpEntity<GetSessionParametersResponse> resp =
+            HttpEntity<SessionParameterInner> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
-                            HttpMethod.GET,
+                            HttpMethod.POST,
                             payload,
-                            GetSessionParametersResponse.class);
+                            SessionParameterInner.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getSessionParameters")));
-            return resp.getBody();
+
+            GetSessionParametersResponse getSessionParametersResponse =
+                    new GetSessionParametersResponse();
+            SessionParameterOutest sessionParameterOutest = new SessionParameterOutest();
+            SessionParameterOuter sessionParameterOuter = new SessionParameterOuter();
+
+            getSessionParametersResponse.setXMLString(sessionParameterOutest);
+            sessionParameterOutest.setSessionParameters(sessionParameterOuter);
+            sessionParameterOuter.setSessionParameters(resp.getBody());
+            return getSessionParametersResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
