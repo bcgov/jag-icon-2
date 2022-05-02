@@ -75,9 +75,8 @@ public class SoapConfig extends WsConfigurerAdapter {
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
         webServiceTemplate.setMessageFactory(messageFactory());
         jaxb2Marshaller.setContextPaths(
-                "ca.bc.gov.open.adobe.ws",
-                "ca.bc.gov.open.adobe.scp",
-                "ca.bc.gov.open.adobe.diagnostic");
+                "ca.bc.gov.open.icon.hsrservice"
+                );
         webServiceTemplate.setMarshaller(jaxb2Marshaller);
         webServiceTemplate.setUnmarshaller(jaxb2Marshaller);
         webServiceTemplate.afterPropertiesSet();
@@ -126,6 +125,13 @@ public class SoapConfig extends WsConfigurerAdapter {
     public Wsdl11Definition HSRWSDL() {
         SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
         wsdl11Definition.setWsdl(new ClassPathResource("wsdl/HSR.wsdl"));
+        return wsdl11Definition;
+    }
+
+    @Bean(name = "ICON2.Source.HealthServiceRequest.ws.provider:HSR")
+    public Wsdl11Definition HSRServiceWSDL() {
+        SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
+        wsdl11Definition.setWsdl(new ClassPathResource("wsdl/HSRService.wsdl"));
         return wsdl11Definition;
     }
 

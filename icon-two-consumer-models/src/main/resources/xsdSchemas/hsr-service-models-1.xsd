@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                targetNamespace="http://ws.phis.health.com"
+                xmlns:impl="http://ws.phis.health.com">
+
+            <xsd:element name="submitHealthServiceRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="csNumber" type="xsd:string"/>
+                        <xsd:element name="submissionDate" type="xsd:dateTime"/>
+                        <xsd:element name="centre" type="xsd:string"/>
+                        <xsd:element name="details" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="submitHealthServiceRequestResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="submitHealthServiceRequestReturn" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="getHealthServiceRequestSummary">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="csNumber" type="xsd:string"/>
+                        <xsd:element name="numCharacters" type="xsd:string"/>
+                        <xsd:element name="startRecord" type="xsd:string"/>
+                        <xsd:element name="endRecord" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="getHealthServiceRequestSummaryResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="getHealthServiceRequestSummaryReturn" type="impl:HealthServiceRequestBundle"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:complexType name="HealthServiceRequest">
+                <xsd:sequence>
+                    <xsd:element name="submittedDtm" nillable="true" type="xsd:dateTime"/>
+                    <xsd:element name="detailsTxt" nillable="true" type="xsd:string"/>
+                    <xsd:element name="id" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ArrayOfHealthServiceRequest">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="requests" type="impl:HealthServiceRequest"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="HealthServiceRequestBundle">
+                <xsd:sequence>
+                    <xsd:element name="totalRequestCount" type="xsd:string"/>
+                    <xsd:element name="requests" nillable="true" type="impl:ArrayOfHealthServiceRequest"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:element name="getHealthServiceRequestDetails">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="csNumber" type="xsd:string"/>
+                        <xsd:element name="id" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="getHealthServiceRequestDetailsResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="getHealthServiceRequestDetailsReturn" type="impl:HealthServiceRequest"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="pingDB">
+                <xsd:complexType/>
+            </xsd:element>
+            <xsd:element name="pingDBResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="pingDBReturn" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="pingWS">
+                <xsd:complexType/>
+            </xsd:element>
+
+            <xsd:element name="pingWSResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="pingWSReturn" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
