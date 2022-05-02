@@ -12,6 +12,9 @@ import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,10 +30,6 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
 @Endpoint
 @Slf4j
 public class HealthController {
@@ -45,7 +44,8 @@ public class HealthController {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public HealthController(WebServiceTemplate soapTemplate, RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public HealthController(
+            WebServiceTemplate soapTemplate, RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.soapTemplate = soapTemplate;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
@@ -115,36 +115,59 @@ public class HealthController {
                             new ParameterizedTypeReference<>() {});
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getHealthServiceRequestHistory")));
+                            new RequestSuccessLog(
+                                    "Request Success", "getHealthServiceRequestHistory")));
 
             String isAllowed = Objects.requireNonNull(resp.getBody()).getOrDefault("isAllowed", "");
 
-//            if (isAllowed.equals("0")){
-//                throw new Exception("The requested CSNumber does not have access to this function.");  // TODO the error is not populated in response and need new ORDSException()
-//            }
+            //            if (isAllowed.equals("0")){
+            //                throw new Exception("The requested CSNumber does not have access to
+            // this function.");  // TODO the error is not populated in response and need new
+            // ORDSException()
+            //            }
 
-            var csNumber = getHealthServiceRequestHistory.getXMLString().getHealthService().getHealthService().getCsNum();
-            var startRecord =  getHealthServiceRequestHistory.getXMLString().getHealthService().getHealthService().getRow().getStart();
-            var endRecord =  getHealthServiceRequestHistory.getXMLString().getHealthService().getHealthService().getRow().getEnd();
+            var csNumber =
+                    getHealthServiceRequestHistory
+                            .getXMLString()
+                            .getHealthService()
+                            .getHealthService()
+                            .getCsNum();
+            var startRecord =
+                    getHealthServiceRequestHistory
+                            .getXMLString()
+                            .getHealthService()
+                            .getHealthService()
+                            .getRow()
+                            .getStart();
+            var endRecord =
+                    getHealthServiceRequestHistory
+                            .getXMLString()
+                            .getHealthService()
+                            .getHealthService()
+                            .getRow()
+                            .getEnd();
 
-
-            ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary healthServiceRequestSummary =
-                    new GetHealthServiceRequestSummary();
+            ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary
+                    healthServiceRequestSummary = new GetHealthServiceRequestSummary();
 
             healthServiceRequestSummary.setCsNumber(csNumber);
-            healthServiceRequestSummary.setStartRecord(startRecord);
-            healthServiceRequestSummary.setEndRecord(endRecord);
-            healthServiceRequestSummary.setNumCharacters("4000");
+            healthServiceRequestSummary.setStartRecord(Integer.valueOf(startRecord));
+            healthServiceRequestSummary.setEndRecord(Integer.valueOf(endRecord));
+            healthServiceRequestSummary.setNumCharacters(4000);
 
-            GetHealthServiceRequestSummaryResponse summaryResponse = (GetHealthServiceRequestSummaryResponse)
-                            soapTemplate.marshalSendAndReceive(hsrServiceUrl, healthServiceRequestSummary);
+            GetHealthServiceRequestSummaryResponse summaryResponse =
+                    (GetHealthServiceRequestSummaryResponse)
+                            soapTemplate.marshalSendAndReceive(
+                                    hsrServiceUrl, healthServiceRequestSummary);
 
-            GetHealthServiceRequestHistoryResponse out = new GetHealthServiceRequestHistoryResponse();
+            GetHealthServiceRequestHistoryResponse out =
+                    new GetHealthServiceRequestHistoryResponse();
             UserTokenOuter userTokenOuter = new UserTokenOuter();
             HealServiceOuter healServiceOuter = new HealServiceOuter();
             HealServiceInner healServiceInner = new HealServiceInner();
             HealService healService = new HealService();
-            List<ca.bc.gov.open.icon.hsr.HealthServiceRequest>  healthServiceRequest= new LinkedList<ca.bc.gov.open.icon.hsr.HealthServiceRequest>();
+            List<ca.bc.gov.open.icon.hsr.HealthServiceRequest> healthServiceRequest =
+                    new LinkedList<ca.bc.gov.open.icon.hsr.HealthServiceRequest>();
             Row row = new Row();
 
             healService.setHealthServiceRequest(healthServiceRequest);
@@ -152,15 +175,24 @@ public class HealthController {
             healServiceOuter.setHealthService(healServiceInner);
             out.setXMLString(healServiceOuter);
 
-            var totalRequestCount = summaryResponse.getGetHealthServiceRequestSummaryReturn().getTotalRequestCount();
-            var hsrList = summaryResponse.getGetHealthServiceRequestSummaryReturn().getRequests().getRequests();
-            for ( var service : hsrList) {
+            var totalRequestCount =
+                    summaryResponse
+                            .getGetHealthServiceRequestSummaryReturn()
+                            .getTotalRequestCount();
+            var hsrList =
+                    summaryResponse
+                            .getGetHealthServiceRequestSummaryReturn()
+                            .getRequests()
+                            .getRequests();
+            for (var service : hsrList) {
 
-                ca.bc.gov.open.icon.hsr.HealthServiceRequest request = new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
-                String date = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                        .withZone(ZoneId.of("GMT-7"))
-                        .withLocale(Locale.US)
-                        .format(service.getSubmittedDtm());
+                ca.bc.gov.open.icon.hsr.HealthServiceRequest request =
+                        new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
+                String date =
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                .withZone(ZoneId.of("GMT-7"))
+                                .withLocale(Locale.US)
+                                .format(service.getSubmittedDtm());
                 request.setRequestDate(date);
 
                 request.setHealthRequest(service.getDetailsTxt());

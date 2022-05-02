@@ -1,7 +1,5 @@
 package ca.bc.gov.open.icon.models.serializers;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -10,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public final class InstantSoapConverter {

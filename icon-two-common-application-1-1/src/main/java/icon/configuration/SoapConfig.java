@@ -74,9 +74,7 @@ public class SoapConfig extends WsConfigurerAdapter {
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
         webServiceTemplate.setMessageFactory(messageFactory());
-        jaxb2Marshaller.setContextPaths(
-                "ca.bc.gov.open.icon.hsrservice"
-                );
+        jaxb2Marshaller.setContextPaths("ca.bc.gov.open.icon.hsrservice");
         webServiceTemplate.setMarshaller(jaxb2Marshaller);
         webServiceTemplate.setUnmarshaller(jaxb2Marshaller);
         webServiceTemplate.afterPropertiesSet();

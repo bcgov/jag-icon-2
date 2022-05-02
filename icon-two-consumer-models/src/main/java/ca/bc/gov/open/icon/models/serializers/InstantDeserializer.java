@@ -3,14 +3,13 @@ package ca.bc.gov.open.icon.models.serializers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.TimeZone;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class InstantDeserializer extends JsonDeserializer<Instant> {
