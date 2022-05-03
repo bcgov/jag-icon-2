@@ -120,11 +120,10 @@ public class HealthController {
 
             String isAllowed = Objects.requireNonNull(resp.getBody()).getOrDefault("isAllowed", "");
 
-            //            if (isAllowed.equals("0")){
-            //                throw new Exception("The requested CSNumber does not have access to
-            // this function.");  // TODO the error is not populated in response and need new
-            // ORDSException()
-            //            }
+            if (isAllowed.equals("0")) {
+                throw new Exception(
+                        "The requested CSNumber does not have access to this function.");
+            }
 
             var csNumber =
                     getHealthServiceRequestHistory
@@ -251,28 +250,32 @@ public class HealthController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.HealthServiceRequest.ws.provider:HSR",
+            namespace = "ICON2.Source.HealthServiceRequest.ws.provider:HSR",
             localPart = "getHSRCount")
     @ResponsePayload
     public GetHSRCountResponse getHSRCount(@RequestPayload GetHSRCount getHSRCount)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "health/hsr-count")
-                        .queryParam("xmlString", getHSRCount.getXMLString())
-                        .queryParam("userTokenString", getHSRCount.getUserTokenString());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "health/hsr-count");
+        HttpEntity<GetHSRCount> payload = new HttpEntity<>(getHSRCount, new HttpHeaders());
 
         try {
-            HttpEntity<GetHSRCountResponse> resp =
+
+            HttpEntity<HSRCount> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetHSRCountResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, HSRCount.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getHSRCount")));
-            return resp.getBody();
+
+            GetHSRCountResponse getHSRCountResponse = new GetHSRCountResponse();
+            HSRCountOuter outResp = new HSRCountOuter();
+            HSRCountInner inResp = new HSRCountInner();
+            inResp.setHealthServiceCount(resp.getBody());
+            outResp.setHealthServiceCount(inResp);
+            getHSRCountResponse.setXMLString(outResp);
+            getHSRCountResponse.setUserTokenString(getHSRCount.getUserTokenString());
+            return getHSRCountResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
