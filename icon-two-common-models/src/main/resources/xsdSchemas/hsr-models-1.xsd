@@ -32,17 +32,65 @@
     <xsd:element name="getHSRCount">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:HSRCountOuter"/>
+                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:complexType name="HSRCountOuter">
+        <xsd:sequence>
+            <xsd:element name="HealthServiceCount" nillable="true" type="tns:HSRCountInner"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="HSRCountInner">
+        <xsd:sequence>
+            <xsd:element name="HealthServiceCount" type="tns:HSRCount"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="HSRCount">
+        <xsd:sequence>
+            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
+            <xsd:element name="count" nillable="true" type="xsd:string"/>
+            <xsd:element name="max" nillable="true" type="xsd:string"/>
+            <xsd:element name="hsrId" nillable="true" type="xsd:string"/>
+            <xsd:element name="xmitOkay" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="userTokenOuter">
+        <xsd:sequence>
+            <xsd:element name="UserToken" nillable="true" type="tns:userTokenInner"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="userTokenInner">
+        <xsd:sequence>
+            <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="userToken">
+        <xsd:sequence>
+            <xsd:element name="RemoteClientBrowserType" type="xsd:string"/>
+            <xsd:element name="RemoteClientHostName" type="xsd:string"/>
+            <xsd:element name="RemoteClientIPAddress" type="xsd:string"/>
+            <xsd:element name="UserIdentifier" type="xsd:string"/>
+            <xsd:element name="AuthoritativePartyIdentifier" type="xsd:string"/>
+            <xsd:element name="BiometricsSignature" type="xsd:string"/>
+            <xsd:element name="CSNumber" type="xsd:string"/>
+            <xsd:element name="SiteMinderSessionID" type="xsd:string"/>
+            <xsd:element name="SiteMinderTransactionID" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name="getHSRCountResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:HSRCountOuter"/>
+                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -50,19 +98,99 @@
     <xsd:element name="getHealthServiceRequestHistory">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:HealServiceOuter"/>
+                <xsd:element name="UserTokenString" nillable="true" type="tns:UserTokenOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:complexType name="HealServiceOuter">
+        <xsd:sequence>
+            <xsd:element name="HealthService" nillable="true" type="tns:HealServiceInner"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="HealServiceInner">
+        <xsd:sequence>
+            <xsd:element name="HealthService" nillable="true" type="tns:HealService"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="HealService">
+        <xsd:sequence>
+            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
+            <xsd:element name="HealthServiceRequest" nillable="true" type="tns:HealthServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="Row" nillable="true" type="tns:Row"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="HealthServiceRequest">
+        <xsd:sequence>
+            <xsd:element name="hsrId" nillable="true" type="xsd:string"/>
+            <xsd:element name="pacID" nillable="true" type="xsd:string"/>
+            <xsd:element name="location" nillable="true" type="xsd:string"/>
+            <xsd:element name="requestDate" nillable="true" type="xsd:string"/>
+            <xsd:element name="healthRequest" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Row">
+        <xsd:sequence>
+            <xsd:element name="start" nillable="true" type="xsd:string"/>
+            <xsd:element name="end" nillable="true" type="xsd:string"/>
+            <xsd:element name="total" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UserTokenOuter">
+        <xsd:sequence>
+            <xsd:element name="UserToken" nillable="true" type="tns:UserTokenInner"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UserTokenInner">
+        <xsd:sequence>
+            <xsd:element name="UserToken" nillable="true" type="tns:UserToken"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UserToken">
+        <xsd:sequence>
+            <xsd:element name="RemoteClientBrowserType" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientHostName" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientIPAddress" nillable="true" type="xsd:string"/>
+            <xsd:element name="UserIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="AuthoritativePartyIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="BiometricsSignature" nillable="true" type="xsd:string"/>
+            <xsd:element name="CSNumber" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderSessionID" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderTransactionID" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name="getHealthServiceRequestHistoryResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:HealServiceOuter"/>
+                <xsd:element name="UserTokenString" nillable="true" type="tns:UserTokenOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </xsd:schema>
 

@@ -6,18 +6,25 @@ import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.hsr.*;
+import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary;
+import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -29,11 +36,17 @@ public class HealthController {
     @Value("${icon.host}")
     private String host = "https://127.0.0.1/";
 
+    @Value("${icon.hsr-service-url}")
+    private String hsrServiceUrl;
+
+    private final WebServiceTemplate soapTemplate;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public HealthController(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public HealthController(
+            WebServiceTemplate soapTemplate, RestTemplate restTemplate, ObjectMapper objectMapper) {
+        this.soapTemplate = soapTemplate;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
@@ -80,7 +93,7 @@ public class HealthController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.HealthServiceRequest.ws.provider:HSR",
+            namespace = "ICON2.Source.HealthServiceRequest.ws.provider:HSR",
             localPart = "getHealthServiceRequestHistory")
     @ResponsePayload
     public GetHealthServiceRequestHistoryResponse getHealthServiceRequestHistory(
@@ -88,25 +101,108 @@ public class HealthController {
             throws JsonProcessingException {
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "health/service-rqst-history")
-                        .queryParam("xmlString", getHealthServiceRequestHistory.getXMLString())
-                        .queryParam(
-                                "userTokenString",
-                                getHealthServiceRequestHistory.getUserTokenString());
+                UriComponentsBuilder.fromHttpUrl(host + "health/service-rqst-history");
+        HttpEntity<GetHealthServiceRequestHistory> payload =
+                new HttpEntity<>(getHealthServiceRequestHistory, new HttpHeaders());
 
         try {
-            HttpEntity<GetHealthServiceRequestHistoryResponse> resp =
+
+            HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetHealthServiceRequestHistoryResponse.class);
+                            builder.build().toUri(),
+                            HttpMethod.POST,
+                            payload,
+                            new ParameterizedTypeReference<>() {});
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog(
                                     "Request Success", "getHealthServiceRequestHistory")));
 
-            return resp.getBody();
+            String isAllowed = Objects.requireNonNull(resp.getBody()).getOrDefault("isAllowed", "");
+
+            if (isAllowed.equals("0")) {
+                throw new Exception(
+                        "The requested CSNumber does not have access to this function.");
+            }
+
+            var csNumber =
+                    getHealthServiceRequestHistory
+                            .getXMLString()
+                            .getHealthService()
+                            .getHealthService()
+                            .getCsNum();
+            var startRecord =
+                    getHealthServiceRequestHistory
+                            .getXMLString()
+                            .getHealthService()
+                            .getHealthService()
+                            .getRow()
+                            .getStart();
+            var endRecord =
+                    getHealthServiceRequestHistory
+                            .getXMLString()
+                            .getHealthService()
+                            .getHealthService()
+                            .getRow()
+                            .getEnd();
+
+            ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary
+                    healthServiceRequestSummary = new GetHealthServiceRequestSummary();
+
+            healthServiceRequestSummary.setCsNumber(csNumber);
+            healthServiceRequestSummary.setStartRecord(Integer.valueOf(startRecord));
+            healthServiceRequestSummary.setEndRecord(Integer.valueOf(endRecord));
+            healthServiceRequestSummary.setNumCharacters(4000);
+
+            GetHealthServiceRequestSummaryResponse summaryResponse =
+                    (GetHealthServiceRequestSummaryResponse)
+                            soapTemplate.marshalSendAndReceive(
+                                    hsrServiceUrl, healthServiceRequestSummary);
+
+            GetHealthServiceRequestHistoryResponse out =
+                    new GetHealthServiceRequestHistoryResponse();
+            UserTokenOuter userTokenOuter = new UserTokenOuter();
+            HealServiceOuter healServiceOuter = new HealServiceOuter();
+            HealServiceInner healServiceInner = new HealServiceInner();
+            HealService healService = new HealService();
+            List<ca.bc.gov.open.icon.hsr.HealthServiceRequest> healthServiceRequest =
+                    new LinkedList<ca.bc.gov.open.icon.hsr.HealthServiceRequest>();
+            Row row = new Row();
+
+            healService.setHealthServiceRequest(healthServiceRequest);
+            healServiceInner.setHealthService(healService);
+            healServiceOuter.setHealthService(healServiceInner);
+            out.setXMLString(healServiceOuter);
+
+            var totalRequestCount =
+                    summaryResponse
+                            .getGetHealthServiceRequestSummaryReturn()
+                            .getTotalRequestCount();
+            var hsrList =
+                    summaryResponse
+                            .getGetHealthServiceRequestSummaryReturn()
+                            .getRequests()
+                            .getRequests();
+            for (var service : hsrList) {
+
+                ca.bc.gov.open.icon.hsr.HealthServiceRequest request =
+                        new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
+                String date =
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                .withZone(ZoneId.of("GMT-7"))
+                                .withLocale(Locale.US)
+                                .format(service.getSubmittedDtm());
+                request.setRequestDate(date);
+
+                request.setHealthRequest(service.getDetailsTxt());
+                request.setHsrId(String.valueOf(service.getId()));
+            }
+
+            row.setStart(startRecord);
+            row.setStart(endRecord);
+            row.setTotal(String.valueOf(totalRequestCount));
+
+            return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -154,28 +250,32 @@ public class HealthController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.HealthServiceRequest.ws.provider:HSR",
+            namespace = "ICON2.Source.HealthServiceRequest.ws.provider:HSR",
             localPart = "getHSRCount")
     @ResponsePayload
     public GetHSRCountResponse getHSRCount(@RequestPayload GetHSRCount getHSRCount)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "health/hsr-count")
-                        .queryParam("xmlString", getHSRCount.getXMLString())
-                        .queryParam("userTokenString", getHSRCount.getUserTokenString());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "health/hsr-count");
+        HttpEntity<GetHSRCount> payload = new HttpEntity<>(getHSRCount, new HttpHeaders());
 
         try {
-            HttpEntity<GetHSRCountResponse> resp =
+
+            HttpEntity<HSRCount> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
-                            GetHSRCountResponse.class);
+                            builder.toUriString(), HttpMethod.POST, payload, HSRCount.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getHSRCount")));
-            return resp.getBody();
+
+            GetHSRCountResponse getHSRCountResponse = new GetHSRCountResponse();
+            HSRCountOuter outResp = new HSRCountOuter();
+            HSRCountInner inResp = new HSRCountInner();
+            inResp.setHealthServiceCount(resp.getBody());
+            outResp.setHealthServiceCount(inResp);
+            getHSRCountResponse.setXMLString(outResp);
+            getHSRCountResponse.setUserTokenString(getHSRCount.getUserTokenString());
+            return getHSRCountResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
