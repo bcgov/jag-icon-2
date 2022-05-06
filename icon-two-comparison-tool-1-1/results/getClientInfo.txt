@@ -1,0 +1,610 @@
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00000398 |        null |
+|          client.lastName |      COLLINS |        null |
+|         client.firstName |       GORDON |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1917.12.06 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00000398
+===========================================================
+|                 Property |   API Response | WM Response |
+|             client.csNum |       00000687 |        null |
+|          client.lastName | AGUILAR-ACOSTA |        null |
+|         client.firstName |         ARNOLD |        null |
+|            client.gender |              M |        null |
+|             client.youth |              N |        null |
+|         client.birthDate |     1940.11.23 |        null |
+|         client.inCustody |              N |        null |
+| client.activeSupervision |              N |        null |
+|            client.active |              N |        null |
+|                   status |              1 |        null |
+===========================================================
+
+INFO: getClientInfoCompare with csNum: 00000687
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00000869 |        null |
+|          client.lastName |         WONG |        null |
+|         client.firstName |        KOREY |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1933.08.13 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00000869
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00001628 |        null |
+|          client.lastName |       NORMAN |        null |
+|         client.firstName |         MARY |        null |
+|            client.gender |            F |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1938.10.04 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00001628
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00003251 |        null |
+|          client.lastName |       NARAIN |        null |
+|         client.firstName |        KEVIN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1920.02.18 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00003251
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00004051 |        null |
+|          client.lastName |         JOHN |        null |
+|         client.firstName |     PARDAMAN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1932.08.11 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00004051
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00004820 |        null |
+|          client.lastName |     OUIMETTE |        null |
+|         client.firstName |        ROGER |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1939.09.27 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00004820
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00007385 |        null |
+|          client.lastName |       JORDAN |        null |
+|         client.firstName |         JOHN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1944.09.10 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00007385
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00007542 |        null |
+|          client.lastName |         HOFF |        null |
+|         client.firstName |         JACK |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1946.09.01 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00007542
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00009647 |        null |
+|          client.lastName |       CARTER |        null |
+|         client.firstName |      STEPHEN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1943.04.13 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00009647
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00010694 |        null |
+|          client.lastName |           LE |        null |
+|         client.firstName |         MIKE |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1951.10.14 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00010694
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00012195 |        null |
+|          client.lastName |     CARRIGAN |        null |
+|         client.firstName |         SEAN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1917.08.23 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00012195
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00013268 |        null |
+|          client.lastName |    CLOUTHIER |        null |
+|         client.firstName |       EDWARD |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1942.12.08 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00013268
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00013300 |        null |
+|          client.lastName |       GAGNON |        null |
+|         client.firstName |       BENOIT |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1939.10.17 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00013300
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00015628 |        null |
+|          client.lastName |   ZETTERBERG |        null |
+|         client.firstName |         ERIC |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1948.07.22 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00015628
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00016139 |        null |
+|          client.lastName |        SYMES |        null |
+|         client.firstName |      MICHAEL |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1922.07.22 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00016139
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00017673 |        null |
+|          client.lastName |      HAYWARD |        null |
+|         client.firstName |       JOSEPH |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1923.08.29 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00017673
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00020867 |        null |
+|          client.lastName |   DOBROVOLNY |        null |
+|         client.firstName |      DERRICK |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1946.07.03 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00020867
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00021543 |        null |
+|          client.lastName |         BOOY |        null |
+|         client.firstName |        BRIAN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1937.06.02 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00021543
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00023218 |        null |
+|          client.lastName |     WILLIAMS |        null |
+|         client.firstName |        TUONG |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1948.12.12 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00023218
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00024612 |        null |
+|          client.lastName |       NELSON |        null |
+|         client.firstName |       KENETH |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1911.05.11 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00024612
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00024653 |        null |
+|          client.lastName |        BILLY |        null |
+|         client.firstName |        ALLEN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1947.08.08 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00024653
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00025247 |        null |
+|          client.lastName |       SAEGER |        null |
+|         client.firstName |       GORDON |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1940.05.28 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00025247
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00025445 |        null |
+|          client.lastName |      ADAMSON |        null |
+|         client.firstName |       CLAUDE |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1932.08.31 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00025445
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00025635 |        null |
+|          client.lastName |      SHIPLEY |        null |
+|         client.firstName |       JANUSZ |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1937.05.30 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00025635
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00025692 |        null |
+|          client.lastName |       LARSEN |        null |
+|         client.firstName |      STEPHEN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1938.11.21 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00025692
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00025809 |        null |
+|          client.lastName |     JENNINGS |        null |
+|         client.firstName |     BRADFORD |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1945.08.25 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00025809
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00027722 |        null |
+|          client.lastName |        ROLLE |        null |
+|         client.firstName |        BRUCE |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1947.06.20 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00027722
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00028530 |        null |
+|          client.lastName |        SZPYT |        null |
+|         client.firstName |        WAYNE |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1958.01.30 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00028530
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00030072 |        null |
+|          client.lastName |     TOIJANEN |        null |
+|         client.firstName |          RON |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1936.01.08 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00030072
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00031062 |        null |
+|          client.lastName |         BUGG |        null |
+|         client.firstName |       WESLEY |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1933.10.28 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00031062
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00031484 |        null |
+|          client.lastName |     HARRISON |        null |
+|         client.firstName |       MARTIN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1943.05.24 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00031484
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00031971 |        null |
+|          client.lastName |   SAINTDENIS |        null |
+|         client.firstName |        REGIS |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1943.07.01 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00031971
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00032649 |        null |
+|          client.lastName |        BROWN |        null |
+|         client.firstName |      MICHAEL |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1946.06.10 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00032649
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00033217 |        null |
+|          client.lastName |     FERGUSON |        null |
+|         client.firstName |       NATHEN |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1934.05.03 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00033217
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00033555 |        null |
+|          client.lastName |        PAIGE |        null |
+|         client.firstName |    FREDERICK |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1945.08.06 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00033555
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00035394 |        null |
+|          client.lastName |     PATERSON |        null |
+|         client.firstName |        JAMES |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1935.05.31 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00035394
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00038240 |        null |
+|          client.lastName |        BROWN |        null |
+|         client.firstName |      CHARLES |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1944.07.18 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00038240
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00038422 |        null |
+|          client.lastName |      RAYNERc |        null |
+|         client.firstName |   RICHARDAAA |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1945.01.28 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00038422
+=========================================================
+|                 Property | API Response | WM Response |
+|             client.csNum |     00038687 |        null |
+|          client.lastName |       PETERS |        null |
+|         client.firstName |        RANDY |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1915.08.23 |        null |
+|         client.inCustody |            N |        null |
+| client.activeSupervision |            N |        null |
+|            client.active |            N |        null |
+|                   status |            1 |        null |
+=========================================================
+
+INFO: getClientInfoCompare with csNum: 00038687
+=========================================================
+|                 Property | API Response | WM Response |
+|                   status |            1 |        null |
+|             client.csNum |     00040634 |        null |
+|          client.lastName |       PETERS |        null |
+|         client.firstName |          GUS |        null |
+|            client.gender |            M |        null |
+|             client.youth |            N |        null |
+|         client.birthDate |   1926.10.24 |        null |
+|         client.in
