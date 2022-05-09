@@ -1,9 +1,12 @@
 icon:
   host: ${ORDS_HOST}
-  pac-queue: ${ICONII_PAC_QUEUE}
-  ping-queue: ${ICONII_PING_QUEUE}
+  pac-queue: ${PAC_QUEUE_NAME}
+  ping-queue: ${PING_QUEUE_NAME}
 
 spring:
   rabbitmq:
     host: ${RABBIT_MQ_HOST}
     port: 5672
+
+server:
+  port: 8081

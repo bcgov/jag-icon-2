@@ -69,10 +69,13 @@ public class PACPollerService {
                                 i));
     }
 
-    private void ping(PingModel p) {
+    @Scheduled(fixedDelay = 5000)
+    private void ping() {
+        PingModel p = new PingModel();
+        p.setSource("lol");
         log.info("Sending ping with source " + p.getSource());
         this.rabbitTemplate.convertAndSend(
-                queueConfig.getPingQueueName(), queueConfig.getPingRoutingKey(), p);
+                queueConfig.getTopicExchangeName(), queueConfig.getPingRoutingKey(), p);
     }
 
     //  Scheduled every minute in MS

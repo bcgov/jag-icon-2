@@ -1,6 +1,7 @@
 package ca.bc.gov.open.jagiconpoller.services;
 
 import ca.bc.gov.open.icon.models.PACModel;
+import ca.bc.gov.open.icon.models.PingModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,7 +18,7 @@ public class PacConsumerService {
     }
 
     @RabbitListener(queues = "${icon.ping-queue}")
-    public void receivedTestMessage(@Payload Message<PACModel> message)
+    public void receivedTestMessage(@Payload Message<PingModel> message)
             throws JsonProcessingException {
         System.out.println(new ObjectMapper().writeValueAsString(message.getPayload()));
     }
