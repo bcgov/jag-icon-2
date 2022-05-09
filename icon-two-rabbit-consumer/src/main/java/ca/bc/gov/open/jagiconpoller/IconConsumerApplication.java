@@ -1,0 +1,12 @@
+package ca.bc.gov.open.jagiconpoller;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class IconConsumerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(IconConsumerApplication.class, args);
+    }
+}

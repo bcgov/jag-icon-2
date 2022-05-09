@@ -1,0 +1,9 @@
+icon:
+  host: ${ORDS_HOST}
+  pac-queue: ${ICONII_PAC_QUEUE}
+  ping-queue: ${ICONII_PING_QUEUE}
+
+spring:
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    port: 5672
