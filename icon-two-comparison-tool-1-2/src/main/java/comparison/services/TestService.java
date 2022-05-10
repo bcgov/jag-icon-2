@@ -2,20 +2,14 @@ package ca.bc.gov.open.comparison.services;
 
 import ca.bc.gov.open.comparison.config.WebServiceSenderWithAuth;
 import ca.bc.gov.open.icon.auth.*;
-import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.myfiles.*;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Change;
@@ -24,16 +18,9 @@ import org.javers.core.diff.changetype.ValueChange;
 import org.javers.core.diff.changetype.container.ListChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
-import org.springframework.ws.server.endpoint.annotation.RequestPayload;
-import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import org.springframework.ws.soap.SoapVersion;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 
@@ -68,11 +55,20 @@ public class TestService {
     private int overallDiff = 0;
     private int diffCounter = 0;
 
+    enum eHasFunctionalAbility {
+        csNum,
+        serviceCd,
+        functionCd,
+        AuthoritativePartyIdentifier,
+        BiometricsSignature
+    }
+
     public void runCompares() throws Exception {
 
-        // getUserInfo_Compare();
-        // getDeviceInfo_Compare();
-        getPreAuthorizeClient_Compare();
+        //        getUserInfo_Compare();
+        //        getDeviceInfo_Compare();
+        //        getPreAuthorizeClient_Compare();
+        getHasFunctionalAbility_Compare();
     }
 
     private void getUserInfo_Compare() throws Exception {
@@ -98,16 +94,13 @@ public class TestService {
             request.setCsNum(line);
 
             if (!compare(new GetUserInfoResponse(), getUserInfo, "information/user-info")) {
-                fileOutput.format(
-                        "\nINFO: getUserInfo_Compare with csNum: %s\n", line);
+                fileOutput.format("\nINFO: getUserInfo_Compare with csNum: %s\n", line);
                 ++diffCounter;
             }
         }
 
         printCompletion();
-
     }
-
 
     private void getDeviceInfo_Compare() throws Exception {
 
@@ -132,14 +125,12 @@ public class TestService {
             request.setCertificateName(line);
 
             if (!compare(new GetDeviceInfoResponse(), getDeviceInfo, "information/device-info")) {
-                fileOutput.format(
-                        "\nINFO: getDeviceInfo_Compare with csNum: %s\n", line);
+                fileOutput.format("\nINFO: getDeviceInfo_Compare with csNum: %s\n", line);
                 ++diffCounter;
             }
         }
 
         printCompletion();
-
     }
 
     private void getPreAuthorizeClient_Compare() throws Exception {
@@ -157,22 +148,82 @@ public class TestService {
         InputStream inputIds = getClass().getResourceAsStream("/getPreAuthorizeClient.csv");
         assert inputIds != null;
         Scanner scanner = new Scanner(inputIds);
-        fileOutput = new PrintWriter(outputDir + "getPreAuthorizeClient.txt", StandardCharsets.UTF_8);
+        fileOutput =
+                new PrintWriter(outputDir + "getPreAuthorizeClient.txt", StandardCharsets.UTF_8);
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             System.out.format("\nINFO: getPreAuthorizeClient_Compare with csNum: %s\n", line);
             request.setCsNum(line);
 
-            if (!compare(new GetPreAuthorizeClientResponse(), getPreAuthorizeClient, "auth/pre-auth-client")) {
-                fileOutput.format(
-                        "\nINFO: getPreAuthorizeClient_Compare with csNum: %s\n", line);
+            if (!compare(
+                    new GetPreAuthorizeClientResponse(),
+                    getPreAuthorizeClient,
+                    "auth/pre-auth-client")) {
+                fileOutput.format("\nINFO: getPreAuthorizeClient_Compare with csNum: %s\n", line);
                 ++diffCounter;
             }
         }
 
         printCompletion();
+    }
 
+    private void getHasFunctionalAbility_Compare() throws Exception {
+
+        diffCounter = 0;
+        var getHasFunctionalAbility = new GetHasFunctionalAbility();
+
+        var hasFunctionalAbilityOut = new HasFunctionalAbilityOut();
+        var hasFunctionalAbilityInner = new HasFunctionalAbilityInner();
+        var functionalAbility = new FunctionalAbility();
+        var request = new HasFunctionalAbility();
+        getHasFunctionalAbility.setXMLString(hasFunctionalAbilityOut);
+        hasFunctionalAbilityOut.setHasFunctionalAbility(hasFunctionalAbilityInner);
+        hasFunctionalAbilityInner.setHasFunctionalAbility(request);
+        request.setFunctionalAbility(functionalAbility);
+
+        var userTokenOut = new UserTokenOut();
+        var userTokenInner = new UserTokenInner();
+        var userToken = new UserToken();
+        getHasFunctionalAbility.setUserTokenString(userTokenOut);
+        userTokenOut.setUserToken(userTokenInner);
+        userTokenInner.setUserToken(userToken);
+
+        InputStream inputIds = getClass().getResourceAsStream("/getHasFunctionalAbility.csv");
+        assert inputIds != null;
+        Scanner scanner = new Scanner(inputIds);
+        fileOutput =
+                new PrintWriter(outputDir + "getHasFunctionalAbility.txt", StandardCharsets.UTF_8);
+
+        while (scanner.hasNextLine()) {
+            String[] line = scanner.nextLine().split(",");
+
+            request.setCsNum(line[eHasFunctionalAbility.csNum.ordinal()]);
+            functionalAbility.setServiceCd(line[eHasFunctionalAbility.serviceCd.ordinal()]);
+            functionalAbility.setFunctionCd(line[eHasFunctionalAbility.functionCd.ordinal()]);
+
+            userToken.setAuthoritativePartyIdentifier(
+                    line[eHasFunctionalAbility.AuthoritativePartyIdentifier.ordinal()]);
+            userToken.setBiometricsSignature(
+                    line[eHasFunctionalAbility.BiometricsSignature.ordinal()]);
+            userToken.setCSNumber(line[eHasFunctionalAbility.csNum.ordinal()]);
+
+            System.out.format(
+                    "\nINFO: getHasFunctionalAbility_Compare with csNum: %s, serviceCd: %s,  functionCd: %s,  AuthoritativePartyIdentifier: %s, BiometricsSignature: %s, CSNumber: %s\n",
+                    line[0], line[1], line[2], line[3], line[4], line[0]);
+
+            if (!compare(
+                    new GetPreAuthorizeClientResponse(),
+                    getHasFunctionalAbility,
+                    "auth/has-functional-ability")) {
+                fileOutput.format(
+                        "\nINFO: getHasFunctionalAbility_Compare with csNum: %s, serviceCd: %s,  functionCd: %s,  AuthoritativePartyIdentifier: %s, BiometricsSignature: %s, CSNumber: %s\n",
+                        line[0], line[1], line[2], line[3], line[4], line[0]);
+                ++diffCounter;
+            }
+        }
+
+        printCompletion();
     }
 
     private void printCompletion() {
@@ -208,10 +259,7 @@ public class TestService {
         webServiceTemplate.setMessageSender(webServiceSenderWithAuth);
         webServiceTemplate.setMessageFactory(messageFactory);
 
-        jaxb2Marshaller.setContextPaths(
-                "ca.bc.gov.open.icon.audit",
-                "ca.bc.gov.open.icon.auth"
-        );
+        jaxb2Marshaller.setContextPaths("ca.bc.gov.open.icon.audit", "ca.bc.gov.open.icon.auth");
 
         webServiceTemplate.setMarshaller(jaxb2Marshaller);
         webServiceTemplate.setUnmarshaller(jaxb2Marshaller);
