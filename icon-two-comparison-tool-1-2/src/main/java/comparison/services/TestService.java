@@ -229,14 +229,14 @@ public class TestService {
     private void printCompletion() {
         System.out.println(
                 "########################################################\n"
-                        + "INFO: getFileDetailCriminal Completed there are "
+                        + "INFO: Completed there are "
                         + diffCounter
                         + " diffs\n"
                         + "########################################################");
 
         fileOutput.println(
                 "########################################################\n"
-                        + "INFO: getFileDetailCriminal Completed there are "
+                        + "INFO: Completed there are "
                         + diffCounter
                         + " diffs\n"
                         + "########################################################");
@@ -270,8 +270,7 @@ public class TestService {
 
         try {
             resultObjectAPI = (T) webServiceTemplate.marshalSendAndReceive(apiHost, request);
-            // resultObjectWM = (T) webServiceTemplate.marshalSendAndReceive(wmHost + wsdl,
-            // request);
+            resultObjectWM = (T) webServiceTemplate.marshalSendAndReceive(wmHost + wsdl, request);
         } catch (Exception e) {
             System.out.println("ERROR: Failed to send request... " + e);
             fileOutput.println("ERROR: Failed to send request... " + e);

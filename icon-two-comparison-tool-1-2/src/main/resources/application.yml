@@ -3,5 +3,3 @@ host:
   username: ${BASIC_AUTH_USER}
   api-host: ${API_HOST}
   wm-host: ${WM_HOST}
-server:
-  port: 8082
