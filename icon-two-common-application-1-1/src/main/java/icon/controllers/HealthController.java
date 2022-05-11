@@ -15,8 +15,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import icon.configuration.QueueConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -29,6 +35,8 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+
+import javax.annotation.PostConstruct;
 
 @Endpoint
 @Slf4j
@@ -43,12 +51,34 @@ public class HealthController {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
+    private final org.springframework.amqp.core.Queue hsrQueue;
+    private final Queue pingQueue;
+    private final RabbitTemplate rabbitTemplate;
+    private final AmqpAdmin amqpAdmin;
+    private final QueueConfig queueConfig;
+
     @Autowired
     public HealthController(
-            WebServiceTemplate soapTemplate, RestTemplate restTemplate, ObjectMapper objectMapper) {
+            WebServiceTemplate soapTemplate, RestTemplate restTemplate, ObjectMapper objectMapper,
+            @Qualifier("hsr-queue") org.springframework.amqp.core.Queue hsrQueue,
+            @Qualifier("ping-queue") org.springframework.amqp.core.Queue pingQueue,
+            RabbitTemplate rabbitTemplate,
+            AmqpAdmin amqpAdmin,
+            QueueConfig queueConfig) {
         this.soapTemplate = soapTemplate;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+        this.hsrQueue = hsrQueue;
+        this.pingQueue = pingQueue;
+        this.rabbitTemplate = rabbitTemplate;
+        this.amqpAdmin = amqpAdmin;
+        this.queueConfig = queueConfig;
+    }
+
+    @PostConstruct
+    public void createQueues() {
+        amqpAdmin.declareQueue(hsrQueue);
+        amqpAdmin.declareQueue(pingQueue);
     }
 
     @PayloadRoot(

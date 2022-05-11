@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jagiconpoller;
+package ca.bc.gov.open.jagiconconsumer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

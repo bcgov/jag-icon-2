@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jagiconpoller.services;
+package ca.bc.gov.open.jagiconconsumer.services;
 
 import ca.bc.gov.open.icon.models.PACModel;
 import ca.bc.gov.open.icon.models.PingModel;

@@ -1,6 +1,7 @@
 icon:
   host: ${ORDS_HOST}
   pac-queue: ${PAC_QUEUE_NAME}
+  hsr-queue: ${HSR_QUEUE_NAME}
   ping-queue: ${PING_QUEUE_NAME}
 
 spring:

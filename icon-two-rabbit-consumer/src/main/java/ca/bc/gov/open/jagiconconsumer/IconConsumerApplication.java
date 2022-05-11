@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jagiconpoller;
+package ca.bc.gov.open.jagiconconsumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
