@@ -12,11 +12,11 @@ import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import icon.configuration.QueueConfig;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import icon.configuration.QueueConfig;
+import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
@@ -35,8 +35,6 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-
-import javax.annotation.PostConstruct;
 
 @Endpoint
 @Slf4j
@@ -59,7 +57,9 @@ public class HealthController {
 
     @Autowired
     public HealthController(
-            WebServiceTemplate soapTemplate, RestTemplate restTemplate, ObjectMapper objectMapper,
+            WebServiceTemplate soapTemplate,
+            RestTemplate restTemplate,
+            ObjectMapper objectMapper,
             @Qualifier("hsr-queue") org.springframework.amqp.core.Queue hsrQueue,
             @Qualifier("ping-queue") org.springframework.amqp.core.Queue pingQueue,
             RabbitTemplate rabbitTemplate,
