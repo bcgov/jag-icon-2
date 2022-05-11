@@ -1,0 +1,13 @@
+icon:
+  ords-host: ${ORDS_HOST}
+  pac-queue: ${PAC_QUEUE_NAME}
+  pac-routing-key: ${PAC_ROUTING_KEY}
+  ping-queue: ${PING_QUEUE_NAME}
+  ping-routing-key: ${PING_ROUTING_KEY}
+  exchange-name: ${RABBIT_EXCHANGE_NAME}
+
+
+spring:
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    port: 5672
