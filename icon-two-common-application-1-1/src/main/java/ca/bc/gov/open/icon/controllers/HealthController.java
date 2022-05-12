@@ -12,11 +12,8 @@ import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
 import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
 import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
-import ca.bc.gov.open.icon.models.serializers.InstantSoapConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +42,7 @@ public class HealthController {
     private String host = "https://127.0.0.1/";
 
     @Value("${icon.hsr-service-url}")
-    private String hsrServiceUrl;
+    private String hsrServiceUrl = "https://127.0.0.1/";
 
     private final WebServiceTemplate soapTemplate;
     private final RestTemplate restTemplate;
@@ -219,12 +216,7 @@ public class HealthController {
 
                 ca.bc.gov.open.icon.hsr.HealthServiceRequest request =
                         new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
-                String date =
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                                .withZone(ZoneId.of("GMT-7"))
-                                .withLocale(Locale.US)
-                                .format(service.getSubmittedDtm());
-                request.setRequestDate(date);
+                request.setRequestDate(service.getSubmittedDtm());
 
                 request.setHealthRequest(service.getDetailsTxt());
                 request.setHsrId(String.valueOf(service.getId()));
@@ -248,7 +240,7 @@ public class HealthController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.HealthServiceRequest.ws.provider:HSR",
+            namespace = "ICON2.Source.HealthServiceRequest.ws.provider:HSR",
             localPart = "publishHSR")
     @ResponsePayload
     public PublishHSRResponse publishHSR(@RequestPayload PublishHSR publishHSR)
@@ -275,7 +267,7 @@ public class HealthController {
                         new SubmitHealthServiceRequest();
                 submitHealthServiceRequest.setCsNumber(resp.getBody().getCsNum());
                 submitHealthServiceRequest.setSubmissionDate(
-                        InstantSoapConverter.parse(resp.getBody().getRequestDate()));
+                        resp.getBody().getRequestDate().toString());
                 submitHealthServiceRequest.setCentre(resp.getBody().getLocation());
                 submitHealthServiceRequest.setDetails(resp.getBody().getHealthRequest());
                 SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =

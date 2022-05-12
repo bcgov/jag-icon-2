@@ -37,7 +37,7 @@
             <xsd:element name="hsrId" nillable="true" type="xsd:string"/>
             <xsd:element name="pacID" nillable="true" type="xsd:string"/>
             <xsd:element name="location" nillable="true" type="xsd:string"/>
-            <xsd:element name="requestDate" nillable="true" type="xsd:string"/>
+            <xsd:element name="requestDate" nillable="true" type="xsd:dateTime"/>
             <xsd:element name="healthRequest" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
