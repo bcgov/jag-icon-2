@@ -191,17 +191,17 @@ public class HealthController {
             GetHealthServiceRequestHistoryResponse out =
                     new GetHealthServiceRequestHistoryResponse();
             UserTokenOuter userTokenOuter = new UserTokenOuter();
-            HealServiceOuter healServiceOuter = new HealServiceOuter();
-            HealServiceInner healServiceInner = new HealServiceInner();
-            HealService healService = new HealService();
+            HealthServiceOuter healthServiceOuter = new HealthServiceOuter();
+            HealthServiceInner healthServiceInner = new HealthServiceInner();
+            HealthService healthService = new HealthService();
             List<ca.bc.gov.open.icon.hsr.HealthServiceRequest> healthServiceRequest =
                     new LinkedList<ca.bc.gov.open.icon.hsr.HealthServiceRequest>();
             Row row = new Row();
 
-            healService.setHealthServiceRequest(healthServiceRequest);
-            healServiceInner.setHealthService(healService);
-            healServiceOuter.setHealthService(healServiceInner);
-            out.setXMLString(healServiceOuter);
+            healthService.setHealthServiceRequest(healthServiceRequest);
+            healthServiceInner.setHealthService(healthService);
+            healthServiceOuter.setHealthService(healthServiceInner);
+            out.setXMLString(healthServiceOuter);
 
             var totalRequestCount =
                     summaryResponse
@@ -249,14 +249,14 @@ public class HealthController {
                 UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
 
         // ORDS Call - PublishHSR
-        HttpEntity<HealthServicePub> resp = null;
+        HttpEntity<HealthServicePubList> resp = null;
         try {
             resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             new HttpEntity<>(publishHSR, new HttpHeaders()),
-                            HealthServicePub.class);
+                            HealthServicePubList.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "publishHSR")));
@@ -265,28 +265,34 @@ public class HealthController {
             try {
                 SubmitHealthServiceRequest submitHealthServiceRequest =
                         new SubmitHealthServiceRequest();
-                submitHealthServiceRequest.setCsNumber(resp.getBody().getCsNum());
-                submitHealthServiceRequest.setSubmissionDate(
-                        resp.getBody().getRequestDate().toString());
-                submitHealthServiceRequest.setCentre(resp.getBody().getLocation());
-                submitHealthServiceRequest.setDetails(resp.getBody().getHealthRequest());
-                SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =
-                        (SubmitHealthServiceRequestResponse)
-                                soapTemplate.marshalSendAndReceive(
-                                        hsrServiceUrl, submitHealthServiceRequest);
+
+                // Go through all health service requests
+                for (var pub : resp.getBody().getHealthServicePubList()) {
+                    submitHealthServiceRequest.setCsNumber(pub.getCsNum());
+                    submitHealthServiceRequest.setSubmissionDate(pub.getRequestDate().toString());
+                    submitHealthServiceRequest.setCentre(pub.getLocation());
+                    submitHealthServiceRequest.setDetails(pub.getHealthRequest());
+                    SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =
+                            (SubmitHealthServiceRequestResponse)
+                                    soapTemplate.marshalSendAndReceive(
+                                            hsrServiceUrl, submitHealthServiceRequest);
+                }
 
                 // ORDS Call - UpdateHSR
                 UriComponentsBuilder builder2 =
                         UriComponentsBuilder.fromHttpUrl(host + "health/update-hsr");
                 HttpEntity<HealthServicePub> resp2 = null;
                 try {
-                    resp2 =
-                            restTemplate.exchange(
-                                    builder2.toUriString(),
-                                    HttpMethod.POST,
-                                    resp,
-                                    HealthServicePub.class);
-                    resp.getBody().setHsrId(resp2.getBody().getHsrId());
+
+                    for (var pub : resp.getBody().getHealthServicePubList()) {
+                        resp2 =
+                                restTemplate.exchange(
+                                        builder2.toUriString(),
+                                        HttpMethod.POST,
+                                        new HttpEntity<>(pub, new HttpHeaders()),
+                                        HealthServicePub.class);
+                        pub.setHsrId(resp2.getBody().getHsrId());
+                    }
                 } catch (Exception ex) {
                     log.error(
                             objectMapper.writeValueAsString(
@@ -317,22 +323,25 @@ public class HealthController {
             throw new ORDSException();
         }
 
-        // Publish HSR only if pacId is empty or null
-        if (resp.getBody().getPacId().equals("-")) {
-            log.warn(
-                    objectMapper.writeValueAsString(
-                            new HsrStatusLog("publishHSR... failure '-' doing BPM", "publishHSR")));
-            enQueueHealthServicePub(resp.getBody());
-        } else if (resp.getBody().getPacId() == null) {
-            log.warn(
-                    objectMapper.writeValueAsString(
-                            new HsrStatusLog(
-                                    "publishHSR... failure 'null' doing BPM", "publishHSR")));
-            enQueueHealthServicePub(resp.getBody());
-        } else {
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new HsrStatusLog("publishHSR... success no BPM", "publishHSR")));
+        for (var pub : resp.getBody().getHealthServicePubList()) {
+            // Publish HSR only if pacId is empty or null
+            if (pub.equals("-")) {
+                log.warn(
+                        objectMapper.writeValueAsString(
+                                new HsrStatusLog(
+                                        "publishHSR... failure '-' doing BPM", "publishHSR")));
+                enQueueHealthServicePub(pub);
+            } else if (pub.getPacId() == null) {
+                log.warn(
+                        objectMapper.writeValueAsString(
+                                new HsrStatusLog(
+                                        "publishHSR... failure 'null' doing BPM", "publishHSR")));
+                enQueueHealthServicePub(pub);
+            } else {
+                log.info(
+                        objectMapper.writeValueAsString(
+                                new HsrStatusLog("publishHSR... success no BPM", "publishHSR")));
+            }
         }
 
         // Compose response body
@@ -340,15 +349,19 @@ public class HealthController {
         HealthServiceOuter outResp = new HealthServiceOuter();
         HealthServiceInner inResp = new HealthServiceInner();
         HealthService healthService = new HealthService();
-        healthService.setCsNum(resp.getBody().getCsNum());
-        ca.bc.gov.open.icon.hsr.HealthServiceRequest healthServiceRequest =
-                new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
-        healthServiceRequest.setHsrId(resp.getBody().getHsrId());
-        healthServiceRequest.setPacID(resp.getBody().getPacId());
-        healthServiceRequest.setLocation(resp.getBody().getLocation());
-        healthServiceRequest.setRequestDate(resp.getBody().getRequestDate());
-        healthServiceRequest.setHealthRequest(resp.getBody().getHealthRequest());
-        healthService.setHealthServiceRequest(healthServiceRequest);
+        healthService.setCsNum(
+                publishHSR.getXMLString().getHealthService().getHealthService().getCsNum());
+        List<ca.bc.gov.open.icon.hsr.HealthServiceRequest> requestList = new ArrayList<>();
+        for (var pub : resp.getBody().getHealthServicePubList()) {
+            ca.bc.gov.open.icon.hsr.HealthServiceRequest healthServiceRequest =
+                    new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
+            healthServiceRequest.setHsrId(pub.getHsrId());
+            healthServiceRequest.setPacID(pub.getPacId());
+            healthServiceRequest.setLocation(pub.getLocation());
+            healthServiceRequest.setRequestDate(pub.getRequestDate());
+            requestList.add(healthServiceRequest);
+        }
+        healthService.setHealthServiceRequest(requestList);
         inResp.setHealthService(healthService);
         outResp.setHealthService(inResp);
         out.setXMLString(outResp);
@@ -356,7 +369,7 @@ public class HealthController {
         log.info(
                 objectMapper.writeValueAsString(
                         new RequestSuccessLog("Request Success", "publishHSR")));
-        return out;
+        return null;
     }
 
     private void enQueueHealthServicePub(HealthServicePub p) {
