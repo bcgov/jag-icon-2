@@ -369,7 +369,7 @@ public class HealthController {
         log.info(
                 objectMapper.writeValueAsString(
                         new RequestSuccessLog("Request Success", "publishHSR")));
-        return null;
+        return out;
     }
 
     private void enQueueHealthServicePub(HealthServicePub p) {
