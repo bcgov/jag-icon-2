@@ -48,4 +48,17 @@ public final class InstantSoapConverter {
             return null;
         }
     }
+
+    public static Instant parseISO(String value) {
+        try {
+            return Instant.parse(value);
+        } catch (Exception ex) {
+            log.warn("Bad date received from soap request - invalid date format: " + value);
+            return null;
+        }
+    }
+
+    public static String printISO(Instant value) {
+        return value.toString();
+    }
 }
