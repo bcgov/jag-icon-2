@@ -10,7 +10,7 @@ import org.springframework.ws.client.core.WebServiceTemplate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class ClientControllerTests {
+public class InformationControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 

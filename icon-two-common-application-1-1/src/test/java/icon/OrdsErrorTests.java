@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ca.bc.gov.open.icon.audit.*;
+import ca.bc.gov.open.icon.error.SetErrorMessage;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.myinfo.GetClientHistory;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
@@ -11,6 +12,7 @@ import ca.bc.gov.open.icon.session.GetSessionParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import icon.controllers.AuditController;
 import icon.controllers.AuthenticationController;
+import icon.controllers.ErrorHandlingController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -149,6 +151,19 @@ public class OrdsErrorTests {
                                 new PrimaryAuthenticationCompleted()));
     }
 
+    /*
+        ErrorHandlingController
+    */
+    @Test
+    public void testSetErrorMessageFail() throws Exception {
+        var errorHandlingController = new ErrorHandlingController(restTemplate, objectMapper);
+
+        Assertions.assertThrows(
+                ORDSException.class,
+                () ->
+                        errorHandlingController.setErrorMessage(
+                                new SetErrorMessage()));    }
+
     @Test
     public void securityTestFail_Then401() throws Exception {
         var response =
@@ -158,4 +173,5 @@ public class OrdsErrorTests {
         Assertions.assertEquals(
                 HttpStatus.UNAUTHORIZED.value(), response.getResponse().getStatus());
     }
+
 }
