@@ -1,5 +1,6 @@
 package icon;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,6 +21,7 @@ import icon.controllers.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -177,15 +183,23 @@ public class OrdsErrorTests {
     /*
         ErrorHandlingController
     */
-//    @Test
-//    public void testSetErrorMessageFail() throws Exception {
-//        var errorHandlingController = new ErrorHandlingController(restTemplate, objectMapper);
-//
-//        Assertions.assertThrows(
-//                ORDSException.class,
-//                () ->
-//                        errorHandlingController.setErrorMessage(
-//                                new SetErrorMessage()));    }
+    @Test
+    public void testSetErrorMessageFail() throws Exception {
+        var errorHandlingController = new ErrorHandlingController(restTemplate, objectMapper);
+
+        when(restTemplate.exchange(
+                Mockito.anyString(),
+                Mockito.eq(HttpMethod.POST),
+                Mockito.<HttpEntity<String>>any(),
+                Mockito.<ParameterizedTypeReference<Map<String,String>>>any()))
+                .thenThrow(new RestClientException("BAD"));
+
+        Assertions.assertThrows(
+                ORDSException.class,
+                () ->
+                        errorHandlingController.setErrorMessage(
+                                new SetErrorMessage()));
+    }
 
     /*
         HealthController

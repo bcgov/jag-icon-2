@@ -322,4 +322,69 @@ public class InformationControllerTests {
         var resp = informationController.getLocations(req);
         Assertions.assertNotNull(resp);
     }
+
+//    @Test
+//    public void testGetConditions() throws JsonProcessingException {
+//        var req = new GetConditions();
+//        var ConditionsOuter = new ConditionsOuter();
+//        var ConditionsInner = new ConditionsInner();
+//
+//        var conditions = new Conditions();
+//        req.setXMLString(locationsOuter);
+//        locationsOuter.setLocations(locationsInner);
+//        locationsInner.setLocations(locations);
+//
+//        conditions.setCsNum("A");
+//        conditions.setAudoId("A");
+//        conditions.setOrderNum("A");
+//        conditions.setStartDate("A");
+//        conditions.setEndDate("A");
+//        var row = new Row();
+//        row.setStart("1");
+//        row.setEnd("3");
+//        row.setTotal("3");
+//        conditions.setRow(row);
+//        List<ConditionsDetails> details = new ArrayList<>();
+//        var conditionsDetails = new ConditionsDetails();
+//        details.add(conditionsDetails);
+//        details.add();
+//        conditions.setConditionsDetails("A");
+//
+//        List<Location> locs = new ArrayList<>();
+//        var loc = new Location();
+//        loc.setPhone("A");
+//        loc.setInstCommType("A");
+//        loc.setFax("A");
+//        var address = new Address();
+//        List<Address> addresses = new ArrayList<>();
+//        addresses.add(address);
+//        address.setType("A");
+//        address.setLine1("A");
+//        address.setLine2("A");
+//        address.setLine3("A");
+//        address.setCity("A");
+//        address.setProvince("A");
+//        address.setPostalCode("A");
+//        loc.setAddress(addresses);
+//        loc.setDescription("A");
+//        loc.setInstCommType("A");
+//        locations.setLocation(locs);
+//
+//        var locations1 = new Locations();
+//
+//        ResponseEntity<Locations> responseEntity = new ResponseEntity<>(locations1, HttpStatus.OK);
+//
+//        // Set up to mock ords response
+//        when(restTemplate.exchange(
+//                Mockito.any(String.class),
+//                Mockito.eq(HttpMethod.POST),
+//                Mockito.<HttpEntity<String>>any(),
+//                Mockito.<Class<Locations>>any()))
+//                .thenReturn(responseEntity);
+//
+//        InformationController informationController =
+//                new InformationController(restTemplate, objectMapper);
+//        var resp = informationController.getLocations(req);
+//        Assertions.assertNotNull(resp);
+//    }
 }
