@@ -5,6 +5,7 @@ import ca.bc.gov.open.icon.models.PACModel;
 import ca.bc.gov.open.icon.models.PingModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.SocketException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -21,13 +22,15 @@ public class ConsumerService {
     }
 
     @RabbitListener(queues = "${icon.hsr-queue}")
-    public void receiveHSRMessage(@Payload Message<HealthServicePub> message) throws JsonProcessingException {
-//        hsrService.processHSR(message.getPayload());
+    public void receiveHSRMessage(@Payload Message<HealthServicePub> message)
+            throws JsonProcessingException, SocketException, InterruptedException {
+        hsrService.processHSR(message.getPayload());
         System.out.println(new ObjectMapper().writeValueAsString(message.getPayload()));
     }
 
     @RabbitListener(queues = "${icon.pac-queue}")
-    public void receivePACMessage(@Payload Message<PACModel> message) throws JsonProcessingException {
+    public void receivePACMessage(@Payload Message<PACModel> message)
+            throws JsonProcessingException {
         System.out.println(new ObjectMapper().writeValueAsString(message.getPayload()));
     }
 
