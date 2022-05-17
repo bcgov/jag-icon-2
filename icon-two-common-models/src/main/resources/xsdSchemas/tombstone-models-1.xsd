@@ -6,7 +6,7 @@
     <xsd:element name="getTombStoneInfo">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:getTombStoneInfo"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -14,7 +14,7 @@
     <xsd:element name="getTombStoneInfoResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="XMLString" nillable="true" type="tns:getTombStoneInfo"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -26,5 +26,22 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
+
+    <xsd:complexType name="getTombStoneInfo">
+        <xsd:sequence>
+            <xsd:element name="TombStoneInfo" nillable="true" type="tns:getTombStoneInfoRequest"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="getTombStoneInfoRequest">
+        <xsd:sequence>
+            <xsd:element name="csNum" nillable="true" type="xsd:string"/>
+            <xsd:element name="lastName" nillable="true" type="xsd:string"/>
+            <xsd:element name="firstName" nillable="true" type="xsd:string"/>
+            <xsd:element name="latestPhoto" nillable="true" type="xsd:string"/>
+            <xsd:element name="businessRole" nillable="true" type="xsd:string"/>
+            <xsd:element name="unreadMessageCount" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
 
 </xsd:schema>
