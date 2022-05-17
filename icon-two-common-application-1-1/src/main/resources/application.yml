@@ -2,8 +2,18 @@ security:
   basic-auth:
     password: ${BASIC_AUTH_PASS}
     username: ${BASIC_AUTH_USER}
+  web-service:
+    password: ${WS_AUTH_PASS}
+    username: ${WS_AUTH_USER}
 icon:
   host: ${ORDS_HOST}
+  hsr-service-url: ${HSR_SERVICE_URL}
+  hsr-queue: ${HSR_QUEUE_NAME}
+  hsr-routing-key: ${HSR_ROUTING_KEY}
+  ping-queue: ${PING_QUEUE_NAME}
+  ping-routing-key: ${PING_ROUTING_KEY}
+  exchange-name: ${RABBIT_EXCHANGE_NAME}
+
 management:
   endpoints:
     web:

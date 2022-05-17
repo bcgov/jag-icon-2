@@ -149,18 +149,17 @@ public class FileController {
                         .queryParam("csNum", getClientInfo.getCsNum());
 
         try {
-            HttpEntity<Client> resp =
+            HttpEntity<GetClientInfoResponse> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.GET,
                             new HttpEntity<>(new HttpHeaders()),
-                            Client.class);
+                            GetClientInfoResponse.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getClientInfo")));
-            GetClientInfoResponse out = new GetClientInfoResponse();
-            out.setClient(resp.getBody());
-            return out;
+            resp.getBody();
+            return resp.getBody();
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
