@@ -39,8 +39,6 @@ import org.springframework.ws.client.core.WebServiceTemplate;
 
 import java.net.URI;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -183,6 +181,40 @@ public class HealthControllerTests {
                 .thenReturn(soapResp);
 
         var resp = healthController.getHealthServiceRequestHistory(req);
+        Assertions.assertNotNull(resp);
+    }
+
+    @Test
+    public void testPublishHSR() throws JsonProcessingException {
+        var req = new PublishHSR();
+        req.setXMLString("A");
+        req.setUserTokenString("A");
+
+        var publishHSR = new PublishHSRResponse();
+        publishHSR.setXMLString("A");
+        publishHSR.setUserTokenString("A");
+        ResponseEntity<PublishHSRResponse> responseEntity = new ResponseEntity<>(publishHSR, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                Mockito.any(String.class),
+                Mockito.eq(HttpMethod.POST),
+                Mockito.<HttpEntity<String>>any(),
+                Mockito.<Class<PublishHSRResponse>>any()))
+                .thenReturn(responseEntity);
+
+        var healthController =
+                new HealthController(
+                        webServiceTemplate,
+                        restTemplate,
+                        objectMapper,
+                        hsrQueue,
+                        pingQueue,
+                        rabbitTemplate,
+                        amqpAdmin,
+                        queueConfig
+                );
+        var resp = healthController.publishHSR(req);
         Assertions.assertNotNull(resp);
     }
 
