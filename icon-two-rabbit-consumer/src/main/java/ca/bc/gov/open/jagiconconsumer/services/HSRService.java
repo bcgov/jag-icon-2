@@ -31,6 +31,7 @@ public class HSRService {
 
     private static int retries;
     private static int MAX_RETRIES = 5;
+    private static int PAUSE = 5000; // in milliseconds
     private boolean appErr = false;
     private boolean hsrFail = false;
 
@@ -76,7 +77,7 @@ public class HSRService {
                     hsrFail = true;
                     break;
                 }
-                Thread.sleep(5000);
+                Thread.sleep(PAUSE);
             }
         }
 
