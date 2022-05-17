@@ -249,14 +249,14 @@ public class HealthController {
                 UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
 
         // ORDS Call - PublishHSR
-        HttpEntity<HealthServicePubList> resp = null;
+        HttpEntity<List<HealthServicePub>> resp = null;
         try {
             resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             new HttpEntity<>(publishHSR, new HttpHeaders()),
-                            HealthServicePubList.class);
+                            new ParameterizedTypeReference<>() {});
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "publishHSR")));
@@ -267,7 +267,7 @@ public class HealthController {
                         new SubmitHealthServiceRequest();
 
                 // Go through all health service requests
-                for (var pub : resp.getBody().getHealthServicePubList()) {
+                for (var pub : resp.getBody()) {
                     submitHealthServiceRequest.setCsNumber(pub.getCsNum());
                     submitHealthServiceRequest.setSubmissionDate(pub.getRequestDate().toString());
                     submitHealthServiceRequest.setCentre(pub.getLocation());
@@ -284,7 +284,7 @@ public class HealthController {
                 HttpEntity<HealthServicePub> resp2 = null;
                 try {
 
-                    for (var pub : resp.getBody().getHealthServicePubList()) {
+                    for (var pub : resp.getBody()) {
                         resp2 =
                                 restTemplate.exchange(
                                         builder2.toUriString(),
@@ -323,7 +323,7 @@ public class HealthController {
             throw new ORDSException();
         }
 
-        for (var pub : resp.getBody().getHealthServicePubList()) {
+        for (var pub : resp.getBody()) {
             // Publish HSR only if pacId is empty or null
             if (pub.equals("-")) {
                 log.warn(
@@ -352,7 +352,7 @@ public class HealthController {
         healthService.setCsNum(
                 publishHSR.getXMLString().getHealthService().getHealthService().getCsNum());
         List<ca.bc.gov.open.icon.hsr.HealthServiceRequest> requestList = new ArrayList<>();
-        for (var pub : resp.getBody().getHealthServicePubList()) {
+        for (var pub : resp.getBody()) {
             ca.bc.gov.open.icon.hsr.HealthServiceRequest healthServiceRequest =
                     new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
             healthServiceRequest.setHsrId(pub.getHsrId());

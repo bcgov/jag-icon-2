@@ -72,7 +72,7 @@ public class PACPollerService {
     @Scheduled(fixedDelay = 5000)
     private void ping() {
         PingModel p = new PingModel();
-        p.setSource("lol");
+        p.setSource("ping");
         log.info("Sending ping with source " + p.getSource());
         this.rabbitTemplate.convertAndSend(
                 queueConfig.getTopicExchangeName(), queueConfig.getPingRoutingKey(), p);
