@@ -81,7 +81,8 @@ public class HSRService {
         }
 
         // Record HSR
-        UriComponentsBuilder recordBuilder = UriComponentsBuilder.fromHttpUrl(host + "record-hsr");
+        UriComponentsBuilder recordBuilder =
+                UriComponentsBuilder.fromHttpUrl(host + "health/record-hsr");
         var recordReq = new RecordHSRRequest();
         recordReq.setCsNum(hsr.getCsNum());
         recordReq.setHsrId(hsr.getHsrId());
@@ -118,7 +119,7 @@ public class HSRService {
                                     + hsr.getCsNum()
                                     + ")";
             UriComponentsBuilder notificationBuilder =
-                    UriComponentsBuilder.fromHttpUrl(host + "notification-hsr");
+                    UriComponentsBuilder.fromHttpUrl(host + "health/notification-hsr");
             var notificationReq = new NotificationHSRRequest();
             notificationReq.setNotificationMessageText(errMsg);
             try {
@@ -142,7 +143,6 @@ public class HSRService {
                 throw new ORDSException();
             }
         }
-
         // End of BPM
     }
 }
