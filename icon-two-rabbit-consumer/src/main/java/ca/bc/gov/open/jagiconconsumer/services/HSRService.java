@@ -72,7 +72,7 @@ public class HSRService {
                 hsrFail = true;
                 break;
             } catch (Exception ex) {
-                if (++retries == 5) {
+                if (++retries == MAX_RETRIES) {
                     appErr = true;
                     hsrFail = true;
                     break;
