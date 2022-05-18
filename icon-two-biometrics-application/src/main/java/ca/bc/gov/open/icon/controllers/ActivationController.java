@@ -50,8 +50,8 @@ public class ActivationController {
                     BCeIDAccountTypeCode.fromValue(reactivate.getRequestorType()));
             reactivateCredential.setRequest(reactivateCredentialRequest);
 
-            ReactivateCredentialResponse reactivateCredentialResponse =
-                    (ReactivateCredentialResponse)
+            ca.bc.gov.open.icon.bcs.ReactivateCredentialResponse reactivateCredentialResponse =
+                    (ca.bc.gov.open.icon.bcs.ReactivateCredentialResponse)
                             soapTemplate.marshalSendAndReceive(bcsHost, reactivateCredential);
 
             if (!reactivateCredentialResponse

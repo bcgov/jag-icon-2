@@ -15,6 +15,24 @@
         <!--        These are being detected as duplicates but they are all needed for code coverage to be generated correctly -->
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
+            <artifactId>icon-two-biometrics-application</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.bc.gov.open</groupId>
+            <artifactId>icon-two-common-application-1-1</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.bc.gov.open</groupId>
+            <artifactId>icon-two-common-application-1-2</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.bc.gov.open</groupId>
             <artifactId>icon-two-common-models</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
@@ -27,14 +45,14 @@
         </dependency>
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-common-application-1-1</artifactId>
-            <version>1.0</version>
+            <artifactId>icon-two-myfiles-application</artifactId>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-common-application-1-2</artifactId>
-            <version>1.0</version>
+            <artifactId>icon-two-poller</artifactId>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -49,7 +67,7 @@
                     <excludes>
                         <exclude>**/configuration/WSDLFilter*</exclude>
                         <exclude>**/configuration/HttpServletRequestWrapper.class</exclude>
-                        <exclude>**/CcdApplication.class</exclude>
+                        <exclude>**/IconTwoCommonApplication.class</exclude>
                         <exclude>**/ObjectFactory.class</exclude>
                         <exclude>**/Adapter1.class</exclude>
                     </excludes>

@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>icon-two-comparison-tool-1-1</artifactId>
-
+    <version>1.0.0</version>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
