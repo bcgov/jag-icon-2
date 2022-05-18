@@ -1,5 +1,6 @@
 package ca.bc.gov.open.jagiconconsumer.services;
 
+import ca.bc.gov.open.icon.models.Client;
 import ca.bc.gov.open.icon.models.HealthServicePub;
 import ca.bc.gov.open.icon.models.PACModel;
 import ca.bc.gov.open.icon.models.PingModel;
@@ -17,29 +18,36 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ConsumerService {
     private final HSRService hsrService;
+    private final PACService pacService;
 
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public ConsumerService(ObjectMapper objectMapper, HSRService hsrService) {
+    public ConsumerService(ObjectMapper objectMapper, HSRService hsrService, PACService pacService) {
         this.objectMapper = objectMapper;
         this.hsrService = hsrService;
+        this.pacService = pacService;
     }
 
     @RabbitListener(queues = "${icon.hsr-queue}")
     public void receiveHSRMessage(@Payload Message<HealthServicePub> message)
-            throws IOException, InterruptedException {
+            throws IOException {
         try {
             hsrService.processHSR(message.getPayload());
         } catch (Exception ignored) {
-            log.error("ERROR: " + message + " not processed successfully");
+            log.error("HSR BPM ERROR: " + message + " not processed successfully");
         }
         System.out.println(objectMapper.writeValueAsString(message.getPayload()));
     }
 
     @RabbitListener(queues = "${icon.pac-queue}")
-    public void receivePACMessage(@Payload Message<PACModel> message)
-            throws JsonProcessingException {
+    public void receivePACMessage(@Payload Message<Client> message)
+        throws IOException {
+        try {
+            pacService.processPAC(message.getPayload());
+        } catch (Exception ignored) {
+            log.error("PAC BPM ERROR: " + message + " not processed successfully");
+        }
         System.out.println(new ObjectMapper().writeValueAsString(message.getPayload()));
     }
 

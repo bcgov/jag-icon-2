@@ -23,7 +23,7 @@ import org.springframework.ws.client.core.WebServiceTemplate;
 @Service
 @Slf4j
 public class HSRService {
-    @Value("${icon.host}")
+    @Value("${icon.cms-host}")
     private String host = "https://127.0.0.1/";
 
     @Value("${icon.hsr-service-url}")
