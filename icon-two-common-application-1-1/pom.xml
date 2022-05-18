@@ -10,7 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>icon-two-common-application-1-1</artifactId>
-
+    <version>1.0</version>
+    <name>icon-two-common-application-1-1</name>
+    <description>icon-two-common-application-1-1</description>
     <repositories>
         <repository>
             <id>splunk-artifactory</id>

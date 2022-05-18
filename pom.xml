@@ -37,6 +37,7 @@
         <module>icon-two-comparison-tool-1-2</module>
         <module>icon-two-poller</module>
         <module>icon-two-rabbit-consumer</module>
+        <module>icon-two-code-coverage</module>
     </modules>
 
     <build>

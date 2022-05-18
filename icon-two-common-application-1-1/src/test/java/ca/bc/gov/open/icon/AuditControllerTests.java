@@ -1,15 +1,15 @@
-package icon;
+package ca.bc.gov.open.icon;
 
 import static org.mockito.Mockito.when;
 
 import ca.bc.gov.open.icon.audit.*;
+import ca.bc.gov.open.icon.controllers.AuditController;
 import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfoResponse;
 import ca.bc.gov.open.icon.session.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import icon.controllers.AuditController;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -348,4 +348,6 @@ public class AuditControllerTests {
         var resp = auditController.getSessionParameters(req);
         Assertions.assertNotNull(resp);
     }
+
+    public static class MessageControllerTests {}
 }

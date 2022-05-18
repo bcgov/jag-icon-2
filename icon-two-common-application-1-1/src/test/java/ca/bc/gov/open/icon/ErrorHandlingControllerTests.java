@@ -1,9 +1,13 @@
-package icon;
+package ca.bc.gov.open.icon;
 
+import static org.mockito.Mockito.when;
+
+import ca.bc.gov.open.icon.controllers.ErrorHandlingController;
 import ca.bc.gov.open.icon.error.SetErrorMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import icon.controllers.ErrorHandlingController;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,19 +22,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.mockito.Mockito.when;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class ErrorHandlingControllerTests {
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
-    @Mock
-    private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
 
     @Mock private RestTemplate restTemplate = new RestTemplate();
 
@@ -47,10 +44,10 @@ public class ErrorHandlingControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(String.class),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<Class<Map>>any()))
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<Map>>any()))
                 .thenReturn(responseEntity);
 
         var errorHandlingController = new ErrorHandlingController(restTemplate, objectMapper);

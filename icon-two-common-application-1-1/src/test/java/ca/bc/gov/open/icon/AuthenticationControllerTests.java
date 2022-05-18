@@ -1,11 +1,11 @@
-package icon;
+package ca.bc.gov.open.icon;
 
 import static org.mockito.Mockito.when;
 
 import ca.bc.gov.open.icon.audit.*;
+import ca.bc.gov.open.icon.controllers.AuthenticationController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import icon.controllers.AuthenticationController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

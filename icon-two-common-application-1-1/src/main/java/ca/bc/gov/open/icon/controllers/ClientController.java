@@ -54,7 +54,9 @@ public class ClientController {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info");
-        HttpEntity<GetTombStoneInfoRequest> payload = new HttpEntity<>(getTombStoneInfo.getXMLString().getTombStoneInfo(), new HttpHeaders());
+        HttpEntity<GetTombStoneInfoRequest> payload =
+                new HttpEntity<>(
+                        getTombStoneInfo.getXMLString().getTombStoneInfo(), new HttpHeaders());
 
         try {
             HttpEntity<GetTombStoneInfoRequest> resp =
@@ -66,11 +68,11 @@ public class ClientController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getTombStoneInfo")));
-               GetTombStoneInfoResponse getTombStoneInfoResponseOut = new GetTombStoneInfoResponse();
-               GetTombStoneInfo2 getTombStoneInfoOut = new GetTombStoneInfo2();
-               getTombStoneInfoOut.setTombStoneInfo(resp.getBody());
-               getTombStoneInfoResponseOut.setXMLString(getTombStoneInfoOut);
-               return getTombStoneInfoResponseOut;
+            GetTombStoneInfoResponse getTombStoneInfoResponseOut = new GetTombStoneInfoResponse();
+            GetTombStoneInfo2 getTombStoneInfoOut = new GetTombStoneInfo2();
+            getTombStoneInfoOut.setTombStoneInfo(resp.getBody());
+            getTombStoneInfoResponseOut.setXMLString(getTombStoneInfoOut);
+            return getTombStoneInfoResponseOut;
 
         } catch (Exception ex) {
             log.error(
@@ -133,7 +135,8 @@ public class ClientController {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule");
-        HttpEntity<GetVisitSchedule> payload = new HttpEntity<>(getVisitSchedule, new HttpHeaders());
+        HttpEntity<GetVisitSchedule> payload =
+                new HttpEntity<>(getVisitSchedule, new HttpHeaders());
         try {
             HttpEntity<GetVisitScheduleRequest> resp =
                     restTemplate.exchange(

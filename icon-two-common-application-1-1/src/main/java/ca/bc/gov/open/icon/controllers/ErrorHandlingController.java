@@ -48,9 +48,12 @@ public class ErrorHandlingController {
         HttpEntity<SetErrorMessage> payload = new HttpEntity<>(setErrorMessage, new HttpHeaders());
 
         try {
-            HttpEntity<Map<String,String>> resp =
+            HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, new ParameterizedTypeReference<>() {});
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            new ParameterizedTypeReference<>() {});
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setErrorMessage")));
