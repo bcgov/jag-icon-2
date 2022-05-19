@@ -80,7 +80,7 @@ public class PACPollerService {
 
     //  Scheduled every minute in MS
     @Scheduled(fixedDelay = 60 * 1000)
-    private void pollOrdsForNewRecords() {
+    public void pollOrdsForNewRecords() {
         log.info("Polling db for new records");
 
         try {

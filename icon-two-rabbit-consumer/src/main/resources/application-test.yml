@@ -7,7 +7,7 @@ icon:
 
 spring:
   rabbitmq:
-    host: http://127.0.0.1/
+    host: redis
     port: 5672
 
 server:
