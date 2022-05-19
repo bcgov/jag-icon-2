@@ -1,10 +1,7 @@
 package ca.bc.gov.open.icon;
 
 import ca.bc.gov.open.icon.biometrics.*;
-import ca.bc.gov.open.icon.controllers.ActivationController;
-import ca.bc.gov.open.icon.controllers.DidController;
-import ca.bc.gov.open.icon.controllers.EnrollmentController;
-import ca.bc.gov.open.icon.controllers.RemovalController;
+import ca.bc.gov.open.icon.controllers.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -33,6 +30,8 @@ public class OrdsErrorTests {
     @Autowired private ObjectMapper objectMapper;
 
     @Mock private WebServiceTemplate webServiceTemplate;
+
+    @Mock private WebServiceTemplate soapTemplate;
 
     @Mock private RestTemplate restTemplate;
 
@@ -112,13 +111,21 @@ public class OrdsErrorTests {
                 ORDSException.class, () -> removalController.removeTemplate(new RemoveTemplate()));
     }
 
-//    @Test
-//    public void testGetRefIdFail() {
-//        var removalController = new RemovalController(webServiceTemplate, objectMapper, modalMapper, restTemplate);
-//
-//        Assertions.assertThrows(
-//                ORDSException.class, () -> removalController.getRefId(new getRefId()));
-//    }
+    @Test
+    public void testStartSearchFail() {
+        var searchController = new SearchController(soapTemplate, objectMapper, modalMapper);
+
+        Assertions.assertThrows(
+                ORDSException.class, () -> searchController.startSearch(new StartSearch()));
+    }
+
+    @Test
+    public void testFinishSearchFail() {
+        var searchController = new SearchController(soapTemplate, objectMapper, modalMapper);
+
+        Assertions.assertThrows(
+                ORDSException.class, () -> searchController.finishSearch(new ca.bc.gov.open.icon.biometrics.FinishSearch()));
+    }
 
 
     @Test
