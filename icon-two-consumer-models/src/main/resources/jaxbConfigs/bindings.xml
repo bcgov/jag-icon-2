@@ -6,12 +6,10 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
     http://jaxb2-commons.dev.java.net/namespace-prefix https://raw.githubusercontent.com/Siggen/jaxb2-namespace-prefix/master/src/main/resources/prefix-namespace-schema.xsd">
 
-
-    <jxb:bindings schemaLocation="../xsdSchemas/hsr-service-models-1.xsd">
+    <jxb:bindings schemaLocation="../xsdSchemas/services-models-1.xsd">
         <jxb:schemaBindings>
-            <jxb:package name="ca.bc.gov.open.icon.hsrservice"/>
+            <jxb:package name="ca.bc.gov.open.icon.services"/>
         </jxb:schemaBindings>
     </jxb:bindings>
-
 
 </jxb:bindings>

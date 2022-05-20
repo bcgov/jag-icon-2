@@ -1,9 +1,9 @@
 package ca.bc.gov.open.jagiconconsumer.services;
 
 import ca.bc.gov.open.icon.exceptions.ORDSException;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
+import ca.bc.gov.open.icon.services.SubmitHealthServiceRequest;
+import ca.bc.gov.open.icon.services.SubmitHealthServiceRequestResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;

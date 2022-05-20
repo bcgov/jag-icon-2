@@ -1,8 +1,7 @@
 package ca.bc.gov.open.icon.models;
 
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 @Data
 public class Client implements Serializable {
@@ -17,8 +16,19 @@ public class Client implements Serializable {
     private String gender;
     private String photoGUID;
     private String probableDischargeDate;
-    private String outLocation;
+    private String pacLocationCd;
     private String outReason;
-    private String NewerUpdate;
-    private String LocaCd;
+    private String newerSequence;
+    private String computerSystemCd;
+    private String isActive;
+    private String sysDate;
+    private String fromCsNum;
+    private String userId;
+    private String mergeUserId;
+    private String icsLocationCd;
+    private String isIn;
+    private String custodyCenter;
+    private String livingUnit;
+    // to accept the status if update process cancels
+    private String status;
 }

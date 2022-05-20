@@ -2,7 +2,6 @@ package ca.bc.gov.open.jagiconconsumer.services;
 
 import ca.bc.gov.open.icon.models.Client;
 import ca.bc.gov.open.icon.models.HealthServicePub;
-import ca.bc.gov.open.icon.models.PACModel;
 import ca.bc.gov.open.icon.models.PingModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,15 +22,15 @@ public class ConsumerService {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public ConsumerService(ObjectMapper objectMapper, HSRService hsrService, PACService pacService) {
+    public ConsumerService(
+            ObjectMapper objectMapper, HSRService hsrService, PACService pacService) {
         this.objectMapper = objectMapper;
         this.hsrService = hsrService;
         this.pacService = pacService;
     }
 
     @RabbitListener(queues = "${icon.hsr-queue}")
-    public void receiveHSRMessage(@Payload Message<HealthServicePub> message)
-            throws IOException {
+    public void receiveHSRMessage(@Payload Message<HealthServicePub> message) throws IOException {
         try {
             hsrService.processHSR(message.getPayload());
         } catch (Exception ignored) {
@@ -41,8 +40,7 @@ public class ConsumerService {
     }
 
     @RabbitListener(queues = "${icon.pac-queue}")
-    public void receivePACMessage(@Payload Message<Client> message)
-        throws IOException {
+    public void receivePACMessage(@Payload Message<Client> message) throws IOException {
         try {
             pacService.processPAC(message.getPayload());
         } catch (Exception ignored) {

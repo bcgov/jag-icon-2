@@ -1,11 +1,11 @@
 package ca.bc.gov.open.jagiconconsumer.services;
 
 import ca.bc.gov.open.icon.exceptions.ORDSException;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
+import ca.bc.gov.open.icon.services.SynchronizeClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,10 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.ws.client.WebServiceIOException;
 import org.springframework.ws.client.core.WebServiceTemplate;
-
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -77,6 +74,101 @@ public class PACService {
         }
 
         builder = UriComponentsBuilder.fromHttpUrl(cms_host + "pac/update");
+        HttpEntity<Client> respClient;
+        try {
+            respClient =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            new HttpEntity<>(client, new HttpHeaders()),
+                            new ParameterizedTypeReference<>() {});
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "pacUpdate")));
+            if (respClient.getBody().getStatus().equals("0")) {
+                log.info("PAC update cancel");
+                return;
+            }
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "pacUpdate",
+                                    ex.getMessage(),
+                                    client)));
+            throw new ORDSException();
+        }
+
+        // Compose Soap Service Request Body
+        SynchronizeClient synchronizeClient = new SynchronizeClient();
+        synchronizeClient.setCsNumber(respClient.getBody().getCsNum());
+        switch (respClient.getBody().getEventTypeCode()) {
+            case "CADM":
+                synchronizeClient.setSurname(respClient.getBody().getSurname());
+                synchronizeClient.setGivenName1(respClient.getBody().getGivenName1());
+                synchronizeClient.setGivenName2(respClient.getBody().getGivenName2());
+                synchronizeClient.setBirthDate(respClient.getBody().getBirthDate());
+                synchronizeClient.setGender(respClient.getBody().getGender());
+                synchronizeClient.setPhotoGuid(respClient.getBody().getPhotoGUID());
+                synchronizeClient.setProbableDischargeDate(
+                        respClient.getBody().getProbableDischargeDate());
+                synchronizeClient.setCentre(respClient.getBody().getCustodyCenter());
+                synchronizeClient.setLivingUnit(respClient.getBody().getLivingUnit());
+                break;
+            case "CDEM":
+            case "CREL":
+            case "CLUN":
+                synchronizeClient.setSurname(respClient.getBody().getSurname());
+                synchronizeClient.setGivenName1(respClient.getBody().getGivenName1());
+                synchronizeClient.setGivenName2(respClient.getBody().getGivenName2());
+                synchronizeClient.setBirthDate(respClient.getBody().getBirthDate());
+                synchronizeClient.setGender(respClient.getBody().getGender());
+                synchronizeClient.setPhotoGuid(respClient.getBody().getPhotoGUID());
+                synchronizeClient.setCentre(respClient.getBody().getCustodyCenter());
+                synchronizeClient.setLivingUnit(respClient.getBody().getLivingUnit());
+                break;
+            case "CKEY":
+                synchronizeClient.setProbableDischargeDate(
+                        respClient.getBody().getProbableDischargeDate());
+                break;
+            case "CLOC":
+                synchronizeClient.setOutLocation(respClient.getBody().getPacLocationCd());
+                synchronizeClient.setOutReason(respClient.getBody().getOutReason());
+                break;
+            case "CIMG":
+                synchronizeClient.setPhotoGuid(respClient.getBody().getPhotoGUID());
+                break;
+            default:
+                log.warn(
+                        "Received EventTypeCode "
+                                + respClient.getBody().getEventTypeCode()
+                                + " is not expected");
+                break;
+        }
+
+        // Invoke Soap Service
+        try {
+            Object soapSvcResp =
+                    webServiceTemplate.marshalSendAndReceive(pacServiceUrl, synchronizeClient);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "synchronizeClient")));
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from SOAP SERVICE - synchronizeClient",
+                                    "pacUpdate",
+                                    ex.getMessage(),
+                                    synchronizeClient)));
+        }
+
+        builder =
+                UriComponentsBuilder.fromHttpUrl(cms_host + "pac/success")
+                        .queryParam("clientNumber", client.getClientNumber())
+                        .queryParam("eventSeqNum", client.getEventSeqNum())
+                        .queryParam("computerSystemCd", client.getComputerSystemCd());
         try {
             HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
@@ -86,19 +178,16 @@ public class PACService {
                             new ParameterizedTypeReference<>() {});
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "pacUpdate")));
-            String status = resp.getBody().get("status");
-            if (status.equals("0")) {
+                            new RequestSuccessLog("Request Success", "updateSuccess")));
+            if (respClient.getBody().getStatus().equals("0")) {
                 log.info("PAC update success");
-            } else {
-                log.info("PAC update cancel");
             }
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from ORDS",
-                                    "pacUpdate",
+                                    "updateSuccess",
                                     ex.getMessage(),
                                     client)));
             throw new ORDSException();
