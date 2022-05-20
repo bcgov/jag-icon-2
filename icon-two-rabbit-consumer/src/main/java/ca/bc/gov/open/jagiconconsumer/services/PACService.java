@@ -22,10 +22,10 @@ import org.springframework.ws.client.core.WebServiceTemplate;
 @Slf4j
 public class PACService {
     @Value("${icon.host}")
-    private String cms_host = "https://127.0.0.1/";
+    private String cmsHost = "https://127.0.0.1/";
 
     @Value("${icon.cmsint-host}")
-    private String cmsint_host = "https://127.0.0.1/";
+    private String cmsintHost = "https://127.0.0.1/";
 
     @Value("${icon.pac-service-url}")
     private String pacServiceUrl = "https://127.0.0.1/";
@@ -48,7 +48,7 @@ public class PACService {
     public void processPAC(Client client) throws JsonProcessingException {
         // Get event type code
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(cmsint_host + "event-type")
+                UriComponentsBuilder.fromHttpUrl(cmsintHost + "event-type")
                         .queryParam("clientNumber", client.getClientNumber())
                         .queryParam("eventSeqNum", client.getEventSeqNum());
         try {
@@ -73,7 +73,7 @@ public class PACService {
             throw new ORDSException();
         }
 
-        builder = UriComponentsBuilder.fromHttpUrl(cms_host + "pac/update");
+        builder = UriComponentsBuilder.fromHttpUrl(cmsHost + "pac/update");
         HttpEntity<Client> respClient;
         try {
             respClient =
@@ -165,7 +165,7 @@ public class PACService {
         }
 
         builder =
-                UriComponentsBuilder.fromHttpUrl(cms_host + "pac/success")
+                UriComponentsBuilder.fromHttpUrl(cmsHost + "pac/success")
                         .queryParam("clientNumber", client.getClientNumber())
                         .queryParam("eventSeqNum", client.getEventSeqNum())
                         .queryParam("computerSystemCd", client.getComputerSystemCd());

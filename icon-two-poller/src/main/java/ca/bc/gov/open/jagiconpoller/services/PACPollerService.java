@@ -1,6 +1,6 @@
 package ca.bc.gov.open.jagiconpoller.services;
 
-import ca.bc.gov.open.icon.models.PACModel;
+import ca.bc.gov.open.icon.models.Client;
 import ca.bc.gov.open.icon.models.PingModel;
 import ca.bc.gov.open.jagiconpoller.config.QueueConfig;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class PACPollerService {
 
     @Value("${icon.ords-host}")
-    private String ordsHost = "https://127.0.0.1/";
+    private String cmsintHost = "https://127.0.0.1/";
 
     private final Queue pacQueue;
 
@@ -60,7 +60,7 @@ public class PACPollerService {
         amqpAdmin.declareQueue(pingQueue);
     }
 
-    private void sendToRabbitMq(List<PACModel> items) {
+    private void sendToRabbitMq(List<Client> items) {
         items.forEach(
                 i ->
                         this.rabbitTemplate.convertAndSend(
@@ -84,9 +84,8 @@ public class PACPollerService {
         log.info("Polling db for new records");
 
         try {
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(ordsHost + "pac/poll");
-
-            HttpEntity<List<PACModel>> resp =
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(cmsintHost + "poll");
+            HttpEntity<List<Client>> resp =
                     restTemplate.exchange(
                             builder.build().toUri(),
                             HttpMethod.GET,
