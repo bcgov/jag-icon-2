@@ -1,8 +1,5 @@
 package ca.bc.gov.open.icon;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
 import ca.bc.gov.open.icon.audit.Base;
 import ca.bc.gov.open.icon.audit.HealthServiceRequest;
 import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmitted;
@@ -16,9 +13,6 @@ import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
 import ca.bc.gov.open.icon.hsrservice.HealthServiceRequestBundle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.net.URI;
-import java.time.Instant;
-import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -37,6 +31,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
+
+import java.net.URI;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -244,6 +248,24 @@ public class HealthControllerTests {
         hsrCount.setHsrId("A");
         hsrCount.setCsNum("1");
         hsrCount.setXmitOkay("A");
+
+        var userTokenOuter = new UserTokenOuter();
+        var userTokenInner = new UserTokenInner();
+        var userToken = new UserToken();
+
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+
+        userTokenInner.setUserToken(userToken);
+        userTokenOuter.setUserToken(userTokenInner);
+        req.setUserTokenString(userTokenOuter);
 
         ResponseEntity<HSRCount> responseEntity = new ResponseEntity<>(hsrCount, HttpStatus.OK);
 

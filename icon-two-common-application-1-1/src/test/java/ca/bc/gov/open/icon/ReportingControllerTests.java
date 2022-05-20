@@ -1,7 +1,5 @@
 package ca.bc.gov.open.icon;
 
-import static org.mockito.Mockito.when;
-
 import ca.bc.gov.open.icon.audit.EReportAnswers;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.Status;
@@ -23,6 +21,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
+import static org.mockito.Mockito.when;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class ReportingControllerTests {
@@ -36,6 +36,7 @@ public class ReportingControllerTests {
     public void testEReportAnswersSubmitted() throws JsonProcessingException {
         var req = new EReportAnswersSubmitted();
         var eReportAnswers = new EReportAnswers();
+
         req.setEReportAnswers(eReportAnswers);
 
         var status = new Status();
@@ -176,4 +177,27 @@ public class ReportingControllerTests {
         var resp = reportingController.getStatus(req);
         Assertions.assertNotNull(resp);
     }
+
+//    @Test
+//    public void testInstantSerializer() throws IOException {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+//        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+//        SimpleModule module = new SimpleModule();
+//        module.addDeserializer(Instant.class, new InstantDeserializer());
+//        module.addSerializer(Instant.class, new InstantSerializer());
+//        objectMapper.registerModule(module);
+//
+//        var time = Instant.now();
+//        String out = objectMapper.writeValueAsString(time);
+//
+//        String expected =
+//                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+//                        .withZone(ZoneId.of("UTC"))
+//                        .withLocale(Locale.US)
+//                        .format(time);
+//
+//        out = out.replace("\"", "");
+//        Assertions.assertEquals(expected, out);
+//    }
 }

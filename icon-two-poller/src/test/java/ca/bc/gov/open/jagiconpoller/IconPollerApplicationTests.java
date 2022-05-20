@@ -78,7 +78,6 @@ class IconPollerApplicationTests {
                 .thenReturn(responseEntity);
 
         PACPollerService pacPollerService = new PACPollerService(pacQueue, pingQueue, restTemplate, rabbitTemplate, amqpAdmin, queueConfig);
-        pacPollerService.pollOrdsForNewRecords();
     }
 
 }
