@@ -1,12 +1,17 @@
 package ca.bc.gov.open.icon;
 
+import static org.mockito.Mockito.when;
+
 import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.controllers.InformationController;
+import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.myinfo.UserToken;
 import ca.bc.gov.open.icon.myinfo.UserTokenInner;
-import ca.bc.gov.open.icon.myinfo.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,12 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -115,7 +114,7 @@ public class InformationControllerTests {
         deviceInfo.setPollActiveInterval("A");
         deviceInfo.setPollSleepInterval("A");
         deviceInfo.setCertificateName("A");
-        List<ServiceCodes>  ServiceCodes = new ArrayList<>();
+        List<ServiceCodes> ServiceCodes = new ArrayList<>();
         var ServiceCode = new ServiceCodes();
         ServiceCode.setServiceCd("A");
         ServiceCodes.add(ServiceCode);
@@ -377,7 +376,6 @@ public class InformationControllerTests {
         draftl.add(ConditionsDetails);
         conditions.setConditionsDetails(draftl);
 
-
         req.setXMLString(conditionsOuter);
         conditionsOuter.setConditions(conditionsInner);
         conditionsInner.setConditions(conditions);
@@ -487,7 +485,6 @@ public class InformationControllerTests {
         conditionDetails.setCondition("A");
         conditionDetailList.add(conditionDetails);
         ordersConditionsDetails.setConditionDetails(conditionDetailList);
-
 
         ResponseEntity<OrdersConditions> responseEntity =
                 new ResponseEntity<>(ordersConditions1, HttpStatus.OK);

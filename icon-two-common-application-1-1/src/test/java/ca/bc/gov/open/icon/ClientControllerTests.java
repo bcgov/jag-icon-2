@@ -1,5 +1,7 @@
 package ca.bc.gov.open.icon;
 
+import static org.mockito.Mockito.when;
+
 import ca.bc.gov.open.icon.controllers.ClientController;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo2;
@@ -11,6 +13,8 @@ import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleRequest;
 import ca.bc.gov.open.icon.visitschedule.VisitScheduleDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -24,11 +28,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

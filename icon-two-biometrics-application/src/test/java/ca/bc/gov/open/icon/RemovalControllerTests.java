@@ -1,5 +1,8 @@
 package ca.bc.gov.open.icon;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.Move;
 import ca.bc.gov.open.icon.biometrics.Remove;
@@ -11,6 +14,10 @@ import ca.bc.gov.open.icon.iis.ResponseCode;
 import ca.bc.gov.open.icon.ips.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,27 +34,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-import java.net.URI;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class RemovalControllerTests {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
-    @Mock
-    private WebServiceTemplate soapTemplate = new WebServiceTemplate();
-
+    @Mock private WebServiceTemplate soapTemplate = new WebServiceTemplate();
 
     @Mock private RestTemplate restTemplate = new RestTemplate();
-
 
     @Mock private ModelMapper modalMapper = new ModelMapper();
 
@@ -63,7 +58,6 @@ public class RemovalControllerTests {
         req.setEnrollmentURL("A");
         req.setExpiry(Instant.now());
 
-
         Map<String, String> out = new HashMap<>();
         out.put("andid", "1");
         ResponseEntity<Map<String, String>> responseEntity =
@@ -71,14 +65,14 @@ public class RemovalControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(URI.class),
-                Mockito.eq(HttpMethod.GET),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                        Mockito.any(URI.class),
+                        Mockito.eq(HttpMethod.GET),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
                 .thenReturn(responseEntity);
 
         // Set up to mock soap service response
-        var soapResp =  new RegisterIndividualResponse();
+        var soapResp = new RegisterIndividualResponse();
         var registerIndividualResponse2 = new RegisterIndividualResponse2();
         soapResp.setRegisterIndividualResult(registerIndividualResponse2);
         registerIndividualResponse2.setCode(ca.bc.gov.open.icon.iis.ResponseCode.SUCCESS);
@@ -88,7 +82,7 @@ public class RemovalControllerTests {
                 .thenReturn(soapResp);
 
         // Set up to mock soap service response
-        var soapResp1 =  new LinkResponse();
+        var soapResp1 = new LinkResponse();
         var LinkResponse2 = new LinkResponse2();
         soapResp1.setLinkResult(LinkResponse2);
         LinkResponse2.setCode(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS);
@@ -96,16 +90,15 @@ public class RemovalControllerTests {
                 .thenReturn(soapResp1);
 
         // Set up to mock soap service response
-        var soapResp2 =  new RebindCredentialResponse();
+        var soapResp2 = new RebindCredentialResponse();
         var rebindCredentialResponse2 = new RebindCredentialResponse2();
         soapResp2.setRebindCredentialResult(rebindCredentialResponse2);
         rebindCredentialResponse2.setCode(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS);
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(RebindCredential.class)))
                 .thenReturn(soapResp2);
 
-
         // Set up to mock soap service response
-        var soapResp3 =  new RemoveIndividualResponse();
+        var soapResp3 = new RemoveIndividualResponse();
         var removeIndividualResponse2 = new RemoveIndividualResponse2();
         soapResp3.setRemoveIndividualResult(removeIndividualResponse2);
         removeIndividualResponse2.setCode(ca.bc.gov.open.icon.iis.ResponseCode.SUCCESS);
@@ -113,7 +106,7 @@ public class RemovalControllerTests {
                 .thenReturn(soapResp3);
 
         // Set up to mock soap service response
-        var soapResp4 =  new UnlinkResponse();
+        var soapResp4 = new UnlinkResponse();
         var unlinkResponse2 = new UnlinkResponse2();
         soapResp4.setUnlinkResult(unlinkResponse2);
         unlinkResponse2.setCode(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS);
@@ -123,7 +116,7 @@ public class RemovalControllerTests {
                 .thenReturn(soapResp4);
 
         // Set up to mock soap service response
-        var common =  new GetIdRefResponse();
+        var common = new GetIdRefResponse();
         var getIdRefResponse2 = new GetIdRefResponse2();
         getIdRefResponse2.setIdRef("A");
         getIdRefResponse2.setCode(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS);
@@ -131,12 +124,11 @@ public class RemovalControllerTests {
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(GetIdRef.class)))
                 .thenReturn(common);
 
-
-        RemovalController removalController = new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+        RemovalController removalController =
+                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
         var resp = removalController.move(req);
         Assertions.assertNotNull(resp);
     }
-
 
     @Test
     public void testRemove() throws JsonProcessingException {
@@ -147,13 +139,12 @@ public class RemovalControllerTests {
         req.setIssuanceID("A");
 
         // Set up to mock soap service response
-        var soapResp =  new DestroyCredentialResponse();
+        var soapResp = new DestroyCredentialResponse();
         var destroyCredentialResponse2 = new DestroyCredentialResponse2();
         soapResp.setDestroyCredentialResult(destroyCredentialResponse2);
         destroyCredentialResponse2.setCode(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS);
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(DestroyCredential.class)))
                 .thenReturn(soapResp);
-
 
         Map<String, String> out = new HashMap<>();
         out.put("andid", "1");
@@ -162,15 +153,14 @@ public class RemovalControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(URI.class),
-                Mockito.eq(HttpMethod.GET),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                        Mockito.any(URI.class),
+                        Mockito.eq(HttpMethod.GET),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
                 .thenReturn(responseEntity);
 
-
         // Set up to mock soap service response
-        var soapResp1 =  new RemoveIndividualResponse();
+        var soapResp1 = new RemoveIndividualResponse();
         var removeIndividualResponse2 = new RemoveIndividualResponse2();
         soapResp1.setRemoveIndividualResult(removeIndividualResponse2);
         removeIndividualResponse2.setCode(ResponseCode.SUCCESS);
@@ -178,7 +168,7 @@ public class RemovalControllerTests {
                 .thenReturn(soapResp1);
 
         // Set up to mock soap service response
-        var soapResp2 =  new UnlinkResponse();
+        var soapResp2 = new UnlinkResponse();
         var unlinkResponse2 = new UnlinkResponse2();
         soapResp2.setUnlinkResult(unlinkResponse2);
         unlinkResponse2.setCode(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS);
@@ -186,7 +176,7 @@ public class RemovalControllerTests {
                 .thenReturn(soapResp2);
 
         // Set up to mock soap service response
-        var common =  new GetIdRefResponse();
+        var common = new GetIdRefResponse();
         var getIdRefResponse2 = new GetIdRefResponse2();
         getIdRefResponse2.setIdRef("A");
         getIdRefResponse2.setCode(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS);
@@ -194,11 +184,11 @@ public class RemovalControllerTests {
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(GetIdRef.class)))
                 .thenReturn(common);
 
-        RemovalController removalController = new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+        RemovalController removalController =
+                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
         var resp = removalController.remove(req);
         Assertions.assertNotNull(resp);
     }
-
 
     @Test
     public void testRemoveIdentity() throws JsonProcessingException {
@@ -216,23 +206,22 @@ public class RemovalControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(URI.class),
-                Mockito.eq(HttpMethod.GET),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                        Mockito.any(URI.class),
+                        Mockito.eq(HttpMethod.GET),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
                 .thenReturn(responseEntity);
 
         // Set up to mock soap service response
-        var soapResp =  new RemoveIndividualResponse();
+        var soapResp = new RemoveIndividualResponse();
         var demoveIndividualResponse2 = new RemoveIndividualResponse2();
         soapResp.setRemoveIndividualResult(demoveIndividualResponse2);
         demoveIndividualResponse2.setCode(ResponseCode.SUCCESS);
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(RemoveIndividual.class)))
                 .thenReturn(soapResp);
 
-
         // Set up to mock soap service response
-        var soapResp2 =  new UnlinkResponse();
+        var soapResp2 = new UnlinkResponse();
         var unlinkResponse2 = new UnlinkResponse2();
         soapResp2.setUnlinkResult(unlinkResponse2);
         unlinkResponse2.setCode(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS);
@@ -240,7 +229,7 @@ public class RemovalControllerTests {
                 .thenReturn(soapResp2);
 
         // Set up to mock soap service response
-        var common =  new GetIdRefResponse();
+        var common = new GetIdRefResponse();
         var getIdRefResponse2 = new GetIdRefResponse2();
         getIdRefResponse2.setIdRef("A");
         getIdRefResponse2.setCode(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS);
@@ -248,7 +237,8 @@ public class RemovalControllerTests {
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(GetIdRef.class)))
                 .thenReturn(common);
 
-        RemovalController removalController = new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+        RemovalController removalController =
+                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
         var resp = removalController.removeIdentity(req);
         Assertions.assertNotNull(resp);
     }
@@ -263,16 +253,15 @@ public class RemovalControllerTests {
         req.setRequestorUserId("A");
 
         // Set up to mock soap service response
-        var soapResp =  new DestroyCredentialResponse();
+        var soapResp = new DestroyCredentialResponse();
         var destroyCredentialResponse2 = new DestroyCredentialResponse2();
         soapResp.setDestroyCredentialResult(destroyCredentialResponse2);
         destroyCredentialResponse2.setCode(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS);
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(DestroyCredential.class)))
                 .thenReturn(soapResp);
 
-
         // Set up to mock soap service response
-        var common =  new GetIdRefResponse();
+        var common = new GetIdRefResponse();
         var getIdRefResponse2 = new GetIdRefResponse2();
         getIdRefResponse2.setIdRef("A");
         getIdRefResponse2.setCode(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS);
@@ -280,7 +269,8 @@ public class RemovalControllerTests {
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(GetIdRef.class)))
                 .thenReturn(common);
 
-        RemovalController removalController = new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+        RemovalController removalController =
+                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
         var resp = removalController.removeTemplate(req);
         Assertions.assertNotNull(resp);
     }

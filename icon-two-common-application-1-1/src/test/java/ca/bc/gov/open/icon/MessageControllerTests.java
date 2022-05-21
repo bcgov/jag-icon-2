@@ -2,7 +2,6 @@ package ca.bc.gov.open.icon;
 
 import static org.mockito.Mockito.when;
 
-
 import ca.bc.gov.open.icon.audit.Base;
 import ca.bc.gov.open.icon.audit.Message;
 import ca.bc.gov.open.icon.audit.MessageAccessed;
@@ -15,6 +14,9 @@ import ca.bc.gov.open.icon.message.UserTokenInner;
 import ca.bc.gov.open.icon.message.UserTokenOuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,10 +30,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -209,7 +207,7 @@ public class MessageControllerTests {
         Application.setCode("Application");
         Application.setDescription("A");
         Sender.setApplication(Application);
-        var Individual= new Individual();
+        var Individual = new Individual();
         Individual.setFirstName("A");
         Individual.setLastName("A");
         Individual.setRelationships(Relationships);
@@ -236,7 +234,6 @@ public class MessageControllerTests {
         userTokenInner.setUserToken(userToken);
         userTokenOuter.setUserToken(userTokenInner);
         req.setUserTokenString(userTokenOuter);
-
 
         var messages = new Messages();
         ResponseEntity<Messages> responseEntity = new ResponseEntity<>(messages, HttpStatus.OK);
@@ -292,7 +289,7 @@ public class MessageControllerTests {
         Application.setCode("Application");
         Application.setDescription("A");
         Sender.setApplication(Application);
-        var Individual= new Individual();
+        var Individual = new Individual();
         Individual.setFirstName("A");
         Individual.setLastName("A");
         Individual.setRelationships(Relationships);
@@ -348,14 +345,14 @@ public class MessageControllerTests {
         MessagesOuter.setMessages(MessagesInner);
         MessagesInner.setMessages(messages);
 
-       messages.setCsNum("A");
-       messages.setUnreadMessageCount("A");
+        messages.setCsNum("A");
+        messages.setUnreadMessageCount("A");
         var row = new Row();
         row.setStart("1");
         row.setEnd("3");
         row.setTotal("3");
         List<MessageDetails> MessageDetails = new ArrayList<>();
-       messages.setRow(row);
+        messages.setRow(row);
         var MessageDetail = new MessageDetails();
         MessageDetail.setId("A");
         MessageDetail.setUnread("A");
@@ -375,7 +372,7 @@ public class MessageControllerTests {
         Application.setCode("Application");
         Application.setDescription("A");
         Sender.setApplication(Application);
-        var Individual= new Individual();
+        var Individual = new Individual();
         Individual.setFirstName("A");
         Individual.setLastName("A");
         Individual.setRelationships(Relationships);
@@ -384,7 +381,6 @@ public class MessageControllerTests {
         MessageDetail.setHasDisclosureSet("A");
         MessageDetails.add(MessageDetail);
         messages.setMessageDetails(MessageDetails);
-
 
         var userTokenOuter = new UserTokenOuter();
         var userTokenInner = new UserTokenInner();

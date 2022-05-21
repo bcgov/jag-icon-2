@@ -1,5 +1,8 @@
 package ca.bc.gov.open.icon;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.Deactivate;
 import ca.bc.gov.open.icon.biometrics.Reactivate;
@@ -16,20 +19,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class ActivationControllerTests {
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
-    @Mock
-    private WebServiceTemplate soapTemplate;
+    @Mock private WebServiceTemplate soapTemplate;
 
-    @Autowired
-    @Mock private RestTemplate restTemplate ;
+    @Autowired @Mock private RestTemplate restTemplate;
 
     @Test
     public void testReactivate() throws Exception {
@@ -38,17 +35,15 @@ public class ActivationControllerTests {
         req.setRequestorUserId("A");
         req.setRequestorType("LDB");
 
-        var activationController =
-                new ActivationController(
-                        soapTemplate,
-                        objectMapper);
+        var activationController = new ActivationController(soapTemplate, objectMapper);
 
         // Set up to mock soap service response
-        var soapResp =  new ReactivateCredentialResponse();
+        var soapResp = new ReactivateCredentialResponse();
         var reactivateCredentialResponse2 = new ReactivateCredentialResponse2();
         reactivateCredentialResponse2.setCode(ResponseCode.SUCCESS);
         soapResp.setReactivateCredentialResult(reactivateCredentialResponse2);
-        when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(ReactivateCredential.class)))
+        when(soapTemplate.marshalSendAndReceive(
+                        anyString(), Mockito.any(ReactivateCredential.class)))
                 .thenReturn(soapResp);
 
         var resp = activationController.reactivate(req);
@@ -62,17 +57,15 @@ public class ActivationControllerTests {
         req.setRequestorUserId("A");
         req.setRequestorType("LDB");
 
-        var activationController =
-                new ActivationController(
-                        soapTemplate,
-                        objectMapper);
+        var activationController = new ActivationController(soapTemplate, objectMapper);
 
         // Set up to mock soap service response
-        var soapResp =  new DestroyCredentialResponse();
+        var soapResp = new DestroyCredentialResponse();
         var reactivateCredentialResponse2 = new DestroyCredentialResponse2();
         reactivateCredentialResponse2.setCode(ResponseCode.SUCCESS);
         soapResp.setDestroyCredentialResult(reactivateCredentialResponse2);
-        when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(DeactivateCredential.class)))
+        when(soapTemplate.marshalSendAndReceive(
+                        anyString(), Mockito.any(DeactivateCredential.class)))
                 .thenReturn(soapResp);
 
         var resp = activationController.deactivate(req);

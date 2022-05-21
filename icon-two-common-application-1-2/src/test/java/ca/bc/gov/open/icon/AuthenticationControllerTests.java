@@ -3,6 +3,7 @@ package ca.bc.gov.open.icon;
 import static org.mockito.Mockito.when;
 
 import ca.bc.gov.open.icon.audit.*;
+import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.controllers.AuthenticationController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,163 +32,84 @@ public class AuthenticationControllerTests {
     @Mock private RestTemplate restTemplate = new RestTemplate();
 
     @Test
-    public void testReauthenticationFailed() throws JsonProcessingException {
-        var req = new ReauthenticationFailed();
-        var reauthentication = new Reauthentication();
-        var base = new Base();
-        base.setSessionID("A");
-        base.setCsNumber("A");
-        base.setSessionID("A");
-        reauthentication.setBase(base);
-        reauthentication.setEServiceCD("A");
-        reauthentication.setEServiceFuntionCD("A");
-        reauthentication.setTransactionID("A");
-        reauthentication.setBiometricID("A");
-        reauthentication.setEReportingEventID("A");
-        req.setReauthentication(reauthentication);
+    public void getPreAuthorizeClient() throws JsonProcessingException {
+        var req = new GetPreAuthorizeClient();
+        var preAuthorizeClientOut = new PreAuthorizeClientOut();
+        var preAuthorizeClientInner = new PreAuthorizeClientInner();
+        var preAuthorizeClient = new PreAuthorizeClient();
+        preAuthorizeClient.setCsNum("A");
+        preAuthorizeClient.setIsAllowed("A");
 
-        Status status = new Status();
-        status.setSuccess(true);
-        ResponseEntity<Status> responseEntity = new ResponseEntity<>(status, HttpStatus.OK);
+        req.setXMLString(preAuthorizeClientOut);
+        preAuthorizeClientOut.setPreAuthorizeClient(preAuthorizeClientInner);
+        preAuthorizeClientInner.setPreAuthorizeClient(preAuthorizeClient);
+
+        var userInfo1 = new PreAuthorizeClient();
+        ResponseEntity<PreAuthorizeClient> responseEntity =
+                new ResponseEntity<>(userInfo1, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<Status>>any()))
+                        Mockito.<Class<PreAuthorizeClient>>any()))
                 .thenReturn(responseEntity);
 
         AuthenticationController authenticationController =
                 new AuthenticationController(restTemplate, objectMapper);
-        var resp = authenticationController.reauthenticationFailed(req);
+        var resp = authenticationController.getPreAuthorizeClient(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
-    public void testReauthenticationSucceeded() throws JsonProcessingException {
-        var req = new ReauthenticationSucceeded();
-        var reauthentication = new Reauthentication();
-        var base = new Base();
-        base.setSessionID("A");
-        base.setCsNumber("A");
-        base.setSessionID("A");
-        reauthentication.setBase(base);
-        reauthentication.setEServiceCD("A");
-        reauthentication.setEServiceFuntionCD("A");
-        reauthentication.setTransactionID("A");
-        reauthentication.setBiometricID("A");
-        reauthentication.setEReportingEventID("A");
-        req.setReauthentication(reauthentication);
+    public void getHasFunctionalAbility() throws JsonProcessingException {
+        var req = new GetHasFunctionalAbility();
 
-        Status status = new Status();
-        status.setSuccess(true);
-        ResponseEntity<Status> responseEntity = new ResponseEntity<>(status, HttpStatus.OK);
+        var hasFunctionalAbilityOut = new HasFunctionalAbilityOut();
+        var hasFunctionalAbilityInner = new HasFunctionalAbilityInner();
+        var hasFunctionalAbility = new HasFunctionalAbility();
+        var functionalAbility = new FunctionalAbility();
+        functionalAbility.setFunctionCd("A");
+        functionalAbility.setServiceCd("A");
+        hasFunctionalAbility.setFunctionalAbility(functionalAbility);
+        hasFunctionalAbilityInner.setHasFunctionalAbility(hasFunctionalAbility);
+        hasFunctionalAbilityOut.setHasFunctionalAbility(hasFunctionalAbilityInner);
+        req.setXMLString(hasFunctionalAbilityOut);
 
-        // Set up to mock ords response
-        when(restTemplate.exchange(
-                        Mockito.any(String.class),
-                        Mockito.eq(HttpMethod.POST),
-                        Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<Status>>any()))
-                .thenReturn(responseEntity);
+        var UserTokenOut = new UserTokenOut();
+        var userTokenInner = new UserTokenInner();
+        var userToken = new UserToken();
 
-        AuthenticationController authenticationController =
-                new AuthenticationController(restTemplate, objectMapper);
-        var resp = authenticationController.reauthenticationSucceeded(req);
-        Assertions.assertNotNull(resp);
-    }
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
 
-    @Test
-    public void testLogoutExecuted() throws JsonProcessingException {
-        var req = new LogoutExcecuted();
-        var logout = new Logout();
-        var base = new Base();
-        base.setSessionID("A");
-        base.setCsNumber("A");
-        base.setSessionID("A");
-        logout.setBase(base);
-        logout.setEServiceCD("A");
-        logout.setEServiceFuntionCD("A");
-        req.setLogout(logout);
+        userTokenInner.setUserToken(userToken);
+        UserTokenOut.setUserToken(userTokenInner);
+        req.setUserTokenString(UserTokenOut);
 
-        Status status = new Status();
-        status.setSuccess(true);
-        ResponseEntity<Status> responseEntity = new ResponseEntity<>(status, HttpStatus.OK);
+        var userInfo1 = new HasFunctionalAbility();
+        ResponseEntity<HasFunctionalAbility> responseEntity =
+                new ResponseEntity<>(userInfo1, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<Status>>any()))
+                        Mockito.<Class<HasFunctionalAbility>>any()))
                 .thenReturn(responseEntity);
 
         AuthenticationController authenticationController =
                 new AuthenticationController(restTemplate, objectMapper);
-        var resp = authenticationController.logoutExecuted(req);
-        Assertions.assertNotNull(resp);
-    }
-
-    @Test
-    public void testIdleTimeoutExecuted() throws JsonProcessingException {
-        var req = new IdleTimeoutExecuted();
-        var idleTimeout = new IdleTimeout();
-        var base = new Base();
-        base.setSessionID("A");
-        base.setCsNumber("A");
-        base.setSessionID("A");
-        idleTimeout.setBase(base);
-        idleTimeout.setEServiceCD("A");
-        idleTimeout.setEServiceFuntionCD("A");
-        req.setIdleTimeout(idleTimeout);
-
-        Status status = new Status();
-        status.setSuccess(true);
-        ResponseEntity<Status> responseEntity = new ResponseEntity<>(status, HttpStatus.OK);
-
-        // Set up to mock ords response
-        when(restTemplate.exchange(
-                        Mockito.any(String.class),
-                        Mockito.eq(HttpMethod.POST),
-                        Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<Status>>any()))
-                .thenReturn(responseEntity);
-
-        AuthenticationController authenticationController =
-                new AuthenticationController(restTemplate, objectMapper);
-        var resp = authenticationController.idleTimeoutExecuted(req);
-        Assertions.assertNotNull(resp);
-    }
-
-    @Test
-    public void testPrimaryAuthenticationCompleted() throws JsonProcessingException {
-        var req = new PrimaryAuthenticationCompleted();
-        var primaryAuthentication = new PrimaryAuthentication();
-        var base = new Base();
-        base.setSessionID("A");
-        base.setCsNumber("A");
-        base.setSessionID("A");
-        primaryAuthentication.setBase(base);
-        primaryAuthentication.setBiometricID("A");
-        primaryAuthentication.setBiometricID("A");
-        req.setPrimaryAuthentication(primaryAuthentication);
-
-        Status status = new Status();
-        status.setSuccess(true);
-        ResponseEntity<Status> responseEntity = new ResponseEntity<>(status, HttpStatus.OK);
-
-        // Set up to mock ords response
-        when(restTemplate.exchange(
-                        Mockito.any(String.class),
-                        Mockito.eq(HttpMethod.POST),
-                        Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<Status>>any()))
-                .thenReturn(responseEntity);
-
-        AuthenticationController authenticationController =
-                new AuthenticationController(restTemplate, objectMapper);
-        var resp = authenticationController.primaryAuthenticationCompleted(req);
+        var resp = authenticationController.getHasFunctionalAbility(req);
         Assertions.assertNotNull(resp);
     }
 }

@@ -39,57 +39,6 @@ public class OrdsErrorTests {
     @Mock private RestTemplate restTemplate;
 
     @Test
-    public void testReauthenticationFailedFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
-        Assertions.assertThrows(
-                ORDSException.class,
-                () ->
-                        authenticationController.reauthenticationFailed(
-                                new ReauthenticationFailed()));
-    }
-
-    @Test
-    public void testReauthenticationSucceededFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
-        Assertions.assertThrows(
-                ORDSException.class,
-                () ->
-                        authenticationController.reauthenticationSucceeded(
-                                new ReauthenticationSucceeded()));
-    }
-
-    @Test
-    public void testLogoutExecutedFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
-        Assertions.assertThrows(
-                ORDSException.class,
-                () -> authenticationController.logoutExecuted(new LogoutExcecuted()));
-    }
-
-    @Test
-    public void testIdleTimeoutExecutedFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
-        Assertions.assertThrows(
-                ORDSException.class,
-                () -> authenticationController.idleTimeoutExecuted(new IdleTimeoutExecuted()));
-    }
-
-    @Test
-    public void testPrimaryAuthenticationCompletedFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
-        Assertions.assertThrows(
-                ORDSException.class,
-                () ->
-                        authenticationController.primaryAuthenticationCompleted(
-                                new PrimaryAuthenticationCompleted()));
-    }
-
-    @Test
     public void testGetPreAuthorizeClientFail() {
         var authenticationController = new AuthenticationController(restTemplate, objectMapper);
 

@@ -1,5 +1,7 @@
 package ca.bc.gov.open.icon;
 
+import static org.mockito.Mockito.when;
+
 import ca.bc.gov.open.icon.audit.Base;
 import ca.bc.gov.open.icon.audit.EReportAnswers;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
@@ -8,6 +10,8 @@ import ca.bc.gov.open.icon.controllers.ReportingController;
 import ca.bc.gov.open.icon.ereporting.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,11 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -77,7 +76,7 @@ public class ReportingControllerTests {
         ReportingCmpltInstruction.setText("A");
         ReportingCmpltInstructionInner.setReportingCmpltInstruction(ReportingCmpltInstruction);
         ReportingCmpltInstructionOuter.setReportingCmpltInstruction(ReportingCmpltInstructionInner);
-         req.setXMLString(ReportingCmpltInstructionOuter);
+        req.setXMLString(ReportingCmpltInstructionOuter);
 
         var userTokenOuter = new UserTokenOuter();
         var userTokenInner = new UserTokenInner();
@@ -340,26 +339,26 @@ public class ReportingControllerTests {
         Assertions.assertNotNull(resp);
     }
 
-//    @Test
-//    public void testInstantSerializer() throws IOException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-//        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-//        SimpleModule module = new SimpleModule();
-//        module.addDeserializer(Instant.class, new InstantDeserializer());
-//        module.addSerializer(Instant.class, new InstantSerializer());
-//        objectMapper.registerModule(module);
-//
-//        var time = Instant.now();
-//        String out = objectMapper.writeValueAsString(time);
-//
-//        String expected =
-//                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-//                        .withZone(ZoneId.of("UTC"))
-//                        .withLocale(Locale.US)
-//                        .format(time);
-//
-//        out = out.replace("\"", "");
-//        Assertions.assertEquals(expected, out);
-//    }
+    //    @Test
+    //    public void testInstantSerializer() throws IOException {
+    //        ObjectMapper objectMapper = new ObjectMapper();
+    //        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    //        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    //        SimpleModule module = new SimpleModule();
+    //        module.addDeserializer(Instant.class, new InstantDeserializer());
+    //        module.addSerializer(Instant.class, new InstantSerializer());
+    //        objectMapper.registerModule(module);
+    //
+    //        var time = Instant.now();
+    //        String out = objectMapper.writeValueAsString(time);
+    //
+    //        String expected =
+    //                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    //                        .withZone(ZoneId.of("UTC"))
+    //                        .withLocale(Locale.US)
+    //                        .format(time);
+    //
+    //        out = out.replace("\"", "");
+    //        Assertions.assertEquals(expected, out);
+    //    }
 }

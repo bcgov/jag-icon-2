@@ -3,6 +3,8 @@ package ca.bc.gov.open.jagiconpoller.services;
 import ca.bc.gov.open.icon.models.PACModel;
 import ca.bc.gov.open.icon.models.PingModel;
 import ca.bc.gov.open.jagiconpoller.config.QueueConfig;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
@@ -17,9 +19,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 @Service
 @Slf4j

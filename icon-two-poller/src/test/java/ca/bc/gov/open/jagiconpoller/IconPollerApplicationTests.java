@@ -1,12 +1,15 @@
 package ca.bc.gov.open.jagiconpoller;
 
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
+import static org.mockito.Mockito.when;
+
 import ca.bc.gov.open.icon.models.PACModel;
 import ca.bc.gov.open.jagiconpoller.config.QueueConfig;
 import ca.bc.gov.open.jagiconpoller.services.PACPollerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -25,16 +28,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-import java.net.URI;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class IconPollerApplicationTests {
@@ -50,15 +43,11 @@ class IconPollerApplicationTests {
 
     private QueueConfig queueConfig;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
-    @Mock
-    private WebServiceTemplate soapTemplate = new WebServiceTemplate();
-
+    @Mock private WebServiceTemplate soapTemplate = new WebServiceTemplate();
 
     @Mock private RestTemplate restTemplate = new RestTemplate();
-
 
     @Test
     void testPollOrdsForNewRecords() throws JsonProcessingException {
@@ -66,18 +55,18 @@ class IconPollerApplicationTests {
         List<PACModel> out = new ArrayList<>();
         var PACModel = new PACModel();
         out.add(PACModel);
-        ResponseEntity<List<PACModel>> responseEntity =
-                new ResponseEntity<>(out, HttpStatus.OK);
+        ResponseEntity<List<PACModel>> responseEntity = new ResponseEntity<>(out, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(URI.class),
-                Mockito.eq(HttpMethod.GET),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<ParameterizedTypeReference<List<PACModel>>>any()))
+                        Mockito.any(URI.class),
+                        Mockito.eq(HttpMethod.GET),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<List<PACModel>>>any()))
                 .thenReturn(responseEntity);
 
-        PACPollerService pacPollerService = new PACPollerService(pacQueue, pingQueue, restTemplate, rabbitTemplate, amqpAdmin, queueConfig);
+        PACPollerService pacPollerService =
+                new PACPollerService(
+                        pacQueue, pingQueue, restTemplate, rabbitTemplate, amqpAdmin, queueConfig);
     }
-
 }

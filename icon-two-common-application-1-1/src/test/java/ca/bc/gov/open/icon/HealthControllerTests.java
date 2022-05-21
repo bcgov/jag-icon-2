@@ -1,5 +1,8 @@
 package ca.bc.gov.open.icon;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import ca.bc.gov.open.icon.audit.Base;
 import ca.bc.gov.open.icon.audit.HealthServiceRequest;
 import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmitted;
@@ -13,6 +16,12 @@ import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
 import ca.bc.gov.open.icon.hsrservice.HealthServiceRequestBundle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -31,16 +40,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
-
-import java.net.URI;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

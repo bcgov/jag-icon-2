@@ -53,10 +53,10 @@ public class AuditControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(String.class),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<Class<Status>>any()))
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
         AuditController auditController = new AuditController(restTemplate, objectMapper);
@@ -82,10 +82,10 @@ public class AuditControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(String.class),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<Class<Status>>any()))
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
         var auditController = new AuditController(restTemplate, objectMapper);
@@ -112,10 +112,10 @@ public class AuditControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(String.class),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<Class<Status>>any()))
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
         AuditController auditController = new AuditController(restTemplate, objectMapper);
@@ -142,10 +142,10 @@ public class AuditControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(String.class),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<Class<Status>>any()))
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
         AuditController auditController = new AuditController(restTemplate, objectMapper);
@@ -275,10 +275,10 @@ public class AuditControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(String.class),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<Class<ClientHistory>>any()))
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<ClientHistory>>any()))
                 .thenReturn(responseEntity);
 
         AuditController auditController = new AuditController(restTemplate, objectMapper);
@@ -298,10 +298,10 @@ public class AuditControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(String.class),
-                Mockito.eq(HttpMethod.GET),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<Class<GetPackageInfoResponse>>any()))
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.GET),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<GetPackageInfoResponse>>any()))
                 .thenReturn(responseEntity);
 
         AuditController auditController = new AuditController(restTemplate, objectMapper);
@@ -338,10 +338,10 @@ public class AuditControllerTests {
 
         // Set up to mock ords response
         when(restTemplate.exchange(
-                Mockito.any(String.class),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.<HttpEntity<String>>any(),
-                Mockito.<Class<SessionParameterInner>>any()))
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<SessionParameterInner>>any()))
                 .thenReturn(responseEntity);
 
         AuditController auditController = new AuditController(restTemplate, objectMapper);
@@ -349,5 +349,5 @@ public class AuditControllerTests {
         Assertions.assertNotNull(resp);
     }
 
-//    public static class MessageControllerTests {}
+    //    public static class MessageControllerTests {}
 }
