@@ -58,6 +58,10 @@ public class RemovalControllerTests {
         req.setCsNumFrom("A");
         req.setRequestorUserId("A");
         req.setRequestorType("LDB");
+        req.setCredentialRefFrom("A");
+        req.setIssuanceID("A");
+        req.setEnrollmentURL("A");
+        req.setExpiry(Instant.now());
 
 
         Map<String, String> out = new HashMap<>();

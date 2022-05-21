@@ -1,5 +1,6 @@
 package ca.bc.gov.open.icon;
 
+import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.StartSearch;
 import ca.bc.gov.open.icon.controllers.SearchController;
@@ -76,6 +77,8 @@ public class SearchControllerTests {
         var finishSearchResponse2 = new FinishSearchResponse2();
         finishSearchResponse2.setCode(ResponseCode.SUCCESS);
         finishSearchResponse2.setActive(ActiveCodeResponse.valueOf("Y"));
+        finishSearchResponse2.setStatus(SearchStatusCode.FOUND);
+        finishSearchResponse2.setDID("A");
         soapResp.setFinishSearchResult(finishSearchResponse2);
 
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(FinishSearch.class)))

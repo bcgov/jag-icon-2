@@ -37,6 +37,14 @@ public class RecordControllerTests {
         var clientLogNotificationOuter = new ClientLogNotificationOuter();
         var clientLogNotificationInner = new ClientLogNotificationInner();
         var clientLogNotification = new ClientLogNotification();
+        clientLogNotification.setCsNum("A");
+        clientLogNotification.setEventID("A");
+        clientLogNotification.setEventState("A");
+        clientLogNotification.setDeviceNo("A");
+        clientLogNotification.setMessage("A");
+        clientLogNotification.setMessageType("A");
+        clientLogNotification.setReauthTransactionNo("A");
+
         req.setXMLString(clientLogNotificationOuter);
         clientLogNotificationOuter.setClientLogNotification(clientLogNotificationInner);
         clientLogNotificationInner.setClientLogNotification(clientLogNotification);
@@ -63,6 +71,14 @@ public class RecordControllerTests {
         var clientLogNotificationOuter = new ClientLogNotificationOuter();
         var clientLogNotificationInner = new ClientLogNotificationInner();
         var clientLogNotification = new ClientLogNotification();
+        clientLogNotification.setCsNum("A");
+        clientLogNotification.setEventID("A");
+        clientLogNotification.setEventState("A");
+        clientLogNotification.setDeviceNo("A");
+        clientLogNotification.setMessage("A");
+        clientLogNotification.setMessageType("A");
+        clientLogNotification.setReauthTransactionNo("A");
+
         req.setXMLString(clientLogNotificationOuter);
         clientLogNotificationOuter.setClientLogNotification(clientLogNotificationInner);
         clientLogNotificationInner.setClientLogNotification(clientLogNotification);
