@@ -237,8 +237,13 @@ public class InformationControllerTests {
         Location.setAddress(addresses);
         List<ProgramInfo> draftl = new ArrayList<>();
         var ProgramInfo = new ProgramInfo();
+
         ProgramInfo.setInstCommStatus("A");
         ProgramInfo.setProgramName("A");
+
+        ProgramInfo.setLocation(Location);
+        ProgramInfo.setEndDate(Instant.now());
+        ProgramInfo.setOutcome("A");
         draftl.add(ProgramInfo);
         programs.setProgramInfo(draftl);
 

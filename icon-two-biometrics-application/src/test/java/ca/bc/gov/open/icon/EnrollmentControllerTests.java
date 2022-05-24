@@ -6,13 +6,13 @@ import static org.mockito.Mockito.when;
 import ca.bc.gov.open.icon.bcs.StartEnrollmentResponse2;
 import ca.bc.gov.open.icon.biometrics.StartEnrollment;
 import ca.bc.gov.open.icon.controllers.EnrollmentController;
-import ca.bc.gov.open.icon.iis.RegisterIndividual;
-import ca.bc.gov.open.icon.iis.RegisterIndividualResponse;
-import ca.bc.gov.open.icon.iis.RegisterIndividualResponse2;
+import ca.bc.gov.open.icon.iis.*;
 import ca.bc.gov.open.icon.ips.*;
+import ca.bc.gov.open.icon.ips.ResponseCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
@@ -63,7 +63,34 @@ public class EnrollmentControllerTests {
                         Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
                 .thenReturn(responseEntity);
 
-        // Set up to mock soap service response
+        //      Set up IIS Request
+        RegisterIndividual iisReq = new RegisterIndividual();
+        RegisterIndividualRequest issReqInner = new RegisterIndividualRequest();
+        issReqInner.setOnlineServiceId("A");
+        issReqInner.setRequesterUserId("A");
+        issReqInner.setRequesterAccountTypeCode(
+                ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode.fromValue("Individual"));
+        issReqInner.setRequesterUserId("A");
+        issReqInner.setRequesterUserGuid("A");
+        issReqInner.setAccountType("A");
+        issReqInner.setSurname("A");
+        issReqInner.setFirstGivenName("A");
+        issReqInner.setMiddleName1("A");
+        issReqInner.setMiddleName2("A");
+        issReqInner.setKnownAs("A");
+        issReqInner.setBirthDate(Instant.now());
+        issReqInner.setTelephone("A");
+        issReqInner.setEmail("A");
+        var Address = new Address();
+        Address.setLine1("A");
+        Address.setLine2("A");
+        Address.setPostalCode("A");
+        Address.setCity("A");
+        Address.setProvince("A");
+        Address.setCountry("A");
+        issReqInner.setPostalAddress(Address);
+        iisReq.setRequest(issReqInner);
+
         var soapResp = new RegisterIndividualResponse();
         var registerIndividualResponse2 = new RegisterIndividualResponse2();
         soapResp.setRegisterIndividualResult(registerIndividualResponse2);

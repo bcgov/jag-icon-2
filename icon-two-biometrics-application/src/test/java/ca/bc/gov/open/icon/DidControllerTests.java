@@ -5,6 +5,8 @@ import static org.mockito.Mockito.when;
 
 import ca.bc.gov.open.icon.biometrics.GetDID;
 import ca.bc.gov.open.icon.controllers.DidController;
+import ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode;
+import ca.bc.gov.open.icon.ips.GetDIDRequest;
 import ca.bc.gov.open.icon.ips.GetDIDResponse2;
 import ca.bc.gov.open.icon.ips.ResponseCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,7 +39,15 @@ public class DidControllerTests {
 
         var didController = new DidController(soapTemplate, objectMapper);
 
-        // Set up to mock soap service response
+        ca.bc.gov.open.icon.ips.GetDID getDIDIPS = new ca.bc.gov.open.icon.ips.GetDID();
+        GetDIDRequest getDIDRequest = new GetDIDRequest();
+        getDIDRequest.setRequesterUserId("A");
+        getDIDRequest.setIdRef("A");
+        getDIDRequest.setRequesterAccountTypeCode(BCeIDAccountTypeCode.fromValue("Individual"));
+        getDIDRequest.setOnlineServiceId("A");
+
+        getDIDIPS.setRequest(getDIDRequest);
+
         var soapResp = new ca.bc.gov.open.icon.ips.GetDIDResponse();
         var getDIDResponse2 = new GetDIDResponse2();
         getDIDResponse2.setCode(ResponseCode.SUCCESS);

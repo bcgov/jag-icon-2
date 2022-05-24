@@ -10,6 +10,7 @@ import ca.bc.gov.open.icon.biometrics.RemoveIdentity;
 import ca.bc.gov.open.icon.biometrics.RemoveTemplate;
 import ca.bc.gov.open.icon.controllers.RemovalController;
 import ca.bc.gov.open.icon.iis.*;
+import ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.iis.ResponseCode;
 import ca.bc.gov.open.icon.ips.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -71,7 +72,33 @@ public class RemovalControllerTests {
                         Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
                 .thenReturn(responseEntity);
 
-        // Set up to mock soap service response
+        //      Set up IIS Request
+        RegisterIndividual iisReq = new RegisterIndividual();
+        RegisterIndividualRequest issReqInner = new RegisterIndividualRequest();
+        issReqInner.setOnlineServiceId("A");
+        issReqInner.setRequesterUserId("A");
+        issReqInner.setRequesterAccountTypeCode(BCeIDAccountTypeCode.fromValue("Individual"));
+        issReqInner.setRequesterUserId("A");
+        issReqInner.setRequesterUserGuid("A");
+        issReqInner.setAccountType("A");
+        issReqInner.setSurname("A");
+        issReqInner.setFirstGivenName("A");
+        issReqInner.setMiddleName1("A");
+        issReqInner.setMiddleName2("A");
+        issReqInner.setKnownAs("A");
+        issReqInner.setBirthDate(Instant.now());
+        issReqInner.setTelephone("A");
+        issReqInner.setEmail("A");
+        var Address = new Address();
+        Address.setLine1("A");
+        Address.setLine2("A");
+        Address.setPostalCode("A");
+        Address.setCity("A");
+        Address.setProvince("A");
+        Address.setCountry("A");
+        issReqInner.setPostalAddress(Address);
+        iisReq.setRequest(issReqInner);
+
         var soapResp = new RegisterIndividualResponse();
         var registerIndividualResponse2 = new RegisterIndividualResponse2();
         soapResp.setRegisterIndividualResult(registerIndividualResponse2);

@@ -5,8 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ca.bc.gov.open.icon.controllers.FileController;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
-import ca.bc.gov.open.icon.myfiles.GetClientClaims;
-import ca.bc.gov.open.icon.myfiles.GetCsNumsByDate;
+import ca.bc.gov.open.icon.myfiles.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -50,11 +49,35 @@ public class OrdsErrorTests {
     }
 
     @Test
-    public void testgetAgencyFileFail() {
+    public void testGetAgencyFileFail() {
         var fileController = new FileController(restTemplate, objectMapper);
 
         Assertions.assertThrows(
-                ORDSException.class, () -> fileController.getCsNumsByDate(new GetCsNumsByDate()));
+                ORDSException.class, () -> fileController.getAgencyFile(new GetAgencyFile()));
+    }
+
+    @Test
+    public void testSetMessageFail() {
+        var fileController = new FileController(restTemplate, objectMapper);
+
+        Assertions.assertThrows(
+                ORDSException.class, () -> fileController.setMessage(new SetMessage()));
+    }
+
+    @Test
+    public void testSetDisclosureFail() {
+        var fileController = new FileController(restTemplate, objectMapper);
+
+        Assertions.assertThrows(
+                ORDSException.class, () -> fileController.setDisclosure(new SetDisclosure()));
+    }
+
+    @Test
+    public void testGetClientInfoFail() {
+        var fileController = new FileController(restTemplate, objectMapper);
+
+        Assertions.assertThrows(
+                ORDSException.class, () -> fileController.getClientInfo(new GetClientInfo()));
     }
 
     @Test
