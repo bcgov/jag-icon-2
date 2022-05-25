@@ -313,6 +313,7 @@ public class HealthController {
                                         "publishHSR",
                                         ex.getMessage(),
                                         publishHSR)));
+                throw new ORDSException();
             }
         } catch (Exception ex) {
             log.error(

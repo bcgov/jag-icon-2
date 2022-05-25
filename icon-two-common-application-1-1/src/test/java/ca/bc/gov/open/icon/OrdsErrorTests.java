@@ -14,6 +14,7 @@ import ca.bc.gov.open.icon.error.SetErrorMessage;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.hsr.GetHSRCount;
 import ca.bc.gov.open.icon.hsr.GetHealthServiceRequestHistory;
+import ca.bc.gov.open.icon.hsr.PublishHSR;
 import ca.bc.gov.open.icon.message.GetMessageDetails;
 import ca.bc.gov.open.icon.message.GetMessages;
 import ca.bc.gov.open.icon.message.SetMessageDetails;
@@ -285,24 +286,22 @@ public class OrdsErrorTests {
                                 new GetHealthServiceRequestHistory()));
     }
 
-    //    @Test
-    //    public void testPublishHSRFail() throws Exception {
-    //        var healthController = new HealthController(
-    //                webServiceTemplate,
-    //                restTemplate,
-    //                objectMapper,
-    //                hsrQueue,
-    //                pingQueue,
-    //                rabbitTemplate,
-    //                amqpAdmin,
-    //                queueConfig
-    //        );
-    //
-    //        Assertions.assertThrows(
-    //                ORDSException.class,
-    //                () ->
-    //                        healthController.publishHSR(
-    //                                new PublishHSR()));    }
+    @Test
+    public void testPublishHSRFail() throws Exception {
+        var healthController =
+                new HealthController(
+                        webServiceTemplate,
+                        restTemplate,
+                        objectMapper,
+                        hsrQueue,
+                        pingQueue,
+                        rabbitTemplate,
+                        amqpAdmin,
+                        queueConfig);
+
+        Assertions.assertThrows(
+                ORDSException.class, () -> healthController.publishHSR(new PublishHSR()));
+    }
 
     @Test
     public void testGetHSRCountFail() throws Exception {
