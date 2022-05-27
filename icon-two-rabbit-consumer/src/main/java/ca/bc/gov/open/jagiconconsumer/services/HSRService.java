@@ -1,9 +1,9 @@
 package ca.bc.gov.open.jagiconconsumer.services;
 
 import ca.bc.gov.open.icon.exceptions.ORDSException;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
+import ca.bc.gov.open.icon.services.SubmitHealthServiceRequest;
+import ca.bc.gov.open.icon.services.SubmitHealthServiceRequestResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
@@ -23,13 +23,12 @@ import org.springframework.ws.client.core.WebServiceTemplate;
 @Service
 @Slf4j
 public class HSRService {
-    @Value("${icon.host}")
+    @Value("${icon.cms-host}")
     private String host = "https://127.0.0.1/";
 
     @Value("${icon.hsr-service-url}")
     private String hsrServiceUrl = "https://127.0.0.1/";
 
-    private static int retries;
     private static int MAX_RETRIES = 5;
     private static int PAUSE = 5000; // in milliseconds
     private boolean appErr = false;
@@ -52,7 +51,7 @@ public class HSRService {
     // HSR BPM
     public void processHSR(HealthServicePub hsr)
             throws InterruptedException, JsonProcessingException {
-        retries = 0;
+        int retries = 0;
 
         // Submit HSR (Invoke SOAP Service)
         SubmitHealthServiceRequest submitHealthServiceRequest = new SubmitHealthServiceRequest();
@@ -66,6 +65,12 @@ public class HSRService {
                         (SubmitHealthServiceRequestResponse)
                                 webServiceTemplate.marshalSendAndReceive(
                                         hsrServiceUrl, submitHealthServiceRequest);
+                if (submitHealthServiceRequestResponse != null) {
+                    break;
+                }
+                else {
+                    ++retries;
+                }
             } catch (WebServiceIOException ex) {
                 // Connection Error
                 appErr = false;

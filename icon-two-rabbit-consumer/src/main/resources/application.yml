@@ -1,6 +1,8 @@
 icon:
-  host: ${ORDS_HOST}
+  cms-host: ${CMS_ORDS_HOST}
+  cmsint-host: ${CMSINT_ORDS_HOST}
   hsr-service-url: ${HSR_SERVICE_URL}
+  pac-service-url: ${PAC_SERVICE_URL}
   pac-queue: ${PAC_QUEUE_NAME}
   hsr-queue: ${HSR_QUEUE_NAME}
   ping-queue: ${PING_QUEUE_NAME}

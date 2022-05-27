@@ -7,11 +7,11 @@ import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.configuration.QueueConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.hsr.*;
-import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary;
-import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
+import ca.bc.gov.open.icon.services.GetHealthServiceRequestSummary;
+import ca.bc.gov.open.icon.services.GetHealthServiceRequestSummaryResponse;
+import ca.bc.gov.open.icon.services.SubmitHealthServiceRequest;
+import ca.bc.gov.open.icon.services.SubmitHealthServiceRequestResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
@@ -175,7 +175,7 @@ public class HealthController {
                             .getRow()
                             .getEnd();
 
-            ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary
+            ca.bc.gov.open.icon.services.GetHealthServiceRequestSummary
                     healthServiceRequestSummary = new GetHealthServiceRequestSummary();
 
             healthServiceRequestSummary.setCsNumber(csNumber);
