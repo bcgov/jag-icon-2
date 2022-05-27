@@ -65,6 +65,12 @@ public class HSRService {
                         (SubmitHealthServiceRequestResponse)
                                 webServiceTemplate.marshalSendAndReceive(
                                         hsrServiceUrl, submitHealthServiceRequest);
+                if (submitHealthServiceRequestResponse != null) {
+                    break;
+                }
+                else {
+                    ++retries;
+                }
             } catch (WebServiceIOException ex) {
                 // Connection Error
                 appErr = false;
