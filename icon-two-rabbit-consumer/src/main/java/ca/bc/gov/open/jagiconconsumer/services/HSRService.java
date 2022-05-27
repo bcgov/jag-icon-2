@@ -29,7 +29,6 @@ public class HSRService {
     @Value("${icon.hsr-service-url}")
     private String hsrServiceUrl = "https://127.0.0.1/";
 
-    private static int retries;
     private static int MAX_RETRIES = 5;
     private static int PAUSE = 5000; // in milliseconds
     private boolean appErr = false;
@@ -52,7 +51,7 @@ public class HSRService {
     // HSR BPM
     public void processHSR(HealthServicePub hsr)
             throws InterruptedException, JsonProcessingException {
-        retries = 0;
+        int retries = 0;
 
         // Submit HSR (Invoke SOAP Service)
         SubmitHealthServiceRequest submitHealthServiceRequest = new SubmitHealthServiceRequest();
