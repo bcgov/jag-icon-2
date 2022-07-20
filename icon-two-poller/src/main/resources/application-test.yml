@@ -1,0 +1,13 @@
+icon:
+  ords-host: http://127.0.0.1/
+  pac-queue: pac-queue
+  pac-routing-key: PAC
+  ping-queue: ping-queue
+  ping-routing-key: PING
+  exchange-name: EXCHANGE
+
+
+spring:
+  rabbitmq:
+    host: redis
+    port: 5672

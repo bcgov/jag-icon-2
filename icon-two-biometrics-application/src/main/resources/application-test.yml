@@ -1,0 +1,16 @@
+security:
+  basic-auth:
+    password: ${BASIC_AUTH_PASS}
+    username: ${BASIC_AUTH_USER}
+icon:
+  ords-host: https://127.0.0.1/
+  iis-host: https://127.0.0.1/
+  ips-host: https://127.0.0.1/
+  bsc-host: https://127.0.0.1/
+  online-service-id: service-id
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics,prometheus,health
