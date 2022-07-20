@@ -10,6 +10,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -61,9 +62,12 @@ public class RecordController {
         HttpEntity<ClientLogNotification> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
-            HttpEntity<Map> resp =
+            HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Map.class);
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            new ParameterizedTypeReference<>() {});
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "recordCompleted")));
@@ -107,9 +111,12 @@ public class RecordController {
         HttpEntity<RecordException> payload = new HttpEntity<>(recordException, new HttpHeaders());
 
         try {
-            HttpEntity<Map> resp =
+            HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Map.class);
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            new ParameterizedTypeReference<>() {});
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "recordException")));

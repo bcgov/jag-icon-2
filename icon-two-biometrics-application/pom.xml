@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>icon-two-biometrics-application</artifactId>
-
+    <version>1.0.0</version>
     <repositories>
         <repository>
             <id>splunk-artifactory</id>

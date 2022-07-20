@@ -1,0 +1,14 @@
+icon:
+  host: http://127.0.0.1/
+  hsr-service-url: http://127.0.0.1/
+  pac-queue: pac-queue
+  hsr-queue: hsr-queue
+  ping-queue: ping-queue
+
+spring:
+  rabbitmq:
+    host: redis
+    port: 5672
+
+server:
+  port: 8081
