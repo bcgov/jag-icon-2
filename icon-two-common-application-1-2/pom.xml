@@ -196,7 +196,7 @@
     </dependencies>
 
     <build>
-        <finalName>jag-adobe-application</finalName>
+        <finalName>icon-two-common-application-1-2</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
