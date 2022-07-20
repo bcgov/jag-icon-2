@@ -245,7 +245,7 @@
                     <excludes>
                         <exclude>**/configuration/WSDLFilter*</exclude>
                         <exclude>**/configuration/HttpServletRequestWrapper.class</exclude>
-                        <exclude>**/AdobeApplication.class</exclude>
+                        <exclude>**/IconTwoMyFilesApplication.class</exclude>
                         <exclude>**/ObjectFactory.class</exclude>
                         <exclude>**/Adapter1.class</exclude>
                     </excludes>
