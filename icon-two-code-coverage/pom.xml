@@ -68,6 +68,10 @@
                         <exclude>**/configuration/WSDLFilter*</exclude>
                         <exclude>**/configuration/HttpServletRequestWrapper.class</exclude>
                         <exclude>**/IconTwoCommonApplication.class</exclude>
+                        <exclude>**/IconTwoBiometricsApplication.class</exclude>
+                        <exclude>**/IconTwoMyFilesApplication.class</exclude>
+                        <exclude>**/IconConsumerApplication.class</exclude>
+                        <exclude>**/IconPollerApplication.class</exclude>
                         <exclude>**/ObjectFactory.class</exclude>
                         <exclude>**/Adapter1.class</exclude>
                     </excludes>

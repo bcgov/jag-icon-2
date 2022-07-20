@@ -43,7 +43,7 @@ public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoi
 
     @Override
     public void afterPropertiesSet() {
-        setRealmName("adobe");
+        setRealmName("icon2_11");
         super.afterPropertiesSet();
     }
 }
