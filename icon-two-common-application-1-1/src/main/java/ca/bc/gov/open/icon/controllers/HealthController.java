@@ -406,6 +406,7 @@ public class HealthController {
             inResp.setHealthServiceCount(resp.getBody());
             outResp.setHealthServiceCount(inResp);
             getHSRCountResponse.setXMLString(outResp);
+            getHSRCountResponse.setUserTokenString(getHSRCount.getUserTokenString());
             return getHSRCountResponse;
         } catch (Exception ex) {
             log.error(
