@@ -120,6 +120,28 @@ jobs:
           exit-code: 1
           ignore-unfixed: true
           severity: HIGH,CRITICAL
+      
+      #Build image for scanning
+      - name: Build image icon-two-rabbit-consumer image from Dockerfile
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          CONTEXT: ./icon-two-rabbit-consumer
+        run: |
+          docker build -t icon-two-rabbit-consumer:${{ github.sha }} ${CONTEXT}
+
+      #Run Vulnerability Scan usinig Trivy scanner
+      - name: Run Trivy vulnerability scanner for icon-two-rabbit-consumer
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: image
+          image-ref: icon-two-rabbit-consumer:${{ github.sha }}
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
 
       #Upload results to the Github security tab.
       - name: Upload Trivy scan results to GitHub Security tab
