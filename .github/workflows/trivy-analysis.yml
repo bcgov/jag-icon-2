@@ -33,18 +33,87 @@ jobs:
       - name: Maven Verify
         run: mvn -ntp clean verify
 
-      - name: Build an image from Dockerfile
+      #Build image for scanning
+      - name: Build icon-two-common-application-1-1 image from Dockerfile
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
+          CONTEXT: ./icon-two-common-application-1-1
         run: |
-          docker build -t jag-pcss-common:${{ github.sha }} .
+          docker build -t icon-two-common-application-1-1:${{ github.sha }} ${CONTEXT}
+
       #Run Vulnerability Scan usinig Trivy scanner
-      - name: Run Trivy vulnerability scanner
+      - name: Run Trivy vulnerability scanner for icon-two-common-application-1-1
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: jag-pcss-common:${{ github.sha }}
+          image-ref: icon-two-common-application-1-1:${{ github.sha }}
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+      
+      #Build image for scanning
+      - name: Build icon-two-common-application-1-2 image from Dockerfile
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          CONTEXT: ./icon-two-common-application-1-2
+        run: |
+          docker build -t icon-two-common-application-1-2:${{ github.sha }} ${CONTEXT}
+
+      #Run Vulnerability Scan usinig Trivy scanner
+      - name: Run Trivy vulnerability scanner for icon-two-common-application-1-2
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: image
+          image-ref: icon-two-common-application-1-2:${{ github.sha }}
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+
+      #Build image for scanning
+      - name: Build icon-two-biometrics-application image from Dockerfile
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          CONTEXT: ./icon-two-biometrics-application
+        run: |
+          docker build -t icon-two-biometrics-application:${{ github.sha }} ${CONTEXT}
+
+      #Run Vulnerability Scan usinig Trivy scanner
+      - name: Run Trivy vulnerability scanner for icon-two-biometrics-application
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: image
+          image-ref: icon-two-biometrics-application:${{ github.sha }}
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+      
+      #Build image for scanning
+      - name: Build image icon-two-myfiles-application image from Dockerfile
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          CONTEXT: ./icon-two-myfiles-application
+        run: |
+          docker build -t icon-two-myfiles-application:${{ github.sha }} ${CONTEXT}
+
+      #Run Vulnerability Scan usinig Trivy scanner
+      - name: Run Trivy vulnerability scanner for icon-two-myfiles-application
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: image
+          image-ref: icon-two-myfiles-application:${{ github.sha }}
           format: template
           template: '@/contrib/sarif.tpl'
           output: trivy-results.sarif
