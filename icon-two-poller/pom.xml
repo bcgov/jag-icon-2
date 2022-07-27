@@ -12,10 +12,7 @@
 	<artifactId>icon-two-poller</artifactId>
 	<version>1.0.0</version>
 	<name>jag-icon-poller</name>
-	<description>Demo project for Spring Boot</description>
-	<properties>
-		<java.version>11</java.version>
-	</properties>
+	<description>jag-icon-poller</description>
 	<dependencies>
 
 		<dependency>
@@ -92,7 +89,7 @@
 							<includes>
 								<include>*.md</include>
 								<include>.gitignore</include>
-							</includes>g
+							</includes>
 							<!-- define the steps to apply to those files -->
 							<trimTrailingWhitespace/>
 							<endWithNewline/>

@@ -11,13 +11,9 @@
 
 	<artifactId>icon-two-rabbit-consumer</artifactId>
 	<version>1.0.0</version>
-	<name>jag-icon-poller</name>
-	<description>Demo project for Spring Boot</description>
-	<properties>
-		<java.version>11</java.version>
-	</properties>
+	<name>icon-two-rabbit-consumer</name>
+	<description>icon-two-rabbit-consumer</description>
 	<dependencies>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -98,7 +94,7 @@
 							<includes>
 								<include>*.md</include>
 								<include>.gitignore</include>
-							</includes>g
+							</includes>
 							<!-- define the steps to apply to those files -->
 							<trimTrailingWhitespace/>
 							<endWithNewline/>
