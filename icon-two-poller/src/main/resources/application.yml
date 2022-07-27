@@ -11,3 +11,5 @@ spring:
   rabbitmq:
     host: ${RABBIT_MQ_HOST}
     port: 5672
+server:
+  port: 8084
