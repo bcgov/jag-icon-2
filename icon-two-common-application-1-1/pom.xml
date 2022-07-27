@@ -10,7 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>icon-two-common-application-1-1</artifactId>
-
+    <version>1.0.0</version>
+    <name>icon-two-common-application-1-1</name>
+    <description>icon-two-common-application-1-1</description>
     <repositories>
         <repository>
             <id>splunk-artifactory</id>
@@ -207,7 +209,7 @@
     </dependencies>
 
     <build>
-        <finalName>jag-adobe-application</finalName>
+        <finalName>icon-two-common-application-1-1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -233,7 +235,7 @@
                             <includes>
                                 <include>*.md</include>
                                 <include>.gitignore</include>
-                            </includes>g
+                            </includes>
                             <!-- define the steps to apply to those files -->
                             <trimTrailingWhitespace/>
                             <endWithNewline/>
@@ -260,7 +262,7 @@
                     <excludes>
                         <exclude>**/configuration/WSDLFilter*</exclude>
                         <exclude>**/configuration/HttpServletRequestWrapper.class</exclude>
-                        <exclude>**/AdobeApplication.class</exclude>
+                        <exclude>**/IconTwoCommonApplication.class</exclude>
                         <exclude>**/ObjectFactory.class</exclude>
                         <exclude>**/Adapter1.class</exclude>
                     </excludes>
