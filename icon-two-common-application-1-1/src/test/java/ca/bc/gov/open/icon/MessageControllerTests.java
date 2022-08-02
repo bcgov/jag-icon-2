@@ -83,7 +83,6 @@ public class MessageControllerTests {
         req.setXMLString(AppointmentMessageOuter);
 
         var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
-        var userTokenInner = new ca.bc.gov.open.icon.ereporting.UserTokenInner();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -96,8 +95,7 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
+        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString(userTokenOuter);
 
         var appointmentMessage = new AppointmentMessage();
@@ -133,7 +131,6 @@ public class MessageControllerTests {
         req.setXMLString(AppointmentMessageOuter);
 
         var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
-        var userTokenInner = new ca.bc.gov.open.icon.ereporting.UserTokenInner();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -146,8 +143,7 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
+        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString(userTokenOuter);
 
         var appointmentMessage = new AppointmentMessage();

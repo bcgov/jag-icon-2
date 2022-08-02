@@ -5,12 +5,18 @@ import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
-import ca.bc.gov.open.icon.ereporting.Locations.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.ByteArrayInputStream;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -125,12 +131,31 @@ public class ReportingController {
             namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getLocations")
     @ResponsePayload
-    public GetLocationsResponse getLocationsResponse(@RequestPayload GetLocations getLocations)
-            throws JsonProcessingException {
+    public GetLocationsResponseEx getLocationsResponse(@RequestPayload GetLocations getLocations)
+            throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
+
+        JAXBContext contextObj = JAXBContext.newInstance(GetLocations.class);
+        Marshaller marshallerObj = contextObj.createMarshaller();
+        marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        StringWriter writer = new StringWriter();
+        marshallerObj.marshal(getLocations, writer);
+
+        String xml = writer.toString();
+        xml = xml.replaceAll("\\&lt;", "<");
+        xml = xml.replaceAll("\\&gt;", ">");
+        xml = xml.replaceAll("getLocations", "getLocationsEx");
+
+        JAXBContext jaxbContextEx = JAXBContext.newInstance(GetLocationsEx.class);
+        Unmarshaller jaxbUnmarshallerEx = jaxbContextEx.createUnmarshaller();
+
+        GetLocationsEx getLocationsEx =
+                (GetLocationsEx)
+                        jaxbUnmarshallerEx.unmarshal(
+                                new ByteArrayInputStream(xml.getBytes("UTF-8")));
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/locations");
-        HttpEntity<GetLocations> payload = new HttpEntity<>(getLocations, new HttpHeaders());
+        HttpEntity<GetLocationsEx> payload = new HttpEntity<>(getLocationsEx, new HttpHeaders());
 
         try {
             HttpEntity<Locations> resp =
@@ -142,11 +167,26 @@ public class ReportingController {
 
             GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
             LocationsOuter outResp = new LocationsOuter();
-            LocationsInner inResp = new LocationsInner();
-            inResp.setLocations(resp.getBody());
-            outResp.setLocations(inResp);
+            outResp.setLocations(resp.getBody());
             getLocationsResponse.setXMLString(outResp);
-            return getLocationsResponse;
+
+            JAXBContext contextObj1 = JAXBContext.newInstance(GetLocationsResponse.class);
+            Marshaller marshallerObj1 = contextObj1.createMarshaller();
+            marshallerObj1.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            StringWriter writer1 = new StringWriter();
+            marshallerObj.marshal(getLocationsResponse, writer1);
+
+            String xml1 = writer1.toString();
+
+            JAXBContext jaxbContextEx2 = JAXBContext.newInstance(GetLocationsResponseEx.class);
+            Unmarshaller jaxbUnmarshallerEx2 = jaxbContextEx2.createUnmarshaller();
+
+            GetLocationsResponseEx getLocationsEx2 =
+                    (GetLocationsResponseEx)
+                            jaxbUnmarshallerEx2.unmarshal(
+                                    new ByteArrayInputStream(xml1.getBytes("UTF-8")));
+
+            return getLocationsEx2;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -202,9 +242,29 @@ public class ReportingController {
             localPart = "getAppointment")
     @ResponsePayload
     public GetAppointmentResponse getAppointment(@RequestPayload GetAppointment getAppointment)
-            throws JsonProcessingException {
+            throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
 
-        HttpEntity<GetAppointment> payload = new HttpEntity<>(getAppointment, new HttpHeaders());
+        JAXBContext contextObj = JAXBContext.newInstance(GetAppointment.class);
+        Marshaller marshallerObj = contextObj.createMarshaller();
+        marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        StringWriter writer = new StringWriter();
+        marshallerObj.marshal(getAppointment, writer);
+
+        String xml = writer.toString();
+        xml = xml.replaceAll("\\&lt;", "<");
+        xml = xml.replaceAll("\\&gt;", ">");
+        xml = xml.replaceAll("getAppointment", "getAppointmentEx");
+
+        JAXBContext jaxbContextEx = JAXBContext.newInstance(GetAppointmentEx.class);
+        Unmarshaller jaxbUnmarshallerEx = jaxbContextEx.createUnmarshaller();
+
+        GetAppointmentEx getAppointmentEx =
+                (GetAppointmentEx)
+                        jaxbUnmarshallerEx.unmarshal(
+                                new ByteArrayInputStream(xml.getBytes("UTF-8")));
+
+        HttpEntity<GetAppointmentEx> payload =
+                new HttpEntity<>(getAppointmentEx, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/appointment");
@@ -221,9 +281,7 @@ public class ReportingController {
 
             GetAppointmentResponse getClientHistoryResponse = new GetAppointmentResponse();
             AppointmentOuter outResp = new AppointmentOuter();
-            AppointmentInner inResp = new AppointmentInner();
-            inResp.setAppointment(resp.getBody());
-            outResp.setAppointment(inResp);
+            outResp.setAppointment(resp.getBody());
             getClientHistoryResponse.setXMLString(outResp);
             return getClientHistoryResponse;
         } catch (Exception ex) {
