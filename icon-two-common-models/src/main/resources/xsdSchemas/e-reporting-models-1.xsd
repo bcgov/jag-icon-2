@@ -36,8 +36,7 @@
         </xsd:complexType>
     </xsd:element>
 
-
-    <xsd:element name="getLocationsEx">
+    <xsd:element name="getLocationsDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:locationsOuter"/>
@@ -66,7 +65,7 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:element name="getLocationsResponse">
+    <xsd:element name="getLocationsResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:locationsOuter"/>
@@ -74,7 +73,7 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="getLocationsResponseEx">
+    <xsd:element name="getLocationsResponse">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="xsd:string"/>

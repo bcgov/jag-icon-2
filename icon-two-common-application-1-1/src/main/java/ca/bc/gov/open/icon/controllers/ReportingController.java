@@ -8,11 +8,10 @@ import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -131,31 +130,16 @@ public class ReportingController {
             namespace = "ICON2.Source.EReporting.ws.provider:EReporting",
             localPart = "getLocations")
     @ResponsePayload
-    public GetLocationsResponseEx getLocationsResponse(@RequestPayload GetLocations getLocations)
+    public GetLocationsResponse getLocationsResponse(@RequestPayload GetLocations getLocations)
             throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
 
-        JAXBContext contextObj = JAXBContext.newInstance(GetLocations.class);
-        Marshaller marshallerObj = contextObj.createMarshaller();
-        marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        StringWriter writer = new StringWriter();
-        marshallerObj.marshal(getLocations, writer);
-
-        String xml = writer.toString();
-        xml = xml.replaceAll("\\&lt;", "<");
-        xml = xml.replaceAll("\\&gt;", ">");
-        xml = xml.replaceAll("getLocations", "getLocationsEx");
-
-        JAXBContext jaxbContextEx = JAXBContext.newInstance(GetLocationsEx.class);
-        Unmarshaller jaxbUnmarshallerEx = jaxbContextEx.createUnmarshaller();
-
-        GetLocationsEx getLocationsEx =
-                (GetLocationsEx)
-                        jaxbUnmarshallerEx.unmarshal(
-                                new ByteArrayInputStream(xml.getBytes("UTF-8")));
+        var getLocationsDocument =
+                XMLUtilities.convertReq(getLocations, new GetLocationsDocument(), "getLocations");
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/locations");
-        HttpEntity<GetLocationsEx> payload = new HttpEntity<>(getLocationsEx, new HttpHeaders());
+        HttpEntity<GetLocationsDocument> payload =
+                new HttpEntity<>(getLocationsDocument, new HttpHeaders());
 
         try {
             HttpEntity<Locations> resp =
@@ -165,28 +149,19 @@ public class ReportingController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getLocationsResponse")));
 
-            GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
+            GetLocationsResponseDocument getLocationsResponseDoc =
+                    new GetLocationsResponseDocument();
             LocationsOuter outResp = new LocationsOuter();
             outResp.setLocations(resp.getBody());
-            getLocationsResponse.setXMLString(outResp);
+            getLocationsResponseDoc.setXMLString(outResp);
 
-            JAXBContext contextObj1 = JAXBContext.newInstance(GetLocationsResponse.class);
-            Marshaller marshallerObj1 = contextObj1.createMarshaller();
-            marshallerObj1.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            StringWriter writer1 = new StringWriter();
-            marshallerObj.marshal(getLocationsResponse, writer1);
+            var getLocationsResponse =
+                    XMLUtilities.convertResp(
+                            getLocationsResponseDoc,
+                            new GetLocationsResponse(),
+                            "getLocationsResponse");
 
-            String xml1 = writer1.toString();
-
-            JAXBContext jaxbContextEx2 = JAXBContext.newInstance(GetLocationsResponseEx.class);
-            Unmarshaller jaxbUnmarshallerEx2 = jaxbContextEx2.createUnmarshaller();
-
-            GetLocationsResponseEx getLocationsEx2 =
-                    (GetLocationsResponseEx)
-                            jaxbUnmarshallerEx2.unmarshal(
-                                    new ByteArrayInputStream(xml1.getBytes("UTF-8")));
-
-            return getLocationsEx2;
+            return getLocationsResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
