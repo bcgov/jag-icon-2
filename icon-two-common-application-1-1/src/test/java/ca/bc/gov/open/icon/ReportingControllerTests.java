@@ -10,8 +10,10 @@ import ca.bc.gov.open.icon.controllers.ReportingController;
 import ca.bc.gov.open.icon.ereporting.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -114,36 +116,36 @@ public class ReportingControllerTests {
     }
 
     @Test
-    public void testGetLocationsResponse() throws JsonProcessingException {
-        //        var req = new GetLocations();
-        //        var LocationsOuter = new LocationsOuter();
-        //        var Locations = new Locations();
-        //        List<Location> draftl = new ArrayList<>();
-        //        var Location = new Location();
-        //        Location.setLocationCd("A");
-        //        draftl.add(Location);
-        //        Locations.setLocation(draftl);
-        //        LocationsOuter.setLocations(Locations);
-        //        req.setXMLString(LocationsOuter);
-        //
-        //        req.setUserTokenString("A");
-        //
-        //        var locations1 = new Locations();
-        //        locations1 = Locations;
-        //        ResponseEntity<Locations> responseEntity = new ResponseEntity<>(locations1,
-        // HttpStatus.OK);
-        //
-        //        // Set up to mock ords response
-        //        when(restTemplate.exchange(
-        //                        Mockito.any(String.class),
-        //                        Mockito.eq(HttpMethod.POST),
-        //                        Mockito.<HttpEntity<String>>any(),
-        //                        Mockito.<Class<Locations>>any()))
-        //                .thenReturn(responseEntity);
-        //
-        //        var reportingController = new ReportingController(restTemplate, objectMapper);
-        //        var resp = reportingController.getLocationsResponse(req);
-        //        Assertions.assertNotNull(resp);
+    public void testGetLocationsResponse()
+            throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
+        var req = new GetLocations();
+        var LocationsOuter = new LocationsOuter();
+        var Locations = new Locations();
+        List<Location> draftl = new ArrayList<>();
+        var Location = new Location();
+        Location.setLocationCd("A");
+        draftl.add(Location);
+        Locations.setLocation(draftl);
+        LocationsOuter.setLocations(Locations);
+        req.setXMLString("A");
+
+        req.setUserTokenString("A");
+
+        var locations1 = new Locations();
+        locations1 = Locations;
+        ResponseEntity<Locations> responseEntity = new ResponseEntity<>(locations1, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<Locations>>any()))
+                .thenReturn(responseEntity);
+
+        var reportingController = new ReportingController(restTemplate, objectMapper);
+        var resp = reportingController.getLocationsResponse(req);
+        Assertions.assertNotNull(resp);
     }
 
     @Test
@@ -207,7 +209,8 @@ public class ReportingControllerTests {
     }
 
     @Test
-    public void testGetAppointment() throws JsonProcessingException {
+    public void testGetAppointment()
+            throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
         var req = new GetAppointment();
 
         var AppointmentOuter = new AppointmentOuter();
@@ -219,8 +222,8 @@ public class ReportingControllerTests {
         Appointment.setStartTime("A");
         Appointment.setEndTime("A");
 
-        //        AppointmentOuter.setAppointment(Appointment);
-        //        req.setXMLString(AppointmentOuter);
+        AppointmentOuter.setAppointment(Appointment);
+        req.setXMLString("A");
 
         var userTokenOuter = new UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
@@ -235,8 +238,8 @@ public class ReportingControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        //        userTokenOuter.setUserToken(userToken);
-        //        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var appointment1 = new Appointment();
         ResponseEntity<Appointment> responseEntity =
@@ -251,8 +254,8 @@ public class ReportingControllerTests {
                 .thenReturn(responseEntity);
 
         var reportingController = new ReportingController(restTemplate, objectMapper);
-        //        var resp = reportingController.getAppointment(req);
-        //        Assertions.assertNotNull(resp);
+        var resp = reportingController.getAppointment(req);
+        Assertions.assertNotNull(resp);
     }
 
     @Test
