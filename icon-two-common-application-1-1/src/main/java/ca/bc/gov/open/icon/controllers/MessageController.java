@@ -124,8 +124,13 @@ public class MessageController {
     public SetMessageDateResponse setMessageDate(@RequestPayload SetMessageDate setMessageDate)
             throws JsonProcessingException {
 
+        var setMessageDateDocument =
+                XMLUtilities.convertReq(
+                        setMessageDate, new SetMessageDateDocument(), "setMessageDate");
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/date");
-        HttpEntity<SetMessageDate> payload = new HttpEntity<>(setMessageDate, new HttpHeaders());
+        HttpEntity<SetMessageDateDocument> payload =
+                new HttpEntity<>(setMessageDateDocument, new HttpHeaders());
 
         try {
             HttpEntity<AppointmentMessage> resp =
@@ -138,11 +143,19 @@ public class MessageController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDate")));
 
-            SetMessageDateResponse getMessageDateResponse = new SetMessageDateResponse();
+            SetMessageDateResponseDocument setMessageDateResponseDocument =
+                    new SetMessageDateResponseDocument();
             AppointmentMessageOuter outResp = new AppointmentMessageOuter();
             outResp.setAppointmentMessage(resp.getBody());
-            getMessageDateResponse.setXMLString(outResp);
-            return getMessageDateResponse;
+            setMessageDateResponseDocument.setXMLString(outResp);
+
+            var setMessageDateResponse =
+                    XMLUtilities.convertResp(
+                            setMessageDateResponseDocument,
+                            new SetMessageDateResponse(),
+                            "setMessageDateResponse");
+
+            return setMessageDateResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(

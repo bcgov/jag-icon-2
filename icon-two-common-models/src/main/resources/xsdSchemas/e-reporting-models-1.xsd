@@ -101,6 +101,15 @@
     <xsd:element name="setMessageDate">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="setMessageDateDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:AppointmentMessageOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -122,6 +131,14 @@
     </xsd:complexType>
 
     <xsd:element name="setMessageDateResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="setMessageDateResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:AppointmentMessageOuter"/>

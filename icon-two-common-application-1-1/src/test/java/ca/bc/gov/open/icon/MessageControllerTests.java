@@ -124,7 +124,7 @@ public class MessageControllerTests {
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
         AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
-        req.setXMLString(AppointmentMessageOuter);
+        req.setXMLString("A");
 
         var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
@@ -140,7 +140,7 @@ public class MessageControllerTests {
         userToken.setSiteMinderTransactionID("A");
 
         userTokenOuter.setUserToken(userToken);
-        req.setUserTokenString(userTokenOuter);
+        req.setUserTokenString("A");
 
         var appointmentMessage = new AppointmentMessage();
         ResponseEntity<AppointmentMessage> responseEntity =
