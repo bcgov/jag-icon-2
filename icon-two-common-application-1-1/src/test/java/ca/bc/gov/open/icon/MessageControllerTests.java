@@ -74,13 +74,11 @@ public class MessageControllerTests {
         var req = new GetMessage();
 
         var AppointmentMessageOuter = new AppointmentMessageOuter();
-        var AppointmentMessageInner = new AppointmentMessageInner();
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        AppointmentMessageInner.setAppointmentMessage(AppointmentMessage);
-        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessageInner);
-        req.setXMLString(AppointmentMessageOuter);
+        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
+        req.setXMLString("A");
 
         var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
@@ -96,7 +94,7 @@ public class MessageControllerTests {
         userToken.setSiteMinderTransactionID("A");
 
         userTokenOuter.setUserToken(userToken);
-        req.setUserTokenString(userTokenOuter);
+        req.setUserTokenString("A");
 
         var appointmentMessage = new AppointmentMessage();
         appointmentMessage.setCsNum("A");
@@ -122,12 +120,10 @@ public class MessageControllerTests {
         var req = new SetMessageDate();
 
         var AppointmentMessageOuter = new AppointmentMessageOuter();
-        var AppointmentMessageInner = new AppointmentMessageInner();
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        AppointmentMessageInner.setAppointmentMessage(AppointmentMessage);
-        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessageInner);
+        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
         req.setXMLString(AppointmentMessageOuter);
 
         var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();

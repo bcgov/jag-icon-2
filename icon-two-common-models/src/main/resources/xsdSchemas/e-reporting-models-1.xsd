@@ -5,6 +5,15 @@
     <xsd:element name="getMessage">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getMessageDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:AppointmentMessageOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -12,6 +21,14 @@
     </xsd:element>
 
     <xsd:element name="getMessageResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getMessageResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:AppointmentMessageOuter"/>
@@ -92,15 +109,10 @@
 
     <xsd:complexType name="AppointmentMessageOuter">
         <xsd:sequence>
-            <xsd:element name="AppointmentMessage" nillable="true" type="tns:appointmentMessageInner"/>
+            <xsd:element name="AppointmentMessage" nillable="true" type="tns:appointmentMessage"/>
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="appointmentMessageInner">
-        <xsd:sequence>
-            <xsd:element name="AppointmentMessage" type="tns:appointmentMessage"/>
-        </xsd:sequence>
-    </xsd:complexType>
 
     <xsd:complexType name="appointmentMessage">
         <xsd:sequence>

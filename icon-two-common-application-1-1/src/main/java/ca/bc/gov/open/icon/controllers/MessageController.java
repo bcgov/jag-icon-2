@@ -8,6 +8,7 @@ import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.message.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -75,8 +76,12 @@ public class MessageController {
     public GetMessageResponse getMessage(@RequestPayload GetMessage getMessage)
             throws JsonProcessingException {
 
+        var getMessageDocument =
+                XMLUtilities.convertReq(getMessage, new GetMessageDocument(), "getMessage");
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/response");
-        HttpEntity<GetMessage> payload = new HttpEntity<>(getMessage, new HttpHeaders());
+        HttpEntity<GetMessageDocument> payload =
+                new HttpEntity<>(getMessageDocument, new HttpHeaders());
 
         try {
             HttpEntity<AppointmentMessage> resp =
@@ -89,12 +94,15 @@ public class MessageController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessage")));
 
-            GetMessageResponse getMessageResponse = new GetMessageResponse();
+            GetMessageResponseDocument getMessageResponseDoc = new GetMessageResponseDocument();
             AppointmentMessageOuter outResp = new AppointmentMessageOuter();
-            AppointmentMessageInner inResp = new AppointmentMessageInner();
-            inResp.setAppointmentMessage(resp.getBody());
-            outResp.setAppointmentMessage(inResp);
-            getMessageResponse.setXMLString(outResp);
+            outResp.setAppointmentMessage(resp.getBody());
+            getMessageResponseDoc.setXMLString(outResp);
+
+            var getMessageResponse =
+                    XMLUtilities.convertResp(
+                            getMessageResponseDoc, new GetMessageResponse(), "getMessageResponse");
+
             return getMessageResponse;
 
         } catch (Exception ex) {
@@ -132,9 +140,7 @@ public class MessageController {
 
             SetMessageDateResponse getMessageDateResponse = new SetMessageDateResponse();
             AppointmentMessageOuter outResp = new AppointmentMessageOuter();
-            AppointmentMessageInner inResp = new AppointmentMessageInner();
-            inResp.setAppointmentMessage(resp.getBody());
-            outResp.setAppointmentMessage(inResp);
+            outResp.setAppointmentMessage(resp.getBody());
             getMessageDateResponse.setXMLString(outResp);
             return getMessageDateResponse;
         } catch (Exception ex) {
