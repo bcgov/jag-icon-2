@@ -12,10 +12,7 @@ import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -219,33 +216,17 @@ public class ReportingController {
     public GetAppointmentResponse getAppointment(@RequestPayload GetAppointment getAppointment)
             throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
 
-        JAXBContext contextObj = JAXBContext.newInstance(GetAppointment.class);
-        Marshaller marshallerObj = contextObj.createMarshaller();
-        marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        StringWriter writer = new StringWriter();
-        marshallerObj.marshal(getAppointment, writer);
+        var getAppointmentDocument =
+                XMLUtilities.convertReq(
+                        getAppointment, new GetAppointmentDocument(), "getAppointment");
 
-        String xml = writer.toString();
-        xml = xml.replaceAll("\\&lt;", "<");
-        xml = xml.replaceAll("\\&gt;", ">");
-        xml = xml.replaceAll("getAppointment", "getAppointmentEx");
-
-        JAXBContext jaxbContextEx = JAXBContext.newInstance(GetAppointmentEx.class);
-        Unmarshaller jaxbUnmarshallerEx = jaxbContextEx.createUnmarshaller();
-
-        GetAppointmentEx getAppointmentEx =
-                (GetAppointmentEx)
-                        jaxbUnmarshallerEx.unmarshal(
-                                new ByteArrayInputStream(xml.getBytes("UTF-8")));
-
-        HttpEntity<GetAppointmentEx> payload =
-                new HttpEntity<>(getAppointmentEx, new HttpHeaders());
+        HttpEntity<GetAppointmentDocument> payload =
+                new HttpEntity<>(getAppointmentDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/appointment");
 
         try {
-
             HttpEntity<Appointment> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Appointment.class);
@@ -254,11 +235,19 @@ public class ReportingController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getAppointment")));
 
-            GetAppointmentResponse getClientHistoryResponse = new GetAppointmentResponse();
+            GetAppointmentResponseDocument getAppointmentResponseDoc =
+                    new GetAppointmentResponseDocument();
             AppointmentOuter outResp = new AppointmentOuter();
             outResp.setAppointment(resp.getBody());
-            getClientHistoryResponse.setXMLString(outResp);
-            return getClientHistoryResponse;
+            getAppointmentResponseDoc.setXMLString(outResp);
+
+            var getAppointmentResponse =
+                    XMLUtilities.convertResp(
+                            getAppointmentResponseDoc,
+                            new GetAppointmentResponse(),
+                            "getAppointmentResponse");
+
+            return getAppointmentResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(

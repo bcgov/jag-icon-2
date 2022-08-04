@@ -172,7 +172,8 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="getAppointmentEx">
+
+    <xsd:element name="getAppointmentDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:appointmentOuter"/>
@@ -230,6 +231,14 @@
     </xsd:complexType>
 
     <xsd:element name="getAppointmentResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getAppointmentResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:appointmentOuter"/>
