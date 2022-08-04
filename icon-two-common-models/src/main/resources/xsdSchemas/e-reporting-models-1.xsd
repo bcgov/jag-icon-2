@@ -322,6 +322,15 @@
     <xsd:element name="getStatus">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getStatusDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:statusOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -329,12 +338,6 @@
     </xsd:element>
 
     <xsd:complexType name="statusOuter">
-        <xsd:sequence>
-            <xsd:element name="Status" nillable="true" type="tns:statusInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="statusInner">
         <xsd:sequence>
             <xsd:element name="Status" nillable="true" type="tns:status"/>
         </xsd:sequence>
@@ -353,6 +356,14 @@
     </xsd:complexType>
 
     <xsd:element name="getStatusResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getStatusResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:statusOuter"/>

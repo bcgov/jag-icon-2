@@ -283,7 +283,6 @@ public class ReportingControllerTests {
         var req = new GetStatus();
 
         var StatusOuter = new StatusOuter();
-        var StatusInner = new StatusInner();
         var Status = new ca.bc.gov.open.icon.ereporting.Status();
 
         Status.setEventId("A");
@@ -294,9 +293,8 @@ public class ReportingControllerTests {
         Status.setAnswersSubmitted("A");
         Status.setAnswersCorrect("A");
 
-        StatusInner.setStatus(Status);
-        StatusOuter.setStatus(StatusInner);
-        req.setXMLString(StatusOuter);
+        StatusOuter.setStatus(Status);
+        req.setXMLString("A");
 
         var userTokenOuter = new UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
@@ -312,7 +310,7 @@ public class ReportingControllerTests {
         userToken.setSiteMinderTransactionID("A");
 
         userTokenOuter.setUserToken(userToken);
-        req.setUserTokenString(userTokenOuter);
+        req.setUserTokenString("A");
 
         var status = new ca.bc.gov.open.icon.ereporting.Status();
         ResponseEntity<ca.bc.gov.open.icon.ereporting.Status> responseEntity =

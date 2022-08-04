@@ -305,8 +305,12 @@ public class ReportingController {
     public GetStatusResponse getStatus(@RequestPayload GetStatus getStatus)
             throws JsonProcessingException {
 
+        var getStatusDocument =
+                XMLUtilities.convertReq(getStatus, new GetStatusDocument(), "getStatus");
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "reporting/status");
-        HttpEntity<GetStatus> payload = new HttpEntity<>(getStatus, new HttpHeaders());
+        HttpEntity<GetStatusDocument> payload =
+                new HttpEntity<>(getStatusDocument, new HttpHeaders());
 
         try {
             HttpEntity<ca.bc.gov.open.icon.ereporting.Status> resp =
@@ -317,14 +321,17 @@ public class ReportingController {
                             ca.bc.gov.open.icon.ereporting.Status.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getQuestions")));
+                            new RequestSuccessLog("Request Success", "getStatus")));
 
-            GetStatusResponse getStatusResponse = new GetStatusResponse();
+            GetStatusResponseDocument getStatusResponseDoc = new GetStatusResponseDocument();
             StatusOuter outResp = new StatusOuter();
-            StatusInner inResp = new StatusInner();
-            inResp.setStatus(resp.getBody());
-            outResp.setStatus(inResp);
-            getStatusResponse.setXMLString(outResp);
+            outResp.setStatus(resp.getBody());
+            getStatusResponseDoc.setXMLString(outResp);
+
+            var getStatusResponse =
+                    XMLUtilities.convertResp(
+                            getStatusResponseDoc, new GetStatusResponse(), "getStatusResponse");
+
             return getStatusResponse;
         } catch (Exception ex) {
             log.error(
