@@ -10,6 +10,7 @@ import javax.xml.bind.Unmarshaller;
 
 public final class XMLUtilities {
 
+    // remove the request XML (contain <![CDATA[ ... ]]> ) to recreate a request object
     public static <T, G> G convertReq(T req, G reqDoc, String service) {
         try {
             // marshall to T type
@@ -41,6 +42,7 @@ public final class XMLUtilities {
         return null;
     }
 
+    // add <![CDATA[ ... ]]> ) to the responsed object's XML and recreate the responsed object
     public static <T, G> G convertResp(T respDoc, G resp, String service) {
         try {
             // marshall to T type
