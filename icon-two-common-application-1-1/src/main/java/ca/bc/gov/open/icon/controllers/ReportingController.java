@@ -5,12 +5,14 @@ import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
-import ca.bc.gov.open.icon.ereporting.Locations.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import javax.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,10 +86,16 @@ public class ReportingController {
             @RequestPayload GetReportingCmpltInstruction getReportingCmpltInstruction)
             throws JsonProcessingException {
 
+        var getReportingCmpltInstructionDocument =
+                XMLUtilities.convertReq(
+                        getReportingCmpltInstruction,
+                        new GetReportingCmpltInstructionDocument(),
+                        "getReportingCmpltInstruction");
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/complete-instruction");
-        HttpEntity<GetReportingCmpltInstruction> payload =
-                new HttpEntity<>(getReportingCmpltInstruction, new HttpHeaders());
+        HttpEntity<GetReportingCmpltInstructionDocument> payload =
+                new HttpEntity<>(getReportingCmpltInstructionDocument, new HttpHeaders());
 
         try {
             HttpEntity<ReportingCmpltInstruction> resp =
@@ -101,13 +109,19 @@ public class ReportingController {
                             new RequestSuccessLog(
                                     "Request Success", "getReportingCmpltInstruction")));
 
-            GetReportingCmpltInstructionResponse getReportingCmpltInstructionResponse =
-                    new GetReportingCmpltInstructionResponse();
+            GetReportingCmpltInstructionResponseDocument
+                    getReportingCmpltInstructionResponseDocument =
+                            new GetReportingCmpltInstructionResponseDocument();
             ReportingCmpltInstructionOuter outResp = new ReportingCmpltInstructionOuter();
-            ReportingCmpltInstructionInner inResp = new ReportingCmpltInstructionInner();
-            inResp.setReportingCmpltInstruction(resp.getBody());
-            outResp.setReportingCmpltInstruction(inResp);
-            getReportingCmpltInstructionResponse.setXMLString(outResp);
+            outResp.setReportingCmpltInstruction(resp.getBody());
+            getReportingCmpltInstructionResponseDocument.setXMLString(outResp);
+
+            var getReportingCmpltInstructionResponse =
+                    XMLUtilities.convertResp(
+                            getReportingCmpltInstructionResponseDocument,
+                            new GetReportingCmpltInstructionResponse(),
+                            "getReportingCmpltInstructionResponse");
+
             return getReportingCmpltInstructionResponse;
         } catch (Exception ex) {
             log.error(
@@ -126,11 +140,15 @@ public class ReportingController {
             localPart = "getLocations")
     @ResponsePayload
     public GetLocationsResponse getLocationsResponse(@RequestPayload GetLocations getLocations)
-            throws JsonProcessingException {
+            throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
+
+        var getLocationsDocument =
+                XMLUtilities.convertReq(getLocations, new GetLocationsDocument(), "getLocations");
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/locations");
-        HttpEntity<GetLocations> payload = new HttpEntity<>(getLocations, new HttpHeaders());
+        HttpEntity<GetLocationsDocument> payload =
+                new HttpEntity<>(getLocationsDocument, new HttpHeaders());
 
         try {
             HttpEntity<Locations> resp =
@@ -140,12 +158,18 @@ public class ReportingController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getLocationsResponse")));
 
-            GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
+            GetLocationsResponseDocument getLocationsResponseDoc =
+                    new GetLocationsResponseDocument();
             LocationsOuter outResp = new LocationsOuter();
-            LocationsInner inResp = new LocationsInner();
-            inResp.setLocations(resp.getBody());
-            outResp.setLocations(inResp);
-            getLocationsResponse.setXMLString(outResp);
+            outResp.setLocations(resp.getBody());
+            getLocationsResponseDoc.setXMLString(outResp);
+
+            var getLocationsResponse =
+                    XMLUtilities.convertResp(
+                            getLocationsResponseDoc,
+                            new GetLocationsResponse(),
+                            "getLocationsResponse");
+
             return getLocationsResponse;
         } catch (Exception ex) {
             log.error(
@@ -166,24 +190,35 @@ public class ReportingController {
     public SubmitAnswersResponse submitAnswers(@RequestPayload SubmitAnswers submitAnswers)
             throws JsonProcessingException {
 
+        var submitAnswersDocument =
+                XMLUtilities.convertReq(
+                        submitAnswers, new SubmitAnswersDocument(), "submitAnswers");
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/submit-answers");
-        HttpEntity<SubmitAnswers> payload = new HttpEntity<>(submitAnswers, new HttpHeaders());
+        HttpEntity<SubmitAnswersDocument> payload =
+                new HttpEntity<>(submitAnswersDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Report> resp =
+            HttpEntity<Ereport> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Report.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "submitAnswers")));
 
-            SubmitAnswersResponse submitAnswersResponse = new SubmitAnswersResponse();
+            SubmitAnswersResponseDocument submitAnswersResponseDocument =
+                    new SubmitAnswersResponseDocument();
             ReportOuter outResp = new ReportOuter();
-            ReportInner inResp = new ReportInner();
-            inResp.setEReport(resp.getBody());
-            outResp.setReport(inResp);
-            submitAnswersResponse.setXMLString(outResp);
+            outResp.setEReport(resp.getBody());
+            submitAnswersResponseDocument.setXMLString(outResp);
+
+            var submitAnswersResponse =
+                    XMLUtilities.convertResp(
+                            submitAnswersResponseDocument,
+                            new SubmitAnswersResponse(),
+                            "submitAnswersResponse");
+
             return submitAnswersResponse;
         } catch (Exception ex) {
             log.error(
@@ -202,15 +237,19 @@ public class ReportingController {
             localPart = "getAppointment")
     @ResponsePayload
     public GetAppointmentResponse getAppointment(@RequestPayload GetAppointment getAppointment)
-            throws JsonProcessingException {
+            throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
 
-        HttpEntity<GetAppointment> payload = new HttpEntity<>(getAppointment, new HttpHeaders());
+        var getAppointmentDocument =
+                XMLUtilities.convertReq(
+                        getAppointment, new GetAppointmentDocument(), "getAppointment");
+
+        HttpEntity<GetAppointmentDocument> payload =
+                new HttpEntity<>(getAppointmentDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/appointment");
 
         try {
-
             HttpEntity<Appointment> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Appointment.class);
@@ -219,13 +258,19 @@ public class ReportingController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getAppointment")));
 
-            GetAppointmentResponse getClientHistoryResponse = new GetAppointmentResponse();
+            GetAppointmentResponseDocument getAppointmentResponseDoc =
+                    new GetAppointmentResponseDocument();
             AppointmentOuter outResp = new AppointmentOuter();
-            AppointmentInner inResp = new AppointmentInner();
-            inResp.setAppointment(resp.getBody());
-            outResp.setAppointment(inResp);
-            getClientHistoryResponse.setXMLString(outResp);
-            return getClientHistoryResponse;
+            outResp.setAppointment(resp.getBody());
+            getAppointmentResponseDoc.setXMLString(outResp);
+
+            var getAppointmentResponse =
+                    XMLUtilities.convertResp(
+                            getAppointmentResponseDoc,
+                            new GetAppointmentResponse(),
+                            "getAppointmentResponse");
+
+            return getAppointmentResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -245,24 +290,34 @@ public class ReportingController {
     public GetQuestionsResponse getQuestions(@RequestPayload GetQuestions getQuestions)
             throws JsonProcessingException {
 
+        var getQuestionsDocument =
+                XMLUtilities.convertReq(getQuestions, new GetQuestionsDocument(), "getQuestions");
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/questions");
-        HttpEntity<GetQuestions> payload = new HttpEntity<>(getQuestions, new HttpHeaders());
+        HttpEntity<GetQuestionsDocument> payload =
+                new HttpEntity<>(getQuestionsDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Report> resp =
+            HttpEntity<Ereport> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Report.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getQuestions")));
 
-            GetQuestionsResponse getQuestionsResponse = new GetQuestionsResponse();
+            GetQuestionsResponseDocument getQuestionsResponseDocument =
+                    new GetQuestionsResponseDocument();
             ReportOuter outResp = new ReportOuter();
-            ReportInner inResp = new ReportInner();
-            inResp.setEReport(resp.getBody());
-            outResp.setReport(inResp);
-            getQuestionsResponse.setXMLString(outResp);
+            outResp.setEReport(resp.getBody());
+            getQuestionsResponseDocument.setXMLString(outResp);
+
+            var getQuestionsResponse =
+                    XMLUtilities.convertResp(
+                            getQuestionsResponseDocument,
+                            new GetQuestionsResponse(),
+                            "getQuestionsResponse");
+
             return getQuestionsResponse;
         } catch (Exception ex) {
             log.error(
@@ -283,8 +338,12 @@ public class ReportingController {
     public GetStatusResponse getStatus(@RequestPayload GetStatus getStatus)
             throws JsonProcessingException {
 
+        var getStatusDocument =
+                XMLUtilities.convertReq(getStatus, new GetStatusDocument(), "getStatus");
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "reporting/status");
-        HttpEntity<GetStatus> payload = new HttpEntity<>(getStatus, new HttpHeaders());
+        HttpEntity<GetStatusDocument> payload =
+                new HttpEntity<>(getStatusDocument, new HttpHeaders());
 
         try {
             HttpEntity<ca.bc.gov.open.icon.ereporting.Status> resp =
@@ -295,14 +354,17 @@ public class ReportingController {
                             ca.bc.gov.open.icon.ereporting.Status.class);
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getQuestions")));
+                            new RequestSuccessLog("Request Success", "getStatus")));
 
-            GetStatusResponse getStatusResponse = new GetStatusResponse();
+            GetStatusResponseDocument getStatusResponseDoc = new GetStatusResponseDocument();
             StatusOuter outResp = new StatusOuter();
-            StatusInner inResp = new StatusInner();
-            inResp.setStatus(resp.getBody());
-            outResp.setStatus(inResp);
-            getStatusResponse.setXMLString(outResp);
+            outResp.setStatus(resp.getBody());
+            getStatusResponseDoc.setXMLString(outResp);
+
+            var getStatusResponse =
+                    XMLUtilities.convertResp(
+                            getStatusResponseDoc, new GetStatusResponse(), "getStatusResponse");
+
             return getStatusResponse;
         } catch (Exception ex) {
             log.error(

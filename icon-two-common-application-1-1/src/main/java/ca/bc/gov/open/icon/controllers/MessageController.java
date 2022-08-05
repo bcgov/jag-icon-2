@@ -8,6 +8,7 @@ import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.message.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -75,8 +76,12 @@ public class MessageController {
     public GetMessageResponse getMessage(@RequestPayload GetMessage getMessage)
             throws JsonProcessingException {
 
+        var getMessageDocument =
+                XMLUtilities.convertReq(getMessage, new GetMessageDocument(), "getMessage");
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/response");
-        HttpEntity<GetMessage> payload = new HttpEntity<>(getMessage, new HttpHeaders());
+        HttpEntity<GetMessageDocument> payload =
+                new HttpEntity<>(getMessageDocument, new HttpHeaders());
 
         try {
             HttpEntity<AppointmentMessage> resp =
@@ -89,12 +94,15 @@ public class MessageController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessage")));
 
-            GetMessageResponse getMessageResponse = new GetMessageResponse();
+            GetMessageResponseDocument getMessageResponseDoc = new GetMessageResponseDocument();
             AppointmentMessageOuter outResp = new AppointmentMessageOuter();
-            AppointmentMessageInner inResp = new AppointmentMessageInner();
-            inResp.setAppointmentMessage(resp.getBody());
-            outResp.setAppointmentMessage(inResp);
-            getMessageResponse.setXMLString(outResp);
+            outResp.setAppointmentMessage(resp.getBody());
+            getMessageResponseDoc.setXMLString(outResp);
+
+            var getMessageResponse =
+                    XMLUtilities.convertResp(
+                            getMessageResponseDoc, new GetMessageResponse(), "getMessageResponse");
+
             return getMessageResponse;
 
         } catch (Exception ex) {
@@ -116,8 +124,13 @@ public class MessageController {
     public SetMessageDateResponse setMessageDate(@RequestPayload SetMessageDate setMessageDate)
             throws JsonProcessingException {
 
+        var setMessageDateDocument =
+                XMLUtilities.convertReq(
+                        setMessageDate, new SetMessageDateDocument(), "setMessageDate");
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/date");
-        HttpEntity<SetMessageDate> payload = new HttpEntity<>(setMessageDate, new HttpHeaders());
+        HttpEntity<SetMessageDateDocument> payload =
+                new HttpEntity<>(setMessageDateDocument, new HttpHeaders());
 
         try {
             HttpEntity<AppointmentMessage> resp =
@@ -130,13 +143,19 @@ public class MessageController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDate")));
 
-            SetMessageDateResponse getMessageDateResponse = new SetMessageDateResponse();
+            SetMessageDateResponseDocument setMessageDateResponseDocument =
+                    new SetMessageDateResponseDocument();
             AppointmentMessageOuter outResp = new AppointmentMessageOuter();
-            AppointmentMessageInner inResp = new AppointmentMessageInner();
-            inResp.setAppointmentMessage(resp.getBody());
-            outResp.setAppointmentMessage(inResp);
-            getMessageDateResponse.setXMLString(outResp);
-            return getMessageDateResponse;
+            outResp.setAppointmentMessage(resp.getBody());
+            setMessageDateResponseDocument.setXMLString(outResp);
+
+            var setMessageDateResponse =
+                    XMLUtilities.convertResp(
+                            setMessageDateResponseDocument,
+                            new SetMessageDateResponse(),
+                            "setMessageDateResponse");
+
+            return setMessageDateResponse;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
