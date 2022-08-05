@@ -4,6 +4,7 @@ import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
@@ -43,20 +44,17 @@ public class RecordController {
     public RecordCompletedResponse recordCompleted(@RequestPayload RecordCompleted recordCompleted)
             throws JsonProcessingException {
 
+        var recordCompletedDocument =
+                XMLUtilities.convertReq(
+                        recordCompleted, new RecordCompletedDocument(), "recordCompleted");
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "record/completed");
 
         var inner =
                 recordCompleted.getXMLString() != null
-                                && recordCompleted.getXMLString().getClientLogNotification() != null
-                                && recordCompleted
-                                                .getXMLString()
-                                                .getClientLogNotification()
-                                                .getClientLogNotification()
+                                && recordCompletedDocument.getXMLString().getClientLogNotification()
                                         != null
-                        ? recordCompleted
-                                .getXMLString()
-                                .getClientLogNotification()
-                                .getClientLogNotification()
+                        ? recordCompletedDocument.getXMLString().getClientLogNotification()
                         : new ClientLogNotification();
 
         HttpEntity<ClientLogNotification> payload = new HttpEntity<>(inner, new HttpHeaders());
@@ -92,23 +90,21 @@ public class RecordController {
     public RecordExceptionResponse recordException(@RequestPayload RecordException recordException)
             throws JsonProcessingException {
 
+        var recordExceptionDocument =
+                XMLUtilities.convertReq(
+                        recordException, new RecordExceptionDocument(), "recordException");
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "record/exception");
 
         var inner =
-                recordException.getXMLString() != null
-                                && recordException.getXMLString() != null
-                                && recordException
-                                                .getXMLString()
-                                                .getClientLogNotification()
-                                                .getClientLogNotification()
+                recordExceptionDocument.getXMLString() != null
+                                && recordExceptionDocument.getXMLString() != null
+                                && recordExceptionDocument.getXMLString().getClientLogNotification()
                                         != null
-                        ? recordException
-                                .getXMLString()
-                                .getClientLogNotification()
-                                .getClientLogNotification()
+                        ? recordExceptionDocument.getXMLString().getClientLogNotification()
                         : new ClientLogNotification();
 
-        HttpEntity<RecordException> payload = new HttpEntity<>(recordException, new HttpHeaders());
+        HttpEntity<ClientLogNotification> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Map<String, String>> resp =

@@ -86,10 +86,16 @@ public class ReportingController {
             @RequestPayload GetReportingCmpltInstruction getReportingCmpltInstruction)
             throws JsonProcessingException {
 
+        var getReportingCmpltInstructionDocument =
+                XMLUtilities.convertReq(
+                        getReportingCmpltInstruction,
+                        new GetReportingCmpltInstructionDocument(),
+                        "getReportingCmpltInstruction");
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/complete-instruction");
-        HttpEntity<GetReportingCmpltInstruction> payload =
-                new HttpEntity<>(getReportingCmpltInstruction, new HttpHeaders());
+        HttpEntity<GetReportingCmpltInstructionDocument> payload =
+                new HttpEntity<>(getReportingCmpltInstructionDocument, new HttpHeaders());
 
         try {
             HttpEntity<ReportingCmpltInstruction> resp =
@@ -103,13 +109,19 @@ public class ReportingController {
                             new RequestSuccessLog(
                                     "Request Success", "getReportingCmpltInstruction")));
 
-            GetReportingCmpltInstructionResponse getReportingCmpltInstructionResponse =
-                    new GetReportingCmpltInstructionResponse();
+            GetReportingCmpltInstructionResponseDocument
+                    getReportingCmpltInstructionResponseDocument =
+                            new GetReportingCmpltInstructionResponseDocument();
             ReportingCmpltInstructionOuter outResp = new ReportingCmpltInstructionOuter();
-            ReportingCmpltInstructionInner inResp = new ReportingCmpltInstructionInner();
-            inResp.setReportingCmpltInstruction(resp.getBody());
-            outResp.setReportingCmpltInstruction(inResp);
-            getReportingCmpltInstructionResponse.setXMLString(outResp);
+            outResp.setReportingCmpltInstruction(resp.getBody());
+            getReportingCmpltInstructionResponseDocument.setXMLString(outResp);
+
+            var getReportingCmpltInstructionResponse =
+                    XMLUtilities.convertResp(
+                            getReportingCmpltInstructionResponseDocument,
+                            new GetReportingCmpltInstructionResponse(),
+                            "getReportingCmpltInstructionResponse");
+
             return getReportingCmpltInstructionResponse;
         } catch (Exception ex) {
             log.error(
@@ -178,24 +190,35 @@ public class ReportingController {
     public SubmitAnswersResponse submitAnswers(@RequestPayload SubmitAnswers submitAnswers)
             throws JsonProcessingException {
 
+        var submitAnswersDocument =
+                XMLUtilities.convertReq(
+                        submitAnswers, new SubmitAnswersDocument(), "submitAnswers");
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/submit-answers");
-        HttpEntity<SubmitAnswers> payload = new HttpEntity<>(submitAnswers, new HttpHeaders());
+        HttpEntity<SubmitAnswersDocument> payload =
+                new HttpEntity<>(submitAnswersDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Report> resp =
+            HttpEntity<Ereport> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Report.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "submitAnswers")));
 
-            SubmitAnswersResponse submitAnswersResponse = new SubmitAnswersResponse();
+            SubmitAnswersResponseDocument submitAnswersResponseDocument =
+                    new SubmitAnswersResponseDocument();
             ReportOuter outResp = new ReportOuter();
-            ReportInner inResp = new ReportInner();
-            inResp.setEReport(resp.getBody());
-            outResp.setReport(inResp);
-            submitAnswersResponse.setXMLString(outResp);
+            outResp.setEReport(resp.getBody());
+            submitAnswersResponseDocument.setXMLString(outResp);
+
+            var submitAnswersResponse =
+                    XMLUtilities.convertResp(
+                            submitAnswersResponseDocument,
+                            new SubmitAnswersResponse(),
+                            "submitAnswersResponse");
+
             return submitAnswersResponse;
         } catch (Exception ex) {
             log.error(
@@ -267,24 +290,34 @@ public class ReportingController {
     public GetQuestionsResponse getQuestions(@RequestPayload GetQuestions getQuestions)
             throws JsonProcessingException {
 
+        var getQuestionsDocument =
+                XMLUtilities.convertReq(getQuestions, new GetQuestionsDocument(), "getQuestions");
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/questions");
-        HttpEntity<GetQuestions> payload = new HttpEntity<>(getQuestions, new HttpHeaders());
+        HttpEntity<GetQuestionsDocument> payload =
+                new HttpEntity<>(getQuestionsDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Report> resp =
+            HttpEntity<Ereport> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Report.class);
+                            builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getQuestions")));
 
-            GetQuestionsResponse getQuestionsResponse = new GetQuestionsResponse();
+            GetQuestionsResponseDocument getQuestionsResponseDocument =
+                    new GetQuestionsResponseDocument();
             ReportOuter outResp = new ReportOuter();
-            ReportInner inResp = new ReportInner();
-            inResp.setEReport(resp.getBody());
-            outResp.setReport(inResp);
-            getQuestionsResponse.setXMLString(outResp);
+            outResp.setEReport(resp.getBody());
+            getQuestionsResponseDocument.setXMLString(outResp);
+
+            var getQuestionsResponse =
+                    XMLUtilities.convertResp(
+                            getQuestionsResponseDocument,
+                            new GetQuestionsResponse(),
+                            "getQuestionsResponse");
+
             return getQuestionsResponse;
         } catch (Exception ex) {
             log.error(

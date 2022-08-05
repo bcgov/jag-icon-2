@@ -35,7 +35,6 @@ public class RecordControllerTests {
     public void testRecordCompleted() throws JsonProcessingException {
         var req = new RecordCompleted();
         var clientLogNotificationOuter = new ClientLogNotificationOuter();
-        var clientLogNotificationInner = new ClientLogNotificationInner();
         var clientLogNotification = new ClientLogNotification();
         clientLogNotification.setCsNum("A");
         clientLogNotification.setEventID("A");
@@ -45,9 +44,8 @@ public class RecordControllerTests {
         clientLogNotification.setMessageType("A");
         clientLogNotification.setReauthTransactionNo("A");
 
-        req.setXMLString(clientLogNotificationOuter);
-        clientLogNotificationOuter.setClientLogNotification(clientLogNotificationInner);
-        clientLogNotificationInner.setClientLogNotification(clientLogNotification);
+        req.setXMLString("A");
+        clientLogNotificationOuter.setClientLogNotification(clientLogNotification);
 
         var out = new HashMap<>();
         ResponseEntity<Map> responseEntity = new ResponseEntity<>(out, HttpStatus.OK);
@@ -69,7 +67,6 @@ public class RecordControllerTests {
     public void testRecordException() throws JsonProcessingException {
         var req = new RecordException();
         var clientLogNotificationOuter = new ClientLogNotificationOuter();
-        var clientLogNotificationInner = new ClientLogNotificationInner();
         var clientLogNotification = new ClientLogNotification();
         clientLogNotification.setCsNum("A");
         clientLogNotification.setEventID("A");
@@ -79,9 +76,8 @@ public class RecordControllerTests {
         clientLogNotification.setMessageType("A");
         clientLogNotification.setReauthTransactionNo("A");
 
-        req.setXMLString(clientLogNotificationOuter);
-        clientLogNotificationOuter.setClientLogNotification(clientLogNotificationInner);
-        clientLogNotificationInner.setClientLogNotification(clientLogNotification);
+        req.setXMLString("A");
+        clientLogNotificationOuter.setClientLogNotification(clientLogNotification);
 
         var out = new HashMap<>();
         ResponseEntity<Map> responseEntity = new ResponseEntity<>(out, HttpStatus.OK);

@@ -149,6 +149,15 @@
     <xsd:element name="submitAnswers">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="submitAnswersDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:reportOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -157,17 +166,12 @@
 
     <xsd:complexType name="reportOuter">
         <xsd:sequence>
-            <xsd:element name="Report" nillable="true" type="tns:reportInner"/>
+            <xsd:element name="EReport" nillable="true" type="tns:ereport"/>
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="reportInner">
-        <xsd:sequence>
-            <xsd:element name="EReport" type="tns:report"/>
-        </xsd:sequence>
-    </xsd:complexType>
 
-    <xsd:complexType name="report">
+    <xsd:complexType name="ereport">
         <xsd:sequence>
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
             <xsd:element name="deviceNo" nillable="true" type="xsd:string"/>
@@ -196,11 +200,18 @@
     <xsd:element name="submitAnswersResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:reportOuter"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="submitAnswersResponseDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="tns:reportOuter"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 
     <xsd:element name="getAppointmentDocument">
         <xsd:complexType>
@@ -278,18 +289,20 @@
     <xsd:element name="recordCompleted">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="recordCompletedDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:clientLogNotificationOuter"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
     <xsd:complexType name="clientLogNotificationOuter">
-        <xsd:sequence>
-            <xsd:element name="ClientLogNotification" nillable="true" type="tns:clientLogNotificationInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="clientLogNotificationInner">
         <xsd:sequence>
             <xsd:element name="ClientLogNotification" nillable="true" type="tns:clientLogNotification"/>
         </xsd:sequence>
@@ -318,6 +331,14 @@
     <xsd:element name="recordException">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="recordExceptionDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:clientLogNotificationOuter"/>
             </xsd:sequence>
         </xsd:complexType>
@@ -334,6 +355,15 @@
     <xsd:element name="getQuestions">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getQuestionsDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:reportOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -341,6 +371,14 @@
     </xsd:element>
 
     <xsd:element name="getQuestionsResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getQuestionsResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:reportOuter"/>
@@ -403,6 +441,15 @@
     <xsd:element name="getReportingCmpltInstruction">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getReportingCmpltInstructionDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:reportingCmpltInstructionOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -411,15 +458,10 @@
 
     <xsd:complexType name="reportingCmpltInstructionOuter">
         <xsd:sequence>
-            <xsd:element name="ReportingCmpltInstruction" nillable="true" type="tns:reportingCmpltInstructionInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="reportingCmpltInstructionInner">
-        <xsd:sequence>
             <xsd:element name="ReportingCmpltInstruction" nillable="true" type="tns:reportingCmpltInstruction"/>
         </xsd:sequence>
     </xsd:complexType>
+
 
     <xsd:complexType name="reportingCmpltInstruction">
         <xsd:sequence>
@@ -429,6 +471,14 @@
     </xsd:complexType>
 
     <xsd:element name="getReportingCmpltInstructionResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getReportingCmpltInstructionResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:reportingCmpltInstructionOuter"/>

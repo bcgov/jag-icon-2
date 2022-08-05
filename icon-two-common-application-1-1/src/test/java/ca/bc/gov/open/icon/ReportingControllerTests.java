@@ -72,13 +72,11 @@ public class ReportingControllerTests {
     public void testGetReportingCmpltInstruction() throws JsonProcessingException {
         var req = new GetReportingCmpltInstruction();
         var ReportingCmpltInstructionOuter = new ReportingCmpltInstructionOuter();
-        var ReportingCmpltInstructionInner = new ReportingCmpltInstructionInner();
         var ReportingCmpltInstruction = new ReportingCmpltInstruction();
         ReportingCmpltInstruction.setCsNum("A");
         ReportingCmpltInstruction.setText("A");
-        ReportingCmpltInstructionInner.setReportingCmpltInstruction(ReportingCmpltInstruction);
-        ReportingCmpltInstructionOuter.setReportingCmpltInstruction(ReportingCmpltInstructionInner);
-        req.setXMLString(ReportingCmpltInstructionOuter);
+        ReportingCmpltInstructionOuter.setReportingCmpltInstruction(ReportingCmpltInstruction);
+        req.setXMLString("A");
 
         var userTokenOuter = new UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
@@ -94,7 +92,7 @@ public class ReportingControllerTests {
         userToken.setSiteMinderTransactionID("A");
 
         userTokenOuter.setUserToken(userToken);
-        req.setUserTokenString(userTokenOuter);
+        req.setUserTokenString("A");
 
         var reportingCmpltInstruction = new ReportingCmpltInstruction();
         reportingCmpltInstruction.setText("A");
@@ -152,8 +150,7 @@ public class ReportingControllerTests {
     public void testSubmitAnswers() throws JsonProcessingException {
         var req = new SubmitAnswers();
         var ReportOuter = new ReportOuter();
-        var ReportInner = new ReportInner();
-        var Report = new Report();
+        var Report = new Ereport();
         Report.setCsNum("A");
         Report.setDeviceNo("A");
         Report.setEventID("A");
@@ -171,9 +168,8 @@ public class ReportingControllerTests {
         Question.setAnswer(Answers);
         Questions.add(Question);
         Report.setQuestion(Questions);
-        ReportInner.setEReport(Report);
-        ReportOuter.setReport(ReportInner);
-        req.setXMLString(ReportOuter);
+        ReportOuter.setEReport(Report);
+        req.setXMLString("A");
 
         var userTokenOuter = new UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
@@ -189,18 +185,18 @@ public class ReportingControllerTests {
         userToken.setSiteMinderTransactionID("A");
 
         userTokenOuter.setUserToken(userToken);
-        req.setUserTokenString(userTokenOuter);
+        req.setUserTokenString("A");
 
-        var report1 = new Report();
+        var report1 = new Ereport();
         report1 = Report;
-        ResponseEntity<Report> responseEntity = new ResponseEntity<>(report1, HttpStatus.OK);
+        ResponseEntity<Ereport> responseEntity = new ResponseEntity<>(report1, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<Report>>any()))
+                        Mockito.<Class<Ereport>>any()))
                 .thenReturn(responseEntity);
 
         var reportingController = new ReportingController(restTemplate, objectMapper);
@@ -262,15 +258,15 @@ public class ReportingControllerTests {
     public void testGetQuestions() throws JsonProcessingException {
         var req = new GetQuestions();
 
-        var report = new Report();
-        ResponseEntity<Report> responseEntity = new ResponseEntity<>(report, HttpStatus.OK);
+        var report = new Ereport();
+        ResponseEntity<Ereport> responseEntity = new ResponseEntity<>(report, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<Report>>any()))
+                        Mockito.<Class<Ereport>>any()))
                 .thenReturn(responseEntity);
 
         var reportingController = new ReportingController(restTemplate, objectMapper);
