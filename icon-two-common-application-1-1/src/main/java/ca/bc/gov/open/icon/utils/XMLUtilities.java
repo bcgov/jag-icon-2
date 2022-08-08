@@ -1,8 +1,6 @@
 package ca.bc.gov.open.icon.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -49,9 +47,8 @@ public final class XMLUtilities {
             JAXBContext respDocContext = JAXBContext.newInstance(respDoc.getClass());
             Marshaller respDocMarshaller = respDocContext.createMarshaller();
             StringWriter stringWriter = new StringWriter();
-            respDocMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            respDocMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             respDocMarshaller.marshal(respDoc, stringWriter);
-
             String xml = stringWriter.toString();
 
             // the requst XML contains XMLString and UserTokenString blocks which need to convert to

@@ -10,7 +10,6 @@ import ca.bc.gov.open.icon.packageinfo.GetPackageInfoResponse;
 import ca.bc.gov.open.icon.session.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -155,11 +154,9 @@ public class AuditControllerTests {
 
     private ClientHistoryOuter Create_ClientHistoryOuter() {
         var clientHistoryOuter = new ClientHistoryOuter();
-        var clientHistoryInner = new ClientHistoryInner();
         var clientHistory = Create_ClientHistory();
 
-        clientHistoryInner.setClientHistory(clientHistory);
-        clientHistoryOuter.setClientHistory(clientHistoryInner);
+        clientHistoryOuter.setClientHistory(clientHistory);
 
         return clientHistoryOuter;
     }
@@ -185,9 +182,9 @@ public class AuditControllerTests {
 
     private ClientHistoryDetails Create_ClientHistoryDetails() {
         var detail = new ClientHistoryDetails();
-        detail.setDate(Instant.now());
+        detail.setDate("A");
         detail.setInstCommStatus("A");
-        detail.setDate(Instant.now());
+        detail.setDate("A");
         detail.setDconsecutive("A");
         detail.setFileNumber("A");
 
@@ -244,10 +241,9 @@ public class AuditControllerTests {
     public void testGetClientHistory() throws JsonProcessingException {
 
         var req = new GetClientHistory();
-        req.setXMLString(Create_ClientHistoryOuter());
+        req.setXMLString("A");
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -260,9 +256,8 @@ public class AuditControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var clientHistory = new ClientHistory();
 

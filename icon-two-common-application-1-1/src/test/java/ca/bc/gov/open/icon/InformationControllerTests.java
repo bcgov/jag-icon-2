@@ -6,7 +6,6 @@ import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.controllers.InformationController;
 import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.myinfo.UserToken;
-import ca.bc.gov.open.icon.myinfo.UserTokenInner;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
@@ -147,7 +146,6 @@ public class InformationControllerTests {
     public void testGetOrders() throws JsonProcessingException {
         var req = new GetOrders();
         var OrdersOuter = new OrdersOuter();
-        var OrdersInner = new OrdersInner();
         var orders = new Orders();
         List<OrdersInfo> draftl = new ArrayList<>();
         var OrdersInfo = new OrdersInfo();
@@ -161,9 +159,8 @@ public class InformationControllerTests {
         orders.setOrdersInfo(draftl);
         orders.setCsNum("A");
 
-        req.setXMLString(OrdersOuter);
-        OrdersOuter.setOrders(OrdersInner);
-        OrdersInner.setOrders(orders);
+        req.setXMLString("A");
+        OrdersOuter.setOrders(orders);
 
         var userTokenOuter = new UserTokenOuter();
         var userTokenInner = new UserTokenInner();
@@ -179,9 +176,8 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var orders1 = new Orders();
         ResponseEntity<Orders> responseEntity = new ResponseEntity<>(orders1, HttpStatus.OK);
@@ -204,12 +200,10 @@ public class InformationControllerTests {
     public void testGetPrograms() throws JsonProcessingException {
         var req = new GetPrograms();
         var programsOuter = new ProgramsOuter();
-        var programsInner = new ProgramsInner();
 
         var programs = new Programs();
-        req.setXMLString(programsOuter);
-        programsOuter.setPrograms(programsInner);
-        programsInner.setPrograms(programs);
+        req.setXMLString("A");
+        programsOuter.setPrograms(programs);
         programs.setCsNum("A");
         programs.setInstCommStatusFilter("A");
         var row = new Row();
@@ -261,9 +255,8 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var programs1 = new Programs();
         programs1 = programs;
@@ -287,12 +280,10 @@ public class InformationControllerTests {
     public void testGetLocations() throws JsonProcessingException {
         var req = new GetLocations();
         var locationsOuter = new LocationsOuter();
-        var locationsInner = new LocationsInner();
 
         var locations = new Locations();
-        req.setXMLString(locationsOuter);
-        locationsOuter.setLocations(locationsInner);
-        locationsInner.setLocations(locations);
+        req.setXMLString("A");
+        locationsOuter.setLocations(locations);
 
         var location = new Location();
         var address = new Address();
@@ -335,9 +326,8 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var locations1 = new Locations();
         locations1 = locations;
@@ -361,7 +351,6 @@ public class InformationControllerTests {
     public void testGetConditions() throws JsonProcessingException {
         var req = new GetConditions();
         var conditionsOuter = new ConditionsOuter();
-        var conditionsInner = new ConditionsInner();
         var conditions = new Conditions();
 
         conditions.setCsNum("A");
@@ -381,9 +370,8 @@ public class InformationControllerTests {
         draftl.add(ConditionsDetails);
         conditions.setConditionsDetails(draftl);
 
-        req.setXMLString(conditionsOuter);
-        conditionsOuter.setConditions(conditionsInner);
-        conditionsInner.setConditions(conditions);
+        req.setXMLString("A");
+        conditionsOuter.setConditions(conditions);
 
         var userTokenOuter = new UserTokenOuter();
         var userTokenInner = new UserTokenInner();
@@ -399,9 +387,8 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var conditions1 = new Conditions();
         conditions1 = conditions;
@@ -468,8 +455,7 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
+        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString(userTokenOuter);
 
         var ordersConditions1 = new OrdersConditions();
@@ -513,16 +499,15 @@ public class InformationControllerTests {
         var req = new GetDates();
         var DatesOuter = new DatesOuter();
 
-        req.setXMLString(DatesOuter);
+        req.setXMLString("A");
 
         var datesOuter = new DatesOuter();
-        var datesInner = new DatesInner();
         var dates = new Dates();
 
         dates.setCsNum("A");
-        dates.setCustodyEndDate(Instant.now());
-        dates.setCommunitySupervisionEndDate(Instant.now());
-        dates.setProbableDischargeReturnDate(Instant.now());
+        dates.setCustodyEndDate("A");
+        dates.setCommunitySupervisionEndDate("A");
+        dates.setProbableDischargeReturnDate("A");
         var row = new Row();
         row.setStart("1");
         row.setEnd("3");
@@ -532,7 +517,7 @@ public class InformationControllerTests {
         List<FutureCourtDates> futureCourtDates = new ArrayList<>();
         var futureCourtDate = new FutureCourtDates();
         futureCourtDates.add(futureCourtDate);
-        futureCourtDate.setCourtAppearanceDate(Instant.now());
+        futureCourtDate.setCourtAppearanceDate("A");
         futureCourtDate.setAppearanceReason("A");
         futureCourtDate.setVideoCourt("A");
         futureCourtDate.setCourtFileNumber("A");
@@ -558,9 +543,8 @@ public class InformationControllerTests {
 
         dates.setFutureCourtDates(futureCourtDates);
 
-        req.setXMLString(datesOuter);
-        datesOuter.setDates(datesInner);
-        datesInner.setDates(dates);
+        req.setXMLString("A");
+        datesOuter.setDates(dates);
 
         var userTokenOuter = new UserTokenOuter();
         var userTokenInner = new UserTokenInner();
@@ -576,9 +560,8 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var dates1 = new Dates();
         dates1 = dates;
