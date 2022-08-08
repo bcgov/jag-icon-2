@@ -37,11 +37,12 @@ public class ConsumerService {
         System.out.println(objectMapper.writeValueAsString(message.getPayload()));
     }
 
-    @RabbitListener(queues = "${icon.pac-queue}")
-    public void receivePACMessage(@Payload Message<PACModel> message)
-            throws JsonProcessingException {
-        System.out.println(new ObjectMapper().writeValueAsString(message.getPayload()));
-    }
+//    Disable PAC Queue until PAC is ready to go
+//    @RabbitListener(queues = "${icon.pac-queue}")
+//    public void receivePACMessage(@Payload Message<PACModel> message)
+//            throws JsonProcessingException {
+//        System.out.println(new ObjectMapper().writeValueAsString(message.getPayload()));
+//    }
 
     @RabbitListener(queues = "${icon.ping-queue}")
     public void receivePingMessage(@Payload Message<PingModel> message)
