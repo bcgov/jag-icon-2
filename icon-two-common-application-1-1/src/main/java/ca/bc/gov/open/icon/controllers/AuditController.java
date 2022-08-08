@@ -8,6 +8,7 @@ import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfoResponse;
 import ca.bc.gov.open.icon.session.*;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -175,8 +176,12 @@ public class AuditController {
     public GetClientHistoryResponse getClientHistory(
             @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
 
-        HttpEntity<GetClientHistory> payload =
-                new HttpEntity<>(getClientHistory, new HttpHeaders());
+        var getClientHistoryDocument =
+                XMLUtilities.convertReq(
+                        getClientHistory, new GetClientHistoryDocument(), "getClientHistory");
+
+        HttpEntity<GetClientHistoryDocument> payload =
+                new HttpEntity<>(getClientHistoryDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/client-history");
@@ -189,12 +194,19 @@ public class AuditController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getClientHistory")));
 
-            GetClientHistoryResponse getClientHistoryResponse = new GetClientHistoryResponse();
+            GetClientHistoryResponseDocument getClientHistoryResponseDocument =
+                    new GetClientHistoryResponseDocument();
             ClientHistoryOuter outResp = new ClientHistoryOuter();
-            ClientHistoryInner inResp = new ClientHistoryInner();
-            inResp.setClientHistory(resp.getBody());
-            outResp.setClientHistory(inResp);
-            getClientHistoryResponse.setXMLString(outResp);
+
+            outResp.setClientHistory(resp.getBody());
+            getClientHistoryResponseDocument.setXMLString(outResp);
+
+            var getClientHistoryResponse =
+                    XMLUtilities.convertResp(
+                            getClientHistoryResponseDocument,
+                            new GetClientHistoryResponse(),
+                            "getClientHistoryResponse");
+
             return getClientHistoryResponse;
         } catch (Exception ex) {
             log.error(
