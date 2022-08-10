@@ -4,6 +4,15 @@
     <xsd:element name="getTrustAccount">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getTrustAccountDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:getTrustAccount"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -11,6 +20,14 @@
     </xsd:element>
 
     <xsd:element name="getTrustAccountResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getTrustAccountResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:getTrustAccount"/>
@@ -35,12 +52,12 @@
     <xsd:complexType name="getTrustAccountRequest">
         <xsd:sequence>
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
-            <xsd:element name="fundsAvailable" nillable="true" type="xsd:string"/>
-            <xsd:element name="fundsOnHold" nillable="true" type="xsd:string"/>
-            <xsd:element name="totalFunds" nillable="true" type="xsd:string"/>
+            <xsd:element name="fundsAvailable" type="xsd:string"/>
+            <xsd:element name="fundsOnHold" type="xsd:string"/>
+            <xsd:element name="totalFunds" type="xsd:string"/>
             <xsd:element name="businessRole" nillable="true" type="xsd:string"/>
             <xsd:element name="Row" nillable="true" type="tns:row"/>
-            <xsd:element name="TransactionDetails" nillable="true" maxOccurs="unbounded" type="tns:transactionDetails"/>
+            <xsd:element name="TransactionDetails" minOccurs="0" maxOccurs="unbounded" type="tns:transactionDetails"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -55,22 +72,16 @@
     <xsd:complexType name="transactionDetails">
       <xsd:sequence>
           <xsd:element name="id" nillable="true" type="xsd:string"/>
-          <xsd:element name="date" nillable="true" type="xsd:string"/>
-          <xsd:element name="deposit" nillable="true" type="xsd:string"/>
-          <xsd:element name="withdrawal" nillable="true" type="xsd:string"/>
-          <xsd:element name="onHold" nillable="true" type="xsd:string"/>
-          <xsd:element name="total" nillable="true" type="xsd:string"/>
-          <xsd:element name="comment" nillable="true" type="xsd:string"/>
+          <xsd:element name="date" type="xsd:string"/>
+          <xsd:element name="deposit" type="xsd:string"/>
+          <xsd:element name="withdrawal" type="xsd:string"/>
+          <xsd:element name="onHold" type="xsd:string"/>
+          <xsd:element name="total" type="xsd:string"/>
+          <xsd:element name="comment" type="xsd:string"/>
       </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="userTokenOuter">
-        <xsd:sequence>
-            <xsd:element name="UserToken" nillable="true" type="tns:userTokenInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userTokenInner">
         <xsd:sequence>
             <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
         </xsd:sequence>
@@ -78,15 +89,15 @@
 
     <xsd:complexType name="userToken">
         <xsd:sequence>
-            <xsd:element name="RemoteClientBrowserType" type="xsd:string"/>
-            <xsd:element name="RemoteClientHostName" type="xsd:string"/>
-            <xsd:element name="RemoteClientIPAddress" type="xsd:string"/>
-            <xsd:element name="UserIdentifier" type="xsd:string"/>
-            <xsd:element name="AuthoritativePartyIdentifier" type="xsd:string"/>
-            <xsd:element name="BiometricsSignature" type="xsd:string"/>
-            <xsd:element name="CSNumber" type="xsd:string"/>
-            <xsd:element name="SiteMinderSessionID" type="xsd:string"/>
-            <xsd:element name="SiteMinderTransactionID" type="xsd:string"/>
+            <xsd:element name="RemoteClientBrowserType" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientHostName" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientIPAddress" nillable="true" type="xsd:string"/>
+            <xsd:element name="UserIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="AuthoritativePartyIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="BiometricsSignature" nillable="true" type="xsd:string"/>
+            <xsd:element name="CSNumber" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderSessionID" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderTransactionID" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 

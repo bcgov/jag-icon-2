@@ -6,12 +6,28 @@
     <xsd:element name="getTombStoneInfo">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getTombStoneInfoDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:getTombStoneInfo"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
     <xsd:element name="getTombStoneInfoResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getTombStoneInfoResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:getTombStoneInfo"/>

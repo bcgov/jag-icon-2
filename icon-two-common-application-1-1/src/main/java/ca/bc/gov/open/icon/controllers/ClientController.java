@@ -3,18 +3,10 @@ package ca.bc.gov.open.icon.controllers;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo2;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoRequest;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoResponse;
-import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
-import ca.bc.gov.open.icon.trustaccount.GetTrustAccount2;
-import ca.bc.gov.open.icon.trustaccount.GetTrustAccountRequest;
-import ca.bc.gov.open.icon.trustaccount.GetTrustAccountResponse;
-import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
-import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule2;
-import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleRequest;
-import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleResponse;
+import ca.bc.gov.open.icon.tombstone.*;
+import ca.bc.gov.open.icon.trustaccount.*;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
+import ca.bc.gov.open.icon.visitschedule.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -46,17 +38,20 @@ public class ClientController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo",
+            namespace = "ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo",
             localPart = "getTombStoneInfo")
     @ResponsePayload
     public GetTombStoneInfoResponse getTombStoneInfo(
             @RequestPayload GetTombStoneInfo getTombStoneInfo) throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info");
-        HttpEntity<GetTombStoneInfoRequest> payload =
-                new HttpEntity<>(
-                        getTombStoneInfo.getXMLString().getTombStoneInfo(), new HttpHeaders());
+        var getTombStoneInfoDocument =
+                XMLUtilities.convertReq(
+                        getTombStoneInfo, new GetTombStoneInfoDocument(), "getTombStoneInfo");
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "tombstone-info");
+
+        HttpEntity<GetTombStoneInfoDocument> payload =
+                new HttpEntity<>(getTombStoneInfoDocument, new HttpHeaders());
 
         try {
             HttpEntity<GetTombStoneInfoRequest> resp =
@@ -68,11 +63,19 @@ public class ClientController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getTombStoneInfo")));
-            GetTombStoneInfoResponse getTombStoneInfoResponseOut = new GetTombStoneInfoResponse();
+            GetTombStoneInfoResponseDocument getTombStoneInfoResponseDocument =
+                    new GetTombStoneInfoResponseDocument();
             GetTombStoneInfo2 getTombStoneInfoOut = new GetTombStoneInfo2();
             getTombStoneInfoOut.setTombStoneInfo(resp.getBody());
-            getTombStoneInfoResponseOut.setXMLString(getTombStoneInfoOut);
-            return getTombStoneInfoResponseOut;
+            getTombStoneInfoResponseDocument.setXMLString(getTombStoneInfoOut);
+
+            var getTombStoneInfoResponse =
+                    XMLUtilities.convertResp(
+                            getTombStoneInfoResponseDocument,
+                            new GetTombStoneInfoResponse(),
+                            "getTombStoneInfoResponse");
+
+            return getTombStoneInfoResponse;
 
         } catch (Exception ex) {
             log.error(
@@ -87,16 +90,20 @@ public class ClientController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.TrustAccount.ws.provider:TrustAccount",
+            namespace = "ICON2.Source.TrustAccount.ws.provider:TrustAccount",
             localPart = "getTrustAccount")
     @ResponsePayload
     public GetTrustAccountResponse getTrustAccount(@RequestPayload GetTrustAccount getTrustAccount)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/trust-account");
+        var getTrustAccountDocument =
+                XMLUtilities.convertReq(
+                        getTrustAccount, new GetTrustAccountDocument(), "getTrustAccount");
 
-        HttpEntity<GetTrustAccount> payload = new HttpEntity<>(getTrustAccount, new HttpHeaders());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "trust-account");
+
+        HttpEntity<GetTrustAccountDocument> payload =
+                new HttpEntity<>(getTrustAccountDocument, new HttpHeaders());
         try {
             HttpEntity<GetTrustAccountRequest> resp =
                     restTemplate.exchange(
@@ -108,11 +115,19 @@ public class ClientController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getTrustAccount")));
 
-            GetTrustAccountResponse getTrustAccountResponseOut = new GetTrustAccountResponse();
+            GetTrustAccountResponseDocument getTrustAccountResponseDocument =
+                    new GetTrustAccountResponseDocument();
             GetTrustAccount2 getTrustAccountInner = new GetTrustAccount2();
             getTrustAccountInner.setTrustAccount(resp.getBody());
-            getTrustAccountResponseOut.setXMLString(getTrustAccountInner);
-            return getTrustAccountResponseOut;
+            getTrustAccountResponseDocument.setXMLString(getTrustAccountInner);
+
+            var getTrustAccountResponse =
+                    XMLUtilities.convertResp(
+                            getTrustAccountResponseDocument,
+                            new GetTrustAccountResponse(),
+                            "getTrustAccountResponse");
+
+            return getTrustAccountResponse;
 
         } catch (Exception ex) {
             log.error(
@@ -127,16 +142,20 @@ public class ClientController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.VisitSchedule.ws.provider:VisitSchedule",
-            localPart = "getVisitScheduleResponse")
+            namespace = "ICON2.Source.VisitSchedule.ws.provider:VisitSchedule",
+            localPart = "getVisitSchedule")
     @ResponsePayload
     public GetVisitScheduleResponse getVisitSchedule(
             @RequestPayload GetVisitSchedule getVisitSchedule) throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule");
-        HttpEntity<GetVisitSchedule> payload =
-                new HttpEntity<>(getVisitSchedule, new HttpHeaders());
+        var getVisitScheduleDocument =
+                XMLUtilities.convertReq(
+                        getVisitSchedule, new GetVisitScheduleDocument(), "getVisitSchedule");
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "visit-schedule");
+
+        HttpEntity<GetVisitScheduleDocument> payload =
+                new HttpEntity<>(getVisitScheduleDocument, new HttpHeaders());
         try {
             HttpEntity<GetVisitScheduleRequest> resp =
                     restTemplate.exchange(
@@ -148,11 +167,19 @@ public class ClientController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getVisitSchedule")));
 
-            GetVisitScheduleResponse getVisitScheduleResponseOut = new GetVisitScheduleResponse();
+            GetVisitScheduleResponseDocument getVisitScheduleResponseDocument =
+                    new GetVisitScheduleResponseDocument();
             GetVisitSchedule2 getVisitScheduleInner = new GetVisitSchedule2();
             getVisitScheduleInner.setVisitSchedule(resp.getBody());
-            getVisitScheduleResponseOut.setXMLString(getVisitScheduleInner);
-            return getVisitScheduleResponseOut;
+            getVisitScheduleResponseDocument.setXMLString(getVisitScheduleInner);
+
+            var getVisitScheduleResponse =
+                    XMLUtilities.convertResp(
+                            getVisitScheduleResponseDocument,
+                            new GetVisitScheduleResponse(),
+                            "GetVisitScheduleResponse");
+
+            return getVisitScheduleResponse;
 
         } catch (Exception ex) {
             log.error(

@@ -1,7 +1,6 @@
 package ca.bc.gov.open.jagiconconsumer.services;
 
 import ca.bc.gov.open.icon.models.HealthServicePub;
-import ca.bc.gov.open.icon.models.PACModel;
 import ca.bc.gov.open.icon.models.PingModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,12 +36,12 @@ public class ConsumerService {
         System.out.println(objectMapper.writeValueAsString(message.getPayload()));
     }
 
-//    Disable PAC Queue until PAC is ready to go
-//    @RabbitListener(queues = "${icon.pac-queue}")
-//    public void receivePACMessage(@Payload Message<PACModel> message)
-//            throws JsonProcessingException {
-//        System.out.println(new ObjectMapper().writeValueAsString(message.getPayload()));
-//    }
+    //    Disable PAC Queue until PAC is ready to go
+    //    @RabbitListener(queues = "${icon.pac-queue}")
+    //    public void receivePACMessage(@Payload Message<PACModel> message)
+    //            throws JsonProcessingException {
+    //        System.out.println(new ObjectMapper().writeValueAsString(message.getPayload()));
+    //    }
 
     @RabbitListener(queues = "${icon.ping-queue}")
     public void receivePingMessage(@Payload Message<PingModel> message)
