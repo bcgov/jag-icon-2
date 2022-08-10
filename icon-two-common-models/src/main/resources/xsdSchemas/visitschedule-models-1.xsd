@@ -2,7 +2,17 @@
 <xsd:schema targetNamespace="ICON2.Source.VisitSchedule.ws.provider:VisitSchedule"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:tns="ICON2.Source.VisitSchedule.ws.provider:VisitSchedule">
+
     <xsd:element name="getVisitSchedule">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getVisitScheduleDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:getVisitSchedule"/>
@@ -22,30 +32,23 @@
 
     <xsd:complexType name="userTokenOuter">
         <xsd:sequence>
-            <xsd:element name="UserToken" nillable="true" type="tns:userTokenInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userTokenInner">
-        <xsd:sequence>
             <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="userToken">
         <xsd:sequence>
-            <xsd:element name="RemoteClientBrowserType" type="xsd:string"/>
-            <xsd:element name="RemoteClientHostName" type="xsd:string"/>
-            <xsd:element name="RemoteClientIPAddress" type="xsd:string"/>
-            <xsd:element name="UserIdentifier" type="xsd:string"/>
-            <xsd:element name="AuthoritativePartyIdentifier" type="xsd:string"/>
-            <xsd:element name="BiometricsSignature" type="xsd:string"/>
-            <xsd:element name="CSNumber" type="xsd:string"/>
-            <xsd:element name="SiteMinderSessionID" type="xsd:string"/>
-            <xsd:element name="SiteMinderTransactionID" type="xsd:string"/>
+            <xsd:element name="RemoteClientBrowserType" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientHostName" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientIPAddress" nillable="true" type="xsd:string"/>
+            <xsd:element name="UserIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="AuthoritativePartyIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="BiometricsSignature" nillable="true" type="xsd:string"/>
+            <xsd:element name="CSNumber" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderSessionID" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderTransactionID" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
-
 
 
     <xsd:complexType name="getVisitSchedule">
@@ -55,11 +58,19 @@
     </xsd:complexType>
 
     <xsd:element name="GetVisitScheduleResponse">
-    <xsd:complexType>
-        <xsd:sequence>
-        <xsd:element name="XMLString" nillable="true" type="tns:getVisitSchedule"/>
-        </xsd:sequence>
-    </xsd:complexType>
+        <xsd:complexType>
+            <xsd:sequence>
+            <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="GetVisitScheduleResponseDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="tns:getVisitSchedule"/>
+            </xsd:sequence>
+        </xsd:complexType>
     </xsd:element>
 
     <xsd:complexType name="getVisitScheduleRequest">
@@ -70,9 +81,6 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="GetVisitScheduleResponse">
-
-    </xsd:complexType>
 
     <xsd:complexType name="row">
         <xsd:sequence>

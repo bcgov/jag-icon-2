@@ -50,7 +50,7 @@ public class ClientControllerTests {
         getTombStoneInfoRequest.setBusinessRole("A");
         getTombStoneInfoRequest.setUnreadMessageCount("A");
 
-        req.setXMLString(getTombStoneInfo2);
+        req.setXMLString("A");
         getTombStoneInfo2.setTombStoneInfo(getTombStoneInfoRequest);
 
         var getTombStoneInfoRequest1 = new GetTombStoneInfoRequest();
@@ -105,11 +105,10 @@ public class ClientControllerTests {
         transactionDetails.add(transactionDetail);
         getTrustAccountRequest.setTransactionDetails(transactionDetails);
 
-        req.setXMLString(getTrustAccount2);
+        req.setXMLString("A");
         getTrustAccount2.setTrustAccount(getTrustAccountRequest);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -122,9 +121,8 @@ public class ClientControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var getTrustAccountRequest1 = new GetTrustAccountRequest();
         ResponseEntity<GetTrustAccountRequest> responseEntity =
@@ -157,7 +155,7 @@ public class ClientControllerTests {
         VisitScheduleDetails.add(VisitScheduleDetail);
         getVisitScheduleRequest.setVisitScheduleDetails(VisitScheduleDetails);
 
-        req.setXMLString(getVisitSchedule2);
+        req.setXMLString("A");
         getVisitSchedule2.setVisitSchedule(getVisitScheduleRequest);
 
         var getVisitScheduleRequest1 = new GetVisitScheduleRequest();

@@ -200,7 +200,7 @@ public class OrdsErrorTests {
         var getTombStoneInfo2 = new GetTombStoneInfo2();
         var getTombStoneInfoRequest = new GetTombStoneInfoRequest();
 
-        getTombStoneInfo.setXMLString(getTombStoneInfo2);
+        getTombStoneInfo.setXMLString("A");
         getTombStoneInfo2.setTombStoneInfo(getTombStoneInfoRequest);
 
         Assertions.assertThrows(

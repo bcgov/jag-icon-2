@@ -55,6 +55,7 @@ public final class XMLUtilities {
             // CDATA
             xml =
                     xml.replaceAll(service + "Document", service)
+                            .replaceAll("&#13;", "\r")
                             .replaceAll(
                                     "<XMLString>", "<XMLString><![CDATA[<?xml version=\"1.0\"?>")
                             .replaceAll("</XMLString>", "]]></XMLString>")
