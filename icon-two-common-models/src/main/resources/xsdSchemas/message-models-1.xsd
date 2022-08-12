@@ -5,6 +5,15 @@
     <xsd:element name="setMessageDetails">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="setMessageDetailsDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:messagesOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -12,6 +21,14 @@
     </xsd:element>
 
     <xsd:element name="setMessageDetailsResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="setMessageDetailsResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:messagesOuter"/>
@@ -30,6 +47,15 @@
     <xsd:element name="getMessages">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getMessagesDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:messagesOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -37,6 +63,14 @@
     </xsd:element>
 
     <xsd:element name="getMessagesResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getMessagesResponseDocument">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:messagesOuter"/>
@@ -47,6 +81,15 @@
     <xsd:element name="getMessageDetails">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getMessageDetailsDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:messagesOuter"/>
                 <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
             </xsd:sequence>
@@ -55,13 +98,7 @@
 
     <xsd:complexType name="messagesOuter">
         <xsd:sequence>
-            <xsd:element name="Messages" nillable="true" type="tns:messagesInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="messagesInner">
-        <xsd:sequence>
-            <xsd:element name="Messages" type="tns:messages"/>
+            <xsd:element name="Messages" nillable="true" type="tns:messages"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -78,7 +115,7 @@
         <xsd:sequence>
             <xsd:element name="id" type="xsd:string"/>
             <xsd:element name="unread" nillable="true" type="xsd:string"/>
-            <xsd:element name="timestamp" nillable="true" type="xsd:dateTime"/>
+            <xsd:element name="timestamp" nillable="true" type="xsd:string"/>
             <xsd:element name="MessageType" nillable="true" type="tns:messageType"/>
             <xsd:element name="text" nillable="true" type="xsd:string"/>
             <xsd:element name="Sender" nillable="true" type="tns:sender"/>
@@ -133,6 +170,14 @@
     <xsd:element name="getMessageDetailsResponse">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getMessageDetailsResponseDocument">
+        <xsd:complexType>
+            <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="tns:messagesOuter"/>
             </xsd:sequence>
         </xsd:complexType>
@@ -140,27 +185,22 @@
 
     <xsd:complexType name="userTokenOuter">
         <xsd:sequence>
-            <xsd:element name="UserToken" nillable="true" type="tns:userTokenInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userTokenInner">
-        <xsd:sequence>
             <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
         </xsd:sequence>
     </xsd:complexType>
 
+
     <xsd:complexType name="userToken">
         <xsd:sequence>
-            <xsd:element name="RemoteClientBrowserType" type="xsd:string"/>
-            <xsd:element name="RemoteClientHostName" type="xsd:string"/>
-            <xsd:element name="RemoteClientIPAddress" type="xsd:string"/>
-            <xsd:element name="UserIdentifier" type="xsd:string"/>
-            <xsd:element name="AuthoritativePartyIdentifier" type="xsd:string"/>
-            <xsd:element name="BiometricsSignature" type="xsd:string"/>
-            <xsd:element name="CSNumber" type="xsd:string"/>
-            <xsd:element name="SiteMinderSessionID" type="xsd:string"/>
-            <xsd:element name="SiteMinderTransactionID" type="xsd:string"/>
+            <xsd:element name="RemoteClientBrowserType" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientHostName" nillable="true" type="xsd:string"/>
+            <xsd:element name="RemoteClientIPAddress" nillable="true" type="xsd:string"/>
+            <xsd:element name="UserIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="AuthoritativePartyIdentifier" nillable="true" type="xsd:string"/>
+            <xsd:element name="BiometricsSignature" nillable="true" type="xsd:string"/>
+            <xsd:element name="CSNumber" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderSessionID" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderTransactionID" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 
