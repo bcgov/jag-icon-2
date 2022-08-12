@@ -175,10 +175,14 @@ public class MessageController {
     public SetMessageDetailsResponse setMessageDetails(
             @RequestPayload SetMessageDetails setMessageDetails) throws JsonProcessingException {
 
+        var setMessageDetailsDocument =
+                XMLUtilities.convertReq(
+                        setMessageDetails, new SetMessageDetailsDocument(), "setMessageDetails");
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "message/details/set");
-        HttpEntity<SetMessageDetails> payload =
-                new HttpEntity<>(setMessageDetails, new HttpHeaders());
+        HttpEntity<SetMessageDetailsDocument> payload =
+                new HttpEntity<>(setMessageDetailsDocument, new HttpHeaders());
 
         try {
             HttpEntity<Messages> resp =
@@ -187,12 +191,18 @@ public class MessageController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDetails")));
-            SetMessageDetailsResponse setMessageDetailsResponse = new SetMessageDetailsResponse();
+            SetMessageDetailsResponseDocument setMessageDetailsResponseDocument =
+                    new SetMessageDetailsResponseDocument();
             MessagesOuter outResp = new MessagesOuter();
-            MessagesInner inResp = new MessagesInner();
-            inResp.setMessages(resp.getBody());
-            outResp.setMessages(inResp);
-            setMessageDetailsResponse.setXMLString(outResp);
+            outResp.setMessages(resp.getBody());
+            setMessageDetailsResponseDocument.setXMLString(outResp);
+
+            var setMessageDetailsResponse =
+                    XMLUtilities.convertResp(
+                            setMessageDetailsResponseDocument,
+                            new SetMessageDetailsResponse(),
+                            "setMessageDetailsResponse");
+
             return setMessageDetailsResponse;
         } catch (Exception ex) {
             log.error(
@@ -211,7 +221,11 @@ public class MessageController {
     public GetMessagesResponse getMessages(@RequestPayload GetMessages getMessages)
             throws JsonProcessingException {
 
-        HttpEntity<GetMessages> payload = new HttpEntity<>(getMessages, new HttpHeaders());
+        var getMessagesDocument =
+                XMLUtilities.convertReq(getMessages, new GetMessagesDocument(), "getMessages");
+
+        HttpEntity<GetMessagesDocument> payload =
+                new HttpEntity<>(getMessagesDocument, new HttpHeaders());
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/responses");
 
@@ -222,12 +236,19 @@ public class MessageController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessages")));
-            GetMessagesResponse getMessagesResponse = new GetMessagesResponse();
+
+            GetMessagesResponseDocument getMessagesResponseDocument =
+                    new GetMessagesResponseDocument();
             MessagesOuter outResp = new MessagesOuter();
-            MessagesInner inResp = new MessagesInner();
-            inResp.setMessages(resp.getBody());
-            outResp.setMessages(inResp);
-            getMessagesResponse.setXMLString(outResp);
+            outResp.setMessages(resp.getBody());
+            getMessagesResponseDocument.setXMLString(outResp);
+
+            var getMessagesResponse =
+                    XMLUtilities.convertResp(
+                            getMessagesResponseDocument,
+                            new GetMessagesResponse(),
+                            "getMessagesResponse");
+
             return getMessagesResponse;
         } catch (Exception ex) {
             log.error(
@@ -248,8 +269,12 @@ public class MessageController {
     public GetMessageDetailsResponse getMessageDetails(
             @RequestPayload GetMessageDetails getMessageDetails) throws JsonProcessingException {
 
-        HttpEntity<GetMessageDetails> payload =
-                new HttpEntity<>(getMessageDetails, new HttpHeaders());
+        var getMessageDetailsDocument =
+                XMLUtilities.convertReq(
+                        getMessageDetails, new GetMessageDetailsDocument(), "getMessageDetails");
+
+        HttpEntity<GetMessageDetailsDocument> payload =
+                new HttpEntity<>(getMessageDetailsDocument, new HttpHeaders());
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/details");
 
@@ -260,12 +285,18 @@ public class MessageController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessageDetails")));
-            GetMessageDetailsResponse getMessageDetailsResponse = new GetMessageDetailsResponse();
+            GetMessageDetailsResponseDocument getMessageDetailsResponseDocument =
+                    new GetMessageDetailsResponseDocument();
             MessagesOuter outResp = new MessagesOuter();
-            MessagesInner inResp = new MessagesInner();
-            inResp.setMessages(resp.getBody());
-            outResp.setMessages(inResp);
-            getMessageDetailsResponse.setXMLString(outResp);
+            outResp.setMessages(resp.getBody());
+            getMessageDetailsResponseDocument.setXMLString(outResp);
+
+            var getMessageDetailsResponse =
+                    XMLUtilities.convertResp(
+                            getMessageDetailsResponseDocument,
+                            new GetMessageDetailsResponse(),
+                            "getMessageDetailsResponse");
+
             return getMessageDetailsResponse;
         } catch (Exception ex) {
             log.error(

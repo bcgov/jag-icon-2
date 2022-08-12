@@ -10,11 +10,9 @@ import ca.bc.gov.open.icon.controllers.MessageController;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.message.*;
 import ca.bc.gov.open.icon.message.UserToken;
-import ca.bc.gov.open.icon.message.UserTokenInner;
 import ca.bc.gov.open.icon.message.UserTokenOuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -164,12 +162,10 @@ public class MessageControllerTests {
         var req = new SetMessageDetails();
 
         var MessagesOuter = new MessagesOuter();
-        var MessagesInner = new MessagesInner();
         var Messages = new Messages();
 
-        req.setXMLString(MessagesOuter);
-        MessagesOuter.setMessages(MessagesInner);
-        MessagesInner.setMessages(Messages);
+        req.setXMLString("A");
+        MessagesOuter.setMessages(Messages);
 
         Messages.setCsNum("A");
         Messages.setUnreadMessageCount("A");
@@ -183,7 +179,7 @@ public class MessageControllerTests {
         var MessageDetail = new MessageDetails();
         MessageDetail.setId("A");
         MessageDetail.setUnread("A");
-        MessageDetail.setTimestamp(Instant.now());
+        MessageDetail.setTimestamp("A");
         var MessageType = new MessageType();
         MessageType.setCode("A");
         MessageType.setDescription("A");
@@ -210,7 +206,6 @@ public class MessageControllerTests {
         Messages.setMessageDetails(MessageDetails);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -223,9 +218,8 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var messages = new Messages();
         ResponseEntity<Messages> responseEntity = new ResponseEntity<>(messages, HttpStatus.OK);
@@ -247,12 +241,10 @@ public class MessageControllerTests {
     public void testGetMessages() throws JsonProcessingException {
         var req = new GetMessages();
         var MessagesOuter = new MessagesOuter();
-        var MessagesInner = new MessagesInner();
         var Messages = new Messages();
 
-        req.setXMLString(MessagesOuter);
-        MessagesOuter.setMessages(MessagesInner);
-        MessagesInner.setMessages(Messages);
+        req.setXMLString("A");
+        MessagesOuter.setMessages(Messages);
 
         Messages.setCsNum("A");
         Messages.setUnreadMessageCount("A");
@@ -265,7 +257,7 @@ public class MessageControllerTests {
         var MessageDetail = new MessageDetails();
         MessageDetail.setId("A");
         MessageDetail.setUnread("A");
-        MessageDetail.setTimestamp(Instant.now());
+        MessageDetail.setTimestamp("A");
         var MessageType = new MessageType();
         MessageType.setCode("A");
         MessageType.setDescription("A");
@@ -292,7 +284,6 @@ public class MessageControllerTests {
         Messages.setMessageDetails(MessageDetails);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -305,9 +296,8 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var messages1 = new Messages();
         messages1 = Messages;
@@ -330,12 +320,10 @@ public class MessageControllerTests {
     public void testGetMessageDetails() throws JsonProcessingException {
         var req = new GetMessageDetails();
         var MessagesOuter = new MessagesOuter();
-        var MessagesInner = new MessagesInner();
         var messages = new Messages();
 
-        req.setXMLString(MessagesOuter);
-        MessagesOuter.setMessages(MessagesInner);
-        MessagesInner.setMessages(messages);
+        req.setXMLString("A");
+        MessagesOuter.setMessages(messages);
 
         messages.setCsNum("A");
         messages.setUnreadMessageCount("A");
@@ -348,7 +336,7 @@ public class MessageControllerTests {
         var MessageDetail = new MessageDetails();
         MessageDetail.setId("A");
         MessageDetail.setUnread("A");
-        MessageDetail.setTimestamp(Instant.now());
+        MessageDetail.setTimestamp("A");
         var MessageType = new MessageType();
         MessageType.setCode("A");
         MessageType.setDescription("A");
@@ -375,7 +363,6 @@ public class MessageControllerTests {
         messages.setMessageDetails(MessageDetails);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -388,9 +375,8 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        userTokenOuter.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         ResponseEntity<Messages> responseEntity = new ResponseEntity<>(messages, HttpStatus.OK);
 
