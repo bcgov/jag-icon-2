@@ -8,7 +8,7 @@ import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
-import ca.bc.gov.open.icon.utils.XMLUtilities;
+import ca.bc.gov.open.icon.utils.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;

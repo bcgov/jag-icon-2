@@ -35,14 +35,12 @@ public class AuthenticationControllerTests {
     public void getPreAuthorizeClient() throws JsonProcessingException {
         var req = new GetPreAuthorizeClient();
         var preAuthorizeClientOut = new PreAuthorizeClientOut();
-        var preAuthorizeClientInner = new PreAuthorizeClientInner();
         var preAuthorizeClient = new PreAuthorizeClient();
         preAuthorizeClient.setCsNum("A");
         preAuthorizeClient.setIsAllowed("A");
 
-        req.setXMLString(preAuthorizeClientOut);
-        preAuthorizeClientOut.setPreAuthorizeClient(preAuthorizeClientInner);
-        preAuthorizeClientInner.setPreAuthorizeClient(preAuthorizeClient);
+        req.setXMLString("A");
+        preAuthorizeClientOut.setPreAuthorizeClient(preAuthorizeClient);
 
         var userInfo1 = new PreAuthorizeClient();
         ResponseEntity<PreAuthorizeClient> responseEntity =
@@ -67,18 +65,16 @@ public class AuthenticationControllerTests {
         var req = new GetHasFunctionalAbility();
 
         var hasFunctionalAbilityOut = new HasFunctionalAbilityOut();
-        var hasFunctionalAbilityInner = new HasFunctionalAbilityInner();
         var hasFunctionalAbility = new HasFunctionalAbility();
         var functionalAbility = new FunctionalAbility();
         functionalAbility.setFunctionCd("A");
         functionalAbility.setServiceCd("A");
         hasFunctionalAbility.setFunctionalAbility(functionalAbility);
-        hasFunctionalAbilityInner.setHasFunctionalAbility(hasFunctionalAbility);
-        hasFunctionalAbilityOut.setHasFunctionalAbility(hasFunctionalAbilityInner);
-        req.setXMLString(hasFunctionalAbilityOut);
+        ;
+        hasFunctionalAbilityOut.setHasFunctionalAbility(hasFunctionalAbility);
+        req.setXMLString("A");
 
         var UserTokenOut = new UserTokenOut();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -91,9 +87,8 @@ public class AuthenticationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        UserTokenOut.setUserToken(userTokenInner);
-        req.setUserTokenString(UserTokenOut);
+        UserTokenOut.setUserToken(userToken);
+        req.setUserTokenString("A");
 
         var userInfo1 = new HasFunctionalAbility();
         ResponseEntity<HasFunctionalAbility> responseEntity =
