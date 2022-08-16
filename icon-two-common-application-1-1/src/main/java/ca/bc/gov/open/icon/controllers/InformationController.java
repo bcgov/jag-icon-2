@@ -126,6 +126,7 @@ public class InformationController {
 
             var getDeviceInfoResponseDocument = new GetDeviceInfoResponseDocument();
             var outResp = new DeviceInfoOut();
+            outResp.setDeviceInfo(resp.getBody());
             getDeviceInfoResponseDocument.setXMLString(outResp);
 
             var getDeviceInfoResponse =
