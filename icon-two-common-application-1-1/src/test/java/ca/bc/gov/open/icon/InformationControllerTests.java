@@ -38,7 +38,6 @@ public class InformationControllerTests {
     public void testGetUserInfo() throws JsonProcessingException {
         var req = new GetUserInfo();
         var userInfoOut = new UserInfoOut();
-        var userInfoInner = new UserInfoInner();
         var userInfo = new UserInfo();
 
         userInfo.setCsNum("A");
@@ -59,9 +58,7 @@ public class InformationControllerTests {
         ServiceInfos.add(ServiceInfo);
         userInfo.setServiceInfo(ServiceInfos);
 
-        req.setXMLString(userInfoOut);
-        userInfoOut.setUserInfo(userInfoInner);
-        userInfoInner.setUserInfo(userInfo);
+        req.setXMLString("A");
 
         var userInfo1 = new UserInfo();
         userInfo1.setCsNum("A");
@@ -102,7 +99,6 @@ public class InformationControllerTests {
     public void testGetDeviceInfo() throws JsonProcessingException {
         var req = new GetDeviceInfo();
         var deviceInfoOut = new DeviceInfoOut();
-        var deviceInfoInner = new DeviceInfoInner();
         var deviceInfo = new DeviceInfo();
 
         deviceInfo.setDeviceNo("A");
@@ -119,9 +115,8 @@ public class InformationControllerTests {
         ServiceCodes.add(ServiceCode);
         deviceInfo.setServiceCodes(ServiceCodes);
 
-        deviceInfoInner.setDeviceInfo(deviceInfo);
-        deviceInfoOut.setDeviceInfo(deviceInfoInner);
-        req.setXMLString(deviceInfoOut);
+        deviceInfoOut.setDeviceInfo(deviceInfo);
+        req.setXMLString("A");
 
         var deviceInfo1 = new DeviceInfo();
         deviceInfo1 = deviceInfo;
@@ -163,7 +158,6 @@ public class InformationControllerTests {
         OrdersOuter.setOrders(orders);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -242,7 +236,6 @@ public class InformationControllerTests {
         programs.setProgramInfo(draftl);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -313,7 +306,6 @@ public class InformationControllerTests {
         locations.setParoleOfficer(ParoleOfficer);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -374,7 +366,6 @@ public class InformationControllerTests {
         conditionsOuter.setConditions(conditions);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -442,7 +433,6 @@ public class InformationControllerTests {
         ordersConditions.setOrdersConditionsDetails(detailsList);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -547,7 +537,6 @@ public class InformationControllerTests {
         datesOuter.setDates(dates);
 
         var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
 
         userToken.setRemoteClientBrowserType("A");
