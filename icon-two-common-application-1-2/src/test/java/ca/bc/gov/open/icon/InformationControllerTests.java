@@ -34,12 +34,10 @@ public class InformationControllerTests {
     public void testGetUserInfo() throws JsonProcessingException {
         var req = new GetUserInfo();
         var userInfoOut = new UserInfoOut();
-        var userInfoInner = new UserInfoInner();
         var userInfo = new UserInfo();
 
-        req.setXMLString(userInfoOut);
-        userInfoOut.setUserInfo(userInfoInner);
-        userInfoInner.setUserInfo(userInfo);
+        req.setXMLString("A");
+        userInfoOut.setUserInfo(userInfo);
 
         var userInfo1 = new UserInfo();
         ResponseEntity<UserInfo> responseEntity = new ResponseEntity<>(userInfo1, HttpStatus.OK);
@@ -62,12 +60,10 @@ public class InformationControllerTests {
     public void testGetDeviceInfo() throws JsonProcessingException {
         var req = new GetDeviceInfo();
         var deviceInfoOut = new DeviceInfoOut();
-        var deviceInfoInner = new DeviceInfoInner();
         var deviceInfo = new DeviceInfo();
 
-        deviceInfoInner.setDeviceInfo(deviceInfo);
-        deviceInfoOut.setDeviceInfo(deviceInfoInner);
-        req.setXMLString(deviceInfoOut);
+        deviceInfoOut.setDeviceInfo(deviceInfo);
+        req.setXMLString("A");
 
         var deviceInfo1 = new DeviceInfo();
         ResponseEntity<DeviceInfo> responseEntity =

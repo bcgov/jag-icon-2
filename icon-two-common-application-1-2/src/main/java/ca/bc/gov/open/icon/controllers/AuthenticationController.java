@@ -1,10 +1,10 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.audit.*;
 import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.utils.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -43,20 +43,20 @@ public class AuthenticationController {
             @RequestPayload GetPreAuthorizeClient getPreAuthorizeClient)
             throws JsonProcessingException {
 
+        var getPreAuthorizeClientDocument =
+                XMLUtilities.convertReq(
+                        getPreAuthorizeClient,
+                        new GetPreAuthorizeClientDocument(),
+                        "getPreAuthorizeClient");
+
         // fetch the inmost DeviceInfo layer
         var inner =
-                getPreAuthorizeClient.getXMLString() != null
-                                && getPreAuthorizeClient.getXMLString().getPreAuthorizeClient()
-                                        != null
-                                && getPreAuthorizeClient
+                getPreAuthorizeClientDocument.getXMLString() != null
+                                && getPreAuthorizeClientDocument
                                                 .getXMLString()
                                                 .getPreAuthorizeClient()
-                                                .getPreAuthorizeClient()
                                         != null
-                        ? getPreAuthorizeClient
-                                .getXMLString()
-                                .getPreAuthorizeClient()
-                                .getPreAuthorizeClient()
+                        ? getPreAuthorizeClientDocument.getXMLString().getPreAuthorizeClient()
                         : new PreAuthorizeClient();
 
         HttpEntity<PreAuthorizeClient> payload = new HttpEntity<>(inner, new HttpHeaders());
@@ -74,20 +74,19 @@ public class AuthenticationController {
 
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
-
-            log.info(
-                    objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getPreAuthorizeClient")));
 
-            var getPreAuthorizeClientResponse = new GetPreAuthorizeClientResponse();
+            var getPreAuthorizeClientResponseDocument = new GetPreAuthorizeClientResponseDocument();
             var outResp = new PreAuthorizeClientOut();
-            var inResp = new PreAuthorizeClientInner();
+            outResp.setPreAuthorizeClient(resp.getBody());
+            getPreAuthorizeClientResponseDocument.setXMLString(outResp);
 
-            inResp.setPreAuthorizeClient(resp.getBody());
-            outResp.setPreAuthorizeClient(inResp);
-            getPreAuthorizeClientResponse.setXMLString(outResp);
+            var getPreAuthorizeClientResponse =
+                    XMLUtilities.convertResp(
+                            getPreAuthorizeClientResponseDocument,
+                            new GetPreAuthorizeClientResponse(),
+                            "getPreAuthorizeClientResponse");
+
             return getPreAuthorizeClientResponse;
 
         } catch (Exception ex) {
@@ -110,8 +109,14 @@ public class AuthenticationController {
             @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility)
             throws JsonProcessingException {
 
-        HttpEntity<GetHasFunctionalAbility> payload =
-                new HttpEntity<>(getHasFunctionalAbility, new HttpHeaders());
+        var getHasFunctionalAbilityDocument =
+                XMLUtilities.convertReq(
+                        getHasFunctionalAbility,
+                        new GetHasFunctionalAbilityDocument(),
+                        "getHasFunctionalAbility");
+
+        HttpEntity<GetHasFunctionalAbilityDocument> payload =
+                new HttpEntity<>(getHasFunctionalAbilityDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability");
@@ -126,21 +131,20 @@ public class AuthenticationController {
 
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success",
-                                    objectMapper.writeValueAsString(getHasFunctionalAbility))));
-
-            log.info(
-                    objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
 
-            var getHasFunctionalAbilityResponse = new GetHasFunctionalAbilityResponse();
+            var getHasFunctionalAbilityResponseDocument =
+                    new GetHasFunctionalAbilityResponseDocument();
             var outResp = new HasFunctionalAbilityOut();
-            var inResp = new HasFunctionalAbilityInner();
+            outResp.setHasFunctionalAbility(resp.getBody());
+            getHasFunctionalAbilityResponseDocument.setXMLString(outResp);
 
-            inResp.setHasFunctionalAbility(resp.getBody());
-            outResp.setHasFunctionalAbility(inResp);
-            getHasFunctionalAbilityResponse.setXMLString(outResp);
+            var getHasFunctionalAbilityResponse =
+                    XMLUtilities.convertResp(
+                            getHasFunctionalAbilityResponseDocument,
+                            new GetHasFunctionalAbilityResponse(),
+                            "getHasFunctionalAbilityResponse");
+
             return getHasFunctionalAbilityResponse;
 
         } catch (Exception ex) {

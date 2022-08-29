@@ -43,12 +43,14 @@ public class InformationController {
     public GetUserInfoResponse getUserInfo(@RequestPayload GetUserInfo getUserInfo)
             throws JsonProcessingException {
 
+        var getUserInfoDocument =
+                XMLUtilities.convertReq(getUserInfo, new GetUserInfoDocument(), "getUserInfo");
+
         // fetch the inmost UserInfo layer
         var inner =
-                getUserInfo.getXMLString() != null
-                                && getUserInfo.getXMLString().getUserInfo() != null
-                                && getUserInfo.getXMLString().getUserInfo().getUserInfo() != null
-                        ? getUserInfo.getXMLString().getUserInfo().getUserInfo()
+                getUserInfoDocument.getXMLString() != null
+                                && getUserInfoDocument.getXMLString().getUserInfo() != null
+                        ? getUserInfoDocument.getXMLString().getUserInfo()
                         : new UserInfo();
 
         HttpEntity<UserInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
@@ -64,21 +66,18 @@ public class InformationController {
 
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
-
-            log.info(
-                    objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getUserInfo")));
 
-            var getUserInfoResponse = new GetUserInfoResponse();
+            var getUserInfoResponseDocument = new GetUserInfoResponseDocument();
             var outResp = new UserInfoOut();
-            var inResp = new UserInfoInner();
-            var innerResp = resp.getBody();
+            outResp.setUserInfo(resp.getBody());
+            getUserInfoResponseDocument.setXMLString(outResp);
 
-            inResp.setUserInfo(innerResp);
-            outResp.setUserInfo(inResp);
-            getUserInfoResponse.setXMLString(outResp);
+            var getUserInfoResponse =
+                    XMLUtilities.convertResp(
+                            getUserInfoResponseDocument,
+                            new GetUserInfoResponse(),
+                            "getUserInfoResponse");
 
             return getUserInfoResponse;
         } catch (Exception ex) {
@@ -100,13 +99,15 @@ public class InformationController {
     public GetDeviceInfoResponse getDeviceInfo(@RequestPayload GetDeviceInfo getDeviceInfo)
             throws JsonProcessingException {
 
+        var getDeviceInfoDocument =
+                XMLUtilities.convertReq(
+                        getDeviceInfo, new GetDeviceInfoDocument(), "getDeviceInfo");
+
         // fetch the inmost DeviceInfo layer
         DeviceInfo inner =
-                (getDeviceInfo.getXMLString() != null
-                                && getDeviceInfo.getXMLString().getDeviceInfo() != null
-                                && getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo()
-                                        != null
-                        ? getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo()
+                (getDeviceInfoDocument.getXMLString() != null
+                                && getDeviceInfoDocument.getXMLString().getDeviceInfo() != null
+                        ? getDeviceInfoDocument.getXMLString().getDeviceInfo()
                         : new DeviceInfo());
 
         HttpEntity<DeviceInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
@@ -121,20 +122,19 @@ public class InformationController {
 
             log.info(
                     objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
-
-            log.info(
-                    objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getDeviceInfo")));
 
-            var getDeviceInfoResponse = new GetDeviceInfoResponse();
+            var getDeviceInfoResponseDocument = new GetDeviceInfoResponseDocument();
             var outResp = new DeviceInfoOut();
-            var inResp = new DeviceInfoInner();
+            outResp.setDeviceInfo(resp.getBody());
+            getDeviceInfoResponseDocument.setXMLString(outResp);
 
-            inResp.setDeviceInfo(resp.getBody());
-            outResp.setDeviceInfo(inResp);
-            getDeviceInfoResponse.setXMLString(outResp);
+            var getDeviceInfoResponse =
+                    XMLUtilities.convertResp(
+                            getDeviceInfoResponseDocument,
+                            new GetDeviceInfoResponse(),
+                            "getDeviceInfoResponse");
+
             return getDeviceInfoResponse;
 
         } catch (Exception ex) {

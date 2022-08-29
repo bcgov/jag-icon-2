@@ -2,7 +2,6 @@ package ca.bc.gov.open.comparison.services;
 
 import ca.bc.gov.open.comparison.config.WebServiceSenderWithAuth;
 import ca.bc.gov.open.icon.auth.*;
-import ca.bc.gov.open.icon.myfiles.*;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -76,12 +75,10 @@ public class TestService {
         diffCounter = 0;
         GetUserInfo getUserInfo = new GetUserInfo();
         UserInfoOut userInfoOut = new UserInfoOut();
-        UserInfoInner userInfoInner = new UserInfoInner();
 
         var request = new UserInfo();
-        getUserInfo.setXMLString(userInfoOut);
-        userInfoOut.setUserInfo(userInfoInner);
-        userInfoInner.setUserInfo(request);
+        getUserInfo.setXMLString("A");
+        userInfoOut.setUserInfo(request);
 
         InputStream inputIds = getClass().getResourceAsStream("/getUserInfo.csv");
         assert inputIds != null;
@@ -107,12 +104,10 @@ public class TestService {
         diffCounter = 0;
         GetDeviceInfo getDeviceInfo = new GetDeviceInfo();
         DeviceInfoOut deviceInfoOut = new DeviceInfoOut();
-        DeviceInfoInner deviceInfoInner = new DeviceInfoInner();
 
         var request = new DeviceInfo();
-        getDeviceInfo.setXMLString(deviceInfoOut);
-        deviceInfoOut.setDeviceInfo(deviceInfoInner);
-        deviceInfoInner.setDeviceInfo(request);
+        getDeviceInfo.setXMLString("A");
+        deviceInfoOut.setDeviceInfo(request);
 
         InputStream inputIds = getClass().getResourceAsStream("/getDeviceInfo.csv");
         assert inputIds != null;
@@ -138,12 +133,10 @@ public class TestService {
         diffCounter = 0;
         GetPreAuthorizeClient getPreAuthorizeClient = new GetPreAuthorizeClient();
         PreAuthorizeClientOut deviceInfoOut = new PreAuthorizeClientOut();
-        PreAuthorizeClientInner deviceInfoInner = new PreAuthorizeClientInner();
 
         var request = new PreAuthorizeClient();
-        getPreAuthorizeClient.setXMLString(deviceInfoOut);
-        deviceInfoOut.setPreAuthorizeClient(deviceInfoInner);
-        deviceInfoInner.setPreAuthorizeClient(request);
+        getPreAuthorizeClient.setXMLString("A");
+        deviceInfoOut.setPreAuthorizeClient(request);
 
         InputStream inputIds = getClass().getResourceAsStream("/getPreAuthorizeClient.csv");
         assert inputIds != null;
@@ -174,20 +167,16 @@ public class TestService {
         var getHasFunctionalAbility = new GetHasFunctionalAbility();
 
         var hasFunctionalAbilityOut = new HasFunctionalAbilityOut();
-        var hasFunctionalAbilityInner = new HasFunctionalAbilityInner();
         var functionalAbility = new FunctionalAbility();
         var request = new HasFunctionalAbility();
-        getHasFunctionalAbility.setXMLString(hasFunctionalAbilityOut);
-        hasFunctionalAbilityOut.setHasFunctionalAbility(hasFunctionalAbilityInner);
-        hasFunctionalAbilityInner.setHasFunctionalAbility(request);
+        getHasFunctionalAbility.setXMLString("A");
+        hasFunctionalAbilityOut.setHasFunctionalAbility(request);
         request.setFunctionalAbility(functionalAbility);
 
         var userTokenOut = new UserTokenOut();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
-        getHasFunctionalAbility.setUserTokenString(userTokenOut);
-        userTokenOut.setUserToken(userTokenInner);
-        userTokenInner.setUserToken(userToken);
+        getHasFunctionalAbility.setUserTokenString("A");
+        userTokenOut.setUserToken(userToken);
 
         InputStream inputIds = getClass().getResourceAsStream("/getHasFunctionalAbility.csv");
         assert inputIds != null;
