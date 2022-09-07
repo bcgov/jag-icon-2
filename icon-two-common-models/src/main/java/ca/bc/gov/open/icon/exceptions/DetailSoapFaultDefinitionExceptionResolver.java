@@ -10,29 +10,11 @@ import org.springframework.ws.soap.server.endpoint.SoapFaultMappingExceptionReso
 
 public class DetailSoapFaultDefinitionExceptionResolver extends SoapFaultMappingExceptionResolver {
 
-    private static final QName CODE = new QName("code");
-    private static final QName DESCRIPTION = new QName("description");
-
-    //    private static final ObjectFactory FACTORY = new ObjectFactory();
-    //    private final Marshaller marshaller;
-
-    //    public DetailSoapFaultDefinitionExceptionResolver() throws JAXBException {
-    //        JAXBContext jaxbContext = JAXBContext.newInstance("your.schema");
-    //        this.marshaller = jaxbContext.createMarshaller();
-    //    }
-
     @Override
     protected void customizeFault(Object endpoint, Exception ex, SoapFault fault) {
-        logger.warn("Exception processed ", ex);
-
-        // code for adding fault details
 
         SoapFaultDefinition soapFaultDefinition = new SoapFaultDefinition();
         String ENVELOPE_NAMESPACE_URI = "http://schemas.xmlsoap.org/soap/envelope/";
-
-        //      soapFaultDefinition.setFaultStringOrReason("--" + ex);
-
-        //      soapFaultDefinition.setLocale(Locale.ENGLISH);
 
         QName CLIENT_FAULT_NAME = new QName(ENVELOPE_NAMESPACE_URI, "5003", "e");
         soapFaultDefinition.setFaultCode(CLIENT_FAULT_NAME);

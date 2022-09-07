@@ -6,6 +6,8 @@ import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.exceptions.ServiceFault;
+import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.*;
@@ -279,7 +281,8 @@ public class ReportingController {
                                     "getAppointment",
                                     ex.getMessage(),
                                     getAppointment)));
-            throw new ORDSException();
+
+            throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
         }
     }
 

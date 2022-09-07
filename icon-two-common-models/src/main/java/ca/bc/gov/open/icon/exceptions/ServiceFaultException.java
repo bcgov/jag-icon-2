@@ -4,13 +4,16 @@ public class ServiceFaultException extends RuntimeException {
 
     private ServiceFault serviceFault;
 
-    public ServiceFaultException(String message, ServiceFault serviceFault) {
-        super(message);
+    public ServiceFaultException(ServiceFault serviceFault) {
+        super(
+                "An error response was received from ORDS please check that your request is of valid form");
         this.serviceFault = serviceFault;
     }
 
-    public ServiceFaultException(String message, Throwable e, ServiceFault serviceFault) {
-        super(message, e);
+    public ServiceFaultException(Throwable e, ServiceFault serviceFault) {
+        super(
+                "An error response was received from ORDS please check that your request is of valid form",
+                e);
         this.serviceFault = serviceFault;
     }
 
