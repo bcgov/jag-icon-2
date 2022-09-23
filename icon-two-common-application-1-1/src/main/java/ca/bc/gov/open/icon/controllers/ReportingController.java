@@ -282,7 +282,8 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getAppointment)));
 
-            throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
+            // throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
+            throw new ORDSException();
         }
     }
 

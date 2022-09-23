@@ -5,6 +5,8 @@ import ca.bc.gov.open.icon.audit.MessageAccessedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.exceptions.ServiceFault;
+import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.message.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -143,6 +145,11 @@ public class MessageController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDate")));
 
+            if(resp.getBody().getResultMessage() != null) {
+                throw new Exception(resp.getBody().getResultMessage());
+            }
+
+
             SetMessageDateResponseDocument setMessageDateResponseDocument =
                     new SetMessageDateResponseDocument();
             AppointmentMessageOuter outResp = new AppointmentMessageOuter();
@@ -165,6 +172,7 @@ public class MessageController {
                                     ex.getMessage(),
                                     setMessageDate)));
             throw new ORDSException();
+//            throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
         }
     }
 
