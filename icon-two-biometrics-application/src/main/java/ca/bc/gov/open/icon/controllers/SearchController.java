@@ -3,6 +3,7 @@ package ca.bc.gov.open.icon.controllers;
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.Search;
 import ca.bc.gov.open.icon.biometrics.StartSearch;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,9 +38,7 @@ public class SearchController {
         this.modelMapper = modelMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "startSearch")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "startSearch")
     @ResponsePayload
     public ca.bc.gov.open.icon.biometrics.StartSearchResponse startSearch(
             @RequestPayload StartSearch startSearch) throws JsonProcessingException {
@@ -86,9 +85,7 @@ public class SearchController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "finishSearch")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "finishSearch")
     @ResponsePayload
     public ca.bc.gov.open.icon.biometrics.FinishSearchResponse finishSearch(
             @RequestPayload ca.bc.gov.open.icon.biometrics.FinishSearch finishSearch)
