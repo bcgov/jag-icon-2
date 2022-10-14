@@ -104,27 +104,14 @@ public class HealthControllerTests {
     @Test
     public void testGetHealthServiceRequestHistory() throws JsonProcessingException {
         var req = new GetHealthServiceRequestHistory();
-        var healServiceOuter = new HealthServiceOuter();
-        var healService = new HealthService();
-        List<ca.bc.gov.open.icon.hsr.HealthServiceRequest> hsrs = new ArrayList<>();
-        var hsr = new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
-        hsr.setHsrId("A");
-        hsr.setPacID("A");
-        hsr.setLocation("A");
-        hsr.setRequestDate("A");
-        hsr.setHealthRequest("A");
-        hsrs.add(hsr);
-        req.setXMLString("A");
-        healServiceOuter.setHealthService(healService);
-        healService.setHealthServiceRequest(hsrs);
-        var row = new Row();
-        row.setStart("1");
-        row.setEnd("3");
-        row.setTotal("3");
-        healService.setRow(row);
-        healService.setCsNum("1");
-        healServiceOuter.setHealthService(healService);
-        req.setXMLString("A");
+        req.setXMLString(
+                "<HealthService>\n"
+                        + "    <csNum>1</csNum>\n"
+                        + "    <Row>\n"
+                        + "        <start>0</start>\n"
+                        + "        <end>1</end>\n"
+                        + "    </Row>\n"
+                        + "</HealthService>");
 
         Map<String, String> out = new HashMap<>();
         out.put("isAllowed", "1");
@@ -177,19 +164,17 @@ public class HealthControllerTests {
     @Test
     public void testPublishHSR() throws JsonProcessingException {
         var req = new PublishHSR();
-        var HealthServiceOuter = new HealthServiceOuter();
-        var HealthService = new HealthService();
-        List<ca.bc.gov.open.icon.hsr.HealthServiceRequest> hsrs = new ArrayList<>();
-        var hsr = new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
-        hsr.setHsrId("A");
-        hsr.setPacID("A");
-        hsr.setLocation("A");
-        hsr.setRequestDate("A");
-        hsr.setHealthRequest("A");
-        hsrs.add(hsr);
-        HealthService.setHealthServiceRequest(hsrs);
-        HealthServiceOuter.setHealthService(HealthService);
-        req.setXMLString("A");
+        req.setXMLString(
+                "<HealthService>\n"
+                        + "    <csNum>1</csNum>\n"
+                        + "    <HealthServiceRequest>\n"
+                        + "        <hsrId>1</hsrId>\n"
+                        + "        <pacID>1</pacID>\n"
+                        + "        <location>1</location>\n"
+                        + "        <requestDate></requestDate>\n"
+                        + "        <healthRequest>Test!</healthRequest>\n"
+                        + "    </HealthServiceRequest>\n"
+                        + "</HealthService> ");
 
         List<HealthServicePub> healthServicePubs = new ArrayList();
         var healthServicePub = new HealthServicePub();
@@ -244,32 +229,15 @@ public class HealthControllerTests {
     @Test
     public void testGetHSRCount() throws JsonProcessingException {
         var req = new GetHSRCount();
-        var hsrCountOuter = new HSRCountOuter();
+        req.setXMLString(
+                "<HealthServiceCount>\n" + "    <csNum>1</csNum>\n" + "</HealthServiceCount>");
+
         var hsrCount = new HSRCount();
-        req.setXMLString("A");
-        hsrCountOuter.setHealthServiceCount(hsrCount);
         hsrCount.setCount("1");
         hsrCount.setMax("1");
         hsrCount.setHsrId("A");
         hsrCount.setCsNum("1");
         hsrCount.setXmitOkay("A");
-
-        var userTokenOuter = new UserTokenOuter();
-        var userToken = new UserToken();
-
-        userToken.setRemoteClientBrowserType("A");
-        userToken.setRemoteClientHostName("A");
-        userToken.setRemoteClientIPAddress("A");
-        userToken.setUserIdentifier("A");
-        userToken.setAuthoritativePartyIdentifier("A");
-        userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
-
-        userTokenOuter.setUserToken(userToken);
-        req.setUserTokenString("A");
-
         ResponseEntity<HSRCount> responseEntity = new ResponseEntity<>(hsrCount, HttpStatus.OK);
 
         // Set up to mock ords response

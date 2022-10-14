@@ -231,7 +231,7 @@ public class HealthController {
                         new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
 
                 var submittedDtm =
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.sss")
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                                 .withZone(ZoneId.of("GMT-7"))
                                 .withLocale(Locale.US)
                                 .format(service.getSubmittedDtm());
