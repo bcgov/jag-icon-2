@@ -290,9 +290,6 @@ public class HealthController {
                             HttpMethod.POST,
                             new HttpEntity<>(publishHSRDocument, new HttpHeaders()),
                             new ParameterizedTypeReference<>() {});
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "publishHSR")));
 
             // Invoke SOAP Service - SubmitHealthServiceRequest (SendHSR)
             try {
@@ -310,32 +307,6 @@ public class HealthController {
                                     soapTemplate.marshalSendAndReceive(
                                             hsrServiceUrl, submitHealthServiceRequest);
                 }
-
-                // ORDS Call - UpdateHSR
-                UriComponentsBuilder builder2 =
-                        UriComponentsBuilder.fromHttpUrl(host + "health/update-hsr");
-                HttpEntity<HealthServicePub> resp2 = null;
-                try {
-
-                    for (var pub : resp.getBody()) {
-                        resp2 =
-                                restTemplate.exchange(
-                                        builder2.toUriString(),
-                                        HttpMethod.POST,
-                                        new HttpEntity<>(pub, new HttpHeaders()),
-                                        HealthServicePub.class);
-                        pub.setHsrId(resp2.getBody().getHsrId());
-                    }
-                } catch (Exception ex) {
-                    log.error(
-                            objectMapper.writeValueAsString(
-                                    new OrdsErrorLog(
-                                            "Error received from ORDS",
-                                            "publishHSR",
-                                            ex.getMessage(),
-                                            publishHSR)));
-                    throw new ORDSException();
-                }
             } catch (Exception ex) {
                 log.error(
                         objectMapper.writeValueAsString(
@@ -344,9 +315,24 @@ public class HealthController {
                                         "publishHSR",
                                         ex.getMessage(),
                                         publishHSR)));
-                //   wM does not throw after receiving error from web service so comment out the
-                // next line
-                //   throw new ORDSException();
+                // wM does not throw after receiving error from web service so comment out the next
+                // line
+                // throw new ORDSException();
+            }
+
+            // ORDS Call - UpdateHSR
+            UriComponentsBuilder builder2 =
+                    UriComponentsBuilder.fromHttpUrl(host + "health/update-hsr");
+            HttpEntity<HealthServicePub> resp2 = null;
+
+            for (var pub : resp.getBody()) {
+                resp2 =
+                        restTemplate.exchange(
+                                builder2.toUriString(),
+                                HttpMethod.POST,
+                                new HttpEntity<>(pub, new HttpHeaders()),
+                                HealthServicePub.class);
+                pub.setHsrId(resp2.getBody().getHsrId());
             }
 
             for (var pub : resp.getBody()) {
