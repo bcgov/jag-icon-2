@@ -31,6 +31,9 @@ import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
 @Slf4j
 public class SoapConfig extends WsConfigurerAdapter {
 
+    public static final String SOAP_NAMESPACE =
+            "http://brooks/ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics";
+
     @Bean
     public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(
             ApplicationContext applicationContext) {
