@@ -20,6 +20,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.UnknownHttpStatusCodeException;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -145,10 +146,9 @@ public class MessageController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDate")));
 
-            if(resp.getBody().getResultMessage() != null) {
+            if (resp.getBody().getResultMessage() != null) {
                 throw new Exception(resp.getBody().getResultMessage());
             }
-
 
             SetMessageDateResponseDocument setMessageDateResponseDocument =
                     new SetMessageDateResponseDocument();
@@ -171,8 +171,12 @@ public class MessageController {
                                     "setMessageDate",
                                     ex.getMessage(),
                                     setMessageDate)));
-            throw new ORDSException();
-//            throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
+
+            if (ex instanceof UnknownHttpStatusCodeException) {
+                throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
+            } else {
+                throw new ORDSException();
+            }
         }
     }
 

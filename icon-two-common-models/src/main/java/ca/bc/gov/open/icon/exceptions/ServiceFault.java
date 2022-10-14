@@ -23,7 +23,5 @@ public class ServiceFault {
                 this.reason = reason.substring(start + 10, end - 1);
             }
         }
-
-        this.reason = reason;
     }
 }

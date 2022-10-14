@@ -22,6 +22,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.UnknownHttpStatusCodeException;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -282,8 +283,11 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getAppointment)));
 
-            // throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
-            throw new ORDSException();
+            if (ex instanceof UnknownHttpStatusCodeException) {
+                throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
+            } else {
+                throw new ORDSException();
+            }
         }
     }
 
