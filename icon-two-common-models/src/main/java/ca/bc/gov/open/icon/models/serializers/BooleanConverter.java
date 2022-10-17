@@ -8,6 +8,7 @@ public final class BooleanConverter {
     }
 
     public static boolean parse(String s) {
-        return s.equals("1");
+        if (s != null) return s.equals("1");
+        else return false;
     }
 }
