@@ -14,7 +14,7 @@ public final class BooleanConverter {
         try {
             return s.equals("1");
         } catch (Exception ex) {
-            log.warn("Bad date received from soap request - invalid boolean: " + s);
+            log.warn("Bad data received from soap request - invalid boolean: " + s);
             return false;
         }
     }
