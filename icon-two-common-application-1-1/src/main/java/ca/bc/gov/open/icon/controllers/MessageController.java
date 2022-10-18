@@ -1,12 +1,12 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.audit.MessageAccessed;
 import ca.bc.gov.open.icon.audit.MessageAccessedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
-import ca.bc.gov.open.icon.exceptions.ServiceFault;
-import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.message.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -20,7 +20,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.client.UnknownHttpStatusCodeException;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -116,7 +115,7 @@ public class MessageController {
                                     "getMessage",
                                     ex.getMessage(),
                                     getMessage)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 
@@ -172,11 +171,7 @@ public class MessageController {
                                     ex.getMessage(),
                                     setMessageDate)));
 
-            if (ex instanceof UnknownHttpStatusCodeException) {
-                throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
-            } else {
-                throw new ORDSException();
-            }
+            throw handleError(ex);
         }
     }
 

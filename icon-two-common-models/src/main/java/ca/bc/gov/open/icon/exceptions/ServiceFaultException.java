@@ -1,5 +1,7 @@
 package ca.bc.gov.open.icon.exceptions;
 
+import org.springframework.web.client.UnknownHttpStatusCodeException;
+
 public class ServiceFaultException extends RuntimeException {
 
     private ServiceFault serviceFault;
@@ -23,5 +25,16 @@ public class ServiceFaultException extends RuntimeException {
 
     public void setServiceFault(ServiceFault serviceFault) {
         this.serviceFault = serviceFault;
+    }
+
+    public static RuntimeException handleError(Exception ex) {
+        if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
+            return new ServiceFaultException(
+                    new ServiceFault((org.springframework.web.client.HttpServerErrorException) ex));
+        } else if (ex instanceof UnknownHttpStatusCodeException) {
+            return new ServiceFaultException(new ServiceFault(ex.getMessage()));
+        } else {
+            return new ORDSException();
+        }
     }
 }

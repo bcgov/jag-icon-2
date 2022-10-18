@@ -1,7 +1,8 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.ereporting.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
@@ -79,7 +80,8 @@ public class RecordController {
                                     "recordCompleted",
                                     ex.getMessage(),
                                     recordCompleted)));
-            throw new ORDSException();
+
+            throw handleError(ex);
         }
     }
 
@@ -125,7 +127,8 @@ public class RecordController {
                                     "recordException",
                                     ex.getMessage(),
                                     recordException)));
-            throw new ORDSException();
+
+            throw handleError(ex);
         }
     }
 }

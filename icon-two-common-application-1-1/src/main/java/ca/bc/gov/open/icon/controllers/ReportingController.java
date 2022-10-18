@@ -1,13 +1,13 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.audit.EReportAnswers;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
-import ca.bc.gov.open.icon.exceptions.ServiceFault;
-import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.*;
@@ -22,7 +22,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.client.UnknownHttpStatusCodeException;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -134,7 +133,8 @@ public class ReportingController {
                                     "getReportingCmpltInstruction",
                                     ex.getMessage(),
                                     getReportingCmpltInstruction)));
-            throw new ORDSException();
+
+            throw handleError(ex);
         }
     }
 
@@ -143,7 +143,7 @@ public class ReportingController {
             localPart = "getLocations")
     @ResponsePayload
     public GetLocationsResponse getLocationsResponse(@RequestPayload GetLocations getLocations)
-            throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
+            throws JsonProcessingException {
 
         var getLocationsDocument =
                 XMLUtilities.convertReq(getLocations, new GetLocationsDocument(), "getLocations");
@@ -182,7 +182,8 @@ public class ReportingController {
                                     "getLocationsResponse",
                                     ex.getMessage(),
                                     getLocations)));
-            throw new ORDSException();
+
+            throw handleError(ex);
         }
     }
 
@@ -231,7 +232,7 @@ public class ReportingController {
                                     "submitAnswers",
                                     ex.getMessage(),
                                     submitAnswers)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 
@@ -283,11 +284,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getAppointment)));
 
-            if (ex instanceof UnknownHttpStatusCodeException) {
-                throw new ServiceFaultException(new ServiceFault(ex.getMessage()));
-            } else {
-                throw new ORDSException();
-            }
+            throw handleError(ex);
         }
     }
 
@@ -335,7 +332,7 @@ public class ReportingController {
                                     "getQuestions",
                                     ex.getMessage(),
                                     getQuestions)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 
@@ -382,7 +379,7 @@ public class ReportingController {
                                     "getStatus",
                                     ex.getMessage(),
                                     getStatus)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 }
