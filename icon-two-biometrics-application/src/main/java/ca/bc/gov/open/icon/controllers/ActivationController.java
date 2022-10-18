@@ -5,6 +5,7 @@ import ca.bc.gov.open.icon.biometrics.Deactivate;
 import ca.bc.gov.open.icon.biometrics.DeactivateResponse;
 import ca.bc.gov.open.icon.biometrics.Reactivate;
 import ca.bc.gov.open.icon.biometrics.ReactivateResponse;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,9 +35,7 @@ public class ActivationController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "reactivate")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "reactivate")
     @ResponsePayload
     public ReactivateResponse reactivate(@RequestPayload Reactivate reactivate)
             throws JsonProcessingException {
@@ -78,9 +77,7 @@ public class ActivationController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "deactivate")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "deactivate")
     @ResponsePayload
     public DeactivateResponse deactivate(@RequestPayload Deactivate deactivate)
             throws JsonProcessingException {

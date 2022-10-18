@@ -2,6 +2,7 @@ package ca.bc.gov.open.icon.controllers;
 
 import ca.bc.gov.open.icon.biometrics.GetDID;
 import ca.bc.gov.open.icon.biometrics.GetDIDResponse;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.ips.GetDIDRequest;
@@ -35,9 +36,7 @@ public class DidController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "getDID")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "getDID")
     @ResponsePayload
     public GetDIDResponse getDid(@RequestPayload GetDID getDID) throws JsonProcessingException {
         try {

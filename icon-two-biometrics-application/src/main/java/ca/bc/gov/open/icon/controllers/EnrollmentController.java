@@ -3,6 +3,7 @@ package ca.bc.gov.open.icon.controllers;
 import ca.bc.gov.open.icon.bcs.FinishEnrollmentRequest;
 import ca.bc.gov.open.icon.bcs.StartEnrollmentRequest;
 import ca.bc.gov.open.icon.biometrics.*;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.iis.RegisterIndividual;
@@ -64,9 +65,7 @@ public class EnrollmentController {
         this.modalMapper = modalMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "startEnrollment")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "startEnrollment")
     @ResponsePayload
     public StartEnrollmentResponse startEnrollment(@RequestPayload StartEnrollment startEnrollment)
             throws JsonProcessingException {
@@ -199,9 +198,7 @@ public class EnrollmentController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "finishEnrollment")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "finishEnrollment")
     @ResponsePayload
     public FinishEnrollmentResponse finishEnrollment(
             @RequestPayload FinishEnrollment finishEnrollment) throws JsonProcessingException {

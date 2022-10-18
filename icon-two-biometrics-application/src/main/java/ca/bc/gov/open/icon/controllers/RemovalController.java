@@ -2,6 +2,7 @@ package ca.bc.gov.open.icon.controllers;
 
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.*;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.iis.*;
 import ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode;
@@ -62,9 +63,7 @@ public class RemovalController {
         this.restTemplate = restTemplate;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "move")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "move")
     @ResponsePayload
     public MoveResponse move(@RequestPayload Move move) throws JsonProcessingException {
         try {
@@ -240,9 +239,7 @@ public class RemovalController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "remove")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "remove")
     @ResponsePayload
     public RemoveResponse remove(@RequestPayload Remove remove) throws JsonProcessingException {
         try {
@@ -355,9 +352,7 @@ public class RemovalController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "removeIdentity")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "removeIdentity")
     @ResponsePayload
     public RemoveIdentityResponse removeIdentity(@RequestPayload RemoveIdentity removeIdentity)
             throws JsonProcessingException {
@@ -446,9 +441,7 @@ public class RemovalController {
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "removeTemplate")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "removeTemplate")
     @ResponsePayload
     public RemoveTemplateResponse removeTemplate(@RequestPayload RemoveTemplate removeTemplate)
             throws JsonProcessingException {
