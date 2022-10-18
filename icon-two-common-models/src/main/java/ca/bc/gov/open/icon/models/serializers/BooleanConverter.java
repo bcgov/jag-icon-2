@@ -10,12 +10,11 @@ public final class BooleanConverter {
         return b ? "1" : "0";
     }
 
-    public static boolean parse(String s) {
-        try {
-            return s.equals("1");
-        } catch (Exception ex) {
+    public static Boolean parse(String s) {
+        if (s == "1" || s == "0") return Boolean.valueOf(s.equals("1"));
+        else {
             log.warn("Bad data received from soap request - invalid boolean: " + s);
-            return false;
+            return null;
         }
     }
 }
