@@ -5,15 +5,12 @@ public class ServiceFaultException extends RuntimeException {
     private Object error;
 
     public ServiceFaultException(Object error) {
-        super(
-                "An error response was received from ORDS please check that your request is of valid form");
+        super("Fault returned by invoked service");
         this.error = error;
     }
 
     public ServiceFaultException(Throwable e, Object error) {
-        super(
-                "An error response was received from ORDS please check that your request is of valid form",
-                e);
+        super("Fault returned by invoked service", e);
         this.error = error;
     }
 
@@ -34,17 +31,6 @@ public class ServiceFaultException extends RuntimeException {
             msg = msg.substring(start + STATUS_MESSAGE.length(), end);
         }
 
-        return msg;
-    }
-
-    public String getMessage(String msg) {
-        int start = msg.indexOf("\"cause\": \"", 0);
-        if (start != -1) {
-            int end = msg.indexOf(",<EOL>", start + 1);
-            if (end != -1) {
-                msg = msg.substring(start + 10, end - 1);
-            }
-        }
         return msg;
     }
 }

@@ -20,7 +20,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.client.UnknownHttpStatusCodeException;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -48,12 +47,6 @@ public class MessageController {
             var error = new Error();
             var faultExceExcption = new ServiceFaultException(error);
             error.setReason(faultExceExcption.getMessage(httpEx));
-            return faultExceExcption;
-        } else if (ex instanceof UnknownHttpStatusCodeException) {
-            var unknownEx = (UnknownHttpStatusCodeException) ex;
-            var error = new Error();
-            var faultExceExcption = new ServiceFaultException(error);
-            error.setReason(faultExceExcption.getMessage(unknownEx.getMessage()));
             return faultExceExcption;
         } else {
             return new ORDSException();
