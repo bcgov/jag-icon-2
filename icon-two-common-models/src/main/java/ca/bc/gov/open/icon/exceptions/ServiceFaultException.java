@@ -17,11 +17,11 @@ public class ServiceFaultException extends RuntimeException {
         this.error = error;
     }
 
-    public Object getServiceFault() {
+    public Object getError() {
         return error;
     }
 
-    public void setServiceFault(Object error) {
+    public void setError(Object error) {
         this.error = error;
     }
 
@@ -37,15 +37,14 @@ public class ServiceFaultException extends RuntimeException {
         return msg;
     }
 
-    public String getMessage(String reason) {
-        int start = reason.indexOf("\"cause\": \"", 0);
+    public String getMessage(String msg) {
+        int start = msg.indexOf("\"cause\": \"", 0);
         if (start != -1) {
-            int end = reason.indexOf(",<EOL>", start + 1);
+            int end = msg.indexOf(",<EOL>", start + 1);
             if (end != -1) {
-                reason = reason.substring(start + 10, end - 1);
+                msg = msg.substring(start + 10, end - 1);
             }
         }
-
-        return reason;
+        return msg;
     }
 }

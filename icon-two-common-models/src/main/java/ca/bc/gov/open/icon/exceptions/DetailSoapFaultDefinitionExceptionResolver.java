@@ -25,10 +25,8 @@ public class DetailSoapFaultDefinitionExceptionResolver extends SoapFaultMapping
 
         // marshal
         try {
-            var serviceFault = ((ServiceFaultException) ex).getServiceFault();
-            JAXBContext.newInstance(serviceFault.getClass())
-                    .createMarshaller()
-                    .marshal(serviceFault, result);
+            var error = ((ServiceFaultException) ex).getError();
+            JAXBContext.newInstance(error.getClass()).createMarshaller().marshal(error, result);
         } catch (JAXBException e) {
             log.warn("SoapFault exception: " + e.getMessage());
         }
