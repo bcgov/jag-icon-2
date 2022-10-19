@@ -44,16 +44,16 @@ public class MessageController {
 
     private RuntimeException handleError(Exception ex) {
         if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
-            var exx = (org.springframework.web.client.HttpServerErrorException) ex;
-            var err = new Error();
-            var faultExceExcption = new ServiceFaultException(err);
-            err.setReason(faultExceExcption.getMessage(exx));
+            var httpEx = (org.springframework.web.client.HttpServerErrorException) ex;
+            var error = new Error();
+            var faultExceExcption = new ServiceFaultException(error);
+            error.setReason(faultExceExcption.getMessage(httpEx));
             return faultExceExcption;
         } else if (ex instanceof UnknownHttpStatusCodeException) {
-            var exx = (UnknownHttpStatusCodeException) ex;
-            var err = new Error();
-            var faultExceExcption = new ServiceFaultException(err);
-            err.setReason(faultExceExcption.getMessage(exx.getMessage()));
+            var unknownEx = (UnknownHttpStatusCodeException) ex;
+            var error = new Error();
+            var faultExceExcption = new ServiceFaultException(error);
+            error.setReason(faultExceExcption.getMessage(unknownEx.getMessage()));
             return faultExceExcption;
         } else {
             return new ORDSException();
