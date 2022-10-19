@@ -1,13 +1,13 @@
 package ca.bc.gov.open.icon.controllers;
 
-import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
-
 import ca.bc.gov.open.icon.audit.EReportAnswers;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
+import ca.bc.gov.open.icon.ereporting.Error;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.*;
@@ -22,6 +22,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.UnknownHttpStatusCodeException;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -41,6 +42,24 @@ public class ReportingController {
     public ReportingController(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+    }
+
+    private RuntimeException handleError(Exception ex) {
+        if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
+            var exx = (org.springframework.web.client.HttpServerErrorException) ex;
+            var err = new Error();
+            var faultExceExcption = new ServiceFaultException(err);
+            err.setReason(faultExceExcption.getMessage(exx));
+            return faultExceExcption;
+        } else if (ex instanceof UnknownHttpStatusCodeException) {
+            var exx = (UnknownHttpStatusCodeException) ex;
+            var err = new Error();
+            var faultExceExcption = new ServiceFaultException(err);
+            err.setReason(faultExceExcption.getMessage(exx.getMessage()));
+            return faultExceExcption;
+        } else {
+            return new ORDSException();
+        }
     }
 
     @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "eReportAnswersSubmitted")

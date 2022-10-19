@@ -18,18 +18,17 @@ public class DetailSoapFaultDefinitionExceptionResolver extends SoapFaultMapping
         SoapFaultDefinition soapFaultDefinition = new SoapFaultDefinition();
         String ENVELOPE_NAMESPACE_URI = "http://schemas.xmlsoap.org/soap/envelope/";
 
-        QName CLIENT_FAULT_NAME = new QName(ENVELOPE_NAMESPACE_URI, "5003", "e");
+        QName CLIENT_FAULT_NAME = new QName(ENVELOPE_NAMESPACE_URI);
         soapFaultDefinition.setFaultCode(CLIENT_FAULT_NAME);
         setDefaultFault(soapFaultDefinition);
         Result result = fault.addFaultDetail().getResult();
 
         // marshal
         try {
-            ServiceFault serviceFault = ((ServiceFaultException) ex).getServiceFault();
-            JAXBContext.newInstance(ServiceFault.class)
+            var serviceFault = ((ServiceFaultException) ex).getServiceFault();
+            JAXBContext.newInstance(serviceFault.getClass())
                     .createMarshaller()
                     .marshal(serviceFault, result);
-
         } catch (JAXBException e) {
             log.warn("SoapFault exception: " + e.getMessage());
         }
