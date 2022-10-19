@@ -145,10 +145,6 @@ public class MessageController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDate")));
 
-            if (resp.getBody().getResultMessage() != null) {
-                throw new Exception(resp.getBody().getResultMessage());
-            }
-
             SetMessageDateResponseDocument setMessageDateResponseDocument =
                     new SetMessageDateResponseDocument();
             AppointmentMessageOuter outResp = new AppointmentMessageOuter();

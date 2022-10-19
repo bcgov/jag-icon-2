@@ -4,10 +4,12 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ws.soap.SoapFault;
 import org.springframework.ws.soap.server.endpoint.SoapFaultDefinition;
 import org.springframework.ws.soap.server.endpoint.SoapFaultMappingExceptionResolver;
 
+@Slf4j
 public class DetailSoapFaultDefinitionExceptionResolver extends SoapFaultMappingExceptionResolver {
 
     @Override
@@ -29,7 +31,7 @@ public class DetailSoapFaultDefinitionExceptionResolver extends SoapFaultMapping
                     .marshal(serviceFault, result);
 
         } catch (JAXBException e) {
-            e.printStackTrace();
+            log.warn("SoapFault exception: " + e.getMessage());
         }
     }
 }

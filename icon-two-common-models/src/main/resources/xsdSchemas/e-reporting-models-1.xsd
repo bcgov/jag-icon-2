@@ -127,8 +127,6 @@
         <xsd:sequence>
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
             <xsd:element name="text" nillable="true" type="xsd:string"/>
-            <xsd:element name="resultCd" nillable="true" type="xsd:string"/>
-            <xsd:element name="resultMessage" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 
