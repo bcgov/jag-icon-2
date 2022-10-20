@@ -1,5 +1,8 @@
 package ca.bc.gov.open.icon.exceptions;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ServiceFaultException extends RuntimeException {
 
     private Object error;
@@ -32,5 +35,44 @@ public class ServiceFaultException extends RuntimeException {
         }
 
         return msg;
+    }
+
+    public static RuntimeException handleError(Exception ex, Object error) {
+        if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
+            var httpEx = (org.springframework.web.client.HttpServerErrorException) ex;
+            var faultExceExcption = new ServiceFaultException(error);
+            String msg = faultExceExcption.getMessage(httpEx);
+            if (error instanceof ca.bc.gov.open.icon.ereporting.Error) {
+                ((ca.bc.gov.open.icon.ereporting.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.myinfo.Error) {
+                ((ca.bc.gov.open.icon.myinfo.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.audit.Error) {
+                ((ca.bc.gov.open.icon.audit.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.auth.Error) {
+                ((ca.bc.gov.open.icon.auth.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.biometrics.Error) {
+                ((ca.bc.gov.open.icon.biometrics.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.hsr.Error) {
+                ((ca.bc.gov.open.icon.hsr.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.message.Error) {
+                ((ca.bc.gov.open.icon.message.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.myfiles.Error) {
+                ((ca.bc.gov.open.icon.myfiles.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.tombstone.Error) {
+                ((ca.bc.gov.open.icon.tombstone.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.trustaccount.Error) {
+                ((ca.bc.gov.open.icon.trustaccount.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.visitschedule.Error) {
+                ((ca.bc.gov.open.icon.visitschedule.Error) error).setReason(msg);
+            } else {
+                log.warn(
+                        "Failed to find a fitted Error class type for the message: ",
+                        ex.getMessage());
+                return new ORDSException(ex.getMessage());
+            }
+            return faultExceExcption;
+        } else {
+            return new ORDSException(ex.getMessage());
+        }
     }
 }
