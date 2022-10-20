@@ -5,7 +5,9 @@ import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
+import ca.bc.gov.open.icon.ereporting.Error;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.*;
@@ -39,6 +41,18 @@ public class ReportingController {
     public ReportingController(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+    }
+
+    private RuntimeException handleError(Exception ex) {
+        if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
+            var httpEx = (org.springframework.web.client.HttpServerErrorException) ex;
+            var error = new Error();
+            var faultExceExcption = new ServiceFaultException(error);
+            error.setReason(faultExceExcption.getMessage(httpEx));
+            return faultExceExcption;
+        } else {
+            return new ORDSException();
+        }
     }
 
     @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "eReportAnswersSubmitted")
@@ -131,7 +145,8 @@ public class ReportingController {
                                     "getReportingCmpltInstruction",
                                     ex.getMessage(),
                                     getReportingCmpltInstruction)));
-            throw new ORDSException();
+
+            throw handleError(ex);
         }
     }
 
@@ -140,7 +155,7 @@ public class ReportingController {
             localPart = "getLocations")
     @ResponsePayload
     public GetLocationsResponse getLocationsResponse(@RequestPayload GetLocations getLocations)
-            throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
+            throws JsonProcessingException {
 
         var getLocationsDocument =
                 XMLUtilities.convertReq(getLocations, new GetLocationsDocument(), "getLocations");
@@ -179,7 +194,8 @@ public class ReportingController {
                                     "getLocationsResponse",
                                     ex.getMessage(),
                                     getLocations)));
-            throw new ORDSException();
+
+            throw handleError(ex);
         }
     }
 
@@ -228,7 +244,7 @@ public class ReportingController {
                                     "submitAnswers",
                                     ex.getMessage(),
                                     submitAnswers)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 
@@ -279,7 +295,8 @@ public class ReportingController {
                                     "getAppointment",
                                     ex.getMessage(),
                                     getAppointment)));
-            throw new ORDSException();
+
+            throw handleError(ex);
         }
     }
 
@@ -327,7 +344,7 @@ public class ReportingController {
                                     "getQuestions",
                                     ex.getMessage(),
                                     getQuestions)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 
@@ -374,7 +391,7 @@ public class ReportingController {
                                     "getStatus",
                                     ex.getMessage(),
                                     getStatus)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 }
