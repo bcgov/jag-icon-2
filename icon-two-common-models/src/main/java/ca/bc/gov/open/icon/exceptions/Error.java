@@ -16,12 +16,6 @@ public class Error {
     }
 
     public Error(String reason) {
-        int start = reason.indexOf("\"cause\": \"", 0);
-        if (start != -1) {
-            int end = reason.indexOf(",<EOL>", start + 1);
-            if (end != -1) {
-                this.reason = reason.substring(start + 10, end - 1);
-            }
-        }
+        this.reason = reason;
     }
 }

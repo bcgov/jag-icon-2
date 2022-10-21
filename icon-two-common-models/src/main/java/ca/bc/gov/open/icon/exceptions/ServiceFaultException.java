@@ -50,12 +50,18 @@ public class ServiceFaultException extends RuntimeException {
         return reason;
     }
 
+    public static RuntimeException handleError(Exception ex) {
+        return handleError(ex, null);
+    }
+
     public static RuntimeException handleError(Exception ex, Object error) {
         if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
             var httpEx = (org.springframework.web.client.HttpServerErrorException) ex;
             var faultExceExcption = new ServiceFaultException(error);
             String msg = faultExceExcption.getMessage(httpEx);
-            if (error instanceof ca.bc.gov.open.icon.ereporting.Error) {
+            if (error == null) {
+                faultExceExcption.setError(new Error(msg));
+            } else if (error instanceof ca.bc.gov.open.icon.ereporting.Error) {
                 ((ca.bc.gov.open.icon.ereporting.Error) error).setReason(msg);
             } else if (error instanceof ca.bc.gov.open.icon.myinfo.Error) {
                 ((ca.bc.gov.open.icon.myinfo.Error) error).setReason(msg);
@@ -85,7 +91,9 @@ public class ServiceFaultException extends RuntimeException {
             var httpEx = (UnknownHttpStatusCodeException) ex;
             var faultExceExcption = new ServiceFaultException(error);
             String msg = faultExceExcption.getMessage(httpEx.getMessage());
-            if (error instanceof ca.bc.gov.open.icon.ereporting.Error) {
+            if (error == null) {
+                faultExceExcption.setError(new Error(msg));
+            } else if (error instanceof ca.bc.gov.open.icon.ereporting.Error) {
                 ((ca.bc.gov.open.icon.ereporting.Error) error).setReason(msg);
             } else if (error instanceof ca.bc.gov.open.icon.myinfo.Error) {
                 ((ca.bc.gov.open.icon.myinfo.Error) error).setReason(msg);

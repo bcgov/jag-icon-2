@@ -315,7 +315,7 @@ public class AuditController {
                                     "getSessionParameters",
                                     ex.getMessage(),
                                     getSessionParameters)));
-            throw handleError(ex, new Error());
+            throw handleError(ex);
         }
     }
 }
