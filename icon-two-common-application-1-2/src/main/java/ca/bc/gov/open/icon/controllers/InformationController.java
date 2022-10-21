@@ -1,7 +1,8 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.auth.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.*;
@@ -92,7 +93,7 @@ public class InformationController {
                                     "getUserInfo",
                                     ex.getMessage(),
                                     inner)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.auth.Error());
         }
     }
 
@@ -149,7 +150,8 @@ public class InformationController {
                                     "getDeviceInfo",
                                     ex.getMessage(),
                                     inner)));
-            throw new ORDSException();
+
+            throw handleError(ex, new ca.bc.gov.open.icon.auth.Error());
         }
     }
 }

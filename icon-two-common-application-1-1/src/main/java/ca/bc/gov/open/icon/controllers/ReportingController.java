@@ -7,7 +7,6 @@ import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
-import ca.bc.gov.open.icon.ereporting.Error;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.*;
@@ -76,7 +75,7 @@ public class ReportingController {
                                     "eReportAnswersSubmitted",
                                     ex.getMessage(),
                                     inner)));
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -134,7 +133,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getReportingCmpltInstruction)));
 
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -183,7 +182,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getLocations)));
 
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -233,7 +232,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     submitAnswers)));
 
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -285,7 +284,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getAppointment)));
 
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -334,7 +333,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getQuestions)));
 
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -382,7 +381,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getStatus)));
 
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 }

@@ -3,7 +3,6 @@ package ca.bc.gov.open.icon.controllers;
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.ereporting.Error;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -70,7 +69,7 @@ public class AuditController {
                                     "eServiceAccessed",
                                     ex.getMessage(),
                                     eServiceAccessed)));
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -102,7 +101,7 @@ public class AuditController {
                                     "homeScreenAccessed",
                                     ex.getMessage(),
                                     homeScreenAccessed)));
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -135,7 +134,7 @@ public class AuditController {
                                     "sessionTimeoutExecuted",
                                     ex.getMessage(),
                                     sessionTimeoutExecuted)));
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -168,7 +167,7 @@ public class AuditController {
                                     "eServiceFunctionAccessed",
                                     ex.getMessage(),
                                     eServiceFunctionAccessed)));
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -219,7 +218,7 @@ public class AuditController {
                                     "getClientHistory",
                                     ex.getMessage(),
                                     getClientHistory)));
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 

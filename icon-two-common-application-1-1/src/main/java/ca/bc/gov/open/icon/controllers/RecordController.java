@@ -3,7 +3,6 @@ package ca.bc.gov.open.icon.controllers;
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 
 import ca.bc.gov.open.icon.ereporting.*;
-import ca.bc.gov.open.icon.ereporting.Error;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
@@ -82,7 +81,7 @@ public class RecordController {
                                     ex.getMessage(),
                                     recordCompleted)));
 
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -129,7 +128,7 @@ public class RecordController {
                                     ex.getMessage(),
                                     recordException)));
 
-            throw handleError(ex, new Error());
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 }
