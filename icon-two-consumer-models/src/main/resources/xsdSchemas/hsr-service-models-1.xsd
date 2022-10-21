@@ -7,7 +7,7 @@
         <complexType>
             <sequence>
                 <element name="csNumber" type="xsd:string"/>
-                <element name="submissionDate" type="xsd:string"/>
+                <element name="submissionDate" type="xsd:dateTime"/>
                 <element name="centre" type="xsd:string"/>
                 <element name="details" type="xsd:string"/>
             </sequence>

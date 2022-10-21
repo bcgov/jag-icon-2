@@ -309,18 +309,16 @@ public class AuditControllerTests {
         var req = new GetSessionParameters();
         var sessionParameterOutest = new SessionParameterOutest();
         var sessionParameterOuter = new SessionParameterOuter();
-        var sessionParameterInner = new SessionParameterInner();
         List<SessionParameter> sessions = new ArrayList<>();
         var sessionParameter = new SessionParameter();
         sessionParameter.setParameterCd("A");
         sessionParameter.setValue("A");
         sessions.add(sessionParameter);
-        sessionParameterInner.setSessionParameter(sessions);
-        sessionParameterOuter.setSessionParameters(sessionParameterInner);
+        sessionParameterOuter.setSessionParameter(sessions);
         sessionParameterOutest.setSessionParameters(sessionParameterOuter);
-        req.setXMLString(sessionParameterOutest);
+        req.setXMLString("A");
 
-        var out = new SessionParameterInner();
+        var out = new SessionParameterOuter();
         List<SessionParameter> sessions1 = new ArrayList<>();
         var sessionParameter1 = new SessionParameter();
         sessionParameter1.setParameterCd("A");
@@ -328,7 +326,7 @@ public class AuditControllerTests {
         sessions1.add(sessionParameter1);
         out.setSessionParameter(sessions1);
 
-        ResponseEntity<SessionParameterInner> responseEntity =
+        ResponseEntity<SessionParameterOuter> responseEntity =
                 new ResponseEntity<>(out, HttpStatus.OK);
 
         // Set up to mock ords response
@@ -336,7 +334,7 @@ public class AuditControllerTests {
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<SessionParameterInner>>any()))
+                        Mockito.<Class<SessionParameterOuter>>any()))
                 .thenReturn(responseEntity);
 
         AuditController auditController = new AuditController(restTemplate, objectMapper);

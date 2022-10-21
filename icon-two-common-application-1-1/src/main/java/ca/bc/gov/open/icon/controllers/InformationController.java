@@ -1,6 +1,9 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.auth.*;
+import ca.bc.gov.open.icon.ereporting.Error;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -191,7 +194,7 @@ public class InformationController {
                                     "getOrders",
                                     ex.getMessage(),
                                     getOrders)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -237,7 +240,7 @@ public class InformationController {
                                     "getPrograms",
                                     ex.getMessage(),
                                     getPrograms)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -285,7 +288,7 @@ public class InformationController {
                                     "getLocations",
                                     ex.getMessage(),
                                     getLocations)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -332,7 +335,7 @@ public class InformationController {
                                     "getConditions",
                                     ex.getMessage(),
                                     getConditions)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -419,7 +422,7 @@ public class InformationController {
                                     "getDates",
                                     ex.getMessage(),
                                     getDates)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 }

@@ -1,11 +1,13 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.audit.HealthServiceRequest;
 import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmitted;
 import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.configuration.QueueConfig;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.ereporting.Error;
 import ca.bc.gov.open.icon.hsr.*;
 import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary;
 import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
@@ -122,7 +124,7 @@ public class HealthController {
                                     "healthServiceRequestSubmitted",
                                     ex.getMessage(),
                                     healthServiceRequestSubmitted)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -264,7 +266,7 @@ public class HealthController {
                                     "getHealthServiceRequestHistory",
                                     ex.getMessage(),
                                     getHealthServiceRequestHistory)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -299,7 +301,7 @@ public class HealthController {
                 // Go through all health service requests
                 for (var pub : resp.getBody()) {
                     submitHealthServiceRequest.setCsNumber(pub.getCsNum());
-                    submitHealthServiceRequest.setSubmissionDate(pub.getRequestDate().toString());
+                    submitHealthServiceRequest.setSubmissionDate(pub.getRequestDate());
                     submitHealthServiceRequest.setCentre(pub.getLocation());
                     submitHealthServiceRequest.setDetails(pub.getHealthRequest());
                     SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =
@@ -405,7 +407,7 @@ public class HealthController {
                                     "publishHSR",
                                     ex.getMessage(),
                                     publishHSR)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -461,7 +463,7 @@ public class HealthController {
                                     "getHSRCount",
                                     ex.getMessage(),
                                     getHSRCount)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 }

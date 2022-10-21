@@ -7,7 +7,6 @@ import ca.bc.gov.open.icon.audit.MessageAccessedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.ereporting.Error;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.message.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
@@ -68,7 +67,7 @@ public class MessageController {
                                     "messageAccessed",
                                     ex.getMessage(),
                                     messageAccessed)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -216,7 +215,7 @@ public class MessageController {
                                     "setMessageDetails",
                                     ex.getMessage(),
                                     setMessageDetails)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -262,7 +261,7 @@ public class MessageController {
                                     "getMessages",
                                     ex.getMessage(),
                                     getMessages)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 
@@ -310,7 +309,7 @@ public class MessageController {
                                     "getMessageDetails",
                                     ex.getMessage(),
                                     getMessageDetails)));
-            throw new ORDSException();
+            throw handleError(ex, new Error());
         }
     }
 }
