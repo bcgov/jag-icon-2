@@ -1,10 +1,11 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.bcs.FinishEnrollmentRequest;
 import ca.bc.gov.open.icon.bcs.StartEnrollmentRequest;
 import ca.bc.gov.open.icon.biometrics.*;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.iis.RegisterIndividual;
 import ca.bc.gov.open.icon.iis.RegisterIndividualRequest;
@@ -194,7 +195,7 @@ public class EnrollmentController {
                                     "startEnrollment",
                                     ex.getMessage(),
                                     startEnrollment)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
@@ -237,7 +238,7 @@ public class EnrollmentController {
                                     "finishEnrollment",
                                     ex.getMessage(),
                                     finishEnrollment)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 }

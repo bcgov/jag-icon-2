@@ -1,12 +1,13 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.Deactivate;
 import ca.bc.gov.open.icon.biometrics.DeactivateResponse;
 import ca.bc.gov.open.icon.biometrics.Reactivate;
 import ca.bc.gov.open.icon.biometrics.ReactivateResponse;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,7 +74,7 @@ public class ActivationController {
                                     "reactivate",
                                     ex.getMessage(),
                                     reactivate)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
@@ -116,7 +117,7 @@ public class ActivationController {
                                     "deactivate",
                                     ex.getMessage(),
                                     deactivate)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 }

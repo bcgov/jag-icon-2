@@ -107,8 +107,6 @@ public class HSRService {
                                     "recordHSR",
                                     ex.getMessage(),
                                     recordReq)));
-
-            var a = new Error();
             throw new ORDSException();
         }
 

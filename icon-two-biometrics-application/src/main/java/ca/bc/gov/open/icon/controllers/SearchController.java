@@ -1,10 +1,11 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.Search;
 import ca.bc.gov.open.icon.biometrics.StartSearch;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -81,7 +82,7 @@ public class SearchController {
                                     "startSearch",
                                     ex.getMessage(),
                                     startSearch)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
@@ -126,7 +127,7 @@ public class SearchController {
                                     "finishSearch",
                                     ex.getMessage(),
                                     finishSearch)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 }

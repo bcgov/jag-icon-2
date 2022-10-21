@@ -1,9 +1,10 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.*;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.iis.*;
 import ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.iis.IssuanceToken;
@@ -235,7 +236,7 @@ public class RemovalController {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog("Processing failed", "move", ex.getMessage(), move)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
@@ -348,7 +349,7 @@ public class RemovalController {
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Processing failed", "remove", ex.getMessage(), remove)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
@@ -437,7 +438,7 @@ public class RemovalController {
                                     "remove",
                                     ex.getMessage(),
                                     removeIdentity)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
@@ -486,7 +487,7 @@ public class RemovalController {
                                     "remove",
                                     ex.getMessage(),
                                     removeTemplate)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 

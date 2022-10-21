@@ -3,7 +3,6 @@ package ca.bc.gov.open.icon.controllers;
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.myinfo.*;
@@ -251,7 +250,7 @@ public class AuditController {
                                     "getPackageInfo",
                                     ex.getMessage(),
                                     getPackageInfo)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 
