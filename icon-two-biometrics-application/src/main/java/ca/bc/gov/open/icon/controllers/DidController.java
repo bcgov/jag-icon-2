@@ -1,9 +1,10 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.biometrics.GetDID;
 import ca.bc.gov.open.icon.biometrics.GetDIDResponse;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.ips.GetDIDRequest;
 import ca.bc.gov.open.icon.ips.ResponseCode;
@@ -67,7 +68,7 @@ public class DidController {
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Processing failed", "remove", ex.getMessage(), getDID)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 }

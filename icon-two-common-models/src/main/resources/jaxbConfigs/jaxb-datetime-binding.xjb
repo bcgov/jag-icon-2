@@ -4,9 +4,5 @@
             <jaxb:javaType name="java.time.Instant" xmlType="xsd:dateTime"
                    parseMethod="ca.bc.gov.open.icon.models.serializers.InstantSoapConverter.parse"
                  printMethod="ca.bc.gov.open.icon.models.serializers.InstantSoapConverter.print" />
-
-           <jaxb:javaType name="java.lang.Boolean" xmlType="xsd:boolean"
-                   parseMethod="ca.bc.gov.open.icon.models.serializers.BooleanConverter.parse"
-                 printMethod="ca.bc.gov.open.icon.models.serializers.BooleanConverter.print" />
         </jaxb:globalBindings>
 </jaxb:bindings>

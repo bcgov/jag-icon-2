@@ -57,7 +57,7 @@ public class HSRService {
         // Submit HSR (Invoke SOAP Service)
         SubmitHealthServiceRequest submitHealthServiceRequest = new SubmitHealthServiceRequest();
         submitHealthServiceRequest.setCsNumber(hsr.getCsNum());
-        submitHealthServiceRequest.setSubmissionDate(hsr.getRequestDate().toString());
+        submitHealthServiceRequest.setSubmissionDate(hsr.getRequestDate());
         submitHealthServiceRequest.setCentre(hsr.getLocation());
         submitHealthServiceRequest.setDetails(hsr.getHealthRequest());
         while (retries < MAX_RETRIES) {

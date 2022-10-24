@@ -1,7 +1,7 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.auth.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.myinfo.*;
@@ -34,119 +34,6 @@ public class InformationController {
     public InformationController(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
-    }
-
-    @PayloadRoot(
-            namespace = "ICON2.Source.Authorization.ws.provider:AuthAuth",
-            localPart = "getUserInfo")
-    @ResponsePayload
-    public GetUserInfoResponse getUserInfo(@RequestPayload GetUserInfo getUserInfo)
-            throws JsonProcessingException {
-
-        var getUserInfoDocument =
-                XMLUtilities.convertReq(getUserInfo, new GetUserInfoDocument(), "getUserInfo");
-
-        // fetch the inmost UserInfo layer
-        var inner =
-                getUserInfoDocument.getXMLString() != null
-                                && getUserInfoDocument.getXMLString().getUserInfo() != null
-                        ? getUserInfoDocument.getXMLString().getUserInfo()
-                        : new UserInfo();
-
-        HttpEntity<UserInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
-
-        try {
-
-            HttpEntity<UserInfo> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, UserInfo.class);
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getUserInfo")));
-
-            var getUserInfoResponseDocument = new GetUserInfoResponseDocument();
-            var outResp = new UserInfoOut();
-            outResp.setUserInfo(resp.getBody());
-            getUserInfoResponseDocument.setXMLString(outResp);
-
-            var getUserInfoResponse =
-                    XMLUtilities.convertResp(
-                            getUserInfoResponseDocument,
-                            new GetUserInfoResponse(),
-                            "getUserInfoResponse");
-
-            return getUserInfoResponse;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getUserInfo",
-                                    ex.getMessage(),
-                                    inner)));
-            throw new ORDSException();
-        }
-    }
-
-    @PayloadRoot(
-            namespace = "ICON2.Source.Authorization.ws.provider:AuthAuth",
-            localPart = "getDeviceInfo")
-    @ResponsePayload
-    public GetDeviceInfoResponse getDeviceInfo(@RequestPayload GetDeviceInfo getDeviceInfo)
-            throws JsonProcessingException {
-
-        var getDeviceInfoDocument =
-                XMLUtilities.convertReq(
-                        getDeviceInfo, new GetDeviceInfoDocument(), "getDeviceInfo");
-
-        // fetch the inmost DeviceInfo layer
-        DeviceInfo inner =
-                (getDeviceInfoDocument.getXMLString() != null
-                                && getDeviceInfoDocument.getXMLString().getDeviceInfo() != null
-                        ? getDeviceInfoDocument.getXMLString().getDeviceInfo()
-                        : new DeviceInfo());
-
-        HttpEntity<DeviceInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
-
-        try {
-            HttpEntity<DeviceInfo> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, DeviceInfo.class);
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getDeviceInfo")));
-
-            var getDeviceInfoResponseDocument = new GetDeviceInfoResponseDocument();
-            var outResp = new DeviceInfoOut();
-            outResp.setDeviceInfo(resp.getBody());
-            getDeviceInfoResponseDocument.setXMLString(outResp);
-
-            var getDeviceInfoResponse =
-                    XMLUtilities.convertResp(
-                            getDeviceInfoResponseDocument,
-                            new GetDeviceInfoResponse(),
-                            "getDeviceInfoResponse");
-
-            return getDeviceInfoResponse;
-
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getDeviceInfo",
-                                    ex.getMessage(),
-                                    inner)));
-            throw new ORDSException();
-        }
     }
 
     @PayloadRoot(namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo", localPart = "getOrders")
@@ -191,7 +78,7 @@ public class InformationController {
                                     "getOrders",
                                     ex.getMessage(),
                                     getOrders)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -237,7 +124,7 @@ public class InformationController {
                                     "getPrograms",
                                     ex.getMessage(),
                                     getPrograms)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -285,7 +172,7 @@ public class InformationController {
                                     "getLocations",
                                     ex.getMessage(),
                                     getLocations)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -332,7 +219,7 @@ public class InformationController {
                                     "getConditions",
                                     ex.getMessage(),
                                     getConditions)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -376,7 +263,7 @@ public class InformationController {
                                     "getOrdersConditions",
                                     ex.getMessage(),
                                     getOrdersConditions)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -419,7 +306,7 @@ public class InformationController {
                                     "getDates",
                                     ex.getMessage(),
                                     getDates)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 }

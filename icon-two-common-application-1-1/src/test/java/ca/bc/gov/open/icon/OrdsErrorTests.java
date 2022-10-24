@@ -5,8 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.auth.GetDeviceInfo;
-import ca.bc.gov.open.icon.auth.GetUserInfo;
 import ca.bc.gov.open.icon.configuration.QueueConfig;
 import ca.bc.gov.open.icon.controllers.*;
 import ca.bc.gov.open.icon.ereporting.*;
@@ -323,22 +321,6 @@ public class OrdsErrorTests {
     /*
         InformationController
     */
-    @Test
-    public void testGetUserInfoFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
-        Assertions.assertThrows(
-                ORDSException.class, () -> informationController.getUserInfo(new GetUserInfo()));
-    }
-
-    @Test
-    public void testGetDeviceInfoFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
-        Assertions.assertThrows(
-                ORDSException.class,
-                () -> informationController.getDeviceInfo(new GetDeviceInfo()));
-    }
 
     @Test
     public void testGetOrdersFail() {

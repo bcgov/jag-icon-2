@@ -1,7 +1,8 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.myinfo.*;
@@ -67,7 +68,7 @@ public class AuditController {
                                     "eServiceAccessed",
                                     ex.getMessage(),
                                     eServiceAccessed)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -99,7 +100,7 @@ public class AuditController {
                                     "homeScreenAccessed",
                                     ex.getMessage(),
                                     homeScreenAccessed)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -132,7 +133,7 @@ public class AuditController {
                                     "sessionTimeoutExecuted",
                                     ex.getMessage(),
                                     sessionTimeoutExecuted)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -165,7 +166,7 @@ public class AuditController {
                                     "eServiceFunctionAccessed",
                                     ex.getMessage(),
                                     eServiceFunctionAccessed)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -216,7 +217,7 @@ public class AuditController {
                                     "getClientHistory",
                                     ex.getMessage(),
                                     getClientHistory)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -249,7 +250,7 @@ public class AuditController {
                                     "getPackageInfo",
                                     ex.getMessage(),
                                     getPackageInfo)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 
@@ -261,44 +262,48 @@ public class AuditController {
             @RequestPayload GetSessionParameters getSessionParameters)
             throws JsonProcessingException {
 
-        SessionParameterInner inner =
-                getSessionParameters.getXMLString() != null
-                                && getSessionParameters.getXMLString().getSessionParameters()
-                                        != null
-                                && getSessionParameters
-                                                .getXMLString()
-                                                .getSessionParameters()
-                                                .getSessionParameters()
-                                        != null
-                        ? getSessionParameters
-                                .getXMLString()
-                                .getSessionParameters()
-                                .getSessionParameters()
-                        : new SessionParameterInner();
+        var getSessionParametersDocument =
+                XMLUtilities.convertReq(
+                        getSessionParameters,
+                        new GetSessionParametersDocument(),
+                        "getSessionParameters");
+
+        SessionParameterOuter inner =
+                getSessionParametersDocument.getXMLString() != null
+                                && getSessionParametersDocument.getXMLString() != null
+                        ? getSessionParametersDocument.getXMLString().getSessionParameters()
+                        : new SessionParameterOuter();
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/session-parameters");
-        HttpEntity<SessionParameterInner> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<SessionParameterOuter> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
-            HttpEntity<SessionParameterInner> resp =
+            HttpEntity<SessionParameterOuter> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            SessionParameterInner.class);
+                            SessionParameterOuter.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getSessionParameters")));
 
-            GetSessionParametersResponse getSessionParametersResponse =
-                    new GetSessionParametersResponse();
+            GetSessionParametersResponseDocument getSessionParametersResponseDocument =
+                    new GetSessionParametersResponseDocument();
             SessionParameterOutest sessionParameterOutest = new SessionParameterOutest();
             SessionParameterOuter sessionParameterOuter = new SessionParameterOuter();
 
-            getSessionParametersResponse.setXMLString(sessionParameterOutest);
+            getSessionParametersResponseDocument.setXMLString(sessionParameterOutest);
             sessionParameterOutest.setSessionParameters(sessionParameterOuter);
-            sessionParameterOuter.setSessionParameters(resp.getBody());
+            sessionParameterOuter.setSessionParameter(resp.getBody().getSessionParameter());
+
+            var getSessionParametersResponse =
+                    XMLUtilities.convertResp(
+                            getSessionParametersResponseDocument,
+                            new GetSessionParametersResponse(),
+                            "getSessionParametersResponse");
+
             return getSessionParametersResponse;
         } catch (Exception ex) {
             log.error(
@@ -308,7 +313,7 @@ public class AuditController {
                                     "getSessionParameters",
                                     ex.getMessage(),
                                     getSessionParameters)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 }

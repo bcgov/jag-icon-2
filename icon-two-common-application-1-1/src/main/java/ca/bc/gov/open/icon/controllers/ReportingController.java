@@ -1,13 +1,12 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.audit.EReportAnswers;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmittedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
-import ca.bc.gov.open.icon.ereporting.Error;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
-import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.*;
@@ -43,18 +42,6 @@ public class ReportingController {
         this.objectMapper = objectMapper;
     }
 
-    private RuntimeException handleError(Exception ex) {
-        if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
-            var httpEx = (org.springframework.web.client.HttpServerErrorException) ex;
-            var error = new Error();
-            var faultExceExcption = new ServiceFaultException(error);
-            error.setReason(faultExceExcption.getMessage(httpEx));
-            return faultExceExcption;
-        } else {
-            return new ORDSException();
-        }
-    }
-
     @PayloadRoot(namespace = "ICON2.Source.Audit.ws:Record", localPart = "eReportAnswersSubmitted")
     @ResponsePayload
     public EReportAnswersSubmittedResponse eReportAnswersSubmitted(
@@ -88,7 +75,7 @@ public class ReportingController {
                                     "eReportAnswersSubmitted",
                                     ex.getMessage(),
                                     inner)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -146,7 +133,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getReportingCmpltInstruction)));
 
-            throw handleError(ex);
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -195,7 +182,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getLocations)));
 
-            throw handleError(ex);
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -244,7 +231,8 @@ public class ReportingController {
                                     "submitAnswers",
                                     ex.getMessage(),
                                     submitAnswers)));
-            throw handleError(ex);
+
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -296,7 +284,7 @@ public class ReportingController {
                                     ex.getMessage(),
                                     getAppointment)));
 
-            throw handleError(ex);
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -344,7 +332,8 @@ public class ReportingController {
                                     "getQuestions",
                                     ex.getMessage(),
                                     getQuestions)));
-            throw handleError(ex);
+
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -391,7 +380,8 @@ public class ReportingController {
                                     "getStatus",
                                     ex.getMessage(),
                                     getStatus)));
-            throw handleError(ex);
+
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 }

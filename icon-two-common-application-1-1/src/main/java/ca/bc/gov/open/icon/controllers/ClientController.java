@@ -1,6 +1,7 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.tombstone.*;
@@ -85,7 +86,7 @@ public class ClientController {
                                     "getTombStoneInfo",
                                     ex.getMessage(),
                                     getTombStoneInfo)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.tombstone.Error());
         }
     }
 
@@ -137,7 +138,7 @@ public class ClientController {
                                     "getTrustAccount",
                                     ex.getMessage(),
                                     getTrustAccount)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.trustaccount.Error());
         }
     }
 
@@ -189,7 +190,7 @@ public class ClientController {
                                     "getVisitSchedule",
                                     ex.getMessage(),
                                     getVisitSchedule)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.visitschedule.Error());
         }
     }
 }

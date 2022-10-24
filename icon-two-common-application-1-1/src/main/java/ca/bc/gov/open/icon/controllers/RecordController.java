@@ -1,9 +1,8 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.ereporting.*;
-import ca.bc.gov.open.icon.ereporting.Error;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
-import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
@@ -37,18 +36,6 @@ public class RecordController {
     public RecordController(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
-    }
-
-    private RuntimeException handleError(Exception ex) {
-        if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
-            var httpEx = (org.springframework.web.client.HttpServerErrorException) ex;
-            var error = new Error();
-            var faultExceExcption = new ServiceFaultException(error);
-            error.setReason(faultExceExcption.getMessage(httpEx));
-            return faultExceExcption;
-        } else {
-            return new ORDSException();
-        }
     }
 
     @PayloadRoot(
@@ -94,7 +81,7 @@ public class RecordController {
                                     ex.getMessage(),
                                     recordCompleted)));
 
-            throw handleError(ex);
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -141,7 +128,7 @@ public class RecordController {
                                     ex.getMessage(),
                                     recordException)));
 
-            throw handleError(ex);
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 }
