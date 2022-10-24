@@ -87,6 +87,38 @@ public class ServiceFaultException extends RuntimeException {
                 faultExceExcption.setError(new Error(msg));
             }
             return faultExceExcption;
+        } else if (ex instanceof org.springframework.web.client.RestClientException) {
+            var httpEx = (org.springframework.web.client.RestClientException) ex;
+            var faultExceExcption = new ServiceFaultException(error);
+            String msg = faultExceExcption.getMessage(httpEx.getMessage());
+            if (error == null) {
+                faultExceExcption.setError(new Error(msg));
+            } else if (error instanceof ca.bc.gov.open.icon.ereporting.Error) {
+                ((ca.bc.gov.open.icon.ereporting.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.myinfo.Error) {
+                ((ca.bc.gov.open.icon.myinfo.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.audit.Error) {
+                ((ca.bc.gov.open.icon.audit.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.auth.Error) {
+                ((ca.bc.gov.open.icon.auth.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.biometrics.Error) {
+                ((ca.bc.gov.open.icon.biometrics.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.hsr.Error) {
+                ((ca.bc.gov.open.icon.hsr.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.message.Error) {
+                ((ca.bc.gov.open.icon.message.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.myfiles.Error) {
+                ((ca.bc.gov.open.icon.myfiles.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.tombstone.Error) {
+                ((ca.bc.gov.open.icon.tombstone.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.trustaccount.Error) {
+                ((ca.bc.gov.open.icon.trustaccount.Error) error).setReason(msg);
+            } else if (error instanceof ca.bc.gov.open.icon.visitschedule.Error) {
+                ((ca.bc.gov.open.icon.visitschedule.Error) error).setReason(msg);
+            } else {
+                faultExceExcption.setError(new Error(msg));
+            }
+            return faultExceExcption;
         } else if (ex instanceof UnknownHttpStatusCodeException) {
             var httpEx = (UnknownHttpStatusCodeException) ex;
             var faultExceExcption = new ServiceFaultException(error);
