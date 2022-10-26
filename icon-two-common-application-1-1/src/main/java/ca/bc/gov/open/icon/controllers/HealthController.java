@@ -307,6 +307,7 @@ public class HealthController {
                             (SubmitHealthServiceRequestResponse)
                                     soapTemplate.marshalSendAndReceive(
                                             hsrServiceUrl, submitHealthServiceRequest);
+                    pub.setPacId(String.valueOf(submitHealthServiceRequestResponse.getSubmitHealthServiceRequestReturn()));
                 }
             } catch (Exception ex) {
                 log.error(
