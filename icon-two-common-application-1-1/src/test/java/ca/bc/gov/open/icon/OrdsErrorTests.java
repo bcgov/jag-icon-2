@@ -10,6 +10,7 @@ import ca.bc.gov.open.icon.controllers.*;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.error.SetErrorMessage;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.hsr.GetHSRCount;
 import ca.bc.gov.open.icon.hsr.GetHealthServiceRequestHistory;
 import ca.bc.gov.open.icon.hsr.PublishHSR;
@@ -237,7 +238,7 @@ public class OrdsErrorTests {
                 .thenThrow(new RestClientException("BAD"));
 
         Assertions.assertThrows(
-                ORDSException.class,
+                ServiceFaultException.class,
                 () -> errorHandlingController.setErrorMessage(new SetErrorMessage()));
     }
 
@@ -442,7 +443,8 @@ public class OrdsErrorTests {
                 .thenThrow(new RestClientException("BAD"));
 
         Assertions.assertThrows(
-                ORDSException.class, () -> recordController.recordCompleted(new RecordCompleted()));
+                ServiceFaultException.class,
+                () -> recordController.recordCompleted(new RecordCompleted()));
     }
 
     @Test
@@ -457,7 +459,8 @@ public class OrdsErrorTests {
                 .thenThrow(new RestClientException("BAD"));
 
         Assertions.assertThrows(
-                ORDSException.class, () -> recordController.recordException(new RecordException()));
+                ServiceFaultException.class,
+                () -> recordController.recordException(new RecordException()));
     }
 
     /*
