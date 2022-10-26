@@ -184,54 +184,6 @@ jobs:
           docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Login to OpenShift Container Repository - Calgary (OC DR)
-      - name: Login to OpenShift Container Repository - Calgary (OC DR)
-        uses: docker/login-action@v1
-        with:
-          registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}
-          username: ${{secrets.OPENSHIFT_SA_USERNAME}}
-          password: ${{secrets.OPENSHIFT_SA_PASSWORD_DR}}
-
-      #Push image jag-icon2-common-1-1 to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-common-1-1 to Openshift Image Stream - Calgary (OC DR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app1}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app1}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-common-1-2 to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-common-1-2 to Openshift Image Stream - Calgary (OC DR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app2}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app2}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-biometrics to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Calgary (OC DR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app3}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app3}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-myfiles to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Calgary (OC DR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app4}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app4}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-rabbitconsumer to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-rabbitconsumer to Openshift Image Stream - Calgary (OC DR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app5}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-
       #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Kamloops (OC PROD)
       - name: Authenticate OC Env Specific SA - Kamloops (OC PROD)
         uses: redhat-actions/oc-login@v1
@@ -327,6 +279,54 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
+      
+      #Login to OpenShift Container Repository - Calgary (OC DR)
+      - name: Login to OpenShift Container Repository - Calgary (OC DR)
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}
+          username: ${{secrets.OPENSHIFT_SA_USERNAME}}
+          password: ${{secrets.OPENSHIFT_SA_PASSWORD_DR}}
+
+      #Push image jag-icon2-common-1-1 to OpenShift Image stream - Calgary (OC DR)
+      - name: Push Image jag-icon2-common-1-1 to Openshift Image Stream - Calgary (OC DR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app1}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app1}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      #Push image jag-icon2-common-1-2 to OpenShift Image stream - Calgary (OC DR)
+      - name: Push Image jag-icon2-common-1-2 to Openshift Image Stream - Calgary (OC DR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app2}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app2}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      #Push image jag-icon2-biometrics to OpenShift Image stream - Calgary (OC DR)
+      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Calgary (OC DR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app3}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app3}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      #Push image jag-icon2-myfiles to OpenShift Image stream - Calgary (OC DR)
+      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Calgary (OC DR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app4}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app4}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      #Push image jag-icon2-rabbitconsumer to OpenShift Image stream - Calgary (OC DR)
+      - name: Push Image jag-icon2-rabbitconsumer to Openshift Image Stream - Calgary (OC DR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app5}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
 
       #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Calgary (OC DR)
       - name: Authenticate OC Env Specific SA - Calgary (OC DR)
