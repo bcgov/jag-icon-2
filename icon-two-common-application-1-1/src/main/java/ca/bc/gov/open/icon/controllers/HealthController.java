@@ -338,7 +338,7 @@ public class HealthController {
 
             for (var pub : resp.getBody()) {
                 // Publish HSR only if pacId is empty or null
-                if (pub.equals("-")) {
+                if (pub.getPacId().equals("-")) {
                     log.warn(
                             objectMapper.writeValueAsString(
                                     new HsrStatusLog(
