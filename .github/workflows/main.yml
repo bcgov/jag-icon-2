@@ -88,8 +88,8 @@ jobs:
       - name: Maven Verify
         run: mvn -ntp clean verify
       
-      - name: Maven Spotless Check
-        run: mvn -ntp spotless:check
+      #- name: Maven Spotless Check
+        #run: mvn -ntp spotless:check
 
       #Build image jag-icon2-common-1-1
       - name: Build image jag-icon2-common-1-1
