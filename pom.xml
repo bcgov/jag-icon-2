@@ -35,7 +35,6 @@
         <module>icon-two-consumer-models</module>
         <module>icon-two-comparison-tool-1-1</module>
         <module>icon-two-comparison-tool-1-2</module>
-        <module>icon-two-poller</module>
         <module>icon-two-rabbit-consumer</module>
         <module>AutomatedTests</module>
         <module>icon-two-code-coverage</module>
