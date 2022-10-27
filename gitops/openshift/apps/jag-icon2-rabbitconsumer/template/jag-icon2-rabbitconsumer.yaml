@@ -90,6 +90,36 @@ objects:
                     secretKeyRef:
                       name: jag-icon2-rabbitconsumer-application-secrets
                       key: BASIC_AUTH_PASS
+                - name: ORDS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: ORDS_HOST
+                - name: HSR_SERVICE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: HSR_SERVICE_URL
+                - name: HSR_QUEUE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: HSR_QUEUE_NAME
+                - name: PING_QUEUE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: PING_QUEUE_NAME
+                - name: RABBIT_MQ_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: RABBIT_MQ_HOST
+                - name: RABBIT_MQ_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: RABBIT_MQ_USERNAME
                 - name: SPRING_PROFILES_ACTIVE
                   valueFrom:
                     secretKeyRef:
