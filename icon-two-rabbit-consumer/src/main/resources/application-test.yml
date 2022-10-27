@@ -8,6 +8,3 @@ spring:
   rabbitmq:
     host: redis
     port: 5672
-
-server:
-  port: 8081

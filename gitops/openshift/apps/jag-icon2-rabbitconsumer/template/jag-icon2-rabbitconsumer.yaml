@@ -120,7 +120,12 @@ objects:
                     secretKeyRef:
                       name: jag-icon2-rabbitconsumer-application-secrets
                       key: RABBIT_MQ_USERNAME
-                - name: RABBIT_MQ_PASSWORD
+                - name: RABBIT_MQ_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: RABBIT_MQ_PASSWORD
+                - name: RABBIT_MQ_PORT
                   valueFrom:
                     secretKeyRef:
                       name: jag-icon2-rabbitconsumer-application-secrets
