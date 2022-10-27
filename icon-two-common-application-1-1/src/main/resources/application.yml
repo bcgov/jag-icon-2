@@ -14,6 +14,13 @@ icon:
   ping-routing-key: ${PING_ROUTING_KEY}
   exchange-name: ${RABBIT_EXCHANGE_NAME}
 
+spring:
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    username: ${RABBIT_MQ_USERNAME}
+    password: ${RABBIT_MQ_PASSWORD}
+    port: 5672
+
 management:
   endpoints:
     web:

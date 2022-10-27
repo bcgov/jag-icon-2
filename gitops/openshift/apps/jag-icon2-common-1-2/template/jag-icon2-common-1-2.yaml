@@ -90,6 +90,11 @@ objects:
                     secretKeyRef:
                       name: jag-icon2-common-1-2-application-secrets
                       key: BASIC_AUTH_PASS
+                - name: ORDS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-2-application-secrets
+                      key: ORDS_HOST
                 - name: SPRING_PROFILES_ACTIVE
                   valueFrom:
                     secretKeyRef:

@@ -7,7 +7,6 @@ icon:
 spring:
   rabbitmq:
     host: ${RABBIT_MQ_HOST}
+    username: ${RABBIT_MQ_USERNAME}
+    password: ${RABBIT_MQ_PASSWORD}
     port: 5672
-
-server:
-  port: 8085
