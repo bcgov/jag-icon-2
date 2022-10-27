@@ -118,8 +118,13 @@ objects:
                 - name: RABBIT_MQ_USERNAME
                   valueFrom:
                     secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: RABBIT_MQ_USERNAME
+                      name: rabbitmq-cluster-secret
+                      key: username
+                  - name: RABBIT_MQ_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: rabbitmq-cluster-secret
+                        key: password
                 - name: SPRING_PROFILES_ACTIVE
                   valueFrom:
                     secretKeyRef:
