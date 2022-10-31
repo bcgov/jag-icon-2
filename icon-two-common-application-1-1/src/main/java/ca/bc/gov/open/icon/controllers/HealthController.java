@@ -342,18 +342,18 @@ public class HealthController {
 
             for (var pub : resp.getBody()) {
                 // Publish HSR only if pacId is empty or null
-                if (pub.getPacId().equals("-")) {
-                    log.warn(
-                            objectMapper.writeValueAsString(
-                                    new HsrStatusLog(
-                                            "publishHSR... failure '-' doing BPM", "publishHSR")));
-                    enQueueHealthServicePub(pub);
-                } else if (pub.getPacId() == null) {
+                if (pub.getPacId() == null) {
                     log.warn(
                             objectMapper.writeValueAsString(
                                     new HsrStatusLog(
                                             "publishHSR... failure 'null' doing BPM",
                                             "publishHSR")));
+                    enQueueHealthServicePub(pub);
+                } else if (pub.getPacId().equals("-")) {
+                    log.warn(
+                            objectMapper.writeValueAsString(
+                                    new HsrStatusLog(
+                                            "publishHSR... failure '-' doing BPM", "publishHSR")));
                     enQueueHealthServicePub(pub);
                 } else {
                     log.info(
