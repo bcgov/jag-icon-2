@@ -109,7 +109,7 @@ objects:
           access_log off;
         }
 
-        location /api/common-1-1 {
+        location /api/common-1-1/Audit {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -122,7 +122,151 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-common-1-1/ws;
+          proxy_pass http://splitter-common-1-1/common-1-1/Audit;
+        }
+
+        location /api/common-1-1/EReporting {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/EReporting;
+        }
+
+        location /api/common-1-1/HSR {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/HSR;
+        }
+
+        location /api/common-1-1/Message {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/Message;
+        }
+
+        location /api/common-1-1/MyInfo {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/MyInfo;
+        }
+
+        location /api/common-1-1/VisitSchedule {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/VisitSchedule;
+        }
+
+        location /api/common-1-1/TrustAccount {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/TrustAccount;
+        }
+
+        location /api/common-1-1/TombStoneInfo {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/TombStoneInfo;
+        }
+
+        location /api/common-1-1/SessionParameter {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/SessionParameter;
+        }
+
+        location /api/common-1-1/ErrorHandling {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-common-1-1/common-1-1/ErrorHandling;
         }
 
         location /api/common-1-2 {
@@ -138,10 +282,10 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-common-1-2/ws;
+          proxy_pass http://splitter-common-1-2/common-1-2;
         }
 
-        location /api/biometrics {
+        location /api/Biometrics {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -154,10 +298,10 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-biometrics/ws;
+          proxy_pass http://splitter-biometrics/Biometrics;
         }
 
-        location /api/myfiles {
+        location /api/MyFiles {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -170,24 +314,9 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-myfiles/ws;
+          proxy_pass http://splitter-myfiles/MyFiles;
         }
 
-        location /api/rabbitconsumer {
-          client_max_body_size 100m;
-          proxy_read_timeout 240s;
-          proxy_send_timeout 80s;
-          proxy_redirect off;
-          port_in_redirect off;
-          proxy_http_version 1.1;
-          proxy_set_header Host $host;
-          proxy_set_header X-Forwarded-Proto $scheme;
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Forwarded-Host $server_name;
-          proxy_pass_request_headers on;
-          proxy_pass http://splitter-rabbitconsumer/ws;
-        }
 
   - kind: ConfigMap
     apiVersion: v1
