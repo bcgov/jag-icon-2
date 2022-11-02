@@ -87,6 +87,77 @@ parameters:
 
 objects:
 
+- kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: nginx-default-conf
+      namespace: ${OC_NAMESPACE}-${OC_ENV}
+    data:
+      nginx.conf: >-
+        worker_processes auto;
+
+        error_log /var/opt/rh/rh-nginx118/log/nginx/error.log;
+
+        pid /var/opt/rh/rh-nginx118/run/nginx/nginx.pid;
+
+
+        # Load dynamic modules. See
+        /opt/rh/rh-nginx118/root/usr/share/doc/README.dynamic.
+
+        include /opt/rh/rh-nginx118/root/usr/share/nginx/modules/*.conf;
+
+
+        events {
+          worker_connections  1024;
+        }
+
+
+        http {
+
+          log_format main escape=json '{ "time": "$time_iso8601", '
+          '"remote_addr": "$remote_addr", '
+          '"remote_user": "$remote_user", '
+          '"body_bytes_sent": "$body_bytes_sent", '
+          '"request_time": "$request_time", '
+          '"status": "$status", '
+          '"request": "$request", '
+          '"request_method": "$request_method", '
+          '"http_referrer": "$http_referer", '
+          '"http_x_forwarded_for": "$http_x_forwarded_for", '
+          '"host": "$host", '
+          '"server_name": "$server_name", '
+          '"upstream_address": "$upstream_addr", '
+          '"upstream_status": "$upstream_status", '
+          '"upstream_response_time": "$upstream_response_time", '
+          '"upstream_response_length": "$upstream_response_length", '
+          '"http_user_agent": "$http_user_agent", '
+          '"request_body": "$request_body" }';
+
+          access_log  /var/opt/rh/rh-nginx118/log/nginx/access.log  main;
+
+          sendfile        on;
+          tcp_nopush      on;
+          tcp_nodelay     on;
+          keepalive_timeout  65;
+          types_hash_max_size 4096;
+
+          include       /etc/opt/rh/rh-nginx118/nginx/mime.types;
+          default_type  application/octet-stream;
+
+          # Load modular configuration files from the /etc/nginx/conf.d directory.
+          include /opt/app-root/etc/nginx.d/*.conf;
+
+          server {
+            listen       8080 default_server;
+            listen       [::]:8080 default_server;
+            server_name  _;
+            root         /opt/app-root/src;
+
+            # Load configuration files for the default server block.
+            include      /opt/app-root/etc/nginx.default.d/*.conf;
+          }
+        }
+
   - kind: ConfigMap
     apiVersion: v1
     metadata:
@@ -400,6 +471,10 @@ objects:
               configMap:
                 name: ${COMPONENT_NAME}-upstream
                 defaultMode: 420
+            - name: nginx-default-conf
+              configMap:
+                name: nginx-default-conf
+                defaultMode: 420
           containers:
             - name: ${COMPONENT_NAME}
               # Below Immage url must be changed as per gold cluster image stream
@@ -413,10 +488,10 @@ objects:
                resources:
                 limits:
                   cpu: 50m
-                  memory: 200Mi
+                  memory: 50Mi
                 requests:
-                  cpu: 50m
-                  memory: 100Mi
+                  cpu: 40m
+                  memory: 50Mi
               volumeMounts:
                 - name: ${COMPONENT_NAME}-conf
                   readOnly: true
@@ -424,6 +499,10 @@ objects:
                 - name: ${COMPONENT_NAME}-upstream
                   readOnly: true
                   mountPath: /opt/app-root/etc/nginx.d
+                - name: nginx-default-conf
+                  readOnly: true
+                  mountPath: /etc/opt/rh/rh-nginx118/nginx/nginx.conf
+                  subPath: nginx.conf
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
               imagePullPolicy: Always

@@ -98,7 +98,7 @@ objects:
                 - name: SPRING_PROFILES_ACTIVE
                   valueFrom:
                     secretKeyRef:
-                      name: jag-icon2-myfiles-application-secrets
+                      name: jag-icon2-splunk-config
                       key: SPRING_PROFILE
                 - name: SPLUNK_HTTP_URL
                   valueFrom:
@@ -118,9 +118,9 @@ objects:
               resources:
                 limits:
                   cpu: 100m
-                  memory: 100Mi
+                  memory: 200Mi
                 requests:
-                  cpu: 50m
+                  cpu: 40m
                   memory: 100Mi
               livenessProbe:
                 httpGet:
