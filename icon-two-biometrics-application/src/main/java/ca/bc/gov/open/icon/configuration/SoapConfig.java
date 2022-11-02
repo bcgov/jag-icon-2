@@ -92,7 +92,7 @@ public class SoapConfig extends WsConfigurerAdapter {
     public WebServiceTemplate webServiceTemplate() {
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-        webServiceTemplate.setMessageFactory(messageFactory());
+        webServiceTemplate.setMessageFactory(messageFactory12());
         jaxb2Marshaller.setContextPaths(
                 "ca.bc.gov.open.icon.iis", "ca.bc.gov.open.icon.ips", "ca.bc.gov.open.icon.bcs");
         webServiceTemplate.setMarshaller(jaxb2Marshaller);
@@ -113,6 +113,16 @@ public class SoapConfig extends WsConfigurerAdapter {
         SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
         messageFactory.setMessageProperties(props);
         messageFactory.setSoapVersion(SoapVersion.SOAP_11);
+        return messageFactory;
+    }
+
+    @Bean
+    public SaajSoapMessageFactory messageFactory12() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(SOAPMessage.WRITE_XML_DECLARATION, "true");
+        SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
+        messageFactory.setMessageProperties(props);
+        messageFactory.setSoapVersion(SoapVersion.SOAP_12);
         return messageFactory;
     }
 
