@@ -94,18 +94,18 @@ public class ActivationController {
             deactivateCredentialRequest.setCredentialReference(deactivate.getCredentialRef());
             deactivateCredential.setRequest(deactivateCredentialRequest);
 
-            DestroyCredentialResponse destroyCredentialResponse =
-                    (DestroyCredentialResponse)
+            DeactivateCredentialResponse deactivateCredentialResponse =
+                    (DeactivateCredentialResponse)
                             soapTemplate.marshalSendAndReceive(bcsHost, deactivateCredential);
 
-            if (!destroyCredentialResponse
-                    .getDestroyCredentialResult()
+            if (!deactivateCredentialResponse
+                    .getDeactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
                 throw new RuntimeException(
                         "Failed to destroy credential "
-                                + destroyCredentialResponse
-                                        .getDestroyCredentialResult()
+                                + deactivateCredentialResponse
+                                        .getDeactivateCredentialResult()
                                         .getMessage());
             }
             return new DeactivateResponse();
