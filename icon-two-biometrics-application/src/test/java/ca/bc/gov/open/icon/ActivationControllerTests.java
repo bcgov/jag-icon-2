@@ -60,10 +60,10 @@ public class ActivationControllerTests {
         var activationController = new ActivationController(soapTemplate, objectMapper);
 
         // Set up to mock soap service response
-        var soapResp = new DestroyCredentialResponse();
-        var reactivateCredentialResponse2 = new DestroyCredentialResponse2();
+        var soapResp = new DeactivateCredentialResponse();
+        var reactivateCredentialResponse2 = new DeactivateCredentialResponse2();
         reactivateCredentialResponse2.setCode(ResponseCode.SUCCESS);
-        soapResp.setDestroyCredentialResult(reactivateCredentialResponse2);
+        soapResp.setDeactivateCredentialResult(reactivateCredentialResponse2);
         when(soapTemplate.marshalSendAndReceive(
                         anyString(), Mockito.any(DeactivateCredential.class)))
                 .thenReturn(soapResp);
