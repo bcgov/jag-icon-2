@@ -1,11 +1,14 @@
 package ca.bc.gov.open.jagiconconsumer.services;
 
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
+import ca.bc.gov.open.icon.hsr.*;
 import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
 import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +52,42 @@ public class HSRService {
         this.webServiceTemplate = webServiceTemplate;
     }
 
-    // HSR BPM
-    public void processHSR(HealthServicePub hsr)
+    public void publicHSR(PublishHSRDocument publishHSR)
             throws InterruptedException, JsonProcessingException {
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
+
+        HttpEntity<List<HealthServicePub>> resp = null;
+        try {
+            resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            new HttpEntity<>(publishHSR, new HttpHeaders()),
+                            new ParameterizedTypeReference<>() {});
+
+            SubmitHealthServiceRequest submitHealthServiceRequest =
+                    new SubmitHealthServiceRequest();
+
+            // Go through all health service requests
+            for (var pub : resp.getBody()) {
+                publish(pub);
+            }
+
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "publishHSR",
+                                    ex.getMessage(),
+                                    publishHSR)));
+            throw handleError(ex);
+        }
+    }
+
+    public void publish(HealthServicePub hsr) throws InterruptedException, JsonProcessingException {
         retries = 0;
 
         // Submit HSR (Invoke SOAP Service)
@@ -107,7 +143,7 @@ public class HSRService {
                                     "recordHSR",
                                     ex.getMessage(),
                                     recordReq)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
 
         // Notification HSR only if hsr fails
@@ -142,7 +178,7 @@ public class HSRService {
                                         "notificationHSR",
                                         ex.getMessage(),
                                         notificationReq)));
-                throw new ORDSException();
+                throw handleError(ex);
             }
         }
         // End of BPM

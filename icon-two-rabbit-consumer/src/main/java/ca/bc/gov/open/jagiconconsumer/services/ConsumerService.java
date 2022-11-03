@@ -1,6 +1,6 @@
 package ca.bc.gov.open.jagiconconsumer.services;
 
-import ca.bc.gov.open.icon.models.HealthServicePub;
+import ca.bc.gov.open.icon.hsr.PublishHSRDocument;
 import ca.bc.gov.open.icon.models.PingModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,10 +26,10 @@ public class ConsumerService {
     }
 
     @RabbitListener(queues = "${icon.hsr-queue}")
-    public void receiveHSRMessage(@Payload Message<HealthServicePub> message)
+    public void receiveHSRMessage(@Payload Message<PublishHSRDocument> message)
             throws IOException, InterruptedException {
         try {
-            hsrService.processHSR(message.getPayload());
+            hsrService.publicHSR(message.getPayload());
         } catch (Exception ignored) {
             log.error("ERROR: " + message + " not processed successfully");
         }
