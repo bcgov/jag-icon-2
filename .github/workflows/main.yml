@@ -144,40 +144,40 @@ jobs:
           username: ${{secrets.OPENSHIFT_SA_USERNAME}}
           password: ${{secrets.OPENSHIFT_SA_PASSWORD}}
 
-      #Push image jag-icon2-common-1-1 to OpenShift Image stream - Kamloops (OC Prod)
-      - name: Push Image jag-icon2-common-1-1 to Openshift Image Stream - Kamloops (OC Prod)
+      #Push image jag-icon2-common-1-1 to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-common-1-1 to Openshift Image Stream - Kamloops (OC GOLD)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app1}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app1}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Push image jag-icon2-common-1-2 to OpenShift Image stream - Kamloops (OC Prod)
-      - name: Push Image jag-icon2-common-1-2 to Openshift Image Stream - Kamloops (OC Prod)
+      #Push image jag-icon2-common-1-2 to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-common-1-2 to Openshift Image Stream - Kamloops (OC GOLD)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app2}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app2}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Push image jag-icon2-biometrics to OpenShift Image stream - Kamloops (OC Prod)
-      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Kamloops (OC Prod)
+      #Push image jag-icon2-biometrics to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Kamloops (OC GOLD)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app3}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app3}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Push image jag-icon2-myfiles to OpenShift Image stream - Kamloops (OC Prod)
-      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Kamloops (OC Prod)
+      #Push image jag-icon2-myfiles to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Kamloops (OC GOLD)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app4}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app4}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Push image jag-icon2-rabbitconsumer to OpenShift Image stream - Kamloops (OC Prod)
-      - name: Push Image jag-icon2-rabbitconsumer to Openshift Image Stream - Kamloops (OC Prod)
+      #Push image jag-icon2-rabbitconsumer to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-rabbitconsumer to Openshift Image Stream - Kamloops (OC GOLD)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app5}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
