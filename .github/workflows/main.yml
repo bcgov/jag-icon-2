@@ -136,8 +136,8 @@ jobs:
         run: |
           docker build -t ${{github.event.inputs.app5}}:${{env.gitsha}} ${CONTEXT}
 
-      #Login to OpenShift Container Repository - Kamloops (OC PROD)
-      - name: Login to OpenShift Container Repository - Kamloops (OC PROD)
+      #Login to OpenShift Container Repository - Kamloops (OC GOLD)
+      - name: Login to OpenShift Container Repository - Kamloops (OC GOLD)
         uses: docker/login-action@v1
         with:
           registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}
@@ -184,8 +184,8 @@ jobs:
           docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Kamloops (OC PROD)
-      - name: Authenticate OC Env Specific SA - Kamloops (OC PROD)
+      #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Kamloops (OC GOLD)
+      - name: Authenticate OC Env Specific SA - Kamloops (OC GOLD)
         uses: redhat-actions/oc-login@v1
         env:
           OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
@@ -195,8 +195,8 @@ jobs:
           openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
           namespace: ${OPENSHIFT_NAMESPACE}
         
-      # Labels the deployment config of the application jag-icon2-common-1-1 with release version number to spin up the pods labelled in same version - Kamloops (OC PROD)
-      - name: Labelling DC of jag-icon2-common-1-1 to release version - Kamloops (OC PROD)
+      # Labels the deployment config of the application jag-icon2-common-1-1 with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
+      - name: Labelling DC of jag-icon2-common-1-1 to release version - Kamloops (OC GOLD)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app1}}
@@ -204,16 +204,16 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-common-1-1 to get completed before proceeding next stage - Kamloops (OC PROD)
-      - name: Wait for DC rollout of jag-icon2-common-1-1 - Kamloops (OC PROD)
+      # Wait to DC rollout of jag-icon2-common-1-1 to get completed before proceeding next stage - Kamloops (OC GOLD)
+      - name: Wait for DC rollout of jag-icon2-common-1-1 - Kamloops (OC GOLD)
         env:
           appName: ${{github.event.inputs.app1}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
 
-      # Labels the deployment config of the application jag-icon2-common-1-2 with release version number to spin up the pods labelled in same version - Kamloops (OC PROD)
-      - name: Labelling DC of jag-icon2-common-1-2 to release version - Kamloops (OC PROD)
+      # Labels the deployment config of the application jag-icon2-common-1-2 with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
+      - name: Labelling DC of jag-icon2-common-1-2 to release version - Kamloops (OC GOLD)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app2}}
@@ -221,16 +221,16 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-common-1-2 to get completed before proceeding next stage - Kamloops (OC PROD)
-      - name: Wait for DC rollout of jag-icon2-common-1-2 - Kamloops (OC PROD)
+      # Wait to DC rollout of jag-icon2-common-1-2 to get completed before proceeding next stage - Kamloops (OC GOLD)
+      - name: Wait for DC rollout of jag-icon2-common-1-2 - Kamloops (OC GOLD)
         env:
           appName: ${{github.event.inputs.app2}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      # Labels the deployment config of the application jag-icon2-biometrics with release version number to spin up the pods labelled in same version - Kamloops (OC PROD)
-      - name: Labelling DC of jag-icon2-biometrics to release version - Kamloops (OC PROD)
+      # Labels the deployment config of the application jag-icon2-biometrics with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
+      - name: Labelling DC of jag-icon2-biometrics to release version - Kamloops (OC GOLD)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app3}}
@@ -238,16 +238,16 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-biometrics to get completed before proceeding next stage - Kamloops (OC PROD)
-      - name: Wait for DC rollout of jag-icon2-biometrics - Kamloops (OC PROD)
+      # Wait to DC rollout of jag-icon2-biometrics to get completed before proceeding next stage - Kamloops (OC GOLD)
+      - name: Wait for DC rollout of jag-icon2-biometrics - Kamloops (OC GOLD)
         env:
           appName: ${{github.event.inputs.app3}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      # Labels the deployment config of the application jag-icon2-myfiles with release version number to spin up the pods labelled in same version - Kamloops (OC PROD)
-      - name: Labelling DC of jag-icon2-myfiles to release version - Kamloops (OC PROD)
+      # Labels the deployment config of the application jag-icon2-myfiles with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
+      - name: Labelling DC of jag-icon2-myfiles to release version - Kamloops (OC GOLD)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app4}}
@@ -255,16 +255,16 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-myfiles to get completed before proceeding next stage - Kamloops (OC PROD)
-      - name: Wait for DC rollout of jag-icon2-myfiles - Kamloops (OC PROD)
+      # Wait to DC rollout of jag-icon2-myfiles to get completed before proceeding next stage - Kamloops (OC GOLD)
+      - name: Wait for DC rollout of jag-icon2-myfiles - Kamloops (OC GOLD)
         env:
           appName: ${{github.event.inputs.app4}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      # Labels the deployment config of the application jag-icon2-rabbitconsumer with release version number to spin up the pods labelled in same version - Kamloops (OC PROD)
-      - name: Labelling DC of jag-icon2-rabbitconsumer to release version - Kamloops (OC PROD)
+      # Labels the deployment config of the application jag-icon2-rabbitconsumer with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
+      - name: Labelling DC of jag-icon2-rabbitconsumer to release version - Kamloops (OC GOLD)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app5}}
@@ -272,64 +272,64 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-rabbitconsumer to get completed before proceeding next stage - Kamloops (OC PROD)
-      - name: Wait for DC rollout of jag-icon2-rabbitconsumer - Kamloops (OC PROD)
+      # Wait to DC rollout of jag-icon2-rabbitconsumer to get completed before proceeding next stage - Kamloops (OC GOLD)
+      - name: Wait for DC rollout of jag-icon2-rabbitconsumer - Kamloops (OC GOLD)
         env:
           appName: ${{github.event.inputs.app5}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      #Login to OpenShift Container Repository - Calgary (OC DR)
-      - name: Login to OpenShift Container Repository - Calgary (OC DR)
+      #Login to OpenShift Container Repository - Calgary (OC GOLDDR)
+      - name: Login to OpenShift Container Repository - Calgary (OC GOLDDR)
         uses: docker/login-action@v1
         with:
           registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}
           username: ${{secrets.OPENSHIFT_SA_USERNAME}}
           password: ${{secrets.OPENSHIFT_SA_PASSWORD_DR}}
 
-      #Push image jag-icon2-common-1-1 to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-common-1-1 to Openshift Image Stream - Calgary (OC DR)
+      #Push image jag-icon2-common-1-1 to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-common-1-1 to Openshift Image Stream - Calgary (OC GOLDDR)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app1}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app1}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Push image jag-icon2-common-1-2 to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-common-1-2 to Openshift Image Stream - Calgary (OC DR)
+      #Push image jag-icon2-common-1-2 to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-common-1-2 to Openshift Image Stream - Calgary (OC GOLDDR)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app2}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app2}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Push image jag-icon2-biometrics to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Calgary (OC DR)
+      #Push image jag-icon2-biometrics to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Calgary (OC GOLDDR)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app3}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app3}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Push image jag-icon2-myfiles to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Calgary (OC DR)
+      #Push image jag-icon2-myfiles to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Calgary (OC GOLDDR)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app4}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app4}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      #Push image jag-icon2-rabbitconsumer to OpenShift Image stream - Calgary (OC DR)
-      - name: Push Image jag-icon2-rabbitconsumer to Openshift Image Stream - Calgary (OC DR)
+      #Push image jag-icon2-rabbitconsumer to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-rabbitconsumer to Openshift Image Stream - Calgary (OC GOLDDR)
         env:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app5}}:${{secrets.OPENSHIFT_ENV_TAG}}
         run: |
           docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
 
-      #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Calgary (OC DR)
-      - name: Authenticate OC Env Specific SA - Calgary (OC DR)
+      #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Calgary (OC GOLDDR)
+      - name: Authenticate OC Env Specific SA - Calgary (OC GOLDDR)
         uses: redhat-actions/oc-login@v1
         env:
           OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
@@ -339,8 +339,8 @@ jobs:
           openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN_DR}}
           namespace: ${OPENSHIFT_NAMESPACE}
         
-      # Labels the deployment config of the application jag-icon2-common-1-1 with release version number to spin up the pods labelled in same version - Calgary (OC DR)
-      - name: Labelling DC of jag-icon2-common-1-1 to release version - Calgary (OC DR)
+      # Labels the deployment config of the application jag-icon2-common-1-1 with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
+      - name: Labelling DC of jag-icon2-common-1-1 to release version - Calgary (OC GOLDDR)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app1}}
@@ -348,16 +348,16 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-common-1-1 to get completed before proceeding next stage - Calgary (OC DR)
-      - name: Wait for DC rollout of jag-icon2-common-1-1 - Calgary (OC DR)
+      # Wait to DC rollout of jag-icon2-common-1-1 to get completed before proceeding next stage - Calgary (OC GOLDDR)
+      - name: Wait for DC rollout of jag-icon2-common-1-1 - Calgary (OC GOLDDR)
         env:
           appName: ${{github.event.inputs.app1}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
 
-      # Labels the deployment config of the application jag-icon2-common-1-2 with release version number to spin up the pods labelled in same version - Calgary (OC DR)
-      - name: Labelling DC of jag-icon2-common-1-2 to release version - Calgary (OC DR)
+      # Labels the deployment config of the application jag-icon2-common-1-2 with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
+      - name: Labelling DC of jag-icon2-common-1-2 to release version - Calgary (OC GOLDDR)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app2}}
@@ -365,16 +365,16 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-common-1-2 to get completed before proceeding next stage - Calgary (OC DR)
-      - name: Wait for DC rollout of jag-icon2-common-1-2 - Calgary (OC DR)
+      # Wait to DC rollout of jag-icon2-common-1-2 to get completed before proceeding next stage - Calgary (OC GOLDDR)
+      - name: Wait for DC rollout of jag-icon2-common-1-2 - Calgary (OC GOLDDR)
         env:
           appName: ${{github.event.inputs.app2}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      # Labels the deployment config of the application jag-icon2-biometrics with release version number to spin up the pods labelled in same version - Calgary (OC DR)
-      - name: Labelling DC of jag-icon2-biometrics to release version - Calgary (OC DR)
+      # Labels the deployment config of the application jag-icon2-biometrics with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
+      - name: Labelling DC of jag-icon2-biometrics to release version - Calgary (OC GOLDDR)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app3}}
@@ -382,16 +382,16 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-biometrics to get completed before proceeding next stage - Calgary (OC DR)
-      - name: Wait for DC rollout of jag-icon2-biometrics - Calgary (OC DR)
+      # Wait to DC rollout of jag-icon2-biometrics to get completed before proceeding next stage - Calgary (OC GOLDDR)
+      - name: Wait for DC rollout of jag-icon2-biometrics - Calgary (OC GOLDDR)
         env:
           appName: ${{github.event.inputs.app3}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      # Labels the deployment config of the application jag-icon2-myfiles with release version number to spin up the pods labelled in same version - Calgary (OC DR)
-      - name: Labelling DC of jag-icon2-myfiles to release version - Calgary (OC DR)
+      # Labels the deployment config of the application jag-icon2-myfiles with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
+      - name: Labelling DC of jag-icon2-myfiles to release version - Calgary (OC GOLDDR)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app4}}
@@ -399,16 +399,16 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-myfiles to get completed before proceeding next stage - Calgary (OC DR)
-      - name: Wait for DC rollout of jag-icon2-myfiles - Calgary (OC DR)
+      # Wait to DC rollout of jag-icon2-myfiles to get completed before proceeding next stage - Calgary (OC GOLDDR)
+      - name: Wait for DC rollout of jag-icon2-myfiles - Calgary (OC GOLDDR)
         env:
           appName: ${{github.event.inputs.app4}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      # Labels the deployment config of the application jag-icon2-rabbitconsumer with release version number to spin up the pods labelled in same version - Calgary (OC DR)
-      - name: Labelling DC of jag-icon2-rabbitconsumer to release version - Calgary (OC DR)
+      # Labels the deployment config of the application jag-icon2-rabbitconsumer with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
+      - name: Labelling DC of jag-icon2-rabbitconsumer to release version - Calgary (OC GOLDDR)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app5}}
@@ -416,8 +416,8 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-rabbitconsumer to get completed before proceeding next stage - Calgary (OC DR)
-      - name: Wait for DC rollout of jag-icon2-rabbitconsumer - Calgary (OC DR)
+      # Wait to DC rollout of jag-icon2-rabbitconsumer to get completed before proceeding next stage - Calgary (OC GOLDDR)
+      - name: Wait for DC rollout of jag-icon2-rabbitconsumer - Calgary (OC GOLDDR)
         env:
           appName: ${{github.event.inputs.app5}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
