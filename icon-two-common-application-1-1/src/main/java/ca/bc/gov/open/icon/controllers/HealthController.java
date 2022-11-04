@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -278,7 +279,47 @@ public class HealthController {
                 XMLUtilities.convertReq(publishHSR, new PublishHSRDocument(), "publishHSR");
 
         try {
-            enQueue(publishHSRDocument);
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
+
+            HttpEntity<List<HealthServicePub>> resp = null;
+            resp =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            new HttpEntity<>(publishHSR, new HttpHeaders()),
+                            new ParameterizedTypeReference<>() {});
+
+            // Go through all health service requests
+            for (var pub : resp.getBody()) {
+                enQueue(pub);
+            }
+
+            // Compose response body
+            PublishHSRResponseDocument publishHSRResponseDocument =
+                    new PublishHSRResponseDocument();
+            HealthServiceOuter outResp = new HealthServiceOuter();
+            HealthService healthService = new HealthService();
+            healthService.setCsNum(publishHSRDocument.getXMLString().getHealthService().getCsNum());
+            List<ca.bc.gov.open.icon.hsr.HealthServiceRequest> requestList = new ArrayList<>();
+            for (var pub : resp != null ? resp.getBody() : null) {
+                ca.bc.gov.open.icon.hsr.HealthServiceRequest healthServiceRequest =
+                        new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
+                healthServiceRequest.setHsrId(pub.getHsrId());
+                healthServiceRequest.setPacID(pub.getPacId());
+                healthServiceRequest.setLocation(pub.getLocation());
+                var requestDate =
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+                                .withZone(ZoneId.of("GMT-7"))
+                                .withLocale(Locale.US)
+                                .format(pub.getRequestDate());
+                healthServiceRequest.setRequestDate(requestDate);
+                healthServiceRequest.setHealthRequest(pub.getHealthRequest());
+                requestList.add(healthServiceRequest);
+            }
+            healthService.setHealthServiceRequest(requestList);
+            outResp.setHealthService(healthService);
+            publishHSRResponseDocument.setXMLString(outResp);
 
             var publishHSRResponse = new PublishHSRResponse();
             publishHSRResponse.setXMLString(publishHSR.getXMLString());
@@ -299,10 +340,24 @@ public class HealthController {
         }
     }
 
-    private void enQueue(PublishHSRDocument publishHSR) {
-        log.info("Sending HSR: " + publishHSR); // might delete later
-        this.rabbitTemplate.convertAndSend(
-                queueConfig.getTopicExchangeName(), queueConfig.getHsrRoutingkey(), publishHSR);
+    private void enQueue(HealthServicePub healthServicePub) throws JsonProcessingException {
+        log.info("Sending HSR: " + healthServicePub); // might delete later
+
+        try {
+            this.rabbitTemplate.convertAndSend(
+                    queueConfig.getTopicExchangeName(),
+                    queueConfig.getHsrRoutingkey(),
+                    healthServicePub);
+        } catch (AmqpException ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error sending health service to MQ",
+                                    "publishHSR",
+                                    ex.getMessage(),
+                                    healthServicePub)));
+            handleError(ex);
+        }
     }
 
     @PayloadRoot(

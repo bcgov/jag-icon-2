@@ -2,10 +2,6 @@ package ca.bc.gov.open.jagiconconsumer;
 
 import static org.mockito.Mockito.when;
 
-import ca.bc.gov.open.icon.hsr.HealthService;
-import ca.bc.gov.open.icon.hsr.HealthServiceOuter;
-import ca.bc.gov.open.icon.hsr.PublishHSRDocument;
-import ca.bc.gov.open.icon.hsr.Row;
 import ca.bc.gov.open.icon.models.HealthServicePub;
 import ca.bc.gov.open.jagiconconsumer.services.HSRService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,16 +37,13 @@ class IconConsumerApplicationTests {
 
     @Test
     void testProcessHSR() throws JsonProcessingException, InterruptedException {
-        var req = new PublishHSRDocument();
-        var healthServiceOuter = new HealthServiceOuter();
-        var service = new HealthService();
-        var row = new Row();
-        row.setEnd("A");
-        row.setEnd("A");
-        row.setTotal("A");
-        service.setRow(row);
-        healthServiceOuter.setHealthService(service);
-        req.setXMLString(healthServiceOuter);
+        var req = new HealthServicePub();
+        req.setHealthRequest("A");
+        req.setCsNum("A");
+        req.setHsrId("A");
+        req.setPacId("A");
+        req.setRequestDate(Instant.now());
+        req.setLocation("A");
 
         List<HealthServicePub> healthServicePubs = new ArrayList();
         var healthServicePub = new HealthServicePub();

@@ -8,7 +8,6 @@ import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,50 +51,16 @@ public class HSRService {
         this.webServiceTemplate = webServiceTemplate;
     }
 
-    public void processHSR(PublishHSRDocument publishHSR)
+    public void processHSR(HealthServicePub publishHSR)
             throws InterruptedException, JsonProcessingException {
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
-
-        HttpEntity<List<HealthServicePub>> resp = null;
-        try {
-            resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            new HttpEntity<>(publishHSR, new HttpHeaders()),
-                            new ParameterizedTypeReference<>() {});
-
-            SubmitHealthServiceRequest submitHealthServiceRequest =
-                    new SubmitHealthServiceRequest();
-
-            // Go through all health service requests
-            for (var pub : resp.getBody()) {
-                publish(pub);
-            }
-
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "publishHSR",
-                                    ex.getMessage(),
-                                    publishHSR)));
-            throw handleError(ex);
-        }
-    }
-
-    public void publish(HealthServicePub hsr) throws InterruptedException, JsonProcessingException {
         retries = 0;
 
         // Submit HSR (Invoke SOAP Service)
         SubmitHealthServiceRequest submitHealthServiceRequest = new SubmitHealthServiceRequest();
-        submitHealthServiceRequest.setCsNumber(hsr.getCsNum());
-        submitHealthServiceRequest.setSubmissionDate(hsr.getRequestDate());
-        submitHealthServiceRequest.setCentre(hsr.getLocation());
-        submitHealthServiceRequest.setDetails(hsr.getHealthRequest());
+        submitHealthServiceRequest.setCsNumber(publishHSR.getCsNum());
+        submitHealthServiceRequest.setSubmissionDate(publishHSR.getRequestDate());
+        submitHealthServiceRequest.setCentre(publishHSR.getLocation());
+        submitHealthServiceRequest.setDetails(publishHSR.getHealthRequest());
         while (retries < MAX_RETRIES) {
             try {
                 SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =
@@ -122,9 +87,9 @@ public class HSRService {
         UriComponentsBuilder recordBuilder =
                 UriComponentsBuilder.fromHttpUrl(host + "health/record-hsr");
         var recordReq = new RecordHSRRequest();
-        recordReq.setCsNum(hsr.getCsNum());
-        recordReq.setHsrId(hsr.getHsrId());
-        recordReq.setPacId(hsr.getPacId());
+        recordReq.setCsNum(publishHSR.getCsNum());
+        recordReq.setHsrId(publishHSR.getHsrId());
+        recordReq.setPacId(publishHSR.getPacId());
         try {
             HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
@@ -151,10 +116,10 @@ public class HSRService {
             String errMsg =
                     appErr
                             ? "HSR Transmission - Application Error - CS Number("
-                                    + hsr.getCsNum()
+                                    + publishHSR.getCsNum()
                                     + ")"
                             : "HSR Transmission - Connection Error - CS Number("
-                                    + hsr.getCsNum()
+                                    + publishHSR.getCsNum()
                                     + ")";
             UriComponentsBuilder notificationBuilder =
                     UriComponentsBuilder.fromHttpUrl(host + "health/notification-hsr");

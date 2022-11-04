@@ -14,6 +14,7 @@ import ca.bc.gov.open.icon.hsrservice.ArrayOfHealthServiceRequest;
 import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary;
 import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
 import ca.bc.gov.open.icon.hsrservice.HealthServiceRequestBundle;
+import ca.bc.gov.open.icon.models.HealthServicePub;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
@@ -163,6 +164,54 @@ public class HealthControllerTests {
     @Test
     public void testPublishHSR() throws JsonProcessingException {
         var req = new PublishHSR();
+        req.setXMLString(
+                "<HealthService>\n"
+                        + "    <csNum>1</csNum>\n"
+                        + "    <HealthServiceRequest>\n"
+                        + "        <hsrId>1</hsrId>\n"
+                        + "        <pacID>1</pacID>\n"
+                        + "        <location>1</location>\n"
+                        + "        <requestDate></requestDate>\n"
+                        + "        <healthRequest>Test!</healthRequest>\n"
+                        + "    </HealthServiceRequest>\n"
+                        + "</HealthService> ");
+
+        List<HealthServicePub> healthServicePubs = new ArrayList();
+        var healthServicePub = new HealthServicePub();
+        healthServicePub.setCsNum("A");
+        healthServicePub.setHsrId("A");
+        healthServicePub.setLocation("A");
+        healthServicePub.setRequestDate(Instant.now());
+        healthServicePub.setHealthRequest("A");
+        healthServicePub.setPacId("A");
+        healthServicePub.setCsNum("A");
+        healthServicePub.setHsrId("A");
+        healthServicePub.setLocation("A");
+        healthServicePub.setRequestDate(Instant.now());
+        healthServicePub.setHealthRequest("A");
+        healthServicePub.setPacId("A");
+        healthServicePubs.add(healthServicePub);
+        ResponseEntity<List<HealthServicePub>> responseEntity =
+                new ResponseEntity<>(healthServicePubs, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<List<HealthServicePub>>>any()))
+                .thenReturn(responseEntity);
+
+        // Set up to mock ords response
+        ResponseEntity<HealthServicePub> responseEntity1 =
+                new ResponseEntity<>(healthServicePub, HttpStatus.OK);
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<HealthServicePub>>any()))
+                .thenReturn(responseEntity1);
+
         var healthController =
                 new HealthController(
                         webServiceTemplate,
@@ -173,7 +222,6 @@ public class HealthControllerTests {
                         rabbitTemplate,
                         amqpAdmin,
                         queueConfig);
-
         var resp = healthController.publishHSR(req);
         Assertions.assertNotNull(resp);
     }
