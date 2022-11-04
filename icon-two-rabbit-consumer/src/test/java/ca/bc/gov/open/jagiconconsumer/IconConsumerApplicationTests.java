@@ -89,6 +89,6 @@ class IconConsumerApplicationTests {
                 .thenReturn(responseEntity1);
 
         HSRService hsrService = new HSRService(restTemplate, objectMapper, webServiceTemplate);
-        hsrService.publicHSR(req);
+        hsrService.processHSR(req);
     }
 }

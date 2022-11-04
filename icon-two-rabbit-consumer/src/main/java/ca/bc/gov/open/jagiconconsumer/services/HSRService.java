@@ -52,7 +52,7 @@ public class HSRService {
         this.webServiceTemplate = webServiceTemplate;
     }
 
-    public void publicHSR(PublishHSRDocument publishHSR)
+    public void processHSR(PublishHSRDocument publishHSR)
             throws InterruptedException, JsonProcessingException {
 
         UriComponentsBuilder builder =

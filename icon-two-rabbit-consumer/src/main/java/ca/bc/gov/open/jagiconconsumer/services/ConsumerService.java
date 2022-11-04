@@ -29,7 +29,7 @@ public class ConsumerService {
     public void receiveHSRMessage(@Payload Message<PublishHSRDocument> message)
             throws IOException, InterruptedException {
         try {
-            hsrService.publicHSR(message.getPayload());
+            hsrService.processHSR(message.getPayload());
         } catch (Exception ignored) {
             log.error("ERROR: " + message + " not processed successfully");
         }
