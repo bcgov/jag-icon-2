@@ -282,12 +282,13 @@ public class HealthController {
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
 
+            // ORDS Call - PublishHSR
             HttpEntity<List<HealthServicePub>> resp = null;
             resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
-                            new HttpEntity<>(publishHSR, new HttpHeaders()),
+                            new HttpEntity<>(publishHSRDocument, new HttpHeaders()),
                             new ParameterizedTypeReference<>() {});
 
             // Go through all health service requests
