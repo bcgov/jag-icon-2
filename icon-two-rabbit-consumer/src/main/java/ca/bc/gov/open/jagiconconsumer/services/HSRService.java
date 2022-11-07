@@ -1,6 +1,8 @@
 package ca.bc.gov.open.jagiconconsumer.services;
 
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
+import ca.bc.gov.open.icon.hsr.*;
 import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
 import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
@@ -49,17 +51,16 @@ public class HSRService {
         this.webServiceTemplate = webServiceTemplate;
     }
 
-    // HSR BPM
-    public void processHSR(HealthServicePub hsr)
+    public void processHSR(HealthServicePub publishHSR)
             throws InterruptedException, JsonProcessingException {
         retries = 0;
 
         // Submit HSR (Invoke SOAP Service)
         SubmitHealthServiceRequest submitHealthServiceRequest = new SubmitHealthServiceRequest();
-        submitHealthServiceRequest.setCsNumber(hsr.getCsNum());
-        submitHealthServiceRequest.setSubmissionDate(hsr.getRequestDate());
-        submitHealthServiceRequest.setCentre(hsr.getLocation());
-        submitHealthServiceRequest.setDetails(hsr.getHealthRequest());
+        submitHealthServiceRequest.setCsNumber(publishHSR.getCsNum());
+        submitHealthServiceRequest.setSubmissionDate(publishHSR.getRequestDate());
+        submitHealthServiceRequest.setCentre(publishHSR.getLocation());
+        submitHealthServiceRequest.setDetails(publishHSR.getHealthRequest());
         while (retries < MAX_RETRIES) {
             try {
                 SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =
@@ -86,9 +87,9 @@ public class HSRService {
         UriComponentsBuilder recordBuilder =
                 UriComponentsBuilder.fromHttpUrl(host + "health/record-hsr");
         var recordReq = new RecordHSRRequest();
-        recordReq.setCsNum(hsr.getCsNum());
-        recordReq.setHsrId(hsr.getHsrId());
-        recordReq.setPacId(hsr.getPacId());
+        recordReq.setCsNum(publishHSR.getCsNum());
+        recordReq.setHsrId(publishHSR.getHsrId());
+        recordReq.setPacId(publishHSR.getPacId());
         try {
             HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
@@ -107,7 +108,7 @@ public class HSRService {
                                     "recordHSR",
                                     ex.getMessage(),
                                     recordReq)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
 
         // Notification HSR only if hsr fails
@@ -115,10 +116,10 @@ public class HSRService {
             String errMsg =
                     appErr
                             ? "HSR Transmission - Application Error - CS Number("
-                                    + hsr.getCsNum()
+                                    + publishHSR.getCsNum()
                                     + ")"
                             : "HSR Transmission - Connection Error - CS Number("
-                                    + hsr.getCsNum()
+                                    + publishHSR.getCsNum()
                                     + ")";
             UriComponentsBuilder notificationBuilder =
                     UriComponentsBuilder.fromHttpUrl(host + "health/notification-hsr");
@@ -142,7 +143,7 @@ public class HSRService {
                                         "notificationHSR",
                                         ex.getMessage(),
                                         notificationReq)));
-                throw new ORDSException();
+                throw handleError(ex);
             }
         }
         // End of BPM

@@ -60,7 +60,7 @@ public class HealthControllerTests {
     @MockBean private RabbitTemplate rabbitTemplate;
     @MockBean private AmqpAdmin amqpAdmin;
 
-    private QueueConfig queueConfig;
+    @Mock private QueueConfig queueConfig = new QueueConfig();
 
     @Test
     public void testHealthServiceRequestSubmitted() throws JsonProcessingException {

@@ -3,7 +3,7 @@ package ca.bc.gov.open.icon.exceptions;
 import org.springframework.ws.soap.server.endpoint.annotation.FaultCode;
 import org.springframework.ws.soap.server.endpoint.annotation.SoapFault;
 
-@SoapFault(faultCode = FaultCode.CLIENT)
+@SoapFault(faultCode = FaultCode.SERVER)
 public class ORDSException extends RuntimeException {
     public ORDSException() {
         super(

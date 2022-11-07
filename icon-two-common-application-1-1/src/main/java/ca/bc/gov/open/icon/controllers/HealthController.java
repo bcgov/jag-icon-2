@@ -10,8 +10,6 @@ import ca.bc.gov.open.icon.configuration.QueueConfig;
 import ca.bc.gov.open.icon.hsr.*;
 import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary;
 import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
-import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -279,12 +278,12 @@ public class HealthController {
         var publishHSRDocument =
                 XMLUtilities.convertReq(publishHSR, new PublishHSRDocument(), "publishHSR");
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
-
-        // ORDS Call - PublishHSR
-        HttpEntity<List<HealthServicePub>> resp = null;
         try {
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
+
+            // ORDS Call - PublishHSR
+            HttpEntity<List<HealthServicePub>> resp = null;
             resp =
                     restTemplate.exchange(
                             builder.toUriString(),
@@ -292,75 +291,9 @@ public class HealthController {
                             new HttpEntity<>(publishHSRDocument, new HttpHeaders()),
                             new ParameterizedTypeReference<>() {});
 
-            // Invoke SOAP Service - SubmitHealthServiceRequest (SendHSR)
-            try {
-                SubmitHealthServiceRequest submitHealthServiceRequest =
-                        new SubmitHealthServiceRequest();
-
-                // Go through all health service requests
-                for (var pub : resp.getBody()) {
-                    submitHealthServiceRequest.setCsNumber(pub.getCsNum());
-                    submitHealthServiceRequest.setSubmissionDate(pub.getRequestDate());
-                    submitHealthServiceRequest.setCentre(pub.getLocation());
-                    submitHealthServiceRequest.setDetails(pub.getHealthRequest());
-                    SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =
-                            (SubmitHealthServiceRequestResponse)
-                                    soapTemplate.marshalSendAndReceive(
-                                            hsrServiceUrl, submitHealthServiceRequest);
-                    pub.setPacId(
-                            String.valueOf(
-                                    submitHealthServiceRequestResponse
-                                            .getSubmitHealthServiceRequestReturn()));
-                }
-            } catch (Exception ex) {
-                log.error(
-                        objectMapper.writeValueAsString(
-                                new OrdsErrorLog(
-                                        "Error received from SOAP SERVICE - SubmitHealthServiceRequest",
-                                        "publishHSR",
-                                        ex.getMessage(),
-                                        publishHSR)));
-                // wM does not throw after receiving error from web service so comment out the next
-                // line
-                // throw new ORDSException();
-            }
-
-            // ORDS Call - UpdateHSR
-            UriComponentsBuilder builder2 =
-                    UriComponentsBuilder.fromHttpUrl(host + "health/update-hsr");
-            HttpEntity<HealthServicePub> resp2 = null;
-
+            // Go through all health service requests
             for (var pub : resp.getBody()) {
-                resp2 =
-                        restTemplate.exchange(
-                                builder2.toUriString(),
-                                HttpMethod.POST,
-                                new HttpEntity<>(pub, new HttpHeaders()),
-                                HealthServicePub.class);
-                pub.setHsrId(resp2.getBody().getHsrId());
-            }
-
-            for (var pub : resp.getBody()) {
-                // Publish HSR only if pacId is empty or null
-                if (pub.getPacId() == null) {
-                    log.warn(
-                            objectMapper.writeValueAsString(
-                                    new HsrStatusLog(
-                                            "publishHSR... failure 'null' doing BPM",
-                                            "publishHSR")));
-                    enQueueHealthServicePub(pub);
-                } else if (pub.getPacId().equals("-")) {
-                    log.warn(
-                            objectMapper.writeValueAsString(
-                                    new HsrStatusLog(
-                                            "publishHSR... failure '-' doing BPM", "publishHSR")));
-                    enQueueHealthServicePub(pub);
-                } else {
-                    log.info(
-                            objectMapper.writeValueAsString(
-                                    new HsrStatusLog(
-                                            "publishHSR... success no BPM", "publishHSR")));
-                }
+                enQueue(pub);
             }
 
             // Compose response body
@@ -389,24 +322,18 @@ public class HealthController {
             outResp.setHealthService(healthService);
             publishHSRResponseDocument.setXMLString(outResp);
 
-            var publishHSRResponse =
-                    XMLUtilities.convertResp(
-                            publishHSRResponseDocument,
-                            new PublishHSRResponse(),
-                            "publishHSRResponse");
-
+            var publishHSRResponse = new PublishHSRResponse();
+            publishHSRResponse.setXMLString(publishHSR.getXMLString());
             publishHSRResponse.setUserTokenString(publishHSR.getUserTokenString());
-
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "publishHSR")));
             return publishHSRResponse;
-
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
-                                    "Error received from ORDS",
+                                    "Error received from RabbitMQ",
                                     "publishHSR",
                                     ex.getMessage(),
                                     publishHSR)));
@@ -414,10 +341,24 @@ public class HealthController {
         }
     }
 
-    private void enQueueHealthServicePub(HealthServicePub p) {
-        log.info("Sending HSR: " + p); // might delete later
-        this.rabbitTemplate.convertAndSend(
-                queueConfig.getTopicExchangeName(), queueConfig.getHsrRoutingkey(), p);
+    private void enQueue(HealthServicePub healthServicePub) throws JsonProcessingException {
+        log.info("Sending HSR: " + healthServicePub); // might delete later
+
+        try {
+            this.rabbitTemplate.convertAndSend(
+                    queueConfig.getTopicExchangeName(),
+                    queueConfig.getHsrRoutingkey(),
+                    healthServicePub);
+        } catch (AmqpException ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error sending health service to MQ",
+                                    "publishHSR",
+                                    ex.getMessage(),
+                                    healthServicePub)));
+            handleError(ex);
+        }
     }
 
     @PayloadRoot(
