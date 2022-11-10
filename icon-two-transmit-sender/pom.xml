@@ -9,10 +9,10 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<artifactId>icon-two-rabbit-consumer</artifactId>
+	<artifactId>icon-two-transmit-sender</artifactId>
 	<version>1.0.0</version>
-	<name>icon-two-rabbit-consumer</name>
-	<description>icon-two-rabbit-consumer</description>
+	<name>icon-two-transmit-sender</name>
+	<description>icon-two-transmit-sender</description>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ca.bc.gov.open</groupId>
-			<artifactId>icon-two-consumer-models</artifactId>
+			<artifactId>icon-two-transmit-models</artifactId>
 			<version>1.0.0</version>
 			<scope>compile</scope>
 		</dependency>
@@ -115,7 +115,7 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>icon-two-rabbit-consumer</finalName>
+		<finalName>icon-two-transmit-sender</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

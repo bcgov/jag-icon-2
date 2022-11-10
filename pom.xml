@@ -42,10 +42,10 @@
                 <module>icon-two-common-models</module>
                 <module>icon-two-common-application-1-1</module>
                 <module>icon-two-common-application-1-2</module>
-                <module>icon-two-consumer-models</module>
+                <module>icon-two-transmit-models</module>
                 <module>icon-two-comparison-tool-1-1</module>
                 <module>icon-two-comparison-tool-1-2</module>
-                <module>icon-two-rabbit-consumer</module>
+                <module>icon-two-transmit-sender</module>
                 <module>AutomatedTests</module>
                 <module>icon-two-code-coverage</module>
             </modules>
@@ -57,12 +57,63 @@
         </profile>
         <profile>
             <id>
+                AutomatedTests
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>AutomatedTests</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-biometrics-application
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-biometrics-application</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-common-application-1-1
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-transmit-models</module>
+                <module>icon-two-common-application-1-1</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-common-application-1-2
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-transmit-models</module>
+                <module>icon-two-common-application-1-2</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
                 icon-two-myfiles-application
             </id>
             <modules>
-                <module>icon-two-common-models</module>
                 <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
                 <module>icon-two-myfiles-application</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-transmit-sender
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-transmit-sender</module>
             </modules>
         </profile>
     </profiles>

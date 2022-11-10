@@ -122,20 +122,20 @@ jobs:
           severity: HIGH,CRITICAL
       
       #Build image for scanning
-      - name: Build image icon-two-rabbit-consumer image from Dockerfile
+      - name: Build image icon-two-transmit-sender image from Dockerfile
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-rabbit-consumer
+          CONTEXT: ./icon-two-transmit-sender
         run: |
-          docker build -t icon-two-rabbit-consumer:${{ github.sha }} ${CONTEXT}
+          docker build -t icon-two-transmit-sender:${{ github.sha }} ${CONTEXT}
 
       #Run Vulnerability Scan usinig Trivy scanner
-      - name: Run Trivy vulnerability scanner for icon-two-rabbit-consumer
+      - name: Run Trivy vulnerability scanner for icon-two-transmit-sender
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: icon-two-rabbit-consumer:${{ github.sha }}
+          image-ref: icon-two-transmit-sender:${{ github.sha }}
           format: template
           template: '@/contrib/sarif.tpl'
           output: trivy-results.sarif

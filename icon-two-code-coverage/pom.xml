@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-consumer-models</artifactId>
+            <artifactId>icon-two-transmit-models</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
@@ -51,7 +51,7 @@
         </dependency>
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-rabbit-consumer</artifactId>
+            <artifactId>icon-two-transmit-sender</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
