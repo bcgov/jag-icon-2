@@ -73,7 +73,7 @@ public class EnrollmentController {
 
         try {
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
                             .queryParam("csnum", startEnrollment.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =

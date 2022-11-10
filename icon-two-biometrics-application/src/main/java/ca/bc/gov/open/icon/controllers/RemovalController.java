@@ -69,7 +69,7 @@ public class RemovalController {
     public MoveResponse move(@RequestPayload Move move) throws JsonProcessingException {
         try {
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
                             .queryParam("csnum", move.getCsNumTo());
 
             HttpEntity<Map<String, String>> andidResp =
@@ -158,7 +158,7 @@ public class RemovalController {
 
             // Grab the did with the from number to start clean up
             builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
                             .queryParam("csnum", move.getCsNumFrom());
 
             andidResp =
@@ -276,7 +276,7 @@ public class RemovalController {
             }
 
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
                             .queryParam("csnum", remove.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =
@@ -359,7 +359,7 @@ public class RemovalController {
             throws JsonProcessingException {
         try {
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
                             .queryParam("csnum", removeIdentity.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =
