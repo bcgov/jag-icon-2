@@ -97,7 +97,7 @@ public class RemovalController {
                     .getRegisterIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to register individual "
                                 + registerIndividualResponse
                                         .getRegisterIndividualResult()
@@ -124,7 +124,7 @@ public class RemovalController {
                     .getLinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to link ips " + linkResponse.getLinkResult().getMessage());
             }
 
@@ -149,7 +149,7 @@ public class RemovalController {
                     .getRebindCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to rebind bcs "
                                 + rebindCredentialResponse
                                         .getRebindCredentialResult()
@@ -196,7 +196,7 @@ public class RemovalController {
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to remove individual "
                                 + removeIndividualResponse
                                         .getRemoveIndividualResult()
@@ -228,7 +228,7 @@ public class RemovalController {
                     .getUnlinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to unlink " + unlinkResponse.getUnlinkResult().getMessage());
             }
             return new MoveResponse();
@@ -268,7 +268,7 @@ public class RemovalController {
                     .getDestroyCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to destroy credential "
                                 + destroyCredentialResponse
                                         .getDestroyCredentialResult()
@@ -311,7 +311,7 @@ public class RemovalController {
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to remove individual "
                                 + removeIndividualResponse
                                         .getRemoveIndividualResult()
@@ -398,7 +398,7 @@ public class RemovalController {
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to remove individual "
                                 + removeIndividualResponse
                                         .getRemoveIndividualResult()
@@ -425,7 +425,7 @@ public class RemovalController {
                     .getUnlinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage());
             }
 
@@ -471,7 +471,7 @@ public class RemovalController {
                     .getDestroyCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to destroy credential "
                                 + destroyCredentialResponse
                                         .getDestroyCredentialResult()
@@ -510,7 +510,7 @@ public class RemovalController {
                 .getGetIdRefResult()
                 .getCode()
                 .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-            throw new RuntimeException(
+            throw new org.springframework.web.client.RestClientException(
                     "Failed to get RefId " + getIdRefResponse.getGetIdRefResult().getMessage());
         }
         return getIdRefResponse.getGetIdRefResult().getIdRef();

@@ -56,7 +56,7 @@ public class DidController {
                             soapTemplate.marshalSendAndReceive(ipsHost, getDIDIPS);
 
             if (!getDIDResponse.getGetDIDResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to get did " + getDIDResponse.getGetDIDResult().getMessage());
             }
 

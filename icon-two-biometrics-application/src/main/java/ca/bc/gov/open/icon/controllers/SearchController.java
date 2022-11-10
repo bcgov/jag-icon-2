@@ -61,7 +61,7 @@ public class SearchController {
                             soapTemplate.marshalSendAndReceive(bcsHost, startSearchBCS);
 
             if (!bcsResp.getStartSearchResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to start BCS search "
                                 + bcsResp.getStartSearchResult().getMessage());
             }
@@ -108,7 +108,7 @@ public class SearchController {
                             soapTemplate.marshalSendAndReceive(bcsHost, finishSearchBCS);
 
             if (!bcsResp.getFinishSearchResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to finish search " + bcsResp.getFinishSearchResult().getMessage());
             }
 
