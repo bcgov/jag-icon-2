@@ -58,7 +58,7 @@ public class ActivationController {
                     .getReactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to reactivate credential "
                                 + reactivateCredentialResponse
                                         .getReactivateCredentialResult()
@@ -102,7 +102,7 @@ public class ActivationController {
                     .getDeactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new org.springframework.web.client.RestClientException(
                         "Failed to destroy credential "
                                 + deactivateCredentialResponse
                                         .getDeactivateCredentialResult()
