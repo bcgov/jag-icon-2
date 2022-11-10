@@ -113,6 +113,7 @@
             <modules>
                 <module>bom/icon-two-starters-bom</module>
                 <module>icon-two-common-models</module>
+                <module>icon-two-transmit-models</module>
                 <module>icon-two-transmit-sender</module>
             </modules>
         </profile>
