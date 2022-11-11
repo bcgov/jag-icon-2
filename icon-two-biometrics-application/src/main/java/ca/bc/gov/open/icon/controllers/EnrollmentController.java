@@ -92,6 +92,7 @@ public class EnrollmentController {
             issReqInner.setRequesterUserId(startEnrollment.getRequestorUserId());
             issReqInner.setRequesterAccountTypeCode(
                     BCeIDAccountTypeCode.fromValue(startEnrollment.getRequestorType()));
+            issReqInner.setAccountType("5");
             iisReq.setRequest(issReqInner);
 
             // The response is wrapped in 2 objects. Here we are doing the correct cast to receive
@@ -121,6 +122,7 @@ public class EnrollmentController {
             ipsLinkInner.setRequesterAccountTypeCode(
                     ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.fromValue(
                             startEnrollment.getRequestorType()));
+            ipsLinkInner.setOnlineServiceId(onlineServiceId);
             ipsLink.setRequest(ipsLinkInner);
 
             //      We do nothing with the response so ignored
