@@ -25,8 +25,7 @@ public class ServiceFaultException extends RuntimeException {
         this.error = error;
     }
 
-    public String getMessage(org.springframework.web.client.HttpServerErrorException ex) {
-        String msg = ex.getMessage();
+    public String getServerError(String msg) {
         var STATUS_MESSAGE = "status_message\":\"";
         var start = msg.indexOf(STATUS_MESSAGE);
         if (start != -1) {
@@ -37,7 +36,7 @@ public class ServiceFaultException extends RuntimeException {
         return msg;
     }
 
-    public String getMessage(String reason) {
+    public String getRestError(String reason) {
         int start = reason.indexOf("\"cause\": \"", 0);
         if (start != -1) {
             int end = reason.indexOf(",<EOL>", start + 1);
@@ -54,10 +53,10 @@ public class ServiceFaultException extends RuntimeException {
     }
 
     public static RuntimeException handleError(Exception ex, Object error) {
-        if (ex instanceof org.springframework.web.client.HttpServerErrorException) {
-            var httpEx = (org.springframework.web.client.HttpServerErrorException) ex;
+        if (ex instanceof org.springframework.web.client.HttpServerErrorException
+                || ex instanceof APIThrownException) {
             var faultExceExcption = new ServiceFaultException(error);
-            String msg = faultExceExcption.getMessage(httpEx);
+            String msg = faultExceExcption.getServerError(ex.getMessage());
             if (error == null) {
                 faultExceExcption.setError(new Error(msg));
             } else if (error instanceof ca.bc.gov.open.icon.ereporting.Error) {
@@ -87,9 +86,8 @@ public class ServiceFaultException extends RuntimeException {
             }
             return faultExceExcption;
         } else if (ex instanceof org.springframework.web.client.RestClientException) {
-            var httpEx = (java.lang.RuntimeException) ex;
             var faultExceExcption = new ServiceFaultException(error);
-            String msg = faultExceExcption.getMessage(httpEx.getMessage());
+            String msg = faultExceExcption.getRestError(ex.getMessage());
             if (error == null) {
                 faultExceExcption.setError(new Error(msg));
             } else if (error instanceof ca.bc.gov.open.icon.ereporting.Error) {

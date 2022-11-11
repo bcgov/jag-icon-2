@@ -6,6 +6,7 @@ import ca.bc.gov.open.icon.bcs.FinishEnrollmentRequest;
 import ca.bc.gov.open.icon.bcs.StartEnrollmentRequest;
 import ca.bc.gov.open.icon.biometrics.*;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.iis.RegisterIndividual;
 import ca.bc.gov.open.icon.iis.RegisterIndividualRequest;
@@ -105,7 +106,7 @@ public class EnrollmentController {
                     .getRegisterIndividualResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.iis.ResponseCode.SUCCESS)) {
-                throw new org.springframework.web.client.RestClientException(
+                throw new APIThrownException(
                         "Failed to register individual "
                                 + registerIndividualResponse
                                         .getRegisterIndividualResult()
@@ -130,7 +131,7 @@ public class EnrollmentController {
                     (LinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, ipsLink);
 
             if (!linkResponse.getLinkResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new org.springframework.web.client.RestClientException(
+                throw new APIThrownException(
                         "Failed to get IPS Link " + linkResponse.getLinkResult().getMessage());
             }
 
@@ -149,7 +150,7 @@ public class EnrollmentController {
                     (GetIdRefResponse) soapTemplate.marshalSendAndReceive(ipsHost, getIdRef);
 
             if (!idRefResponse.getGetIdRefResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new org.springframework.web.client.RestClientException(
+                throw new APIThrownException(
                         "Failed to get ID Ref response "
                                 + idRefResponse.getGetIdRefResult().getMessage());
             }
@@ -175,7 +176,7 @@ public class EnrollmentController {
             if (!bcsResp.getStartEnrollmentResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new org.springframework.web.client.RestClientException(
+                throw new APIThrownException(
                         "Failed to enroll in BCS "
                                 + bcsResp.getStartEnrollmentResult().getMessage());
             }
@@ -225,7 +226,7 @@ public class EnrollmentController {
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
 
-                throw new org.springframework.web.client.RestClientException(
+                throw new APIThrownException(
                         "Failed to finish BCS enrollment "
                                 + bcsResp.getFinishEnrollmentResult().getMessage());
             }
