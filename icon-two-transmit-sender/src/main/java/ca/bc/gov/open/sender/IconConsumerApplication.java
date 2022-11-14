@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jagiconconsumer;
+package ca.bc.gov.open.sender;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

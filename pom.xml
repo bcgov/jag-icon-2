@@ -98,6 +98,28 @@
         </profile>
         <profile>
             <id>
+                icon-two-comparison-tool-1-1
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-transmit-models</module>
+                <module>icon-two-comparison-tool-1-1</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-comparison-tool-1-2
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-transmit-models</module>
+                <module>icon-two-comparison-tool-1-2</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
                 icon-two-myfiles-application
             </id>
             <modules>

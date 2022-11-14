@@ -3,7 +3,7 @@ package ca.bc.gov.open.jagiconconsumer;
 import static org.mockito.Mockito.when;
 
 import ca.bc.gov.open.icon.models.HealthServicePub;
-import ca.bc.gov.open.jagiconconsumer.services.HSRService;
+import ca.bc.gov.open.sender.services.HSRService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
