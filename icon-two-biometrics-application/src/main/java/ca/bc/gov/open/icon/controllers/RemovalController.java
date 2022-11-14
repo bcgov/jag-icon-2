@@ -71,7 +71,7 @@ public class RemovalController {
         try {
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
-                            .queryParam("csnum", move.getCsNumTo());
+                            .queryParam("csNum", move.getCsNumTo());
 
             HttpEntity<Map<String, String>> andidResp =
                     restTemplate.exchange(
@@ -160,7 +160,7 @@ public class RemovalController {
             // Grab the did with the from number to start clean up
             builder =
                     UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
-                            .queryParam("csnum", move.getCsNumFrom());
+                            .queryParam("csNum", move.getCsNumFrom());
 
             andidResp =
                     restTemplate.exchange(
@@ -278,7 +278,7 @@ public class RemovalController {
 
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
-                            .queryParam("csnum", remove.getCsNum());
+                            .queryParam("csNum", remove.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =
                     restTemplate.exchange(
@@ -361,7 +361,7 @@ public class RemovalController {
         try {
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
-                            .queryParam("csnum", removeIdentity.getCsNum());
+                            .queryParam("csNum", removeIdentity.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =
                     restTemplate.exchange(
