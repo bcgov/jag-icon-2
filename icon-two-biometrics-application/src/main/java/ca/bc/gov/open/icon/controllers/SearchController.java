@@ -6,6 +6,7 @@ import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.Search;
 import ca.bc.gov.open.icon.biometrics.StartSearch;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,7 +62,7 @@ public class SearchController {
                             soapTemplate.marshalSendAndReceive(bcsHost, startSearchBCS);
 
             if (!bcsResp.getStartSearchResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to start BCS search "
                                 + bcsResp.getStartSearchResult().getMessage());
             }
@@ -108,7 +109,7 @@ public class SearchController {
                             soapTemplate.marshalSendAndReceive(bcsHost, finishSearchBCS);
 
             if (!bcsResp.getFinishSearchResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to finish search " + bcsResp.getFinishSearchResult().getMessage());
             }
 

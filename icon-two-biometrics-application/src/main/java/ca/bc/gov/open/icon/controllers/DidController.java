@@ -5,6 +5,7 @@ import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 import ca.bc.gov.open.icon.biometrics.GetDID;
 import ca.bc.gov.open.icon.biometrics.GetDIDResponse;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.ips.GetDIDRequest;
 import ca.bc.gov.open.icon.ips.ResponseCode;
@@ -56,7 +57,7 @@ public class DidController {
                             soapTemplate.marshalSendAndReceive(ipsHost, getDIDIPS);
 
             if (!getDIDResponse.getGetDIDResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to get did " + getDIDResponse.getGetDIDResult().getMessage());
             }
 

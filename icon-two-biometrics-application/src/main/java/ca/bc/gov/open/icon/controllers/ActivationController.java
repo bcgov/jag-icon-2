@@ -8,6 +8,7 @@ import ca.bc.gov.open.icon.biometrics.DeactivateResponse;
 import ca.bc.gov.open.icon.biometrics.Reactivate;
 import ca.bc.gov.open.icon.biometrics.ReactivateResponse;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,7 +59,7 @@ public class ActivationController {
                     .getReactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to reactivate credential "
                                 + reactivateCredentialResponse
                                         .getReactivateCredentialResult()
@@ -102,7 +103,7 @@ public class ActivationController {
                     .getDeactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to destroy credential "
                                 + deactivateCredentialResponse
                                         .getDeactivateCredentialResult()
