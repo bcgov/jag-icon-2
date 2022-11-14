@@ -75,7 +75,7 @@ public class EnrollmentController {
         try {
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
-                            .queryParam("csnum", startEnrollment.getCsNum());
+                            .queryParam("csNum", startEnrollment.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =
                     restTemplate.exchange(
