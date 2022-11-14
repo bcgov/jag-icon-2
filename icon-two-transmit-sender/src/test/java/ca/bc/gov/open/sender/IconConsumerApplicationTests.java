@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jagiconconsumer;
+package ca.bc.gov.open.sender;
 
 import static org.mockito.Mockito.when;
 
