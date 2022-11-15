@@ -54,6 +54,7 @@ public class SearchController {
                     ActiveCodeRequest.fromValue(startSearch.getActiveOnly()));
             startSearchRequest.setRequesterAccountTypeCode(
                     BCeIDAccountTypeCode.fromValue(startSearch.getRequestorType()));
+            startSearchRequest.setAccountType("5");
 
             startSearchBCS.setRequest(startSearchRequest);
 
