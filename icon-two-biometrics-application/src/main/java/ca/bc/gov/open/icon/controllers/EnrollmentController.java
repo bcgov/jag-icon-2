@@ -1,5 +1,6 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.configuration.SoapConfig.ACCOUNT_TYPE_FIVE;
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 
 import ca.bc.gov.open.icon.bcs.FinishEnrollmentRequest;
@@ -93,7 +94,7 @@ public class EnrollmentController {
             issReqInner.setRequesterUserId(startEnrollment.getRequestorUserId());
             issReqInner.setRequesterAccountTypeCode(
                     BCeIDAccountTypeCode.fromValue(startEnrollment.getRequestorType()));
-            issReqInner.setAccountType("5");
+            issReqInner.setAccountType(ACCOUNT_TYPE_FIVE);
             iisReq.setRequest(issReqInner);
 
             // The response is wrapped in 2 objects. Here we are doing the correct cast to receive

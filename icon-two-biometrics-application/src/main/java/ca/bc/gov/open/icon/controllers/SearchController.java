@@ -1,5 +1,6 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.configuration.SoapConfig.ACCOUNT_TYPE_FIVE;
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 
 import ca.bc.gov.open.icon.bcs.*;
@@ -54,7 +55,7 @@ public class SearchController {
                     ActiveCodeRequest.fromValue(startSearch.getActiveOnly()));
             startSearchRequest.setRequesterAccountTypeCode(
                     BCeIDAccountTypeCode.fromValue(startSearch.getRequestorType()));
-            startSearchRequest.setAccountType("5");
+            startSearchRequest.setAccountType(ACCOUNT_TYPE_FIVE);
 
             startSearchBCS.setRequest(startSearchRequest);
 
