@@ -1,5 +1,6 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.configuration.SoapConfig.ACCOUNT_TYPE_FIVE;
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 
 import ca.bc.gov.open.icon.bcs.*;
@@ -86,6 +87,7 @@ public class RemovalController {
             RegisterIndividualRequest registerIndividualRequest = new RegisterIndividualRequest();
             registerIndividualRequest.setOnlineServiceId(onlineServiceId);
             registerIndividualRequest.setRequesterUserId(move.getRequestorUserId());
+            registerIndividualRequest.setAccountType(ACCOUNT_TYPE_FIVE);
             registerIndividualRequest.setRequesterAccountTypeCode(
                     BCeIDAccountTypeCode.fromValue(move.getRequestorType()));
             registerIndividual.setRequest(registerIndividualRequest);
@@ -380,6 +382,10 @@ public class RemovalController {
 
             RemoveIndividual removeIndividual = new RemoveIndividual();
             RemoveIndividualRequest removeIndividualRequest = new RemoveIndividualRequest();
+            removeIndividualRequest.setRequesterUserId(removeIdentity.getRequestorUserId());
+            removeIndividualRequest.setRequesterAccountTypeCode(
+                    ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode.fromValue(
+                            removeIdentity.getRequestorType()));
             removeIndividualRequest.setOnlineServiceId(onlineServiceId);
             removeIndividualRequest.setIdRef(refId);
 
@@ -408,6 +414,11 @@ public class RemovalController {
 
             Unlink unlink = new Unlink();
             UnlinkRequest unlinkRequest = new UnlinkRequest();
+            unlinkRequest.setRequesterUserId(removeIdentity.getRequestorUserId());
+            unlinkRequest.setRequesterAccountTypeCode(
+                    ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.fromValue(
+                            removeIdentity.getRequestorType()));
+
             unlinkRequest.setDID(did);
             unlinkRequest.setOnlineServiceId(onlineServiceId);
 
@@ -501,7 +512,7 @@ public class RemovalController {
         getIdRefRequest.setRequesterAccountTypeCode(
                 StringUtils.hasLength(type)
                         ? ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.fromValue(type)
-                        : null);
+                        : ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.VOID);
         getIdRef.setRequest(getIdRefRequest);
 
         GetIdRefResponse getIdRefResponse =

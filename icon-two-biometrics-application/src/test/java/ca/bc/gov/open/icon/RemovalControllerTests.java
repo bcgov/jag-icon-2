@@ -225,6 +225,7 @@ public class RemovalControllerTests {
         req.setEnrollmentURL("A");
         req.setIssuanceID("A");
         req.setRequestorUserId("A");
+        req.setRequestorType("Business");
 
         Map<String, String> out = new HashMap<>();
         out.put("andid", "1");

@@ -39,6 +39,8 @@ public class SoapConfig extends WsConfigurerAdapter {
     public static final String SOAP_NAMESPACE =
             "http://brooks/ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics";
 
+    public static final String ACCOUNT_TYPE_FIVE = "5";
+
     @Bean
     public SoapFaultMappingExceptionResolver exceptionResolver() {
         SoapFaultMappingExceptionResolver exceptionResolver =

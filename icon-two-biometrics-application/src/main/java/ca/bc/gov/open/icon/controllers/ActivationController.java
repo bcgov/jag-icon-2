@@ -45,6 +45,7 @@ public class ActivationController {
             ReactivateCredential reactivateCredential = new ReactivateCredential();
             ReactivateCredentialRequest reactivateCredentialRequest =
                     new ReactivateCredentialRequest();
+            reactivateCredentialRequest.setOnlineServiceId(onlineServiceId);
             reactivateCredentialRequest.setRequesterUserId(reactivate.getRequestorUserId());
             reactivateCredentialRequest.setCredentialReference(reactivate.getCredentialRef());
             reactivateCredentialRequest.setRequesterAccountTypeCode(
