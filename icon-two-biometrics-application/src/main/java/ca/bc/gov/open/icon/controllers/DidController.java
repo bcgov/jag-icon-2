@@ -10,6 +10,7 @@ import ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.ips.GetDIDRequest;
 import ca.bc.gov.open.icon.ips.ResponseCode;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -63,12 +64,17 @@ public class DidController {
 
             GetDIDResponse out = new GetDIDResponse();
             out.setClientDID(getDIDResponse.getGetDIDResult().getDID());
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getDid")));
+
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
-                                    "Processing failed", "remove", ex.getMessage(), getDID)));
+                                    "Processing failed", "getDid", ex.getMessage(), getDID)));
             throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }

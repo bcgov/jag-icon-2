@@ -10,6 +10,7 @@ import ca.bc.gov.open.icon.biometrics.ReactivateResponse;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +68,10 @@ public class ActivationController {
                                         .getMessage());
             }
 
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "reactivate")));
+
             return new ReactivateResponse();
         } catch (Exception ex) {
             log.error(
@@ -110,6 +115,11 @@ public class ActivationController {
                                         .getDeactivateCredentialResult()
                                         .getMessage());
             }
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "deactivate")));
+
             return new DeactivateResponse();
         } catch (Exception ex) {
             log.error(

@@ -50,8 +50,7 @@ public class SearchControllerTests {
                         anyString(), Mockito.any(ca.bc.gov.open.icon.bcs.StartSearch.class)))
                 .thenReturn(soapResp);
 
-        SearchController searchController =
-                new SearchController(soapTemplate, objectMapper);
+        SearchController searchController = new SearchController(soapTemplate, objectMapper);
         var resp = searchController.startSearch(req);
         Assertions.assertNotNull(resp);
     }
@@ -75,8 +74,7 @@ public class SearchControllerTests {
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(FinishSearch.class)))
                 .thenReturn(soapResp);
 
-        SearchController searchController =
-                new SearchController(soapTemplate, objectMapper);
+        SearchController searchController = new SearchController(soapTemplate, objectMapper);
         var resp = searchController.finishSearch(req);
         Assertions.assertNotNull(resp);
     }

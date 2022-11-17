@@ -14,6 +14,7 @@ import ca.bc.gov.open.icon.iis.RegisterIndividualRequest;
 import ca.bc.gov.open.icon.iis.RegisterIndividualResponse;
 import ca.bc.gov.open.icon.ips.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
@@ -56,9 +57,7 @@ public class EnrollmentController {
     private final RestTemplate restTemplate;
 
     public EnrollmentController(
-            WebServiceTemplate soapTemplate,
-            ObjectMapper objectMapper,
-            RestTemplate restTemplate) {
+            WebServiceTemplate soapTemplate, ObjectMapper objectMapper, RestTemplate restTemplate) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
@@ -186,6 +185,10 @@ public class EnrollmentController {
             issuance.setExpiryDate(bcsResp.getStartEnrollmentResult().getIssuance().getExpiry());
             startEnrollmentResponse.setIssuance(issuance);
 
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "startEnrollment")));
+
             return startEnrollmentResponse;
 
         } catch (Exception ex) {
@@ -231,6 +234,10 @@ public class EnrollmentController {
 
             FinishEnrollmentResponse out = new FinishEnrollmentResponse();
             out.setCredentialRef(bcsResp.getFinishEnrollmentResult().getCredentialReference());
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "finishEnrollment")));
             return out;
         } catch (Exception ex) {
             log.error(
