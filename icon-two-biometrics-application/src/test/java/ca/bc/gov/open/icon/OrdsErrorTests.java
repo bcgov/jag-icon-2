@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,8 +33,6 @@ public class OrdsErrorTests {
     @Mock private WebServiceTemplate soapTemplate;
 
     @Mock private RestTemplate restTemplate;
-
-    @Mock private ModelMapper modalMapper;
 
     @Test
     public void testReactivateFail() {
@@ -64,7 +61,7 @@ public class OrdsErrorTests {
     public void testStartEnrollmentFail() {
         var enrollmentController =
                 new EnrollmentController(
-                        webServiceTemplate, objectMapper, restTemplate, modalMapper);
+                        webServiceTemplate, objectMapper, restTemplate);
 
         Assertions.assertThrows(
                 ORDSException.class,
@@ -75,7 +72,7 @@ public class OrdsErrorTests {
     public void testFinishEnrollmentFail() {
         var enrollmentController =
                 new EnrollmentController(
-                        webServiceTemplate, objectMapper, restTemplate, modalMapper);
+                        webServiceTemplate, objectMapper, restTemplate);
 
         Assertions.assertThrows(
                 ORDSException.class,
@@ -85,7 +82,7 @@ public class OrdsErrorTests {
     @Test
     public void testMoveFail() {
         var removalController =
-                new RemovalController(webServiceTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(webServiceTemplate, objectMapper, restTemplate);
 
         Assertions.assertThrows(ORDSException.class, () -> removalController.move(new Move()));
     }
@@ -93,7 +90,7 @@ public class OrdsErrorTests {
     @Test
     public void testRemoveFail() {
         var removalController =
-                new RemovalController(webServiceTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(webServiceTemplate, objectMapper, restTemplate);
 
         Assertions.assertThrows(ORDSException.class, () -> removalController.remove(new Remove()));
     }
@@ -101,7 +98,7 @@ public class OrdsErrorTests {
     @Test
     public void testRemoveIdentityFail() {
         var removalController =
-                new RemovalController(webServiceTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(webServiceTemplate, objectMapper, restTemplate);
 
         Assertions.assertThrows(
                 ORDSException.class, () -> removalController.removeIdentity(new RemoveIdentity()));
@@ -110,7 +107,7 @@ public class OrdsErrorTests {
     @Test
     public void testRemoveTemplateFail() {
         var removalController =
-                new RemovalController(webServiceTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(webServiceTemplate, objectMapper, restTemplate);
 
         Assertions.assertThrows(
                 ORDSException.class, () -> removalController.removeTemplate(new RemoveTemplate()));
@@ -118,7 +115,7 @@ public class OrdsErrorTests {
 
     @Test
     public void testStartSearchFail() {
-        var searchController = new SearchController(soapTemplate, objectMapper, modalMapper);
+        var searchController = new SearchController(soapTemplate, objectMapper);
 
         Assertions.assertThrows(
                 ORDSException.class, () -> searchController.startSearch(new StartSearch()));
@@ -126,7 +123,7 @@ public class OrdsErrorTests {
 
     @Test
     public void testFinishSearchFail() {
-        var searchController = new SearchController(soapTemplate, objectMapper, modalMapper);
+        var searchController = new SearchController(soapTemplate, objectMapper);
 
         Assertions.assertThrows(
                 ORDSException.class,

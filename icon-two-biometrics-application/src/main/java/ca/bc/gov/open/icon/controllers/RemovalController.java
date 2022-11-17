@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -59,7 +58,6 @@ public class RemovalController {
     public RemovalController(
             WebServiceTemplate soapTemplate,
             ObjectMapper objectMapper,
-            ModelMapper modelMapper,
             RestTemplate restTemplate) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;

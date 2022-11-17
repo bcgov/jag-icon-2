@@ -3,6 +3,7 @@ package ca.bc.gov.open.icon;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+import ca.bc.gov.open.icon.bcs.IssuanceToken;
 import ca.bc.gov.open.icon.bcs.StartEnrollmentResponse2;
 import ca.bc.gov.open.icon.biometrics.StartEnrollment;
 import ca.bc.gov.open.icon.controllers.EnrollmentController;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
@@ -40,8 +40,6 @@ public class EnrollmentControllerTests {
     @Mock private WebServiceTemplate soapTemplate = new WebServiceTemplate();
 
     @Mock private RestTemplate restTemplate = new RestTemplate();
-
-    @Mock private ModelMapper modalMapper = new ModelMapper();
 
     @Test
     public void testStartEnrollment() throws JsonProcessingException {
@@ -118,15 +116,20 @@ public class EnrollmentControllerTests {
 
         // Set up to mock soap service response
         var soapResp3 = new ca.bc.gov.open.icon.bcs.StartEnrollmentResponse();
-        var StartEnrollmentResponse2 = new StartEnrollmentResponse2();
-        soapResp3.setStartEnrollmentResult(StartEnrollmentResponse2);
-        StartEnrollmentResponse2.setCode(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS);
+        var startEnrollmentResponse2 = new StartEnrollmentResponse2();
+        var issuanceToken = new IssuanceToken();
+        issuanceToken.setIssuanceID("A");
+        issuanceToken.setEnrollmentURL("A");
+        issuanceToken.setExpiry(Instant.now());
+        startEnrollmentResponse2.setIssuance(issuanceToken);
+        soapResp3.setStartEnrollmentResult(startEnrollmentResponse2);
+        startEnrollmentResponse2.setCode(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS);
         when(soapTemplate.marshalSendAndReceive(
                         anyString(), Mockito.any(ca.bc.gov.open.icon.bcs.StartEnrollment.class)))
                 .thenReturn(soapResp3);
 
         EnrollmentController enrollmentController =
-                new EnrollmentController(soapTemplate, objectMapper, restTemplate, modalMapper);
+                new EnrollmentController(soapTemplate, objectMapper, restTemplate);
         var resp = enrollmentController.startEnrollment(req);
         Assertions.assertNotNull(resp);
     }
