@@ -74,7 +74,7 @@ public class DidController {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
-                                    "Processing failed", "remove", ex.getMessage(), getDID)));
+                                    "Processing failed", "getDid", ex.getMessage(), getDID)));
             throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }

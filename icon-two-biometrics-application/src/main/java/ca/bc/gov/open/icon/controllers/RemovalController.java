@@ -457,7 +457,7 @@ public class RemovalController {
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Processing failed",
-                                    "remove",
+                                    "removeIdentity",
                                     ex.getMessage(),
                                     removeIdentity)));
             throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
@@ -510,7 +510,7 @@ public class RemovalController {
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Processing failed",
-                                    "remove",
+                                    "removeTemplate",
                                     ex.getMessage(),
                                     removeTemplate)));
             throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
