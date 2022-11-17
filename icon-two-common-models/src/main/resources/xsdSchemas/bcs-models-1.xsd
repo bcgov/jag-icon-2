@@ -84,7 +84,7 @@
         <xsd:sequence>
             <xsd:element  name="issuanceID" type="xsd:string"/>
             <xsd:element  name="enrollmentURL" type="xsd:string"/>
-            <xsd:element maxOccurs="1" minOccurs="1" name="expiry" type="xsd:dateTime"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="expiry" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:element name="StartSearch">
