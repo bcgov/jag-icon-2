@@ -9,6 +9,7 @@ import ca.bc.gov.open.icon.biometrics.StartSearch;
 import ca.bc.gov.open.icon.configuration.SoapConfig;
 import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +33,7 @@ public class SearchController {
     private final WebServiceTemplate soapTemplate;
     private final ObjectMapper objectMapper;
 
-    public SearchController(
-            WebServiceTemplate soapTemplate, ObjectMapper objectMapper) {
+    public SearchController(WebServiceTemplate soapTemplate, ObjectMapper objectMapper) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;
     }
@@ -73,6 +73,10 @@ public class SearchController {
             search.setUrl(bcsResp.getStartSearchResult().getSearch().getSearchURL());
             search.setExpiryDate(bcsResp.getStartSearchResult().getSearch().getExpiry().toString());
             out.setSearch(search);
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "startSearch")));
 
             return out;
         } catch (Exception ex) {
@@ -119,6 +123,10 @@ public class SearchController {
             out.setActiveFlag(bcsResp.getFinishSearchResult().getActive().value());
             out.setClientId(bcsResp.getFinishSearchResult().getDID());
             out.setCredentialRef(bcsResp.getFinishSearchResult().getCredentialReference());
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "finishSearch")));
             return out;
         } catch (Exception ex) {
             log.error(

@@ -60,8 +60,7 @@ public class OrdsErrorTests {
     @Test
     public void testStartEnrollmentFail() {
         var enrollmentController =
-                new EnrollmentController(
-                        webServiceTemplate, objectMapper, restTemplate);
+                new EnrollmentController(webServiceTemplate, objectMapper, restTemplate);
 
         Assertions.assertThrows(
                 ORDSException.class,
@@ -71,8 +70,7 @@ public class OrdsErrorTests {
     @Test
     public void testFinishEnrollmentFail() {
         var enrollmentController =
-                new EnrollmentController(
-                        webServiceTemplate, objectMapper, restTemplate);
+                new EnrollmentController(webServiceTemplate, objectMapper, restTemplate);
 
         Assertions.assertThrows(
                 ORDSException.class,

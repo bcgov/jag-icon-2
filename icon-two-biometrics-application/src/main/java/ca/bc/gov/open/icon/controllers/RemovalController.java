@@ -13,6 +13,7 @@ import ca.bc.gov.open.icon.iis.IssuanceToken;
 import ca.bc.gov.open.icon.iis.ResponseCode;
 import ca.bc.gov.open.icon.ips.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
@@ -56,9 +57,7 @@ public class RemovalController {
     private final RestTemplate restTemplate;
 
     public RemovalController(
-            WebServiceTemplate soapTemplate,
-            ObjectMapper objectMapper,
-            RestTemplate restTemplate) {
+            WebServiceTemplate soapTemplate, ObjectMapper objectMapper, RestTemplate restTemplate) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
@@ -232,6 +231,11 @@ public class RemovalController {
                 throw new APIThrownException(
                         "Failed to unlink " + unlinkResponse.getUnlinkResult().getMessage());
             }
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "move")));
+
             return new MoveResponse();
         } catch (Exception ex) {
             log.error(
@@ -344,6 +348,10 @@ public class RemovalController {
                         "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage());
             }
 
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "remove")));
+
             return new RemoveResponse();
         } catch (Exception ex) {
             log.error(
@@ -439,6 +447,10 @@ public class RemovalController {
                         "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage());
             }
 
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "removeIdentity")));
+
             return new RemoveIdentityResponse();
         } catch (Exception ex) {
             log.error(
@@ -487,6 +499,10 @@ public class RemovalController {
                                         .getDestroyCredentialResult()
                                         .getMessage());
             }
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "removeTemplate")));
 
             return new RemoveTemplateResponse();
         } catch (Exception ex) {
