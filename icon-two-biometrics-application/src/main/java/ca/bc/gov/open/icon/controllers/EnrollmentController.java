@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -55,17 +54,14 @@ public class EnrollmentController {
     private final WebServiceTemplate soapTemplate;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
-    private final ModelMapper modalMapper;
 
     public EnrollmentController(
             WebServiceTemplate soapTemplate,
             ObjectMapper objectMapper,
-            RestTemplate restTemplate,
-            ModelMapper modalMapper) {
+            RestTemplate restTemplate) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
-        this.modalMapper = modalMapper;
     }
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "startEnrollment")
@@ -184,9 +180,10 @@ public class EnrollmentController {
 
             StartEnrollmentResponse startEnrollmentResponse = new StartEnrollmentResponse();
 
-            Issuance issuance =
-                    modalMapper.map(
-                            bcsResp.getStartEnrollmentResult().getIssuance(), Issuance.class);
+            Issuance issuance = new Issuance();
+            issuance.setId(bcsResp.getStartEnrollmentResult().getIssuance().getIssuanceID());
+            issuance.setUrl(bcsResp.getStartEnrollmentResult().getIssuance().getEnrollmentURL());
+            issuance.setExpiryDate(bcsResp.getStartEnrollmentResult().getIssuance().getExpiry());
             startEnrollmentResponse.setIssuance(issuance);
 
             return startEnrollmentResponse;

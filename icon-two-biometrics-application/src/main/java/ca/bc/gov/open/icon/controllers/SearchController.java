@@ -12,7 +12,6 @@ import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -32,13 +31,11 @@ public class SearchController {
 
     private final WebServiceTemplate soapTemplate;
     private final ObjectMapper objectMapper;
-    private final ModelMapper modelMapper;
 
     public SearchController(
-            WebServiceTemplate soapTemplate, ObjectMapper objectMapper, ModelMapper modelMapper) {
+            WebServiceTemplate soapTemplate, ObjectMapper objectMapper) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;
-        this.modelMapper = modelMapper;
     }
 
     @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "startSearch")
@@ -71,9 +68,10 @@ public class SearchController {
 
             ca.bc.gov.open.icon.biometrics.StartSearchResponse out =
                     new ca.bc.gov.open.icon.biometrics.StartSearchResponse();
-
-            Search search =
-                    modelMapper.map(bcsResp.getStartSearchResult().getSearch(), Search.class);
+            Search search = new Search();
+            search.setId(bcsResp.getStartSearchResult().getSearch().getSearchID());
+            search.setUrl(bcsResp.getStartSearchResult().getSearch().getSearchURL());
+            search.setExpiryDate(bcsResp.getStartSearchResult().getSearch().getExpiry().toString());
             out.setSearch(search);
 
             return out;

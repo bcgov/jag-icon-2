@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
@@ -44,8 +43,6 @@ public class RemovalControllerTests {
     @Mock private WebServiceTemplate soapTemplate = new WebServiceTemplate();
 
     @Mock private RestTemplate restTemplate = new RestTemplate();
-
-    @Mock private ModelMapper modalMapper = new ModelMapper();
 
     @Test
     public void testMove() throws JsonProcessingException {
@@ -152,7 +149,7 @@ public class RemovalControllerTests {
                 .thenReturn(common);
 
         RemovalController removalController =
-                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(soapTemplate, objectMapper, restTemplate);
         var resp = removalController.move(req);
         Assertions.assertNotNull(resp);
     }
@@ -212,7 +209,7 @@ public class RemovalControllerTests {
                 .thenReturn(common);
 
         RemovalController removalController =
-                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(soapTemplate, objectMapper, restTemplate);
         var resp = removalController.remove(req);
         Assertions.assertNotNull(resp);
     }
@@ -266,7 +263,7 @@ public class RemovalControllerTests {
                 .thenReturn(common);
 
         RemovalController removalController =
-                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(soapTemplate, objectMapper, restTemplate);
         var resp = removalController.removeIdentity(req);
         Assertions.assertNotNull(resp);
     }
@@ -298,7 +295,7 @@ public class RemovalControllerTests {
                 .thenReturn(common);
 
         RemovalController removalController =
-                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(soapTemplate, objectMapper, restTemplate);
         var resp = removalController.removeTemplate(req);
         Assertions.assertNotNull(resp);
     }
