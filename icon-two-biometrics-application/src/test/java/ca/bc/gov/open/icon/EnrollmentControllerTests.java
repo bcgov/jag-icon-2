@@ -120,7 +120,7 @@ public class EnrollmentControllerTests {
         var issuanceToken = new IssuanceToken();
         issuanceToken.setIssuanceID("A");
         issuanceToken.setEnrollmentURL("A");
-        issuanceToken.setExpiry(Instant.now());
+        issuanceToken.setExpiry("A");
         startEnrollmentResponse2.setIssuance(issuanceToken);
         soapResp3.setStartEnrollmentResult(startEnrollmentResponse2);
         startEnrollmentResponse2.setCode(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS);

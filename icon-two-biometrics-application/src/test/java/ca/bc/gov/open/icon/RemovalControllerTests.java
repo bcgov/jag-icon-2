@@ -54,7 +54,7 @@ public class RemovalControllerTests {
         req.setCredentialRefFrom("A");
         req.setIssuanceID("A");
         req.setEnrollmentURL("A");
-        req.setExpiry(Instant.now());
+        req.setExpiry("A");
 
         Map<String, String> out = new HashMap<>();
         out.put("andid", "1");
@@ -158,7 +158,7 @@ public class RemovalControllerTests {
     public void testRemove() throws JsonProcessingException {
         var req = new Remove();
         req.setCredentialRef("A");
-        req.setExpiry(Instant.now());
+        req.setExpiry("A");
         req.setRegistrar("A");
         req.setIssuanceID("A");
 
@@ -218,7 +218,7 @@ public class RemovalControllerTests {
     public void testRemoveIdentity() throws JsonProcessingException {
         var req = new RemoveIdentity();
         req.setCsNum("A");
-        req.setExpiry(Instant.now());
+        req.setExpiry("A");
         req.setEnrollmentURL("A");
         req.setIssuanceID("A");
         req.setRequestorUserId("A");
@@ -272,10 +272,11 @@ public class RemovalControllerTests {
     public void testRemoveTemplate() throws JsonProcessingException {
         var req = new RemoveTemplate();
         req.setCredentialRef("A");
-        req.setExpiry(Instant.now());
+        req.setExpiry("A");
         req.setEnrollmentURL("A");
         req.setIssuanceID("A");
         req.setRequestorUserId("A");
+        req.setRequestorType("CORNET");
 
         // Set up to mock soap service response
         var soapResp = new DestroyCredentialResponse();

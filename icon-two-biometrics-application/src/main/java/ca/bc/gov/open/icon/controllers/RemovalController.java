@@ -473,8 +473,10 @@ public class RemovalController {
             DestroyCredentialRequest destroyCredentialRequest = new DestroyCredentialRequest();
             destroyCredentialRequest.setCredentialReference(removeTemplate.getCredentialRef());
             destroyCredentialRequest.setOnlineServiceId(onlineServiceId);
+            destroyCredentialRequest.setRequesterUserId(removeTemplate.getRequestorUserId());
             destroyCredentialRequest.setRequesterAccountTypeCode(
-                    ca.bc.gov.open.icon.bcs.BCeIDAccountTypeCode.VOID);
+                    ca.bc.gov.open.icon.bcs.BCeIDAccountTypeCode.fromValue(
+                            removeTemplate.getRequestorType()));
 
             ca.bc.gov.open.icon.bcs.IssuanceToken issuanceToken =
                     new ca.bc.gov.open.icon.bcs.IssuanceToken();
