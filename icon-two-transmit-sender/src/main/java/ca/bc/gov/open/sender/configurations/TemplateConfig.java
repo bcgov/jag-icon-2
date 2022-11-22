@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jagiconconsumer.configurations;
+package ca.bc.gov.open.sender.configurations;
 
 import ca.bc.gov.open.icon.models.serializers.InstantDeserializer;
 import ca.bc.gov.open.icon.models.serializers.InstantSerializer;

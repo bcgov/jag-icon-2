@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jagiconconsumer.services;
+package ca.bc.gov.open.sender.services;
 
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 

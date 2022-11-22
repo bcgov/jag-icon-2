@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jagiconconsumer.services;
+package ca.bc.gov.open.sender.services;
 
 import ca.bc.gov.open.icon.models.HealthServicePub;
 import ca.bc.gov.open.icon.models.PingModel;
