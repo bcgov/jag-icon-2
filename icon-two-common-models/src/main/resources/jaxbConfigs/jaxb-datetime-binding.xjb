@@ -6,8 +6,8 @@
                  printMethod="ca.bc.gov.open.icon.models.serializers.InstantSoapConverter.print" />
 
            <jaxb:javaType name="java.lang.Boolean" xmlType="xsd:boolean"
-                   parseMethod="ca.bc.gov.open.icon.models.serializers.BooleanConverter.parse"
-                 printMethod="ca.bc.gov.open.icon.models.serializers.BooleanConverter.print" />
+                   parseMethod="ca.bc.gov.open.icon.models.serializers.BooleanSoapConverter.parse"
+                 printMethod="ca.bc.gov.open.icon.models.serializers.BooleanSoapConverter.print" />
 
         </jaxb:globalBindings>
 </jaxb:bindings>

@@ -3,8 +3,8 @@ package ca.bc.gov.open.icon.models.serializers;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public final class BooleanConverter {
-    private BooleanConverter() {}
+public final class BooleanSoapConverter {
+    private BooleanSoapConverter() {}
 
     public static String print(boolean b) {
         return b ? "1" : "0";
