@@ -236,8 +236,14 @@ public class InformationController {
             @RequestPayload GetOrdersConditions getOrdersConditions)
             throws JsonProcessingException {
 
-        HttpEntity<GetOrdersConditions> payload =
-                new HttpEntity<>(getOrdersConditions, new HttpHeaders());
+        var getOrdersConditionsDocument =
+                XMLUtilities.convertReq(
+                        getOrdersConditions,
+                        new GetOrdersConditionsDocument(),
+                        "getOrdersConditions");
+
+        HttpEntity<GetOrdersConditionsDocument> payload =
+                new HttpEntity<>(getOrdersConditionsDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions");
@@ -250,13 +256,17 @@ public class InformationController {
                             payload,
                             OrdersConditions.class);
 
-            GetOrdersConditionsResponse getOrdersConditionsResponse =
-                    new GetOrdersConditionsResponse();
+            GetOrdersConditionsResponseDocument getOrdersConditionsResponseDocument =
+                    new GetOrdersConditionsResponseDocument();
             OrdersConditionsOuter outResp = new OrdersConditionsOuter();
-            OrdersConditionsInner inResp = new OrdersConditionsInner();
-            inResp.setOrdersConditions(resp.getBody());
-            outResp.setOrdersConditions(inResp);
-            getOrdersConditionsResponse.setXMLString(outResp);
+            outResp.setOrdersConditions(resp.getBody());
+            getOrdersConditionsResponseDocument.setXMLString(outResp);
+
+            var getOrdersConditionsResponse =
+                    XMLUtilities.convertResp(
+                            getOrdersConditionsResponseDocument,
+                            new GetOrdersConditionsResponse(),
+                            "getOrdersConditionsResponse");
 
             log.info(
                     objectMapper.writeValueAsString(

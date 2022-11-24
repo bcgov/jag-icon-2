@@ -300,7 +300,6 @@ public class InformationControllerTests {
     public void testOrdersConditions() throws JsonProcessingException {
         var req = new GetOrdersConditions();
         var ordersConditionsOuter = new OrdersConditionsOuter();
-        var ordersConditionsInner = new OrdersConditionsInner();
         var ordersConditions = new OrdersConditions();
 
         List<OrdersConditionsDetails> draftl = new ArrayList<>();
@@ -321,9 +320,8 @@ public class InformationControllerTests {
         ordersConditions.setOrdersConditionsDetails(draftl);
         ordersConditions.setCsNum("A");
 
-        req.setXMLString(ordersConditionsOuter);
-        ordersConditionsOuter.setOrdersConditions(ordersConditionsInner);
-        ordersConditionsInner.setOrdersConditions(ordersConditions);
+        req.setXMLString("A");
+        ordersConditionsOuter.setOrdersConditions(ordersConditions);
 
         List<OrdersConditionsDetails> detailsList = new ArrayList<>();
         ordersConditions.setOrdersConditionsDetails(detailsList);
@@ -342,7 +340,7 @@ public class InformationControllerTests {
         userToken.setSiteMinderTransactionID("A");
 
         userTokenOuter.setUserToken(userToken);
-        req.setUserTokenString(userTokenOuter);
+        req.setUserTokenString("A");
 
         var ordersConditions1 = new OrdersConditions();
 
