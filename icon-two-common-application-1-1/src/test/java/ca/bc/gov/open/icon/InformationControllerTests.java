@@ -8,7 +8,6 @@ import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.myinfo.UserToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -45,8 +44,8 @@ public class InformationControllerTests {
         OrdersInfo.setDescription("A");
         OrdersInfo.setAdultYouth("A");
         OrdersInfo.setOrderNum("A");
-        OrdersInfo.setStartDate(Instant.now());
-        OrdersInfo.setEndDate(Instant.now());
+        OrdersInfo.setStartDate("A");
+        OrdersInfo.setEndDate("A");
         draftl.add(OrdersInfo);
         orders.setOrdersInfo(draftl);
         orders.setCsNum("A");
@@ -127,7 +126,7 @@ public class InformationControllerTests {
         ProgramInfo.setProgramName("A");
 
         ProgramInfo.setLocation(Location);
-        ProgramInfo.setEndDate(Instant.now());
+        ProgramInfo.setEndDate("A");
         ProgramInfo.setOutcome("A");
         draftl.add(ProgramInfo);
         programs.setProgramInfo(draftl);
@@ -245,8 +244,8 @@ public class InformationControllerTests {
         conditions.setCsNum("A");
         conditions.setAudoId("A");
         conditions.setOrderNum("A");
-        conditions.setStartDate(Instant.now());
-        conditions.setEndDate(Instant.now());
+        conditions.setStartDate("A");
+        conditions.setEndDate("A");
         var row = new Row();
         row.setStart("1");
         row.setEnd("3");
@@ -310,8 +309,8 @@ public class InformationControllerTests {
         OrdersConditionsDetails.setDescription("A");
         OrdersConditionsDetails.setAdultYouth("A");
         OrdersConditionsDetails.setOrderNum("A");
-        OrdersConditionsDetails.setStartDate(Instant.now());
-        OrdersConditionsDetails.setEndDate(Instant.now());
+        OrdersConditionsDetails.setStartDate("A");
+        OrdersConditionsDetails.setEndDate("A");
         List<ConditionDetails> ConditionDetails = new ArrayList<>();
         var ConditionDetail = new ConditionDetails();
         ConditionDetail.setCondition("A");
@@ -354,8 +353,8 @@ public class InformationControllerTests {
         ordersConditionsDetails.setDescription("A");
         ordersConditionsDetails.setAdultYouth("A");
         ordersConditionsDetails.setOrderNum("A");
-        ordersConditionsDetails.setStartDate(Instant.now());
-        ordersConditionsDetails.setEndDate(Instant.now());
+        ordersConditionsDetails.setStartDate("A");
+        ordersConditionsDetails.setEndDate("A");
 
         List<ConditionDetails> conditionDetailList = new ArrayList<>();
         var conditionDetails = new ConditionDetails();
