@@ -1,13 +1,19 @@
-<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="2.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+               jaxb:extensionBindingPrefixes="xjc"
+               version="2.0">
+    <jaxb:bindings>
         <jaxb:globalBindings>
-            <jaxb:serializable uid="1" />
-            <jaxb:javaType name="java.time.Instant" xmlType="xsd:dateTime"
-                   parseMethod="ca.bc.gov.open.icon.models.serializers.InstantSoapConverter.parse"
-                 printMethod="ca.bc.gov.open.icon.models.serializers.InstantSoapConverter.print" />
+            <jaxb:serializable/>
 
-           <jaxb:javaType name="java.lang.Boolean" xmlType="xsd:boolean"
-                   parseMethod="ca.bc.gov.open.icon.models.serializers.BooleanSoapConverter.parse"
-                 printMethod="ca.bc.gov.open.icon.models.serializers.BooleanSoapConverter.print" />
+            <xjc:javaType name="java.lang.Boolean" xmlType="xsd:boolean"
+                                               adapter="ca.bc.gov.open.icon.models.serializers.BooleanSoapConverterAdapter"/>
 
+            <xjc:javaType name="java.time.Instant" xmlType="xsd:dateTime"
+                                               adapter="ca.bc.gov.open.icon.models.serializers.InstantSoapConverterAdapter"/>
         </jaxb:globalBindings>
+    </jaxb:bindings>
+
 </jaxb:bindings>
