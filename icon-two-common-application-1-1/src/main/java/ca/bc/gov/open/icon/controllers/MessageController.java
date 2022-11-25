@@ -284,9 +284,7 @@ public class MessageController {
             HttpEntity<Messages> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Messages.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getMessageDetails")));
+
             GetMessageDetailsResponseDocument getMessageDetailsResponseDocument =
                     new GetMessageDetailsResponseDocument();
             MessagesOuter outResp = new MessagesOuter();
@@ -298,6 +296,10 @@ public class MessageController {
                             getMessageDetailsResponseDocument,
                             new GetMessageDetailsResponse(),
                             "getMessageDetailsResponse");
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getMessageDetails")));
 
             return getMessageDetailsResponse;
         } catch (Exception ex) {

@@ -191,9 +191,6 @@ public class AuditController {
             HttpEntity<ClientHistory> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, ClientHistory.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getClientHistory")));
 
             GetClientHistoryResponseDocument getClientHistoryResponseDocument =
                     new GetClientHistoryResponseDocument();
@@ -207,6 +204,10 @@ public class AuditController {
                             getClientHistoryResponseDocument,
                             new GetClientHistoryResponse(),
                             "getClientHistoryResponse");
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getClientHistory")));
 
             return getClientHistoryResponse;
         } catch (Exception ex) {

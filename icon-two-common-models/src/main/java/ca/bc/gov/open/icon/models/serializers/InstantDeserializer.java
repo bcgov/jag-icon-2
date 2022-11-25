@@ -17,23 +17,11 @@ public class InstantDeserializer extends JsonDeserializer<Instant> {
     public Instant deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException {
         try {
-            if (jsonParser.getText().split("-")[0].length() < 4) {
-                var sfd = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS a", Locale.US);
-                sfd.setTimeZone(TimeZone.getTimeZone("GMT-7"));
-                return sfd.parse(jsonParser.getText()).toInstant();
-            } else {
-                var sfd = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
-                sfd.setTimeZone(TimeZone.getTimeZone("GMT-7"));
-                return sfd.parse(jsonParser.getText()).toInstant();
-            }
+            var sfd = new SimpleDateFormat("yyyy.MM.dd", Locale.US);
+            sfd.setTimeZone(TimeZone.getTimeZone("GMT-7"));
+            return sfd.parse(jsonParser.getText()).toInstant();
         } catch (ParseException e) {
-            try {
-                var sfd = new SimpleDateFormat("dd-MMM-yy", Locale.US);
-                sfd.setTimeZone(TimeZone.getTimeZone("GMT-7"));
-                return sfd.parse(jsonParser.getText()).toInstant();
-            } catch (ParseException e2) {
-                log.error(e2.getLocalizedMessage());
-            }
+            log.error(e.getLocalizedMessage());
         }
         return null;
     }

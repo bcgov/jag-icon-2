@@ -54,9 +54,6 @@ public class InformationController {
             HttpEntity<Orders> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Orders.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getOrders")));
 
             GetOrdersResponseDocument getOrdersResponseDocument = new GetOrdersResponseDocument();
             OrdersOuter outResp = new OrdersOuter();
@@ -68,6 +65,10 @@ public class InformationController {
                             getOrdersResponseDocument,
                             new GetOrdersResponse(),
                             "getOrdersResponse");
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getOrders")));
 
             return getOrdersResponse;
         } catch (Exception ex) {
@@ -100,9 +101,7 @@ public class InformationController {
             HttpEntity<Programs> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Programs.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getPrograms")));
+
             GetProgramsResponseDocument getProgramsResponseDocument =
                     new GetProgramsResponseDocument();
             ProgramsOuter outResp = new ProgramsOuter();
@@ -114,6 +113,10 @@ public class InformationController {
                             getProgramsResponseDocument,
                             new GetProgramsResponse(),
                             "getProgramsResponse");
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getPrograms")));
 
             return getProgramsResponse;
         } catch (Exception ex) {
@@ -146,9 +149,6 @@ public class InformationController {
             HttpEntity<Locations> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Locations.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getLocations")));
 
             GetLocationsResponseDocument getLocationsResponseDocument =
                     new GetLocationsResponseDocument();
@@ -162,6 +162,10 @@ public class InformationController {
                             getLocationsResponseDocument,
                             new GetLocationsResponse(),
                             "getLocationsResponse");
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getLocations")));
 
             return getLocationsResponse;
         } catch (Exception ex) {
@@ -195,9 +199,7 @@ public class InformationController {
             HttpEntity<Conditions> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Conditions.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getConditions")));
+
             GetConditionsResponseDocument getConditionsResponseDocument =
                     new GetConditionsResponseDocument();
             ConditionsOuter outResp = new ConditionsOuter();
@@ -209,6 +211,10 @@ public class InformationController {
                             getConditionsResponseDocument,
                             new GetConditionsResponse(),
                             "getConditionsResponse");
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getConditions")));
 
             return getConditionsResponse;
         } catch (Exception ex) {
@@ -231,8 +237,14 @@ public class InformationController {
             @RequestPayload GetOrdersConditions getOrdersConditions)
             throws JsonProcessingException {
 
-        HttpEntity<GetOrdersConditions> payload =
-                new HttpEntity<>(getOrdersConditions, new HttpHeaders());
+        var getOrdersConditionsDocument =
+                XMLUtilities.convertReq(
+                        getOrdersConditions,
+                        new GetOrdersConditionsDocument(),
+                        "getOrdersConditions");
+
+        HttpEntity<GetOrdersConditionsDocument> payload =
+                new HttpEntity<>(getOrdersConditionsDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions");
@@ -244,16 +256,23 @@ public class InformationController {
                             HttpMethod.POST,
                             payload,
                             OrdersConditions.class);
+
+            GetOrdersConditionsResponseDocument getOrdersConditionsResponseDocument =
+                    new GetOrdersConditionsResponseDocument();
+            OrdersConditionsOuter outResp = new OrdersConditionsOuter();
+            outResp.setOrdersConditions(resp.getBody());
+            getOrdersConditionsResponseDocument.setXMLString(outResp);
+
+            var getOrdersConditionsResponse =
+                    XMLUtilities.convertResp(
+                            getOrdersConditionsResponseDocument,
+                            new GetOrdersConditionsResponse(),
+                            "getOrdersConditionsResponse");
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getOrdersConditions")));
-            GetOrdersConditionsResponse getOrdersConditionsResponse =
-                    new GetOrdersConditionsResponse();
-            OrdersConditionsOuter outResp = new OrdersConditionsOuter();
-            OrdersConditionsInner inResp = new OrdersConditionsInner();
-            inResp.setOrdersConditions(resp.getBody());
-            outResp.setOrdersConditions(inResp);
-            getOrdersConditionsResponse.setXMLString(outResp);
+
             return getOrdersConditionsResponse;
         } catch (Exception ex) {
             log.error(
@@ -284,9 +303,6 @@ public class InformationController {
             HttpEntity<Dates> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Dates.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getDates")));
 
             GetDatesResponseDocument getDatesResponseDocument = new GetDatesResponseDocument();
             DatesOuter outResp = new DatesOuter();
@@ -296,6 +312,10 @@ public class InformationController {
             var getDatesResponse =
                     XMLUtilities.convertResp(
                             getDatesResponseDocument, new GetDatesResponse(), "getDatesResponse");
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getDates")));
 
             return getDatesResponse;
         } catch (Exception ex) {
