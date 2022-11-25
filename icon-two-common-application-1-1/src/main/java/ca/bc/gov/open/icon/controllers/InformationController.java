@@ -54,9 +54,6 @@ public class InformationController {
             HttpEntity<Orders> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Orders.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getOrders")));
 
             GetOrdersResponseDocument getOrdersResponseDocument = new GetOrdersResponseDocument();
             OrdersOuter outResp = new OrdersOuter();
@@ -68,6 +65,10 @@ public class InformationController {
                             getOrdersResponseDocument,
                             new GetOrdersResponse(),
                             "getOrdersResponse");
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getOrders")));
 
             return getOrdersResponse;
         } catch (Exception ex) {
