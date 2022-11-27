@@ -3,6 +3,9 @@ package ca.bc.gov.open.icon.utils;
 import java.io.*;
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.stream.StreamSource;
 
 public final class XMLUtilities {
@@ -93,16 +96,18 @@ public final class XMLUtilities {
         try {
             StringWriter stringWriter = new StringWriter();
             stringWriter.write(XML_HEADER);
+            XMLStreamWriter xmlStreamWriter =
+                    XMLOutputFactory.newInstance().createXMLStreamWriter(stringWriter);
             JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             JAXBElement<T> jaxbElement =
                     new JAXBElement<>(new QName("", objName), (Class<T>) obj.getClass(), obj);
-            jaxbMarshaller.marshal(jaxbElement, stringWriter);
+            jaxbMarshaller.marshal(jaxbElement, new CustomizedXMLStreamWriter(xmlStreamWriter));
 
             return stringWriter.toString();
-        } catch (JAXBException e) {
+        } catch (JAXBException | XMLStreamException e) {
             e.printStackTrace();
             return null;
         }
