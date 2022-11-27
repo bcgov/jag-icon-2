@@ -4,10 +4,10 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-/*
+/**
    Implement the CustomizedXMLStreamWriter is to support output/serialized XML
    has no namespace attribute. writeNamespace and writeDefaultNamespace are two overridden methods
-*/
+**/
 public class CustomizedXMLStreamWriter implements XMLStreamWriter {
 
     private XMLStreamWriter xmlStreamWriter;
