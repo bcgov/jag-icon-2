@@ -1,12 +1,13 @@
 package ca.bc.gov.open.icon.utils;
 
 import java.io.*;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
+import javax.xml.namespace.QName;
+import javax.xml.transform.stream.StreamSource;
 
 public final class XMLUtilities {
+
+    private static final String XML_HEADER = "<?xml version=\"1.0\"?>";
 
     // remove the request XML (contain <![CDATA[ ... ]]> ) to recreate a request object
     public static <T, G> G convertReq(T req, G reqDoc, String service) {
@@ -72,5 +73,38 @@ public final class XMLUtilities {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static <T> T deserializeXmlStr(String xmlString, T obj) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            StreamSource source = new StreamSource(new StringReader(xmlString));
+            JAXBElement<T> jaxbElement =
+                    (JAXBElement<T>) unmarshaller.unmarshal(source, obj.getClass());
+            return jaxbElement.getValue();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static <T> String serializeXmlStr(T obj, String objName) {
+        try {
+            StringWriter stringWriter = new StringWriter();
+            stringWriter.write(XML_HEADER);
+            JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+            JAXBElement<T> jaxbElement =
+                    new JAXBElement<>(new QName("", objName), (Class<T>) obj.getClass(), obj);
+            jaxbMarshaller.marshal(jaxbElement, stringWriter);
+
+            return stringWriter.toString();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
