@@ -73,10 +73,6 @@ public class AuthenticationController {
                             payload,
                             PreAuthorizeClient.class);
 
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getPreAuthorizeClient")));
-
             var getPreAuthorizeClientResponseDocument = new GetPreAuthorizeClientResponseDocument();
             var outResp = new PreAuthorizeClientOut();
             outResp.setPreAuthorizeClient(resp.getBody());
@@ -87,9 +83,10 @@ public class AuthenticationController {
                             getPreAuthorizeClientResponseDocument,
                             new GetPreAuthorizeClientResponse(),
                             "getPreAuthorizeClientResponse");
-
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getPreAuthorizeClient")));
             return getPreAuthorizeClientResponse;
-
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -130,10 +127,6 @@ public class AuthenticationController {
                             payload,
                             HasFunctionalAbility.class);
 
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
-
             var getHasFunctionalAbilityResponseDocument =
                     new GetHasFunctionalAbilityResponseDocument();
             var outResp = new HasFunctionalAbilityOut();
@@ -145,9 +138,10 @@ public class AuthenticationController {
                             getHasFunctionalAbilityResponseDocument,
                             new GetHasFunctionalAbilityResponse(),
                             "getHasFunctionalAbilityResponse");
-
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
             return getHasFunctionalAbilityResponse;
-
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(

@@ -171,58 +171,6 @@ public class AuditController {
     }
 
     @PayloadRoot(
-            namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo",
-            localPart = "getClientHistory")
-    @ResponsePayload
-    public GetClientHistoryResponse getClientHistory(
-            @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
-
-        var getClientHistoryDocument =
-                XMLUtilities.convertReq(
-                        getClientHistory, new GetClientHistoryDocument(), "getClientHistory");
-
-        HttpEntity<GetClientHistoryDocument> payload =
-                new HttpEntity<>(getClientHistoryDocument, new HttpHeaders());
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/client-history");
-
-        try {
-            HttpEntity<ClientHistory> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, ClientHistory.class);
-
-            GetClientHistoryResponseDocument getClientHistoryResponseDocument =
-                    new GetClientHistoryResponseDocument();
-            ClientHistoryOuter outResp = new ClientHistoryOuter();
-
-            outResp.setClientHistory(resp.getBody());
-            getClientHistoryResponseDocument.setXMLString(outResp);
-
-            var getClientHistoryResponse =
-                    XMLUtilities.convertResp(
-                            getClientHistoryResponseDocument,
-                            new GetClientHistoryResponse(),
-                            "getClientHistoryResponse");
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getClientHistory")));
-
-            return getClientHistoryResponse;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getClientHistory",
-                                    ex.getMessage(),
-                                    getClientHistory)));
-            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
-        }
-    }
-
-    @PayloadRoot(
             namespace = "http://reeks.bcgov/ICON2.Source.Version.ws.provider:PackageInfo",
             localPart = "getPackageInfo")
     @ResponsePayload

@@ -59,19 +59,9 @@ public class InformationController {
                 UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
 
         try {
-
             HttpEntity<UserInfo> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, UserInfo.class);
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getUserInfo")));
 
             var getUserInfoResponseDocument = new GetUserInfoResponseDocument();
             var outResp = new UserInfoOut();
@@ -83,7 +73,9 @@ public class InformationController {
                             getUserInfoResponseDocument,
                             new GetUserInfoResponse(),
                             "getUserInfoResponse");
-
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getUserInfo")));
             return getUserInfoResponse;
         } catch (Exception ex) {
             log.error(
@@ -125,10 +117,6 @@ public class InformationController {
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, DeviceInfo.class);
 
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getDeviceInfo")));
-
             var getDeviceInfoResponseDocument = new GetDeviceInfoResponseDocument();
             var outResp = new DeviceInfoOut();
             outResp.setDeviceInfo(resp.getBody());
@@ -140,8 +128,10 @@ public class InformationController {
                             new GetDeviceInfoResponse(),
                             "getDeviceInfoResponse");
 
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getDeviceInfo")));
             return getDeviceInfoResponse;
-
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(

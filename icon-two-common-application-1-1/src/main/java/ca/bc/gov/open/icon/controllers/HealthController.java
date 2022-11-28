@@ -283,8 +283,7 @@ public class HealthController {
                     UriComponentsBuilder.fromHttpUrl(host + "health/publish-hsr");
 
             // ORDS Call - PublishHSR
-            HttpEntity<List<HealthServicePub>> resp = null;
-            resp =
+            HttpEntity<List<HealthServicePub>> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
@@ -333,7 +332,7 @@ public class HealthController {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
-                                    "Error received from RabbitMQ",
+                                    "Error received from ORDS",
                                     "publishHSR",
                                     ex.getMessage(),
                                     publishHSR)));
