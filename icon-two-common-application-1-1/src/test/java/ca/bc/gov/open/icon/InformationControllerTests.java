@@ -2,7 +2,6 @@ package ca.bc.gov.open.icon;
 
 import static org.mockito.Mockito.when;
 
-import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.controllers.InformationController;
 import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.myinfo.UserToken;
@@ -12,34 +11,36 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InformationControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private InformationController controller;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        controller = Mockito.spy(new InformationController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testGetOrders() throws JsonProcessingException {
         var req = new GetOrders();
-        var OrdersOuter = new OrdersOuter();
         var orders = new Orders();
-        List<OrdersInfo> draftl = new ArrayList<>();
+        GetOrdersDocument ordersDocument = new GetOrdersDocument();
+        List<OrdersInfo> ordersInfoList = new ArrayList<>();
         var OrdersInfo = new OrdersInfo();
         OrdersInfo.setAudoId("A");
         OrdersInfo.setDescription("A");
@@ -47,16 +48,11 @@ public class InformationControllerTests {
         OrdersInfo.setOrderNum("A");
         OrdersInfo.setStartDate(Instant.now());
         OrdersInfo.setEndDate(Instant.now());
-        draftl.add(OrdersInfo);
-        orders.setOrdersInfo(draftl);
+        ordersInfoList.add(OrdersInfo);
+        orders.setOrdersInfo(ordersInfoList);
         orders.setCsNum("A");
 
-        req.setXMLString("A");
-        OrdersOuter.setOrders(orders);
-
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new UserToken();
-
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -67,11 +63,12 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
+        req.setXMLString("A");
         req.setUserTokenString("A");
+        ordersDocument.setOrders(orders);
+        ordersDocument.setUserToken(userToken);
 
-        var orders1 = new Orders();
-        ResponseEntity<Orders> responseEntity = new ResponseEntity<>(orders1, HttpStatus.OK);
+        ResponseEntity<Orders> responseEntity = new ResponseEntity<>(orders, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -81,20 +78,15 @@ public class InformationControllerTests {
                         Mockito.<Class<Orders>>any()))
                 .thenReturn(responseEntity);
 
-        InformationController informationController =
-                new InformationController(restTemplate, objectMapper);
-        var resp = informationController.getOrders(req);
+        var resp = controller.getOrders(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testGetPrograms() throws JsonProcessingException {
         var req = new GetPrograms();
-        var programsOuter = new ProgramsOuter();
-
         var programs = new Programs();
         req.setXMLString("A");
-        programsOuter.setPrograms(programs);
         programs.setCsNum("A");
         programs.setInstCommStatusFilter("A");
         var row = new Row();
@@ -120,21 +112,17 @@ public class InformationControllerTests {
         address.setProvince("A");
         address.setPostalCode("A");
         Location.setAddress(addresses);
-        List<ProgramInfo> draftl = new ArrayList<>();
+        List<ProgramInfo> programInfoList = new ArrayList<>();
         var ProgramInfo = new ProgramInfo();
-
         ProgramInfo.setInstCommStatus("A");
         ProgramInfo.setProgramName("A");
-
         ProgramInfo.setLocation(Location);
         ProgramInfo.setEndDate(Instant.now());
         ProgramInfo.setOutcome("A");
-        draftl.add(ProgramInfo);
-        programs.setProgramInfo(draftl);
+        programInfoList.add(ProgramInfo);
+        programs.setProgramInfo(programInfoList);
 
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new UserToken();
-
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -145,12 +133,13 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
+        req.setXMLString("A");
         req.setUserTokenString("A");
+        GetProgramsDocument getProgramsDocument = new GetProgramsDocument();
+        getProgramsDocument.setPrograms(programs);
+        getProgramsDocument.setUserToken(userToken);
 
-        var programs1 = new Programs();
-        programs1 = programs;
-        ResponseEntity<Programs> responseEntity = new ResponseEntity<>(programs1, HttpStatus.OK);
+        ResponseEntity<Programs> responseEntity = new ResponseEntity<>(programs, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -160,22 +149,14 @@ public class InformationControllerTests {
                         Mockito.<Class<Programs>>any()))
                 .thenReturn(responseEntity);
 
-        InformationController informationController =
-                new InformationController(restTemplate, objectMapper);
-        var resp = informationController.getPrograms(req);
+        var resp = controller.getPrograms(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testGetLocations() throws JsonProcessingException {
         var req = new GetLocations();
-        var locationsOuter = new LocationsOuter();
-
         var locations = new Locations();
-        req.setXMLString("A");
-        locationsOuter.setLocations(locations);
-
-        var location = new Location();
         var address = new Address();
         List<Address> addresses = new ArrayList<>();
         addresses.add(address);
@@ -186,15 +167,16 @@ public class InformationControllerTests {
         address.setCity("A");
         address.setProvince("A");
         address.setPostalCode("A");
+        var location = new Location();
         location.setAddress(addresses);
         location.setCode("A");
         location.setDescription("A");
         location.setFax("A");
         location.setInstCommType("A");
         location.setPhone("A");
-        List<Location> draftl = new ArrayList<>();
-        draftl.add(location);
-        locations.setLocation(draftl);
+        List<Location> locationList = new ArrayList<>();
+        locationList.add(location);
+        locations.setLocation(locationList);
         locations.setCsNum("A");
         var ParoleOfficer = new ParoleOfficer();
         ParoleOfficer.setLastname("A");
@@ -202,9 +184,7 @@ public class InformationControllerTests {
         ParoleOfficer.setBusinessHrs("A");
         locations.setParoleOfficer(ParoleOfficer);
 
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new UserToken();
-
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -215,12 +195,13 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
+        GetLocationsDocument getLocationsDocument = new GetLocationsDocument();
+        getLocationsDocument.setLocations(locations);
+        getLocationsDocument.setUserToken(userToken);
+        req.setXMLString("A");
         req.setUserTokenString("A");
 
-        var locations1 = new Locations();
-        locations1 = locations;
-        ResponseEntity<Locations> responseEntity = new ResponseEntity<>(locations1, HttpStatus.OK);
+        ResponseEntity<Locations> responseEntity = new ResponseEntity<>(locations, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -230,18 +211,14 @@ public class InformationControllerTests {
                         Mockito.<Class<Locations>>any()))
                 .thenReturn(responseEntity);
 
-        InformationController informationController =
-                new InformationController(restTemplate, objectMapper);
-        var resp = informationController.getLocations(req);
+        var resp = controller.getLocations(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testGetConditions() throws JsonProcessingException {
         var req = new GetConditions();
-        var conditionsOuter = new ConditionsOuter();
         var conditions = new Conditions();
-
         conditions.setCsNum("A");
         conditions.setAudoId("A");
         conditions.setOrderNum("A");
@@ -252,19 +229,14 @@ public class InformationControllerTests {
         row.setEnd("3");
         row.setTotal("3");
         conditions.setRow(row);
-        List<ConditionsDetails> draftl = new ArrayList<>();
+        List<ConditionsDetails> conditionsDetailsList = new ArrayList<>();
         var ConditionsDetails = new ConditionsDetails();
         ConditionsDetails.setCondition("A");
         ConditionsDetails.setDetails("A");
-        draftl.add(ConditionsDetails);
-        conditions.setConditionsDetails(draftl);
+        conditionsDetailsList.add(ConditionsDetails);
+        conditions.setConditionsDetails(conditionsDetailsList);
 
-        req.setXMLString("A");
-        conditionsOuter.setConditions(conditions);
-
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new UserToken();
-
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -275,13 +247,13 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
+        GetConditionsDocument getConditionsDocument = new GetConditionsDocument();
+        getConditionsDocument.setConditions(conditions);
+        getConditionsDocument.setUserToken(userToken);
+        req.setXMLString("A");
         req.setUserTokenString("A");
 
-        var conditions1 = new Conditions();
-        conditions1 = conditions;
-        ResponseEntity<Conditions> responseEntity =
-                new ResponseEntity<>(conditions1, HttpStatus.OK);
+        ResponseEntity<Conditions> responseEntity = new ResponseEntity<>(conditions, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -291,20 +263,15 @@ public class InformationControllerTests {
                         Mockito.<Class<Conditions>>any()))
                 .thenReturn(responseEntity);
 
-        InformationController informationController =
-                new InformationController(restTemplate, objectMapper);
-        var resp = informationController.getConditions(req);
+        var resp = controller.getConditions(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testOrdersConditions() throws JsonProcessingException {
         var req = new GetOrdersConditions();
-        var ordersConditionsOuter = new OrdersConditionsOuter();
-        var ordersConditionsInner = new OrdersConditionsInner();
         var ordersConditions = new OrdersConditions();
-
-        List<OrdersConditionsDetails> draftl = new ArrayList<>();
+        List<OrdersConditionsDetails> ordersConditionsDetailsList = new ArrayList<>();
         var OrdersConditionsDetails = new OrdersConditionsDetails();
         OrdersConditionsDetails.setAudoId("A");
         OrdersConditionsDetails.setDescription("A");
@@ -318,20 +285,14 @@ public class InformationControllerTests {
         ConditionDetail.setDetails("A");
         ConditionDetails.add(ConditionDetail);
         OrdersConditionsDetails.setConditionDetails(ConditionDetails);
-        draftl.add(OrdersConditionsDetails);
-        ordersConditions.setOrdersConditionsDetails(draftl);
+        ordersConditionsDetailsList.add(OrdersConditionsDetails);
+        ordersConditions.setOrdersConditionsDetails(ordersConditionsDetailsList);
         ordersConditions.setCsNum("A");
-
-        req.setXMLString(ordersConditionsOuter);
-        ordersConditionsOuter.setOrdersConditions(ordersConditionsInner);
-        ordersConditionsInner.setOrdersConditions(ordersConditions);
 
         List<OrdersConditionsDetails> detailsList = new ArrayList<>();
         ordersConditions.setOrdersConditionsDetails(detailsList);
 
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new UserToken();
-
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -341,11 +302,6 @@ public class InformationControllerTests {
         userToken.setCSNumber("A");
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
-
-        userTokenOuter.setUserToken(userToken);
-        req.setUserTokenString(userTokenOuter);
-
-        var ordersConditions1 = new OrdersConditions();
 
         var ordersConditionsDetails = new OrdersConditionsDetails();
         detailsList.add(ordersConditionsDetails);
@@ -364,8 +320,14 @@ public class InformationControllerTests {
         conditionDetailList.add(conditionDetails);
         ordersConditionsDetails.setConditionDetails(conditionDetailList);
 
+        GetOrdersConditionsDocument getOrdersConditionsDocument = new GetOrdersConditionsDocument();
+        getOrdersConditionsDocument.setOrdersConditions(ordersConditions);
+        getOrdersConditionsDocument.setUserToken(userToken);
+        req.setXMLString("A");
+        req.setUserTokenString("A");
+
         ResponseEntity<OrdersConditions> responseEntity =
-                new ResponseEntity<>(ordersConditions1, HttpStatus.OK);
+                new ResponseEntity<>(ordersConditions, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -375,22 +337,14 @@ public class InformationControllerTests {
                         Mockito.<Class<OrdersConditions>>any()))
                 .thenReturn(responseEntity);
 
-        InformationController informationController =
-                new InformationController(restTemplate, objectMapper);
-        var resp = informationController.getOrdersConditions(req);
+        var resp = controller.getOrdersConditions(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testGetDates() throws JsonProcessingException {
         var req = new GetDates();
-        var DatesOuter = new DatesOuter();
-
-        req.setXMLString("A");
-
-        var datesOuter = new DatesOuter();
         var dates = new Dates();
-
         dates.setCsNum("A");
         dates.setCustodyEndDate("A");
         dates.setCommunitySupervisionEndDate("A");
@@ -427,15 +381,9 @@ public class InformationControllerTests {
         location.setInstCommType("A");
         location.setPhone("A");
         futureCourtDate.setLocation(location);
-
         dates.setFutureCourtDates(futureCourtDates);
 
-        req.setXMLString("A");
-        datesOuter.setDates(dates);
-
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new UserToken();
-
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -446,12 +394,13 @@ public class InformationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
+        GetDatesDocument getDatesDocument = new GetDatesDocument();
+        getDatesDocument.setDates(dates);
+        getDatesDocument.setUserToken(userToken);
+        req.setXMLString("A");
         req.setUserTokenString("A");
 
-        var dates1 = new Dates();
-        dates1 = dates;
-        ResponseEntity<Dates> responseEntity = new ResponseEntity<>(dates1, HttpStatus.OK);
+        ResponseEntity<Dates> responseEntity = new ResponseEntity<>(dates, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -461,9 +410,84 @@ public class InformationControllerTests {
                         Mockito.<Class<Dates>>any()))
                 .thenReturn(responseEntity);
 
-        InformationController informationController =
-                new InformationController(restTemplate, objectMapper);
-        var resp = informationController.getDates(req);
+        var resp = controller.getDates(req);
+        Assertions.assertNotNull(resp);
+    }
+
+    @Test
+    public void testGetClientHistory() throws JsonProcessingException {
+        var req = new GetClientHistory();
+        var clientHistory = new ClientHistory();
+        clientHistory.setCsNum("A");
+        clientHistory.setInstCommStatusFilter("A");
+        Row row = new Row();
+        row.setStart("A");
+        row.setEnd("A");
+        row.setTotal("A");
+        clientHistory.setRow(row);
+        List<ClientHistoryDetails> clientHistoryDetailsList = new ArrayList<>();
+        ClientHistoryDetails clientHistoryDetails = new ClientHistoryDetails();
+        clientHistoryDetails.setDate("A");
+        Court court = new Court();
+        court.setCourtCode("A");
+        court.setCourtDescription("A");
+        clientHistoryDetails.setCourt(court);
+        Disposition disposition = new Disposition();
+        disposition.setDispositionCode("A");
+        disposition.setDispositionDescription("A");
+        clientHistoryDetails.setDisposition(disposition);
+        clientHistoryDetails.setFileNumber("A");
+        Location location = new Location();
+        location.setCode("A");
+        clientHistoryDetails.setLocation(location);
+        clientHistoryDetails.setDconsecutive("A");
+        clientHistoryDetails.setInstCommStatus("A");
+        clientHistoryDetails.setOffence("A");
+        clientHistoryDetails.setDconsecutive("A");
+        SentenceLength sentenceLength = new SentenceLength();
+        sentenceLength.setSentenceLengthCode("A");
+        sentenceLength.setSentenceLengthDescription("A");
+        clientHistoryDetails.setSentenceLength(sentenceLength);
+        Movement movement = new Movement();
+        movement.setMovementCode("A");
+        movement.setMovementDescription("A");
+        clientHistoryDetails.setMovement(movement);
+        MovementReason movementReason = new MovementReason();
+        movementReason.setMovementReasonCode("A");
+        movementReason.setMovementReasonDescription("A");
+        clientHistoryDetails.setMovementReason(movementReason);
+        clientHistoryDetailsList.add(clientHistoryDetails);
+        clientHistory.setClientHistoryDetails(clientHistoryDetailsList);
+
+        var userToken = new UserToken();
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+
+        GetClientHistoryDocument getClientHistoryDocument = new GetClientHistoryDocument();
+        getClientHistoryDocument.setClientHistory(clientHistory);
+        getClientHistoryDocument.setUserToken(userToken);
+        req.setXMLString("A");
+        req.setUserTokenString("A");
+
+        ResponseEntity<ClientHistory> responseEntity =
+                new ResponseEntity<>(clientHistory, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<ClientHistory>>any()))
+                .thenReturn(responseEntity);
+
+        var resp = controller.getClientHistory(req);
         Assertions.assertNotNull(resp);
     }
 }

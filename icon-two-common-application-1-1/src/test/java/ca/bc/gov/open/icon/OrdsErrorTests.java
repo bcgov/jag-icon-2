@@ -1,8 +1,6 @@
 package ca.bc.gov.open.icon;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ca.bc.gov.open.icon.audit.*;
 import ca.bc.gov.open.icon.configuration.QueueConfig;
@@ -29,54 +27,81 @@ import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
 public class OrdsErrorTests {
-    @Autowired private MockMvc mockMvc;
-
-    @Autowired private ObjectMapper objectMapper;
-
     @Mock private WebServiceTemplate webServiceTemplate;
-
     @Mock private RestTemplate restTemplate;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private QueueConfig queueConfig;
+    @Mock private RabbitTemplate rabbitTemplate;
+    @Mock private AmqpAdmin amqpAdmin;
 
     @Qualifier("hsr-queue")
+    @Mock
     private org.springframework.amqp.core.Queue hsrQueue;
 
     @Qualifier("ping-queue")
+    @Mock
     private org.springframework.amqp.core.Queue pingQueue;
 
-    @MockBean private RabbitTemplate rabbitTemplate;
-    @MockBean private AmqpAdmin amqpAdmin;
+    @Mock private InformationController informationController;
+    @Mock private AuditController auditController;
+    @Mock private AuthenticationController authenticationController;
+    @Mock private MessageController messageController;
+    @Mock private RecordController recordController;
+    @Mock private ReportingController reportingController;
+    @Mock private HealthController healthController;
+    @Mock private ClientController clientController;
+    @Mock private ErrorHandlingController errorHandlingController;
 
-    private QueueConfig queueConfig;
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        informationController = Mockito.spy(new InformationController(restTemplate, objectMapper));
+        auditController = Mockito.spy(new AuditController(restTemplate, objectMapper));
+        authenticationController =
+                Mockito.spy(new AuthenticationController(restTemplate, objectMapper));
+        messageController = Mockito.spy(new MessageController(restTemplate, objectMapper));
+        recordController = Mockito.spy(new RecordController(restTemplate, objectMapper));
+        reportingController = Mockito.spy(new ReportingController(restTemplate, objectMapper));
+        healthController =
+                Mockito.spy(
+                        new HealthController(
+                                webServiceTemplate,
+                                restTemplate,
+                                objectMapper,
+                                hsrQueue,
+                                pingQueue,
+                                rabbitTemplate,
+                                amqpAdmin,
+                                queueConfig));
+        clientController = Mockito.spy(new ClientController(restTemplate, objectMapper));
+        errorHandlingController =
+                Mockito.spy(new ErrorHandlingController(restTemplate, objectMapper));
+    }
 
     /*
         AuditController
     */
     @Test
     public void testEServiceAccessedFail() {
-        var auditController = new AuditController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> auditController.eServiceAccessed(new EServiceAccessed()));
@@ -84,8 +109,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testHomeScreenAccessedFail() {
-        var auditController = new AuditController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> auditController.homeScreenAccessed(new HomeScreenAccessed()));
@@ -93,8 +116,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testSessionTimeoutExecutedFail() {
-        var auditController = new AuditController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> auditController.sessionTimeoutExecuted(new SessionTimeoutExecuted()));
@@ -102,34 +123,19 @@ public class OrdsErrorTests {
 
     @Test
     public void testEServiceFunctionAccessedFail() {
-        var auditController = new AuditController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> auditController.eServiceFunctionAccessed(new EServiceFunctionAccessed()));
     }
 
     @Test
-    public void testGetClientHistoryFail() {
-        var auditController = new AuditController(restTemplate, objectMapper);
-
-        Assertions.assertThrows(
-                ORDSException.class,
-                () -> auditController.getClientHistory(new GetClientHistory()));
-    }
-
-    @Test
     public void testGetPackageInfoFail() {
-        var auditController = new AuditController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> auditController.getPackageInfo(new GetPackageInfo()));
     }
 
     @Test
     public void testGetSessionParametersFail() {
-        var auditController = new AuditController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> auditController.getSessionParameters(new GetSessionParameters()));
@@ -140,8 +146,6 @@ public class OrdsErrorTests {
     */
     @Test
     public void testReauthenticationFailedFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
@@ -151,8 +155,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testReauthenticationSucceededFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
@@ -162,8 +164,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testLogoutExecutedFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> authenticationController.logoutExecuted(new LogoutExcecuted()));
@@ -171,8 +171,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testIdleTimeoutExecutedFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> authenticationController.idleTimeoutExecuted(new IdleTimeoutExecuted()));
@@ -180,8 +178,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testPrimaryAuthenticationCompletedFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
@@ -194,7 +190,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetTombStoneInfoFail() {
-        var clientController = new ClientController(restTemplate, objectMapper);
         var getTombStoneInfo = new GetTombStoneInfo();
         var getTombStoneInfo2 = new GetTombStoneInfo2();
         var getTombStoneInfoRequest = new GetTombStoneInfoRequest();
@@ -208,16 +203,12 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetTrustAccountFail() {
-        var clientController = new ClientController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> clientController.getTrustAccount(new GetTrustAccount()));
     }
 
     @Test
     public void testGetVisitScheduleFail() {
-        var clientController = new ClientController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> clientController.getVisitSchedule(new GetVisitSchedule()));
@@ -227,9 +218,7 @@ public class OrdsErrorTests {
         ErrorHandlingController
     */
     @Test
-    public void testSetErrorMessageFail() throws Exception {
-        var errorHandlingController = new ErrorHandlingController(restTemplate, objectMapper);
-
+    public void testSetErrorMessageFail() {
         when(restTemplate.exchange(
                         Mockito.anyString(),
                         Mockito.eq(HttpMethod.POST),
@@ -246,18 +235,7 @@ public class OrdsErrorTests {
         HealthController
     */
     @Test
-    public void testHealthServiceRequestSubmittedFail() throws Exception {
-        var healthController =
-                new HealthController(
-                        webServiceTemplate,
-                        restTemplate,
-                        objectMapper,
-                        hsrQueue,
-                        pingQueue,
-                        rabbitTemplate,
-                        amqpAdmin,
-                        queueConfig);
-
+    public void testHealthServiceRequestSubmittedFail() {
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
@@ -266,18 +244,7 @@ public class OrdsErrorTests {
     }
 
     @Test
-    public void testGetHealthServiceRequestHistoryFail() throws Exception {
-        var healthController =
-                new HealthController(
-                        webServiceTemplate,
-                        restTemplate,
-                        objectMapper,
-                        hsrQueue,
-                        pingQueue,
-                        rabbitTemplate,
-                        amqpAdmin,
-                        queueConfig);
-
+    public void testGetHealthServiceRequestHistoryFail() {
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
@@ -286,35 +253,21 @@ public class OrdsErrorTests {
     }
 
     @Test
-    public void testPublishHSRFail() throws Exception {
-        var healthController =
-                new HealthController(
-                        webServiceTemplate,
-                        restTemplate,
-                        objectMapper,
-                        hsrQueue,
-                        pingQueue,
-                        rabbitTemplate,
-                        amqpAdmin,
-                        queueConfig);
-
-        Assertions.assertThrows(
-                ORDSException.class, () -> healthController.publishHSR(new PublishHSR()));
+    public void testPublishHSROrdsFail() {
+        PublishHSR publishHSR = new PublishHSR();
+        publishHSR.setXMLString("A");
+        publishHSR.setUserTokenString("A");
+        Assertions.assertThrows(ORDSException.class, () -> healthController.publishHSR(publishHSR));
     }
 
     @Test
-    public void testGetHSRCountFail() throws Exception {
-        var healthController =
-                new HealthController(
-                        webServiceTemplate,
-                        restTemplate,
-                        objectMapper,
-                        hsrQueue,
-                        pingQueue,
-                        rabbitTemplate,
-                        amqpAdmin,
-                        queueConfig);
+    public void testPublishHSRFail() {
+        Assertions.assertThrows(
+                ServiceFaultException.class, () -> healthController.publishHSR(new PublishHSR()));
+    }
 
+    @Test
+    public void testGetHSRCountFail() {
         Assertions.assertThrows(
                 ORDSException.class, () -> healthController.getHSRCount(new GetHSRCount()));
     }
@@ -325,52 +278,67 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetOrdersFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
+        GetOrders getOrders = new GetOrders();
+        getOrders.setXMLString("A");
+        getOrders.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> informationController.getOrders(new GetOrders()));
+                ORDSException.class, () -> informationController.getOrders(getOrders));
     }
 
     @Test
     public void testGetProgramsFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
+        GetPrograms getPrograms = new GetPrograms();
+        getPrograms.setXMLString("A");
+        getPrograms.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> informationController.getPrograms(new GetPrograms()));
+                ORDSException.class, () -> informationController.getPrograms(getPrograms));
     }
 
     @Test
     public void testGetLocationsFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
+        GetLocations getLocations = new GetLocations();
+        getLocations.setXMLString("A");
+        getLocations.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> informationController.getLocations(new GetLocations()));
+                ORDSException.class, () -> informationController.getLocations(getLocations));
     }
 
     @Test
     public void testGetConditionsFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
+        GetConditions getConditions = new GetConditions();
+        getConditions.setXMLString("A");
+        getConditions.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> informationController.getConditions(new GetConditions()));
+                ORDSException.class, () -> informationController.getConditions(getConditions));
     }
 
     @Test
     public void testGetOrdersConditionsFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
+        GetOrdersConditions getOrdersConditions = new GetOrdersConditions();
+        getOrdersConditions.setXMLString("A");
+        getOrdersConditions.setUserTokenString("A");
         Assertions.assertThrows(
                 ORDSException.class,
-                () -> informationController.getOrdersConditions(new GetOrdersConditions()));
+                () -> informationController.getOrdersConditions(getOrdersConditions));
     }
 
     @Test
     public void testGetDatesFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
+        GetDates getDates = new GetDates();
+        getDates.setXMLString("A");
+        getDates.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> informationController.getDates(new GetDates()));
+                ORDSException.class, () -> informationController.getDates(getDates));
+    }
+
+    @Test
+    public void testGetClientHistoryFail() {
+        GetClientHistory getClientHistory = new GetClientHistory();
+        getClientHistory.setXMLString("A");
+        getClientHistory.setUserTokenString("A");
+        Assertions.assertThrows(
+                ORDSException.class,
+                () -> informationController.getClientHistory(getClientHistory));
     }
 
     /*
@@ -379,8 +347,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testMessageAccessedFail() {
-        var messageController = new MessageController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> messageController.messageAccessed(new MessageAccessed()));
@@ -388,24 +354,18 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetMessageFail() {
-        var messageController = new MessageController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> messageController.getMessage(new GetMessage()));
     }
 
     @Test
     public void testSetMessageDateFail() {
-        var messageController = new MessageController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> messageController.setMessageDate(new SetMessageDate()));
     }
 
     @Test
     public void testSetMessageDetailsFail() {
-        var messageController = new MessageController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> messageController.setMessageDetails(new SetMessageDetails()));
@@ -413,16 +373,12 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetMessagesFail() {
-        var messageController = new MessageController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> messageController.getMessages(new GetMessages()));
     }
 
     @Test
     public void testGetMessageDetailsFail() {
-        var messageController = new MessageController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> messageController.getMessageDetails(new GetMessageDetails()));
@@ -432,9 +388,7 @@ public class OrdsErrorTests {
         RecordController
     */
     @Test
-    public void testRecordCompletedFail() throws Exception {
-        var recordController = new RecordController(restTemplate, objectMapper);
-
+    public void testRecordCompletedFail() {
         when(restTemplate.exchange(
                         Mockito.anyString(),
                         Mockito.eq(HttpMethod.POST),
@@ -448,9 +402,7 @@ public class OrdsErrorTests {
     }
 
     @Test
-    public void testRecordExceptionFail() throws Exception {
-        var recordController = new RecordController(restTemplate, objectMapper);
-
+    public void testRecordExceptionFail() {
         when(restTemplate.exchange(
                         Mockito.anyString(),
                         Mockito.eq(HttpMethod.POST),
@@ -468,8 +420,6 @@ public class OrdsErrorTests {
     */
     @Test
     public void testEReportAnswersSubmittedFail() {
-        var reportingController = new ReportingController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> reportingController.eReportAnswersSubmitted(new EReportAnswersSubmitted()));
@@ -477,8 +427,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetReportingCmpltInstructionFail() {
-        var reportingController = new ReportingController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
@@ -488,8 +436,6 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetLocationsResponseFail() {
-        var reportingController = new ReportingController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
@@ -499,16 +445,12 @@ public class OrdsErrorTests {
 
     @Test
     public void testSubmitAnswersFail() {
-        var reportingController = new ReportingController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> reportingController.submitAnswers(new SubmitAnswers()));
     }
 
     @Test
     public void testGetAppointmentFail() {
-        var reportingController = new ReportingController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class,
                 () -> reportingController.getAppointment(new GetAppointment()));
@@ -516,27 +458,13 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetQuestionsFail() {
-        var reportingController = new ReportingController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> reportingController.getQuestions(new GetQuestions()));
     }
 
     @Test
     public void testGetStatusFail() {
-        var reportingController = new ReportingController(restTemplate, objectMapper);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> reportingController.getStatus(new GetStatus()));
-    }
-
-    @Test
-    public void securityTestFail_Then401() throws Exception {
-        var response =
-                mockMvc.perform(post("/ws").contentType(MediaType.TEXT_XML))
-                        .andExpect(status().is4xxClientError())
-                        .andReturn();
-        Assertions.assertEquals(
-                HttpStatus.UNAUTHORIZED.value(), response.getResponse().getStatus());
     }
 }

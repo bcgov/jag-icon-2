@@ -41,8 +41,11 @@ public class InformationController {
     public GetOrdersResponse getOrders(@RequestPayload GetOrders getOrders)
             throws JsonProcessingException {
 
-        var getOrdersDocument =
-                XMLUtilities.convertReq(getOrders, new GetOrdersDocument(), "getOrders");
+        GetOrdersDocument getOrdersDocument = new GetOrdersDocument();
+        getOrdersDocument.setOrders(
+                XMLUtilities.deserializeXmlStr(getOrders.getXMLString(), new Orders()));
+        getOrdersDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getOrders.getUserTokenString(), new UserToken()));
 
         HttpEntity<GetOrdersDocument> payload =
                 new HttpEntity<>(getOrdersDocument, new HttpHeaders());
@@ -54,21 +57,17 @@ public class InformationController {
             HttpEntity<Orders> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Orders.class);
+
+            GetOrdersResponse getOrdersResponse = new GetOrdersResponse();
+            getOrdersDocument.setOrders(resp.getBody());
+            getOrdersResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getOrdersDocument.getOrders(),
+                            getOrdersDocument.getOrders().getClass().toString()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getOrders")));
-
-            GetOrdersResponseDocument getOrdersResponseDocument = new GetOrdersResponseDocument();
-            OrdersOuter outResp = new OrdersOuter();
-            outResp.setOrders(resp.getBody());
-            getOrdersResponseDocument.setXMLString(outResp);
-
-            var getOrdersResponse =
-                    XMLUtilities.convertResp(
-                            getOrdersResponseDocument,
-                            new GetOrdersResponse(),
-                            "getOrdersResponse");
-
             return getOrdersResponse;
         } catch (Exception ex) {
             log.error(
@@ -87,8 +86,11 @@ public class InformationController {
     public GetProgramsResponse getPrograms(@RequestPayload GetPrograms getPrograms)
             throws JsonProcessingException {
 
-        var getProgramsDocument =
-                XMLUtilities.convertReq(getPrograms, new GetProgramsDocument(), "getPrograms");
+        GetProgramsDocument getProgramsDocument = new GetProgramsDocument();
+        getProgramsDocument.setPrograms(
+                XMLUtilities.deserializeXmlStr(getPrograms.getXMLString(), new Programs()));
+        getProgramsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getPrograms.getUserTokenString(), new UserToken()));
 
         HttpEntity<GetProgramsDocument> payload =
                 new HttpEntity<>(getProgramsDocument, new HttpHeaders());
@@ -100,21 +102,17 @@ public class InformationController {
             HttpEntity<Programs> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Programs.class);
+
+            GetProgramsResponse getProgramsResponse = new GetProgramsResponse();
+            getProgramsDocument.setPrograms(resp.getBody());
+            getProgramsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getProgramsDocument.getPrograms(),
+                            getProgramsDocument.getPrograms().getClass().toString()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getPrograms")));
-            GetProgramsResponseDocument getProgramsResponseDocument =
-                    new GetProgramsResponseDocument();
-            ProgramsOuter outResp = new ProgramsOuter();
-            outResp.setPrograms(resp.getBody());
-            getProgramsResponseDocument.setXMLString(outResp);
-
-            var getProgramsResponse =
-                    XMLUtilities.convertResp(
-                            getProgramsResponseDocument,
-                            new GetProgramsResponse(),
-                            "getProgramsResponse");
-
             return getProgramsResponse;
         } catch (Exception ex) {
             log.error(
@@ -133,8 +131,11 @@ public class InformationController {
     public GetLocationsResponse getLocations(@RequestPayload GetLocations getLocations)
             throws JsonProcessingException {
 
-        var getLocationsDocument =
-                XMLUtilities.convertReq(getLocations, new GetLocationsDocument(), "getLocations");
+        GetLocationsDocument getLocationsDocument = new GetLocationsDocument();
+        getLocationsDocument.setLocations(
+                XMLUtilities.deserializeXmlStr(getLocations.getXMLString(), new Locations()));
+        getLocationsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getLocations.getUserTokenString(), new UserToken()));
 
         HttpEntity<GetLocationsDocument> payload =
                 new HttpEntity<>(getLocationsDocument, new HttpHeaders());
@@ -146,23 +147,17 @@ public class InformationController {
             HttpEntity<Locations> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Locations.class);
+
+            GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
+            getLocationsDocument.setLocations(resp.getBody());
+            getLocationsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getLocationsDocument.getLocations(),
+                            getLocationsDocument.getLocations().getClass().toString()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getLocations")));
-
-            GetLocationsResponseDocument getLocationsResponseDocument =
-                    new GetLocationsResponseDocument();
-
-            LocationsOuter outResp = new LocationsOuter();
-            outResp.setLocations(resp.getBody());
-            getLocationsResponseDocument.setXMLString(outResp);
-
-            var getLocationsResponse =
-                    XMLUtilities.convertResp(
-                            getLocationsResponseDocument,
-                            new GetLocationsResponse(),
-                            "getLocationsResponse");
-
             return getLocationsResponse;
         } catch (Exception ex) {
             log.error(
@@ -181,9 +176,12 @@ public class InformationController {
     public GetConditionsResponse getConditions(@RequestPayload GetConditions getConditions)
             throws JsonProcessingException {
 
-        var getConditionsDocument =
-                XMLUtilities.convertReq(
-                        getConditions, new GetConditionsDocument(), "getConditions");
+        GetConditionsDocument getConditionsDocument = new GetConditionsDocument();
+        getConditionsDocument.setConditions(
+                XMLUtilities.deserializeXmlStr(getConditions.getXMLString(), new Conditions()));
+        getConditionsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getConditions.getUserTokenString(), new UserToken()));
 
         HttpEntity<GetConditionsDocument> payload =
                 new HttpEntity<>(getConditionsDocument, new HttpHeaders());
@@ -195,21 +193,17 @@ public class InformationController {
             HttpEntity<Conditions> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Conditions.class);
+
+            GetConditionsResponse getConditionsResponse = new GetConditionsResponse();
+            getConditionsDocument.setConditions(resp.getBody());
+            getConditionsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getConditionsDocument.getConditions(),
+                            getConditionsDocument.getConditions().getClass().toString()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getConditions")));
-            GetConditionsResponseDocument getConditionsResponseDocument =
-                    new GetConditionsResponseDocument();
-            ConditionsOuter outResp = new ConditionsOuter();
-            outResp.setConditions(resp.getBody());
-            getConditionsResponseDocument.setXMLString(outResp);
-
-            var getConditionsResponse =
-                    XMLUtilities.convertResp(
-                            getConditionsResponseDocument,
-                            new GetConditionsResponse(),
-                            "getConditionsResponse");
-
             return getConditionsResponse;
         } catch (Exception ex) {
             log.error(
@@ -231,11 +225,19 @@ public class InformationController {
             @RequestPayload GetOrdersConditions getOrdersConditions)
             throws JsonProcessingException {
 
+        GetOrdersConditionsDocument getOrdersConditionsDocument = new GetOrdersConditionsDocument();
+        getOrdersConditionsDocument.setOrdersConditions(
+                XMLUtilities.deserializeXmlStr(
+                        getOrdersConditions.getXMLString(), new OrdersConditions()));
+        getOrdersConditionsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getOrdersConditions.getUserTokenString(), new UserToken()));
+
         HttpEntity<GetOrdersConditions> payload =
                 new HttpEntity<>(getOrdersConditions, new HttpHeaders());
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions");
+                UriComponentsBuilder.fromHttpUrl(host + "information/orders-conditions");
 
         try {
             HttpEntity<OrdersConditions> resp =
@@ -244,16 +246,21 @@ public class InformationController {
                             HttpMethod.POST,
                             payload,
                             OrdersConditions.class);
+
+            GetOrdersConditionsResponse getOrdersConditionsResponse =
+                    new GetOrdersConditionsResponse();
+            getOrdersConditionsDocument.setOrdersConditions(resp.getBody());
+            getOrdersConditionsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getOrdersConditionsDocument.getOrdersConditions(),
+                            getOrdersConditionsDocument
+                                    .getOrdersConditions()
+                                    .getClass()
+                                    .toString()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getOrdersConditions")));
-            GetOrdersConditionsResponse getOrdersConditionsResponse =
-                    new GetOrdersConditionsResponse();
-            OrdersConditionsOuter outResp = new OrdersConditionsOuter();
-            OrdersConditionsInner inResp = new OrdersConditionsInner();
-            inResp.setOrdersConditions(resp.getBody());
-            outResp.setOrdersConditions(inResp);
-            getOrdersConditionsResponse.setXMLString(outResp);
             return getOrdersConditionsResponse;
         } catch (Exception ex) {
             log.error(
@@ -272,8 +279,11 @@ public class InformationController {
     public GetDatesResponse getDates(@RequestPayload GetDates getDates)
             throws JsonProcessingException {
 
-        var getDatesDocument =
-                XMLUtilities.convertReq(getDates, new GetDatesDocument(), "getDates");
+        GetDatesDocument getDatesDocument = new GetDatesDocument();
+        getDatesDocument.setDates(
+                XMLUtilities.deserializeXmlStr(getDates.getXMLString(), new Dates()));
+        getDatesDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getDates.getUserTokenString(), new UserToken()));
 
         HttpEntity<GetDatesDocument> payload =
                 new HttpEntity<>(getDatesDocument, new HttpHeaders());
@@ -284,19 +294,17 @@ public class InformationController {
             HttpEntity<Dates> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Dates.class);
+
+            GetDatesResponse getDatesResponse = new GetDatesResponse();
+            getDatesDocument.setDates(resp.getBody());
+            getDatesResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getDatesDocument.getDates(),
+                            getDatesDocument.getDates().getClass().toString()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getDates")));
-
-            GetDatesResponseDocument getDatesResponseDocument = new GetDatesResponseDocument();
-            DatesOuter outResp = new DatesOuter();
-            outResp.setDates(resp.getBody());
-            getDatesResponseDocument.setXMLString(outResp);
-
-            var getDatesResponse =
-                    XMLUtilities.convertResp(
-                            getDatesResponseDocument, new GetDatesResponse(), "getDatesResponse");
-
             return getDatesResponse;
         } catch (Exception ex) {
             log.error(
@@ -306,6 +314,55 @@ public class InformationController {
                                     "getDates",
                                     ex.getMessage(),
                                     getDates)));
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
+        }
+    }
+
+    @PayloadRoot(
+            namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo",
+            localPart = "getClientHistory")
+    @ResponsePayload
+    public GetClientHistoryResponse getClientHistory(
+            @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
+
+        GetClientHistoryDocument getClientHistoryDocument = new GetClientHistoryDocument();
+        getClientHistoryDocument.setClientHistory(
+                XMLUtilities.deserializeXmlStr(
+                        getClientHistory.getXMLString(), new ClientHistory()));
+        getClientHistoryDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getClientHistory.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetClientHistoryDocument> payload =
+                new HttpEntity<>(getClientHistoryDocument, new HttpHeaders());
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "audit/client-history");
+
+        try {
+            HttpEntity<ClientHistory> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(), HttpMethod.POST, payload, ClientHistory.class);
+
+            GetClientHistoryResponse getClientHistoryResponse = new GetClientHistoryResponse();
+            getClientHistoryDocument.setClientHistory(resp.getBody());
+            getClientHistoryResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getClientHistoryDocument.getClientHistory(),
+                            getClientHistoryDocument.getClientHistory().getClass().toString()));
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getClientHistory")));
+            return getClientHistoryResponse;
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getClientHistory",
+                                    ex.getMessage(),
+                                    getClientHistory)));
             throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
