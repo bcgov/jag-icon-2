@@ -61,9 +61,7 @@ public class InformationController {
             GetOrdersResponse getOrdersResponse = new GetOrdersResponse();
             getOrdersDocument.setOrders(resp.getBody());
             getOrdersResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(
-                            getOrdersDocument.getOrders(),
-                            getOrdersDocument.getOrders().getClass().getSimpleName()));
+                    XMLUtilities.serializeXmlStr(getOrdersDocument.getOrders()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -106,9 +104,7 @@ public class InformationController {
             GetProgramsResponse getProgramsResponse = new GetProgramsResponse();
             getProgramsDocument.setPrograms(resp.getBody());
             getProgramsResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(
-                            getProgramsDocument.getPrograms(),
-                            getProgramsDocument.getPrograms().getClass().getSimpleName()));
+                    XMLUtilities.serializeXmlStr(getProgramsDocument.getPrograms()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -151,9 +147,7 @@ public class InformationController {
             GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
             getLocationsDocument.setLocations(resp.getBody());
             getLocationsResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(
-                            getLocationsDocument.getLocations(),
-                            getLocationsDocument.getLocations().getClass().getSimpleName()));
+                    XMLUtilities.serializeXmlStr(getLocationsDocument.getLocations()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -197,9 +191,7 @@ public class InformationController {
             GetConditionsResponse getConditionsResponse = new GetConditionsResponse();
             getConditionsDocument.setConditions(resp.getBody());
             getConditionsResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(
-                            getConditionsDocument.getConditions(),
-                            getConditionsDocument.getConditions().getClass().getSimpleName()));
+                    XMLUtilities.serializeXmlStr(getConditionsDocument.getConditions()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -252,11 +244,7 @@ public class InformationController {
             getOrdersConditionsDocument.setOrdersConditions(resp.getBody());
             getOrdersConditionsResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(
-                            getOrdersConditionsDocument.getOrdersConditions(),
-                            getOrdersConditionsDocument
-                                    .getOrdersConditions()
-                                    .getClass()
-                                    .getSimpleName()));
+                            getOrdersConditionsDocument.getOrdersConditions()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -298,9 +286,7 @@ public class InformationController {
             GetDatesResponse getDatesResponse = new GetDatesResponse();
             getDatesDocument.setDates(resp.getBody());
             getDatesResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(
-                            getDatesDocument.getDates(),
-                            getDatesDocument.getDates().getClass().getSimpleName()));
+                    XMLUtilities.serializeXmlStr(getDatesDocument.getDates()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -347,12 +333,7 @@ public class InformationController {
             GetClientHistoryResponse getClientHistoryResponse = new GetClientHistoryResponse();
             getClientHistoryDocument.setClientHistory(resp.getBody());
             getClientHistoryResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(
-                            getClientHistoryDocument.getClientHistory(),
-                            getClientHistoryDocument
-                                    .getClientHistory()
-                                    .getClass()
-                                    .getSimpleName()));
+                    XMLUtilities.serializeXmlStr(getClientHistoryDocument.getClientHistory()));
 
             log.info(
                     objectMapper.writeValueAsString(

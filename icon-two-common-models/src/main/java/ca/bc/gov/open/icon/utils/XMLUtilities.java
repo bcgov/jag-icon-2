@@ -92,7 +92,7 @@ public final class XMLUtilities {
         }
     }
 
-    public static <T> String serializeXmlStr(T obj, String objName) {
+    public static <T> String serializeXmlStr(T obj) {
         try {
             StringWriter stringWriter = new StringWriter();
             stringWriter.write(XML_HEADER);
@@ -103,7 +103,10 @@ public final class XMLUtilities {
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             JAXBElement<T> jaxbElement =
-                    new JAXBElement<>(new QName("", objName), (Class<T>) obj.getClass(), obj);
+                    new JAXBElement<>(
+                            new QName("", obj.getClass().getSimpleName()),
+                            (Class<T>) obj.getClass(),
+                            obj);
             jaxbMarshaller.marshal(jaxbElement, new CustomizedXMLStreamWriter(xmlStreamWriter));
 
             return stringWriter.toString();
