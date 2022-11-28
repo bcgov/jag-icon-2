@@ -63,7 +63,7 @@ public class InformationController {
             getOrdersResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(
                             getOrdersDocument.getOrders(),
-                            getOrdersDocument.getOrders().getClass().toString()));
+                            getOrdersDocument.getOrders().getClass().getSimpleName()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -108,7 +108,7 @@ public class InformationController {
             getProgramsResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(
                             getProgramsDocument.getPrograms(),
-                            getProgramsDocument.getPrograms().getClass().toString()));
+                            getProgramsDocument.getPrograms().getClass().getSimpleName()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -153,7 +153,7 @@ public class InformationController {
             getLocationsResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(
                             getLocationsDocument.getLocations(),
-                            getLocationsDocument.getLocations().getClass().toString()));
+                            getLocationsDocument.getLocations().getClass().getSimpleName()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -199,7 +199,7 @@ public class InformationController {
             getConditionsResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(
                             getConditionsDocument.getConditions(),
-                            getConditionsDocument.getConditions().getClass().toString()));
+                            getConditionsDocument.getConditions().getClass().getSimpleName()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -256,7 +256,7 @@ public class InformationController {
                             getOrdersConditionsDocument
                                     .getOrdersConditions()
                                     .getClass()
-                                    .toString()));
+                                    .getSimpleName()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -300,7 +300,7 @@ public class InformationController {
             getDatesResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(
                             getDatesDocument.getDates(),
-                            getDatesDocument.getDates().getClass().toString()));
+                            getDatesDocument.getDates().getClass().getSimpleName()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -349,7 +349,10 @@ public class InformationController {
             getClientHistoryResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(
                             getClientHistoryDocument.getClientHistory(),
-                            getClientHistoryDocument.getClientHistory().getClass().toString()));
+                            getClientHistoryDocument
+                                    .getClientHistory()
+                                    .getClass()
+                                    .getSimpleName()));
 
             log.info(
                     objectMapper.writeValueAsString(
