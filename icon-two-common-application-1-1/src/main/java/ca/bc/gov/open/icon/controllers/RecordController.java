@@ -45,20 +45,15 @@ public class RecordController {
     public RecordCompletedResponse recordCompleted(@RequestPayload RecordCompleted recordCompleted)
             throws JsonProcessingException {
 
-        var recordCompletedDocument =
-                XMLUtilities.convertReq(
-                        recordCompleted, new RecordCompletedDocument(), "recordCompleted");
+        RecordCompletedDocument recordCompletedDocument = new RecordCompletedDocument();
+        recordCompletedDocument.setClientLogNotification(
+                XMLUtilities.deserializeXmlStr(
+                        recordCompleted.getXMLString(), new ClientLogNotification()));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "record/completed");
 
-        var inner =
-                recordCompleted.getXMLString() != null
-                                && recordCompletedDocument.getXMLString().getClientLogNotification()
-                                        != null
-                        ? recordCompletedDocument.getXMLString().getClientLogNotification()
-                        : new ClientLogNotification();
-
-        HttpEntity<ClientLogNotification> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<RecordCompletedDocument> payload =
+                new HttpEntity<>(recordCompletedDocument, new HttpHeaders());
 
         try {
             HttpEntity<Map<String, String>> resp =
@@ -92,21 +87,15 @@ public class RecordController {
     public RecordExceptionResponse recordException(@RequestPayload RecordException recordException)
             throws JsonProcessingException {
 
-        var recordExceptionDocument =
-                XMLUtilities.convertReq(
-                        recordException, new RecordExceptionDocument(), "recordException");
+        RecordExceptionDocument recordExceptionDocument = new RecordExceptionDocument();
+        recordExceptionDocument.setClientLogNotification(
+                XMLUtilities.deserializeXmlStr(
+                        recordException.getXMLString(), new ClientLogNotification()));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "record/exception");
 
-        var inner =
-                recordExceptionDocument.getXMLString() != null
-                                && recordExceptionDocument.getXMLString() != null
-                                && recordExceptionDocument.getXMLString().getClientLogNotification()
-                                        != null
-                        ? recordExceptionDocument.getXMLString().getClientLogNotification()
-                        : new ClientLogNotification();
-
-        HttpEntity<ClientLogNotification> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<RecordExceptionDocument> payload =
+                new HttpEntity<>(recordExceptionDocument, new HttpHeaders());
 
         try {
             HttpEntity<Map<String, String>> resp =

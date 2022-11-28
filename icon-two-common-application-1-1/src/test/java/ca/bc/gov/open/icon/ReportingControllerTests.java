@@ -6,7 +6,7 @@ import ca.bc.gov.open.icon.audit.Base;
 import ca.bc.gov.open.icon.audit.EReportAnswers;
 import ca.bc.gov.open.icon.audit.EReportAnswersSubmitted;
 import ca.bc.gov.open.icon.audit.Status;
-import ca.bc.gov.open.icon.controllers.ReportingController;
+import ca.bc.gov.open.icon.controllers.*;
 import ca.bc.gov.open.icon.ereporting.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,27 +15,31 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ReportingControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private WebServiceTemplate webServiceTemplate;
+    @Mock private RestTemplate restTemplate;
+    @Mock private ReportingController reportingController;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        reportingController = Mockito.spy(new ReportingController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testEReportAnswersSubmitted() throws JsonProcessingException {
@@ -63,7 +67,6 @@ public class ReportingControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        var reportingController = new ReportingController(restTemplate, objectMapper);
         var resp = reportingController.eReportAnswersSubmitted(req);
         Assertions.assertNotNull(resp);
     }
@@ -71,14 +74,11 @@ public class ReportingControllerTests {
     @Test
     public void testGetReportingCmpltInstruction() throws JsonProcessingException {
         var req = new GetReportingCmpltInstruction();
-        var ReportingCmpltInstructionOuter = new ReportingCmpltInstructionOuter();
         var ReportingCmpltInstruction = new ReportingCmpltInstruction();
         ReportingCmpltInstruction.setCsNum("A");
         ReportingCmpltInstruction.setText("A");
-        ReportingCmpltInstructionOuter.setReportingCmpltInstruction(ReportingCmpltInstruction);
         req.setXMLString("A");
 
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -91,7 +91,6 @@ public class ReportingControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var reportingCmpltInstruction = new ReportingCmpltInstruction();
@@ -108,7 +107,6 @@ public class ReportingControllerTests {
                         Mockito.<Class<ReportingCmpltInstruction>>any()))
                 .thenReturn(responseEntity);
 
-        var reportingController = new ReportingController(restTemplate, objectMapper);
         var resp = reportingController.getReportingCmpltInstruction(req);
         Assertions.assertNotNull(resp);
     }
@@ -117,14 +115,12 @@ public class ReportingControllerTests {
     public void testGetLocationsResponse()
             throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
         var req = new GetLocations();
-        var LocationsOuter = new LocationsOuter();
         var Locations = new Locations();
         List<Location> draftl = new ArrayList<>();
         var Location = new Location();
         Location.setLocationCd("A");
         draftl.add(Location);
         Locations.setLocation(draftl);
-        LocationsOuter.setLocations(Locations);
         req.setXMLString("A");
 
         req.setUserTokenString("A");
@@ -141,7 +137,6 @@ public class ReportingControllerTests {
                         Mockito.<Class<Locations>>any()))
                 .thenReturn(responseEntity);
 
-        var reportingController = new ReportingController(restTemplate, objectMapper);
         var resp = reportingController.getLocationsResponse(req);
         Assertions.assertNotNull(resp);
     }
@@ -149,7 +144,6 @@ public class ReportingControllerTests {
     @Test
     public void testSubmitAnswers() throws JsonProcessingException {
         var req = new SubmitAnswers();
-        var ReportOuter = new ReportOuter();
         var Report = new Ereport();
         Report.setCsNum("A");
         Report.setDeviceNo("A");
@@ -168,10 +162,8 @@ public class ReportingControllerTests {
         Question.setAnswer(Answers);
         Questions.add(Question);
         Report.setQuestion(Questions);
-        ReportOuter.setEReport(Report);
         req.setXMLString("A");
 
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -184,7 +176,6 @@ public class ReportingControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var report1 = new Ereport();
@@ -199,7 +190,6 @@ public class ReportingControllerTests {
                         Mockito.<Class<Ereport>>any()))
                 .thenReturn(responseEntity);
 
-        var reportingController = new ReportingController(restTemplate, objectMapper);
         var resp = reportingController.submitAnswers(req);
         Assertions.assertNotNull(resp);
     }
@@ -209,7 +199,6 @@ public class ReportingControllerTests {
             throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
         var req = new GetAppointment();
 
-        var AppointmentOuter = new AppointmentOuter();
         var Appointment = new Appointment();
 
         Appointment.setCsNum("A");
@@ -218,10 +207,8 @@ public class ReportingControllerTests {
         Appointment.setStartTime("A");
         Appointment.setEndTime("A");
 
-        AppointmentOuter.setAppointment(Appointment);
         req.setXMLString("A");
 
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -234,7 +221,6 @@ public class ReportingControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var appointment1 = new Appointment();
@@ -249,7 +235,6 @@ public class ReportingControllerTests {
                         Mockito.<Class<Appointment>>any()))
                 .thenReturn(responseEntity);
 
-        var reportingController = new ReportingController(restTemplate, objectMapper);
         var resp = reportingController.getAppointment(req);
         Assertions.assertNotNull(resp);
     }
@@ -257,8 +242,28 @@ public class ReportingControllerTests {
     @Test
     public void testGetQuestions() throws JsonProcessingException {
         var req = new GetQuestions();
-
         var report = new Ereport();
+        report.setCsNum("A");
+        report.setDeviceNo("A");
+        report.setEventID("A");
+        report.setState("A");
+        List<Question> Questions = new ArrayList<>();
+        var Question = new Question();
+        Question.setStandardQuestionID("A");
+        Question.setStandardText("A");
+        Question.setAdditionalText("A");
+        List<Answer> Answers = new ArrayList<>();
+        var Answer = new Answer();
+        Answer.setCode("A");
+        Answer.setDescription("A");
+        Answers.add(Answer);
+        Question.setAnswer(Answers);
+        Questions.add(Question);
+        report.setQuestion(Questions);
+        req.setXMLString("A");
+
+        req.setUserTokenString("A");
+
         ResponseEntity<Ereport> responseEntity = new ResponseEntity<>(report, HttpStatus.OK);
 
         // Set up to mock ords response
@@ -269,7 +274,6 @@ public class ReportingControllerTests {
                         Mockito.<Class<Ereport>>any()))
                 .thenReturn(responseEntity);
 
-        var reportingController = new ReportingController(restTemplate, objectMapper);
         var resp = reportingController.getQuestions(req);
         Assertions.assertNotNull(resp);
     }
@@ -278,7 +282,6 @@ public class ReportingControllerTests {
     public void testGetStatus() throws JsonProcessingException {
         var req = new GetStatus();
 
-        var StatusOuter = new StatusOuter();
         var Status = new ca.bc.gov.open.icon.ereporting.Status();
 
         Status.setEventId("A");
@@ -289,10 +292,8 @@ public class ReportingControllerTests {
         Status.setAnswersSubmitted("A");
         Status.setAnswersCorrect("A");
 
-        StatusOuter.setStatus(Status);
         req.setXMLString("A");
 
-        var userTokenOuter = new UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -305,7 +306,6 @@ public class ReportingControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var status = new ca.bc.gov.open.icon.ereporting.Status();
@@ -320,31 +320,7 @@ public class ReportingControllerTests {
                         Mockito.<Class<ca.bc.gov.open.icon.ereporting.Status>>any()))
                 .thenReturn(responseEntity);
 
-        var reportingController = new ReportingController(restTemplate, objectMapper);
         var resp = reportingController.getStatus(req);
         Assertions.assertNotNull(resp);
     }
-
-    //    @Test
-    //    public void testInstantSerializer() throws IOException {
-    //        ObjectMapper objectMapper = new ObjectMapper();
-    //        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-    //        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-    //        SimpleModule module = new SimpleModule();
-    //        module.addDeserializer(Instant.class, new InstantDeserializer());
-    //        module.addSerializer(Instant.class, new InstantSerializer());
-    //        objectMapper.registerModule(module);
-    //
-    //        var time = Instant.now();
-    //        String out = objectMapper.writeValueAsString(time);
-    //
-    //        String expected =
-    //                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    //                        .withZone(ZoneId.of("UTC"))
-    //                        .withLocale(Locale.US)
-    //                        .format(time);
-    //
-    //        out = out.replace("\"", "");
-    //        Assertions.assertEquals(expected, out);
-    //    }
 }

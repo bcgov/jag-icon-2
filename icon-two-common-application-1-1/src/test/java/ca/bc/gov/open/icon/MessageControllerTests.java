@@ -16,27 +16,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MessageControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private WebServiceTemplate webServiceTemplate;
+    @Mock private RestTemplate restTemplate;
+    @Mock private MessageController messageController;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        messageController = Mockito.spy(new MessageController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testMessageAccessed() throws JsonProcessingException {
@@ -62,7 +66,6 @@ public class MessageControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.messageAccessed(req);
         Assertions.assertNotNull(resp);
     }
@@ -71,14 +74,11 @@ public class MessageControllerTests {
     public void testGetMessage() throws JsonProcessingException {
         var req = new GetMessage();
 
-        var AppointmentMessageOuter = new AppointmentMessageOuter();
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
         req.setXMLString("A");
 
-        var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -91,7 +91,6 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var appointmentMessage = new AppointmentMessage();
@@ -107,8 +106,6 @@ public class MessageControllerTests {
                         Mockito.<HttpEntity<String>>any(),
                         Mockito.<Class<AppointmentMessage>>any()))
                 .thenReturn(responseEntity);
-
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.getMessage(req);
         Assertions.assertNotNull(resp);
     }
@@ -117,14 +114,11 @@ public class MessageControllerTests {
     public void testSetMessageDate() throws JsonProcessingException {
         var req = new SetMessageDate();
 
-        var AppointmentMessageOuter = new AppointmentMessageOuter();
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
         req.setXMLString("A");
 
-        var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -137,7 +131,6 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var appointmentMessage = new AppointmentMessage();
@@ -152,7 +145,6 @@ public class MessageControllerTests {
                         Mockito.<Class<AppointmentMessage>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.setMessageDate(req);
         Assertions.assertNotNull(resp);
     }
@@ -232,7 +224,6 @@ public class MessageControllerTests {
                         Mockito.<Class<Messages>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.setMessageDetails(req);
         Assertions.assertNotNull(resp);
     }
@@ -311,7 +302,6 @@ public class MessageControllerTests {
                         Mockito.<Class<Messages>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.getMessages(req);
         Assertions.assertNotNull(resp);
     }
@@ -388,7 +378,6 @@ public class MessageControllerTests {
                         Mockito.<Class<Messages>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.getMessageDetails(req);
         Assertions.assertNotNull(resp);
     }

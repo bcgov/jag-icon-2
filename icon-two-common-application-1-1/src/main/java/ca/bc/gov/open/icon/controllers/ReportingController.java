@@ -87,11 +87,16 @@ public class ReportingController {
             @RequestPayload GetReportingCmpltInstruction getReportingCmpltInstruction)
             throws JsonProcessingException {
 
-        var getReportingCmpltInstructionDocument =
-                XMLUtilities.convertReq(
-                        getReportingCmpltInstruction,
-                        new GetReportingCmpltInstructionDocument(),
-                        "getReportingCmpltInstruction");
+        GetReportingCmpltInstructionDocument getReportingCmpltInstructionDocument =
+                new GetReportingCmpltInstructionDocument();
+        getReportingCmpltInstructionDocument.setReportingCmpltInstruction(
+                XMLUtilities.deserializeXmlStr(
+                        getReportingCmpltInstruction.getXMLString(),
+                        new ReportingCmpltInstruction()));
+        getReportingCmpltInstructionDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getReportingCmpltInstruction.getUserTokenString(),
+                        new ca.bc.gov.open.icon.ereporting.UserToken()));
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/complete-instruction");
@@ -105,23 +110,16 @@ public class ReportingController {
                             HttpMethod.POST,
                             payload,
                             ReportingCmpltInstruction.class);
+
+            GetReportingCmpltInstructionResponse getReportingCmpltInstructionResponse =
+                    new GetReportingCmpltInstructionResponse();
+            getReportingCmpltInstructionResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(resp.getBody()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog(
                                     "Request Success", "getReportingCmpltInstruction")));
-
-            GetReportingCmpltInstructionResponseDocument
-                    getReportingCmpltInstructionResponseDocument =
-                            new GetReportingCmpltInstructionResponseDocument();
-            ReportingCmpltInstructionOuter outResp = new ReportingCmpltInstructionOuter();
-            outResp.setReportingCmpltInstruction(resp.getBody());
-            getReportingCmpltInstructionResponseDocument.setXMLString(outResp);
-
-            var getReportingCmpltInstructionResponse =
-                    XMLUtilities.convertResp(
-                            getReportingCmpltInstructionResponseDocument,
-                            new GetReportingCmpltInstructionResponse(),
-                            "getReportingCmpltInstructionResponse");
 
             return getReportingCmpltInstructionResponse;
         } catch (Exception ex) {
@@ -144,8 +142,13 @@ public class ReportingController {
     public GetLocationsResponse getLocationsResponse(@RequestPayload GetLocations getLocations)
             throws JsonProcessingException {
 
-        var getLocationsDocument =
-                XMLUtilities.convertReq(getLocations, new GetLocationsDocument(), "getLocations");
+        GetLocationsDocument getLocationsDocument = new GetLocationsDocument();
+        getLocationsDocument.setLocations(
+                XMLUtilities.deserializeXmlStr(getLocations.getXMLString(), new Locations()));
+        getLocationsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getLocations.getUserTokenString(),
+                        new ca.bc.gov.open.icon.ereporting.UserToken()));
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/locations");
@@ -156,21 +159,13 @@ public class ReportingController {
             HttpEntity<Locations> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Locations.class);
+
+            GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
+            getLocationsResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getLocationsResponse")));
-
-            GetLocationsResponseDocument getLocationsResponseDoc =
-                    new GetLocationsResponseDocument();
-            LocationsOuter outResp = new LocationsOuter();
-            outResp.setLocations(resp.getBody());
-            getLocationsResponseDoc.setXMLString(outResp);
-
-            var getLocationsResponse =
-                    XMLUtilities.convertResp(
-                            getLocationsResponseDoc,
-                            new GetLocationsResponse(),
-                            "getLocationsResponse");
 
             return getLocationsResponse;
         } catch (Exception ex) {
@@ -193,9 +188,13 @@ public class ReportingController {
     public SubmitAnswersResponse submitAnswers(@RequestPayload SubmitAnswers submitAnswers)
             throws JsonProcessingException {
 
-        var submitAnswersDocument =
-                XMLUtilities.convertReq(
-                        submitAnswers, new SubmitAnswersDocument(), "submitAnswers");
+        SubmitAnswersDocument submitAnswersDocument = new SubmitAnswersDocument();
+        submitAnswersDocument.setEReport(
+                XMLUtilities.deserializeXmlStr(submitAnswers.getXMLString(), new Ereport()));
+        submitAnswersDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        submitAnswers.getUserTokenString(),
+                        new ca.bc.gov.open.icon.ereporting.UserToken()));
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/submit-answers");
@@ -206,21 +205,13 @@ public class ReportingController {
             HttpEntity<Ereport> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
+
+            SubmitAnswersResponse submitAnswersResponse = new SubmitAnswersResponse();
+            submitAnswersResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "submitAnswers")));
-
-            SubmitAnswersResponseDocument submitAnswersResponseDocument =
-                    new SubmitAnswersResponseDocument();
-            ReportOuter outResp = new ReportOuter();
-            outResp.setEReport(resp.getBody());
-            submitAnswersResponseDocument.setXMLString(outResp);
-
-            var submitAnswersResponse =
-                    XMLUtilities.convertResp(
-                            submitAnswersResponseDocument,
-                            new SubmitAnswersResponse(),
-                            "submitAnswersResponse");
 
             return submitAnswersResponse;
         } catch (Exception ex) {
@@ -243,9 +234,13 @@ public class ReportingController {
     public GetAppointmentResponse getAppointment(@RequestPayload GetAppointment getAppointment)
             throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
 
-        var getAppointmentDocument =
-                XMLUtilities.convertReq(
-                        getAppointment, new GetAppointmentDocument(), "getAppointment");
+        GetAppointmentDocument getAppointmentDocument = new GetAppointmentDocument();
+        getAppointmentDocument.setAppointment(
+                XMLUtilities.deserializeXmlStr(getAppointment.getXMLString(), new Appointment()));
+        getAppointmentDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getAppointment.getUserTokenString(),
+                        new ca.bc.gov.open.icon.ereporting.UserToken()));
 
         HttpEntity<GetAppointmentDocument> payload =
                 new HttpEntity<>(getAppointmentDocument, new HttpHeaders());
@@ -258,21 +253,12 @@ public class ReportingController {
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Appointment.class);
 
+            GetAppointmentResponse getAppointmentResponse = new GetAppointmentResponse();
+            getAppointmentResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getAppointment")));
-
-            GetAppointmentResponseDocument getAppointmentResponseDoc =
-                    new GetAppointmentResponseDocument();
-            AppointmentOuter outResp = new AppointmentOuter();
-            outResp.setAppointment(resp.getBody());
-            getAppointmentResponseDoc.setXMLString(outResp);
-
-            var getAppointmentResponse =
-                    XMLUtilities.convertResp(
-                            getAppointmentResponseDoc,
-                            new GetAppointmentResponse(),
-                            "getAppointmentResponse");
 
             return getAppointmentResponse;
         } catch (Exception ex) {
@@ -295,8 +281,14 @@ public class ReportingController {
     public GetQuestionsResponse getQuestions(@RequestPayload GetQuestions getQuestions)
             throws JsonProcessingException {
 
-        var getQuestionsDocument =
-                XMLUtilities.convertReq(getQuestions, new GetQuestionsDocument(), "getQuestions");
+        GetQuestionsDocument getQuestionsDocument = new GetQuestionsDocument();
+        getQuestionsDocument.setEReport(
+                XMLUtilities.deserializeXmlStr(getQuestions.getXMLString(), new Ereport()));
+
+        getQuestionsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getQuestions.getUserTokenString(),
+                        new ca.bc.gov.open.icon.ereporting.UserToken()));
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/questions");
@@ -307,21 +299,13 @@ public class ReportingController {
             HttpEntity<Ereport> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
+
+            GetQuestionsResponse getQuestionsResponse = new GetQuestionsResponse();
+            getQuestionsResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getQuestions")));
-
-            GetQuestionsResponseDocument getQuestionsResponseDocument =
-                    new GetQuestionsResponseDocument();
-            ReportOuter outResp = new ReportOuter();
-            outResp.setEReport(resp.getBody());
-            getQuestionsResponseDocument.setXMLString(outResp);
-
-            var getQuestionsResponse =
-                    XMLUtilities.convertResp(
-                            getQuestionsResponseDocument,
-                            new GetQuestionsResponse(),
-                            "getQuestionsResponse");
 
             return getQuestionsResponse;
         } catch (Exception ex) {
@@ -344,8 +328,14 @@ public class ReportingController {
     public GetStatusResponse getStatus(@RequestPayload GetStatus getStatus)
             throws JsonProcessingException {
 
-        var getStatusDocument =
-                XMLUtilities.convertReq(getStatus, new GetStatusDocument(), "getStatus");
+        GetStatusDocument getStatusDocument = new GetStatusDocument();
+        getStatusDocument.setStatus(
+                XMLUtilities.deserializeXmlStr(
+                        getStatus.getXMLString(), new ca.bc.gov.open.icon.ereporting.Status()));
+        getStatusDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getStatus.getUserTokenString(),
+                        new ca.bc.gov.open.icon.ereporting.UserToken()));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "reporting/status");
         HttpEntity<GetStatusDocument> payload =
@@ -358,18 +348,13 @@ public class ReportingController {
                             HttpMethod.POST,
                             payload,
                             ca.bc.gov.open.icon.ereporting.Status.class);
+
+            GetStatusResponse getStatusResponse = new GetStatusResponse();
+            getStatusResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getStatus")));
-
-            GetStatusResponseDocument getStatusResponseDoc = new GetStatusResponseDocument();
-            StatusOuter outResp = new StatusOuter();
-            outResp.setStatus(resp.getBody());
-            getStatusResponseDoc.setXMLString(outResp);
-
-            var getStatusResponse =
-                    XMLUtilities.convertResp(
-                            getStatusResponseDoc, new GetStatusResponse(), "getStatusResponse");
 
             return getStatusResponse;
         } catch (Exception ex) {
