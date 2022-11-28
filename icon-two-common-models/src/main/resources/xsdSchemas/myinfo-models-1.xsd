@@ -33,8 +33,8 @@
             <xsd:element name="description" nillable="true" type="xsd:string"/>
             <xsd:element name="adultYouth" nillable="true" type="xsd:string"/>
             <xsd:element name="orderNum" type="xsd:string"/>
-            <xsd:element name="startDate" type="xsd:dateTime"/>
-            <xsd:element name="endDate" type="xsd:dateTime"/>
+            <xsd:element name="startDate" type="xsd:string"/>
+            <xsd:element name="endDate" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -86,7 +86,7 @@
             <xsd:element name="instCommStatus" nillable="true" type="xsd:string"/>
             <xsd:element name="programName" type="xsd:string"/>
             <xsd:element name="Location" nillable="true" type="tns:location"/>
-            <xsd:element name="endDate" type="xsd:dateTime"/>
+            <xsd:element name="endDate" type="xsd:string"/>
             <xsd:element name="outcome" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
@@ -295,8 +295,8 @@
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
             <xsd:element name="audoId" nillable="true" type="xsd:string"/>
             <xsd:element name="orderNum" nillable="true" type="xsd:string"/>
-            <xsd:element name="startDate" nillable="true" type="xsd:dateTime"/>
-            <xsd:element name="endDate" nillable="true" type="xsd:dateTime"/>
+            <xsd:element name="startDate" nillable="true" type="xsd:string"/>
+            <xsd:element name="endDate" nillable="true" type="xsd:string"/>
             <xsd:element name="Row" nillable="true" type="tns:row"/>
             <xsd:element maxOccurs="unbounded" minOccurs="0" name="ConditionsDetails" type="tns:conditionsDetails"/>
         </xsd:sequence>
@@ -348,8 +348,8 @@
             <xsd:element name="description" nillable="true" type="xsd:string"/>
             <xsd:element name="adultYouth" nillable="true" type="xsd:string"/>
             <xsd:element name="orderNum" type="xsd:string"/>
-            <xsd:element name="startDate" type="xsd:dateTime"/>
-            <xsd:element name="endDate" type="xsd:dateTime"/>
+            <xsd:element name="startDate" type="xsd:string"/>
+            <xsd:element name="endDate" type="xsd:string"/>
             <xsd:element maxOccurs="unbounded" minOccurs="0" name="ConditionDetails" nillable="true" type="tns:conditionDetails"/>
         </xsd:sequence>
     </xsd:complexType>
