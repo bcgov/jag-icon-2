@@ -86,8 +86,10 @@ public class CustomizedXMLStreamWriter implements XMLStreamWriter {
     }
 
     @Override
-    public void writeNamespace(String prefix, String namespaceURI) {
-        // To match wM response, marshalled xml string output has no namespace in tag whatsoever
+    public void writeNamespace(String prefix, String namespaceURI) throws XMLStreamException {
+        if (prefix.equals("xsi")) {
+            xmlStreamWriter.writeNamespace(prefix, namespaceURI);
+        }
         return;
     }
 
