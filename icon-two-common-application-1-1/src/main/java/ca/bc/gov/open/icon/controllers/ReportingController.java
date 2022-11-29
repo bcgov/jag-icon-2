@@ -13,10 +13,12 @@ import ca.bc.gov.open.icon.utils.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
+import java.util.Map;
 import javax.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -196,18 +198,27 @@ public class ReportingController {
                         submitAnswers.getUserTokenString(),
                         new ca.bc.gov.open.icon.ereporting.UserToken()));
 
+        int i = 0;
+        for (var questions : submitAnswersDocument.getEReport().getQuestion()) {
+            questions.setQuestionId(Integer.toString(i++));
+        }
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "reporting/submit-answers");
         HttpEntity<SubmitAnswersDocument> payload =
                 new HttpEntity<>(submitAnswersDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Ereport> resp =
+            HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            new ParameterizedTypeReference<>() {});
 
             SubmitAnswersResponse submitAnswersResponse = new SubmitAnswersResponse();
-            submitAnswersResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+            submitAnswersResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(submitAnswersDocument.getEReport()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -301,7 +312,11 @@ public class ReportingController {
                             builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
 
             GetQuestionsResponse getQuestionsResponse = new GetQuestionsResponse();
-            getQuestionsResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+            var ereport = resp.getBody();
+            if (ereport != null && getQuestionsDocument.getEReport() != null) {
+                ereport.setState(getQuestionsDocument.getEReport().getState());
+            }
+            getQuestionsResponse.setXMLString(XMLUtilities.serializeXmlStr(ereport));
 
             log.info(
                     objectMapper.writeValueAsString(

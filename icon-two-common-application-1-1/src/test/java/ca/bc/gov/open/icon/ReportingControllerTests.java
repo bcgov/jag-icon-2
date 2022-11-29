@@ -144,11 +144,24 @@ public class ReportingControllerTests {
     @Test
     public void testSubmitAnswers() throws JsonProcessingException {
         var req = new SubmitAnswers();
-        var Report = new Ereport();
-        Report.setCsNum("A");
-        Report.setDeviceNo("A");
-        Report.setEventID("A");
-        Report.setState("A");
+        req.setXMLString(
+                "<EReport>\n"
+                        + "    <csNum>1</csNum>\n"
+                        + "    <eventId>1</eventId>\n"
+                        + "    <pacID>1</pacID>\n"
+                        + "    <deviceNo>1</deviceNo>\n"
+                        + "    <Question>\n"
+                        + "        <standardQuestionID>standardQuestionID1</standardQuestionID>\n"
+                        + "    </Question>\n"
+                        + "</EReport> ");
+
+        var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
+
+        var report = new Ereport();
+        report.setCsNum("A");
+        report.setDeviceNo("A");
+        report.setEventID("A");
+        report.setState("A");
         List<Question> Questions = new ArrayList<>();
         var Question = new Question();
         Question.setStandardQuestionID("A");
@@ -161,10 +174,7 @@ public class ReportingControllerTests {
         Answers.add(Answer);
         Question.setAnswer(Answers);
         Questions.add(Question);
-        Report.setQuestion(Questions);
-        req.setXMLString("A");
-
-        var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
+        report.setQuestion(Questions);
 
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
@@ -175,12 +185,9 @@ public class ReportingControllerTests {
         userToken.setCSNumber("A");
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
-
         req.setUserTokenString("A");
 
-        var report1 = new Ereport();
-        report1 = Report;
-        ResponseEntity<Ereport> responseEntity = new ResponseEntity<>(report1, HttpStatus.OK);
+        ResponseEntity<Ereport> responseEntity = new ResponseEntity<>(report, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(

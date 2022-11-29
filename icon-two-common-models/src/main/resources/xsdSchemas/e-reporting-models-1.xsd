@@ -163,6 +163,7 @@
 
     <xsd:complexType name="question">
         <xsd:sequence>
+            <xsd:element name="QuestionId" nillable="true" type="xsd:string"/>
             <xsd:element name="standardQuestionID" nillable="true" type="xsd:string"/>
             <xsd:element name="standardText" nillable="true" type="xsd:string"/>
             <xsd:element name="additionalText" nillable="true" type="xsd:string"/>

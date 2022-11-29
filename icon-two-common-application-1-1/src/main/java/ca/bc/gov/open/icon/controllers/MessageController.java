@@ -12,9 +12,11 @@ import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -140,15 +142,16 @@ public class MessageController {
                 new HttpEntity<>(setMessageDateDocument, new HttpHeaders());
 
         try {
-            HttpEntity<AppointmentMessage> resp =
+            HttpEntity<Map<String, String>> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            AppointmentMessage.class);
+                            new ParameterizedTypeReference<>() {});
 
             SetMessageDateResponse setMessageDateResponse = new SetMessageDateResponse();
-            setMessageDateResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+            setMessageDateResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(setMessageDateDocument.getAppointmentMessage()));
 
             log.info(
                     objectMapper.writeValueAsString(

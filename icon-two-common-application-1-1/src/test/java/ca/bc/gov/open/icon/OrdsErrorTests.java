@@ -25,6 +25,7 @@ import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoRequest;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
 import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -368,6 +369,18 @@ public class OrdsErrorTests {
         setMessageDate.setXMLString("A");
         setMessageDate.setUserTokenString("A");
 
+        Map<String, String> out = new HashMap<>();
+        ResponseEntity<Map<String, String>> responseEntity =
+                new ResponseEntity<>(out, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenReturn(responseEntity);
+
         Assertions.assertThrows(
                 ORDSException.class, () -> messageController.setMessageDate(setMessageDate));
     }
@@ -467,8 +480,31 @@ public class OrdsErrorTests {
     @Test
     public void testSubmitAnswersFail() {
         SubmitAnswers submitAnswers = new SubmitAnswers();
-        submitAnswers.setXMLString("A");
+        submitAnswers.setXMLString(
+                "<EReport>\n"
+                        + "    <csNum>1</csNum>\n"
+                        + "    <eventId>1</eventId>\n"
+                        + "    <pacID>1</pacID>\n"
+                        + "    <deviceNo>1</deviceNo>\n"
+                        + "    <Question>\n"
+                        + "        <QuestionId>0</QuestionId>\n"
+                        + "        <standardQuestionID>standardQuestionID1</standardQuestionID>\n"
+                        + "    </Question>\n"
+                        + "</EReport> ");
+
         submitAnswers.setUserTokenString("A");
+
+        Map<String, String> out = new HashMap<>();
+        ResponseEntity<Map<String, String>> responseEntity =
+                new ResponseEntity<>(out, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenThrow(ORDSException.class);
 
         Assertions.assertThrows(
                 ORDSException.class, () -> reportingController.submitAnswers(submitAnswers));

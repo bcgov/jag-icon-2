@@ -113,11 +113,12 @@ public class MessageControllerTests {
     @Test
     public void testSetMessageDate() throws JsonProcessingException {
         var req = new SetMessageDate();
+        req.setXMLString(
+                "<AppointmentMessage>\n" + "    <csNum>1</csNum>\n" + "</AppointmentMessage> ");
 
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        req.setXMLString("A");
 
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
