@@ -3,46 +3,99 @@ package ca.bc.gov.open.icon;
 import static org.mockito.Mockito.when;
 
 import ca.bc.gov.open.icon.auth.*;
+import ca.bc.gov.open.icon.auth.UserToken;
 import ca.bc.gov.open.icon.controllers.InformationController;
 import ca.bc.gov.open.icon.myinfo.*;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InformationControllerTests {
-    @Autowired private ObjectMapper objectMapper;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private InformationController controller;
 
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        controller = Mockito.spy(new InformationController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testGetUserInfo() throws JsonProcessingException {
-        var req = new GetUserInfo();
-        var userInfoOut = new UserInfoOut();
-        var userInfo = new UserInfo();
 
-        req.setXMLString("A");
-        userInfoOut.setUserInfo(userInfo);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setCsNum("A");
+        userInfo.setBusinessRole("A");
+        userInfo.setFirstName("A");
+        userInfo.setLastName("A");
+        userInfo.setLatestPhoto("A");
+        userInfo.setLocationCD("A");
 
-        var userInfo1 = new UserInfo();
-        ResponseEntity<UserInfo> responseEntity = new ResponseEntity<>(userInfo1, HttpStatus.OK);
+        FunctionalAbility functionalAbility = new FunctionalAbility();
+        functionalAbility.setFunctionCd("A");
+        functionalAbility.setServiceCd("A");
+
+        List<FunctionalAbility> functionalAbilityList = new ArrayList<>();
+        functionalAbilityList.add(functionalAbility);
+
+        SessionInfo sessionInfo = new SessionInfo();
+        sessionInfo.setSessionLimit("A");
+        sessionInfo.setIdleTimeout("A");
+
+        ServiceInfo serviceInfo = new ServiceInfo();
+        serviceInfo.setSessionInfo(sessionInfo);
+        serviceInfo.setDescription("A");
+        serviceInfo.setFunctionalAbility(functionalAbilityList);
+        serviceInfo.setName("A");
+        serviceInfo.setUrn("A");
+
+        List<ServiceInfo> serviceInfoList = new ArrayList<>();
+        serviceInfoList.add(serviceInfo);
+        userInfo.setServiceInfo(serviceInfoList);
+        userInfo.setSessionInfo(sessionInfo);
+
+        UserToken userToken = new UserToken();
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+
+        GetUserInfoDocument getUserInfoDocument = new GetUserInfoDocument();
+        getUserInfoDocument.setUserInfo(userInfo);
+        getUserInfoDocument.setUserToken(userToken);
+
+        GetUserInfo req = new GetUserInfo();
+        req.setXMLString(XMLUtilities.serializeXmlStr(getUserInfoDocument.getUserInfo()));
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(getUserInfoDocument.getUserToken()));
 
         // Set up to mock ords response
+        ResponseEntity<UserInfo> responseEntity = new ResponseEntity<>(userInfo, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
@@ -50,26 +103,50 @@ public class InformationControllerTests {
                         Mockito.<Class<UserInfo>>any()))
                 .thenReturn(responseEntity);
 
-        InformationController informationController =
-                new InformationController(restTemplate, objectMapper);
-        var resp = informationController.getUserInfo(req);
+        GetUserInfoResponse resp = controller.getUserInfo(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testGetDeviceInfo() throws JsonProcessingException {
-        var req = new GetDeviceInfo();
-        var deviceInfoOut = new DeviceInfoOut();
-        var deviceInfo = new DeviceInfo();
 
-        deviceInfoOut.setDeviceInfo(deviceInfo);
-        req.setXMLString("A");
+        DeviceInfo deviceInfo = new DeviceInfo();
+        deviceInfo.setDeviceNo("A");
+        deviceInfo.setBusinessRole("A");
+        deviceInfo.setCertificateName("A");
+        deviceInfo.setIsEnabled("A");
+        deviceInfo.setLocationCd("A");
+        deviceInfo.setPollActiveInterval("A");
+        deviceInfo.setPollSleepInterval("A");
+        deviceInfo.setSystemMessage("A");
 
-        var deviceInfo1 = new DeviceInfo();
-        ResponseEntity<DeviceInfo> responseEntity =
-                new ResponseEntity<>(deviceInfo1, HttpStatus.OK);
+        ServiceCodes serviceCodes = new ServiceCodes();
+        serviceCodes.setServiceCd("A");
+        List<ServiceCodes> serviceCodesList = new ArrayList<>();
+        serviceCodesList.add(serviceCodes);
+        deviceInfo.setServiceCodes(serviceCodesList);
+
+        UserToken userToken = new UserToken();
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+
+        GetDeviceInfoDocument getDeviceInfoDocument = new GetDeviceInfoDocument();
+        getDeviceInfoDocument.setDeviceInfo(deviceInfo);
+        getDeviceInfoDocument.setUserToken(userToken);
+
+        GetDeviceInfo req = new GetDeviceInfo();
+        req.setXMLString(XMLUtilities.serializeXmlStr(getDeviceInfoDocument.getDeviceInfo()));
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(getDeviceInfoDocument.getUserToken()));
 
         // Set up to mock ords response
+        ResponseEntity<DeviceInfo> responseEntity = new ResponseEntity<>(deviceInfo, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
@@ -77,9 +154,7 @@ public class InformationControllerTests {
                         Mockito.<Class<DeviceInfo>>any()))
                 .thenReturn(responseEntity);
 
-        InformationController informationController =
-                new InformationController(restTemplate, objectMapper);
-        var resp = informationController.getDeviceInfo(req);
+        GetDeviceInfoResponse resp = controller.getDeviceInfo(req);
         Assertions.assertNotNull(resp);
     }
 }

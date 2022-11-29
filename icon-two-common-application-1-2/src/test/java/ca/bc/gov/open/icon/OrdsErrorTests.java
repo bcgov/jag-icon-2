@@ -14,8 +14,12 @@ import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.exceptions.ORDSException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,62 +30,61 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrdsErrorTests {
-    @Autowired private MockMvc mockMvc;
-
-    @Autowired private ObjectMapper objectMapper;
 
     @Mock private WebServiceTemplate webServiceTemplate;
-
     @Mock private RestTemplate restTemplate;
+    @Mock private ObjectMapper objectMapper;
+    @Autowired private MockMvc mockMvc;
+
+    @Mock private InformationController informationController;
+    @Mock private AuthenticationController authenticationController;
+
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        informationController = Mockito.spy(new InformationController(restTemplate, objectMapper));
+        authenticationController = Mockito.spy(new AuthenticationController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testGetPreAuthorizeClientFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
+        GetPreAuthorizeClient getPreAuthorizeClient = new GetPreAuthorizeClient();
+        getPreAuthorizeClient.setXMLString("A");
         Assertions.assertThrows(
                 ORDSException.class,
-                () -> authenticationController.getPreAuthorizeClient(new GetPreAuthorizeClient()));
+                () -> authenticationController.getPreAuthorizeClient(getPreAuthorizeClient));
     }
 
     @Test
     public void testGetHasFunctionalAbilityFail() {
-        var authenticationController = new AuthenticationController(restTemplate, objectMapper);
-
+        GetHasFunctionalAbility getHasFunctionalAbility = new GetHasFunctionalAbility();
+        getHasFunctionalAbility.setXMLString("A");
+        getHasFunctionalAbility.setUserTokenString("A");
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
                         authenticationController.getHasFunctionalAbility(
-                                new GetHasFunctionalAbility()));
+                                getHasFunctionalAbility));
     }
 
     @Test
     public void testGetUserInfoFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
+        GetUserInfo getUserInfo = new GetUserInfo();
+        getUserInfo.setXMLString("A");
+        getUserInfo.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> informationController.getUserInfo(new GetUserInfo()));
+                ORDSException.class, () -> informationController.getUserInfo(getUserInfo));
     }
 
     @Test
     public void testGetDeviceInfoFail() {
-        var informationController = new InformationController(restTemplate, objectMapper);
-
+        GetDeviceInfo getDeviceInfo = new GetDeviceInfo();
+        getDeviceInfo.setXMLString("A");
+        getDeviceInfo.setUserTokenString("A");
         Assertions.assertThrows(
                 ORDSException.class,
-                () -> informationController.getDeviceInfo(new GetDeviceInfo()));
-    }
-
-    @Test
-    public void securityTestFail_Then401() throws Exception {
-        var response =
-                mockMvc.perform(post("/ws").contentType(MediaType.TEXT_XML))
-                        .andExpect(status().is4xxClientError())
-                        .andReturn();
-        Assertions.assertEquals(
-                HttpStatus.UNAUTHORIZED.value(), response.getResponse().getStatus());
+                () -> informationController.getDeviceInfo(getDeviceInfo));
     }
 }
