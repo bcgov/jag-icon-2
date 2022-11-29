@@ -74,11 +74,9 @@ public class TestService {
 
         diffCounter = 0;
         GetUserInfo getUserInfo = new GetUserInfo();
-        UserInfoOut userInfoOut = new UserInfoOut();
 
         var request = new UserInfo();
         getUserInfo.setXMLString("A");
-        userInfoOut.setUserInfo(request);
 
         InputStream inputIds = getClass().getResourceAsStream("/getUserInfo.csv");
         assert inputIds != null;
@@ -103,11 +101,9 @@ public class TestService {
 
         diffCounter = 0;
         GetDeviceInfo getDeviceInfo = new GetDeviceInfo();
-        DeviceInfoOut deviceInfoOut = new DeviceInfoOut();
 
         var request = new DeviceInfo();
         getDeviceInfo.setXMLString("A");
-        deviceInfoOut.setDeviceInfo(request);
 
         InputStream inputIds = getClass().getResourceAsStream("/getDeviceInfo.csv");
         assert inputIds != null;
@@ -132,11 +128,9 @@ public class TestService {
 
         diffCounter = 0;
         GetPreAuthorizeClient getPreAuthorizeClient = new GetPreAuthorizeClient();
-        PreAuthorizeClientOut deviceInfoOut = new PreAuthorizeClientOut();
 
         var request = new PreAuthorizeClient();
         getPreAuthorizeClient.setXMLString("A");
-        deviceInfoOut.setPreAuthorizeClient(request);
 
         InputStream inputIds = getClass().getResourceAsStream("/getPreAuthorizeClient.csv");
         assert inputIds != null;
@@ -166,17 +160,13 @@ public class TestService {
         diffCounter = 0;
         var getHasFunctionalAbility = new GetHasFunctionalAbility();
 
-        var hasFunctionalAbilityOut = new HasFunctionalAbilityOut();
         var functionalAbility = new FunctionalAbility();
         var request = new HasFunctionalAbility();
         getHasFunctionalAbility.setXMLString("A");
-        hasFunctionalAbilityOut.setHasFunctionalAbility(request);
         request.setFunctionalAbility(functionalAbility);
 
-        var userTokenOut = new UserTokenOut();
         var userToken = new UserToken();
         getHasFunctionalAbility.setUserTokenString("A");
-        userTokenOut.setUserToken(userToken);
 
         InputStream inputIds = getClass().getResourceAsStream("/getHasFunctionalAbility.csv");
         assert inputIds != null;

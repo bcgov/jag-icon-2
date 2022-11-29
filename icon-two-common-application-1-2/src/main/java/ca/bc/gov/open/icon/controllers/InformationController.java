@@ -43,17 +43,11 @@ public class InformationController {
     public GetUserInfoResponse getUserInfo(@RequestPayload GetUserInfo getUserInfo)
             throws JsonProcessingException {
 
-        var getUserInfoDocument =
-                XMLUtilities.convertReq(getUserInfo, new GetUserInfoDocument(), "getUserInfo");
+        GetUserInfoDocument getUserInfoDocument = new GetUserInfoDocument();
+        getUserInfoDocument.setUserInfo(XMLUtilities.deserializeXmlStr(getUserInfo.getXMLString(), new UserInfo()));
+        getUserInfoDocument.setUserToken(XMLUtilities.deserializeXmlStr(getUserInfo.getUserTokenString(), new UserToken()));
 
-        // fetch the inmost UserInfo layer
-        var inner =
-                getUserInfoDocument.getXMLString() != null
-                                && getUserInfoDocument.getXMLString().getUserInfo() != null
-                        ? getUserInfoDocument.getXMLString().getUserInfo()
-                        : new UserInfo();
-
-        HttpEntity<UserInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<GetUserInfoDocument> payload = new HttpEntity<>(getUserInfoDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
@@ -63,16 +57,10 @@ public class InformationController {
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, UserInfo.class);
 
-            var getUserInfoResponseDocument = new GetUserInfoResponseDocument();
-            var outResp = new UserInfoOut();
-            outResp.setUserInfo(resp.getBody());
-            getUserInfoResponseDocument.setXMLString(outResp);
-
-            var getUserInfoResponse =
-                    XMLUtilities.convertResp(
-                            getUserInfoResponseDocument,
-                            new GetUserInfoResponse(),
-                            "getUserInfoResponse");
+            GetUserInfoResponse getUserInfoResponse = new GetUserInfoResponse();
+            getUserInfoDocument.setUserInfo(resp.getBody());
+            getUserInfoResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getUserInfoDocument.getUserInfo()));
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getUserInfo")));
@@ -84,7 +72,7 @@ public class InformationController {
                                     "Error received from ORDS",
                                     "getUserInfo",
                                     ex.getMessage(),
-                                    inner)));
+                                    getUserInfo)));
             throw handleError(ex, new ca.bc.gov.open.icon.auth.Error());
         }
     }
@@ -96,19 +84,11 @@ public class InformationController {
     public GetDeviceInfoResponse getDeviceInfo(@RequestPayload GetDeviceInfo getDeviceInfo)
             throws JsonProcessingException {
 
-        var getDeviceInfoDocument =
-                XMLUtilities.convertReq(
-                        getDeviceInfo, new GetDeviceInfoDocument(), "getDeviceInfo");
+        GetDeviceInfoDocument getDeviceInfoDocument = new GetDeviceInfoDocument();
+        getDeviceInfoDocument.setDeviceInfo(XMLUtilities.deserializeXmlStr(getDeviceInfo.getXMLString(), new DeviceInfo()));
+        getDeviceInfoDocument.setUserToken(XMLUtilities.deserializeXmlStr(getDeviceInfo.getUserTokenString(), new UserToken()));
 
-        // fetch the inmost DeviceInfo layer
-        DeviceInfo inner =
-                (getDeviceInfoDocument.getXMLString() != null
-                                && getDeviceInfoDocument.getXMLString().getDeviceInfo() != null
-                        ? getDeviceInfoDocument.getXMLString().getDeviceInfo()
-                        : new DeviceInfo());
-
-        HttpEntity<DeviceInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
-
+        HttpEntity<GetDeviceInfoDocument> payload = new HttpEntity<>(getDeviceInfoDocument, new HttpHeaders());
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
 
@@ -117,16 +97,10 @@ public class InformationController {
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, DeviceInfo.class);
 
-            var getDeviceInfoResponseDocument = new GetDeviceInfoResponseDocument();
-            var outResp = new DeviceInfoOut();
-            outResp.setDeviceInfo(resp.getBody());
-            getDeviceInfoResponseDocument.setXMLString(outResp);
-
-            var getDeviceInfoResponse =
-                    XMLUtilities.convertResp(
-                            getDeviceInfoResponseDocument,
-                            new GetDeviceInfoResponse(),
-                            "getDeviceInfoResponse");
+            GetDeviceInfoResponse getDeviceInfoResponse = new GetDeviceInfoResponse();
+            getDeviceInfoDocument.setDeviceInfo(resp.getBody());
+            getDeviceInfoResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getDeviceInfoDocument.getDeviceInfo()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -139,7 +113,7 @@ public class InformationController {
                                     "Error received from ORDS",
                                     "getDeviceInfo",
                                     ex.getMessage(),
-                                    inner)));
+                                    getDeviceInfo)));
 
             throw handleError(ex, new ca.bc.gov.open.icon.auth.Error());
         }
