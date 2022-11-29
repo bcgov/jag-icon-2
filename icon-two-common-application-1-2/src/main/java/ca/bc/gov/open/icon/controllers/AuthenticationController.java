@@ -44,9 +44,13 @@ public class AuthenticationController {
             @RequestPayload GetPreAuthorizeClient getPreAuthorizeClient)
             throws JsonProcessingException {
 
-        GetPreAuthorizeClientDocument getPreAuthorizeClientDocument = new GetPreAuthorizeClientDocument();
-        getPreAuthorizeClientDocument.setPreAuthorizeClient(XMLUtilities.deserializeXmlStr(getPreAuthorizeClient.getXMLString(), new PreAuthorizeClient()));
-        HttpEntity<GetPreAuthorizeClientDocument> payload = new HttpEntity<>(getPreAuthorizeClientDocument, new HttpHeaders());
+        GetPreAuthorizeClientDocument getPreAuthorizeClientDocument =
+                new GetPreAuthorizeClientDocument();
+        getPreAuthorizeClientDocument.setPreAuthorizeClient(
+                XMLUtilities.deserializeXmlStr(
+                        getPreAuthorizeClient.getXMLString(), new PreAuthorizeClient()));
+        HttpEntity<GetPreAuthorizeClientDocument> payload =
+                new HttpEntity<>(getPreAuthorizeClientDocument, new HttpHeaders());
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/pre-auth-client");
 
@@ -58,9 +62,11 @@ public class AuthenticationController {
                             payload,
                             PreAuthorizeClient.class);
 
-            GetPreAuthorizeClientResponse getPreAuthorizeClientResponse = new GetPreAuthorizeClientResponse();
+            GetPreAuthorizeClientResponse getPreAuthorizeClientResponse =
+                    new GetPreAuthorizeClientResponse();
             getPreAuthorizeClientDocument.setPreAuthorizeClient(resp.getBody());
-            getPreAuthorizeClientResponse.setXMLString(XMLUtilities.serializeXmlStr(getPreAuthorizeClientDocument));
+            getPreAuthorizeClientResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getPreAuthorizeClientDocument));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -86,9 +92,14 @@ public class AuthenticationController {
             @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility)
             throws JsonProcessingException {
 
-        GetHasFunctionalAbilityDocument getHasFunctionalAbilityDocument = new GetHasFunctionalAbilityDocument();
-        getHasFunctionalAbilityDocument.setHasFunctionalAbility(XMLUtilities.deserializeXmlStr(getHasFunctionalAbility.getXMLString(), new HasFunctionalAbility()));
-        getHasFunctionalAbilityDocument.setUserToken(XMLUtilities.deserializeXmlStr(getHasFunctionalAbility.getUserTokenString(), new UserToken()));
+        GetHasFunctionalAbilityDocument getHasFunctionalAbilityDocument =
+                new GetHasFunctionalAbilityDocument();
+        getHasFunctionalAbilityDocument.setHasFunctionalAbility(
+                XMLUtilities.deserializeXmlStr(
+                        getHasFunctionalAbility.getXMLString(), new HasFunctionalAbility()));
+        getHasFunctionalAbilityDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getHasFunctionalAbility.getUserTokenString(), new UserToken()));
 
         HttpEntity<GetHasFunctionalAbilityDocument> payload =
                 new HttpEntity<>(getHasFunctionalAbilityDocument, new HttpHeaders());
@@ -107,7 +118,8 @@ public class AuthenticationController {
             GetHasFunctionalAbilityResponse getHasFunctionalAbilityResponse =
                     new GetHasFunctionalAbilityResponse();
             getHasFunctionalAbilityDocument.setHasFunctionalAbility(resp.getBody());
-            getHasFunctionalAbilityResponse.setXMLString(XMLUtilities.serializeXmlStr(getHasFunctionalAbilityDocument));
+            getHasFunctionalAbilityResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getHasFunctionalAbilityDocument));
 
             log.info(
                     objectMapper.writeValueAsString(

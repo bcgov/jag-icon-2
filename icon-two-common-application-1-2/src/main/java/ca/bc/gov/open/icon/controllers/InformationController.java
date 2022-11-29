@@ -44,10 +44,13 @@ public class InformationController {
             throws JsonProcessingException {
 
         GetUserInfoDocument getUserInfoDocument = new GetUserInfoDocument();
-        getUserInfoDocument.setUserInfo(XMLUtilities.deserializeXmlStr(getUserInfo.getXMLString(), new UserInfo()));
-        getUserInfoDocument.setUserToken(XMLUtilities.deserializeXmlStr(getUserInfo.getUserTokenString(), new UserToken()));
+        getUserInfoDocument.setUserInfo(
+                XMLUtilities.deserializeXmlStr(getUserInfo.getXMLString(), new UserInfo()));
+        getUserInfoDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getUserInfo.getUserTokenString(), new UserToken()));
 
-        HttpEntity<GetUserInfoDocument> payload = new HttpEntity<>(getUserInfoDocument, new HttpHeaders());
+        HttpEntity<GetUserInfoDocument> payload =
+                new HttpEntity<>(getUserInfoDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
@@ -85,10 +88,14 @@ public class InformationController {
             throws JsonProcessingException {
 
         GetDeviceInfoDocument getDeviceInfoDocument = new GetDeviceInfoDocument();
-        getDeviceInfoDocument.setDeviceInfo(XMLUtilities.deserializeXmlStr(getDeviceInfo.getXMLString(), new DeviceInfo()));
-        getDeviceInfoDocument.setUserToken(XMLUtilities.deserializeXmlStr(getDeviceInfo.getUserTokenString(), new UserToken()));
+        getDeviceInfoDocument.setDeviceInfo(
+                XMLUtilities.deserializeXmlStr(getDeviceInfo.getXMLString(), new DeviceInfo()));
+        getDeviceInfoDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getDeviceInfo.getUserTokenString(), new UserToken()));
 
-        HttpEntity<GetDeviceInfoDocument> payload = new HttpEntity<>(getDeviceInfoDocument, new HttpHeaders());
+        HttpEntity<GetDeviceInfoDocument> payload =
+                new HttpEntity<>(getDeviceInfoDocument, new HttpHeaders());
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
 

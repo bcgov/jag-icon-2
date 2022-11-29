@@ -1,8 +1,5 @@
 package ca.bc.gov.open.icon;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import ca.bc.gov.open.icon.audit.*;
 import ca.bc.gov.open.icon.auth.GetDeviceInfo;
 import ca.bc.gov.open.icon.auth.GetHasFunctionalAbility;
@@ -21,11 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
@@ -45,7 +37,8 @@ public class OrdsErrorTests {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         informationController = Mockito.spy(new InformationController(restTemplate, objectMapper));
-        authenticationController = Mockito.spy(new AuthenticationController(restTemplate, objectMapper));
+        authenticationController =
+                Mockito.spy(new AuthenticationController(restTemplate, objectMapper));
     }
 
     @Test
@@ -64,9 +57,7 @@ public class OrdsErrorTests {
         getHasFunctionalAbility.setUserTokenString("A");
         Assertions.assertThrows(
                 ORDSException.class,
-                () ->
-                        authenticationController.getHasFunctionalAbility(
-                                getHasFunctionalAbility));
+                () -> authenticationController.getHasFunctionalAbility(getHasFunctionalAbility));
     }
 
     @Test
@@ -84,7 +75,6 @@ public class OrdsErrorTests {
         getDeviceInfo.setXMLString("A");
         getDeviceInfo.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> informationController.getDeviceInfo(getDeviceInfo));
+                ORDSException.class, () -> informationController.getDeviceInfo(getDeviceInfo));
     }
 }
