@@ -28,14 +28,6 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="getMessageResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="AppointmentMessage" nillable="true" type="tns:AppointmentMessage"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
     <xsd:element name="Error">
         <xsd:complexType>
             <xsd:sequence>
@@ -75,14 +67,6 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:element name="getLocationsResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="Locations" nillable="true" type="tns:locations"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
     <xsd:element name="getLocationsResponse">
         <xsd:complexType>
             <xsd:sequence>
@@ -120,14 +104,6 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
-    <xsd:element name="setMessageDateResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="AppointmentMessage" nillable="true" type="tns:AppointmentMessage"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -186,14 +162,6 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="submitAnswersResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="EReport" nillable="true" type="tns:ereport"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
     <xsd:element name="getAppointmentDocument">
         <xsd:complexType>
             <xsd:sequence>
@@ -241,14 +209,6 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
-    <xsd:element name="getAppointmentResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="Appointment" nillable="true" type="tns:appointment"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -339,14 +299,6 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="getQuestionsResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="EReport" nillable="true" type="tns:ereport"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
     <xsd:element name="getStatus">
         <xsd:complexType>
             <xsd:sequence>
@@ -382,14 +334,6 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
-    <xsd:element name="getStatusResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="Status" nillable="true" type="tns:status"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
