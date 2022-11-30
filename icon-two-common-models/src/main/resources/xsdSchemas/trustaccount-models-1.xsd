@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema targetNamespace="ICON2.Source.TrustAccount.ws.provider:TrustAccount"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="ICON2.Source.TrustAccount.ws.provider:TrustAccount">
+
     <xsd:element name="getTrustAccount">
         <xsd:complexType>
             <xsd:sequence>
@@ -13,8 +14,8 @@
     <xsd:element name="getTrustAccountDocument">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:getTrustAccount"/>
-                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
+                <xsd:element name="TrustAccount" nillable="true" type="tns:trustAccount"/>
+                <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -27,14 +28,6 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="getTrustAccountResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:getTrustAccount"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
     <xsd:element name="Error">
         <xsd:complexType>
             <xsd:sequence>
@@ -43,13 +36,7 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="getTrustAccount">
-        <xsd:sequence>
-            <xsd:element name="TrustAccount" nillable="true" type="tns:getTrustAccountRequest"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="getTrustAccountRequest">
+    <xsd:complexType name="trustAccount">
         <xsd:sequence>
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
             <xsd:element name="fundsAvailable" type="xsd:string"/>
@@ -79,12 +66,6 @@
           <xsd:element name="total" type="xsd:string"/>
           <xsd:element name="comment" type="xsd:string"/>
       </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userTokenOuter">
-        <xsd:sequence>
-            <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
-        </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="userToken">
