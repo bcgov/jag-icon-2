@@ -13,7 +13,6 @@ import ca.bc.gov.open.icon.utils.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
-import java.util.Map;
 import javax.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,12 +208,12 @@ public class ReportingController {
                 new HttpEntity<>(submitAnswersDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Map<String, String>> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            new ParameterizedTypeReference<>() {});
+
+            restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    payload,
+                    new ParameterizedTypeReference<>() {});
 
             SubmitAnswersResponse submitAnswersResponse = new SubmitAnswersResponse();
             submitAnswersResponse.setXMLString(

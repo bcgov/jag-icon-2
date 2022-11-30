@@ -8,7 +8,6 @@ import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,12 +55,12 @@ public class RecordController {
                 new HttpEntity<>(recordCompletedDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Map<String, String>> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            new ParameterizedTypeReference<>() {});
+            restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    payload,
+                    new ParameterizedTypeReference<>() {});
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "recordCompleted")));
@@ -98,12 +97,12 @@ public class RecordController {
                 new HttpEntity<>(recordExceptionDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Map<String, String>> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            new ParameterizedTypeReference<>() {});
+            restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    payload,
+                    new ParameterizedTypeReference<>() {});
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "recordException")));

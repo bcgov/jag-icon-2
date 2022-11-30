@@ -14,7 +14,7 @@
     <xsd:element name="getMessageDocument">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="AppointmentMessage" nillable="true" type="tns:AppointmentMessage"/>
+                <xsd:element name="AppointmentMessage" nillable="true" type="tns:appointmentMessage"/>
                 <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
             </xsd:sequence>
         </xsd:complexType>
@@ -87,13 +87,13 @@
     <xsd:element name="setMessageDateDocument">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="AppointmentMessage" nillable="true" type="tns:AppointmentMessage"/>
+                <xsd:element name="AppointmentMessage" nillable="true" type="tns:appointmentMessage"/>
                 <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="AppointmentMessage">
+    <xsd:complexType name="appointmentMessage">
         <xsd:sequence>
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
             <xsd:element name="text" nillable="true" type="xsd:string"/>
@@ -139,7 +139,7 @@
 
     <xsd:complexType name="question">
         <xsd:sequence>
-            <xsd:element name="QuestionId" nillable="true" type="xsd:string"/>
+            <xsd:element name="questionId" nillable="true" type="xsd:string"/>
             <xsd:element name="standardQuestionID" nillable="true" type="xsd:string"/>
             <xsd:element name="standardText" nillable="true" type="xsd:string"/>
             <xsd:element name="additionalText" nillable="true" type="xsd:string"/>
@@ -371,11 +371,4 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="getReportingCmpltInstructionResponseDocument">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="ReportingCmpltInstruction" nillable="true" type="tns:reportingCmpltInstruction"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
 </xsd:schema>
