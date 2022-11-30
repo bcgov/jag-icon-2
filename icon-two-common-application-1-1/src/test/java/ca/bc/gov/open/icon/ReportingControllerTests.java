@@ -80,7 +80,6 @@ public class ReportingControllerTests {
         req.setXMLString("A");
 
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
-
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -90,6 +89,7 @@ public class ReportingControllerTests {
         userToken.setCSNumber("A");
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
+        req.setUserTokenString("A");
 
         ResponseEntity<ReportingCmpltInstruction> responseEntity =
                 new ResponseEntity<>(reportingCmpltInstruction, HttpStatus.OK);
