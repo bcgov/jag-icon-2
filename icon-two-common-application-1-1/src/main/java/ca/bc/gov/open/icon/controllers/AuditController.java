@@ -232,9 +232,8 @@ public class AuditController {
 
             GetSessionParametersResponse getSessionParametersResponse =
                     new GetSessionParametersResponse();
-            getSessionParametersDocument.setSessionParameters(resp.getBody().getSessionParameters());
             getSessionParametersResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(getSessionParametersDocument));
+                    XMLUtilities.serializeXmlStr(resp.getBody().getSessionParameters()));
 
             log.info(
                     objectMapper.writeValueAsString(
