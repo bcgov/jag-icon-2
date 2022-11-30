@@ -24,6 +24,7 @@ import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
 import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
 import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -355,14 +356,34 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetMessageFail() {
+        GetMessage getMessage = new GetMessage();
+        getMessage.setXMLString("A");
+        getMessage.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class, () -> messageController.getMessage(new GetMessage()));
+                ORDSException.class, () -> messageController.getMessage(getMessage));
     }
 
     @Test
     public void testSetMessageDateFail() {
+        SetMessageDate setMessageDate = new SetMessageDate();
+        setMessageDate.setXMLString("A");
+        setMessageDate.setUserTokenString("A");
+
+        Map<String, String> out = new HashMap<>();
+        ResponseEntity<Map<String, String>> responseEntity =
+                new ResponseEntity<>(out, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenReturn(responseEntity);
+
         Assertions.assertThrows(
-                ORDSException.class, () -> messageController.setMessageDate(new SetMessageDate()));
+                ORDSException.class, () -> messageController.setMessageDate(setMessageDate));
     }
 
     @Test
@@ -406,6 +427,9 @@ public class OrdsErrorTests {
     */
     @Test
     public void testRecordCompletedFail() {
+        RecordCompleted recordCompleted = new RecordCompleted();
+        recordCompleted.setXMLString("A");
+
         when(restTemplate.exchange(
                         Mockito.anyString(),
                         Mockito.eq(HttpMethod.POST),
@@ -415,11 +439,14 @@ public class OrdsErrorTests {
 
         Assertions.assertThrows(
                 ServiceFaultException.class,
-                () -> recordController.recordCompleted(new RecordCompleted()));
+                () -> recordController.recordCompleted(recordCompleted));
     }
 
     @Test
     public void testRecordExceptionFail() {
+        RecordException recordException = new RecordException();
+        recordException.setXMLString("A");
+
         when(restTemplate.exchange(
                         Mockito.anyString(),
                         Mockito.eq(HttpMethod.POST),
@@ -429,7 +456,7 @@ public class OrdsErrorTests {
 
         Assertions.assertThrows(
                 ServiceFaultException.class,
-                () -> recordController.recordException(new RecordException()));
+                () -> recordController.recordException(recordException));
     }
 
     /*
@@ -444,44 +471,89 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetReportingCmpltInstructionFail() {
+        GetReportingCmpltInstruction getReportingCmpltInstruction =
+                new GetReportingCmpltInstruction();
+        getReportingCmpltInstruction.setXMLString("A");
+        getReportingCmpltInstruction.setUserTokenString("A");
+
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
                         reportingController.getReportingCmpltInstruction(
-                                new GetReportingCmpltInstruction()));
+                                getReportingCmpltInstruction));
     }
 
     @Test
     public void testGetLocationsResponseFail() {
+        ca.bc.gov.open.icon.ereporting.GetLocations getLocations =
+                new ca.bc.gov.open.icon.ereporting.GetLocations();
+        getLocations.setXMLString("A");
+        getLocations.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class,
-                () ->
-                        reportingController.getLocationsResponse(
-                                new ca.bc.gov.open.icon.ereporting.GetLocations()));
+                ORDSException.class, () -> reportingController.getLocationsResponse(getLocations));
     }
 
     @Test
     public void testSubmitAnswersFail() {
+        SubmitAnswers submitAnswers = new SubmitAnswers();
+        submitAnswers.setXMLString(
+                "<EReport>\n"
+                        + "    <csNum>1</csNum>\n"
+                        + "    <eventId>1</eventId>\n"
+                        + "    <pacID>1</pacID>\n"
+                        + "    <deviceNo>1</deviceNo>\n"
+                        + "    <Question>\n"
+                        + "        <QuestionId>0</QuestionId>\n"
+                        + "        <standardQuestionID>standardQuestionID1</standardQuestionID>\n"
+                        + "    </Question>\n"
+                        + "</EReport> ");
+
+        submitAnswers.setUserTokenString("A");
+
+        Map<String, String> out = new HashMap<>();
+        ResponseEntity<Map<String, String>> responseEntity =
+                new ResponseEntity<>(out, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenThrow(ORDSException.class);
+
         Assertions.assertThrows(
-                ORDSException.class, () -> reportingController.submitAnswers(new SubmitAnswers()));
+                ORDSException.class, () -> reportingController.submitAnswers(submitAnswers));
     }
 
     @Test
     public void testGetAppointmentFail() {
+        GetAppointment getAppointment = new GetAppointment();
+        getAppointment.setXMLString("A");
+        getAppointment.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> reportingController.getAppointment(new GetAppointment()));
+                ORDSException.class, () -> reportingController.getAppointment(getAppointment));
     }
 
     @Test
     public void testGetQuestionsFail() {
+        GetQuestions getQuestions = new GetQuestions();
+        getQuestions.setXMLString("A");
+        getQuestions.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class, () -> reportingController.getQuestions(new GetQuestions()));
+                ORDSException.class, () -> reportingController.getQuestions(getQuestions));
     }
 
     @Test
     public void testGetStatusFail() {
+        ca.bc.gov.open.icon.ereporting.GetStatus getStatus =
+                new ca.bc.gov.open.icon.ereporting.GetStatus();
+        getStatus.setXMLString("A");
+        getStatus.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class, () -> reportingController.getStatus(new GetStatus()));
+                ORDSException.class, () -> reportingController.getStatus(getStatus));
     }
 }

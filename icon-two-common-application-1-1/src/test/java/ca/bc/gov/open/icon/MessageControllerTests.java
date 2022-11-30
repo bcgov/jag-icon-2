@@ -63,7 +63,6 @@ public class MessageControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.messageAccessed(req);
         Assertions.assertNotNull(resp);
     }
@@ -72,14 +71,11 @@ public class MessageControllerTests {
     public void testGetMessage() throws JsonProcessingException {
         var req = new GetMessage();
 
-        var AppointmentMessageOuter = new AppointmentMessageOuter();
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
         req.setXMLString("A");
 
-        var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -92,7 +88,6 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var appointmentMessage = new AppointmentMessage();
@@ -108,8 +103,6 @@ public class MessageControllerTests {
                         Mockito.<HttpEntity<String>>any(),
                         Mockito.<Class<AppointmentMessage>>any()))
                 .thenReturn(responseEntity);
-
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.getMessage(req);
         Assertions.assertNotNull(resp);
     }
@@ -117,15 +110,13 @@ public class MessageControllerTests {
     @Test
     public void testSetMessageDate() throws JsonProcessingException {
         var req = new SetMessageDate();
+        req.setXMLString(
+                "<AppointmentMessage>\n" + "    <csNum>1</csNum>\n" + "</AppointmentMessage> ");
 
-        var AppointmentMessageOuter = new AppointmentMessageOuter();
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
-        req.setXMLString("A");
 
-        var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -138,7 +129,6 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var appointmentMessage = new AppointmentMessage();
@@ -153,7 +143,6 @@ public class MessageControllerTests {
                         Mockito.<Class<AppointmentMessage>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.setMessageDate(req);
         Assertions.assertNotNull(resp);
     }
