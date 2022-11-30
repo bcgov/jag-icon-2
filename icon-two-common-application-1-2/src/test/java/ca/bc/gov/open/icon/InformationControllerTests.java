@@ -9,6 +9,8 @@ import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,17 +18,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.ws.client.core.WebServiceTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InformationControllerTests {

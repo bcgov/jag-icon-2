@@ -136,9 +136,11 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetSessionParametersFail() {
+        GetSessionParameters getSessionParameters = new GetSessionParameters();
+        getSessionParameters.setXMLString("A");
         Assertions.assertThrows(
                 ORDSException.class,
-                () -> auditController.getSessionParameters(new GetSessionParameters()));
+                () -> auditController.getSessionParameters(getSessionParameters));
     }
 
     /*
