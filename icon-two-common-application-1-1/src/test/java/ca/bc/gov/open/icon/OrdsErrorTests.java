@@ -20,10 +20,9 @@ import ca.bc.gov.open.icon.myinfo.GetLocations;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
 import ca.bc.gov.open.icon.session.GetSessionParameters;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo2;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoRequest;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
 import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
+import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
@@ -192,28 +191,28 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetTombStoneInfoFail() {
-        var getTombStoneInfo = new GetTombStoneInfo();
-        var getTombStoneInfo2 = new GetTombStoneInfo2();
-        var getTombStoneInfoRequest = new GetTombStoneInfoRequest();
-
+        GetTombStoneInfo getTombStoneInfo = new GetTombStoneInfo();
         getTombStoneInfo.setXMLString("A");
-        getTombStoneInfo2.setTombStoneInfo(getTombStoneInfoRequest);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> clientController.getTombStoneInfo(getTombStoneInfo));
     }
 
     @Test
     public void testGetTrustAccountFail() {
+        GetTrustAccount getTrustAccount = new GetTrustAccount();
+        getTrustAccount.setXMLString("A");
+        getTrustAccount.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> clientController.getTrustAccount(new GetTrustAccount()));
+                ORDSException.class, () -> clientController.getTrustAccount(getTrustAccount));
     }
 
     @Test
     public void testGetVisitScheduleFail() {
+        GetVisitSchedule getVisitSchedule = new GetVisitSchedule();
+        getVisitSchedule.setUserTokenString("A");
+        getVisitSchedule.setXMLString("A");
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> clientController.getVisitSchedule(new GetVisitSchedule()));
+                ORDSException.class, () -> clientController.getVisitSchedule(getVisitSchedule));
     }
 
     /*
