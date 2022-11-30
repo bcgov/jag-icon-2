@@ -366,22 +366,38 @@ public class OrdsErrorTests {
 
     @Test
     public void testSetMessageDetailsFail() {
+        SetMessageDetails setMessageDetails = new SetMessageDetails();
+        setMessageDetails.setXMLString("A");
+        setMessageDetails.setUserTokenString("A");
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenThrow(new ORDSException());
+
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> messageController.setMessageDetails(new SetMessageDetails()));
+                ORDSException.class, () -> messageController.setMessageDetails(setMessageDetails));
     }
 
     @Test
     public void testGetMessagesFail() {
+        GetMessages getMessages = new GetMessages();
+        getMessages.setXMLString("A");
+        getMessages.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> messageController.getMessages(new GetMessages()));
+                ORDSException.class, () -> messageController.getMessages(getMessages));
     }
 
     @Test
     public void testGetMessageDetailsFail() {
+        GetMessageDetails getMessageDetails = new GetMessageDetails();
+        getMessageDetails.setXMLString("A");
+        getMessageDetails.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> messageController.getMessageDetails(new GetMessageDetails()));
+                ORDSException.class, () -> messageController.getMessageDetails(getMessageDetails));
     }
 
     /*
