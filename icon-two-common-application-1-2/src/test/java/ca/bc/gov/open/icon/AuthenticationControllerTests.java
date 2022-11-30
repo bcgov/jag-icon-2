@@ -5,12 +5,9 @@ import static org.mockito.Mockito.when;
 import ca.bc.gov.open.icon.audit.*;
 import ca.bc.gov.open.icon.auth.*;
 import ca.bc.gov.open.icon.controllers.AuthenticationController;
-import ca.bc.gov.open.icon.controllers.InformationController;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,15 +15,11 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuthenticationControllerTests {
@@ -48,11 +41,13 @@ public class AuthenticationControllerTests {
         preAuthorizeClient.setCsNum("A");
         preAuthorizeClient.setIsAllowed("A");
 
-        GetPreAuthorizeClientDocument getPreAuthorizeClientDocument = new GetPreAuthorizeClientDocument();
+        GetPreAuthorizeClientDocument getPreAuthorizeClientDocument =
+                new GetPreAuthorizeClientDocument();
         getPreAuthorizeClientDocument.setPreAuthorizeClient(preAuthorizeClient);
 
         // Set up to mock ords response
-        ResponseEntity<PreAuthorizeClient> responseEntity = new ResponseEntity<>(preAuthorizeClient, HttpStatus.OK);
+        ResponseEntity<PreAuthorizeClient> responseEntity =
+                new ResponseEntity<>(preAuthorizeClient, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
@@ -61,7 +56,9 @@ public class AuthenticationControllerTests {
                 .thenReturn(responseEntity);
 
         GetPreAuthorizeClient req = new GetPreAuthorizeClient();
-        req.setXMLString(XMLUtilities.serializeXmlStr(getPreAuthorizeClientDocument.getPreAuthorizeClient()));
+        req.setXMLString(
+                XMLUtilities.serializeXmlStr(
+                        getPreAuthorizeClientDocument.getPreAuthorizeClient()));
         GetPreAuthorizeClientResponse resp = controller.getPreAuthorizeClient(req);
         Assertions.assertNotNull(resp);
     }
@@ -86,12 +83,14 @@ public class AuthenticationControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        GetHasFunctionalAbilityDocument getHasFunctionalAbilityDocument = new GetHasFunctionalAbilityDocument();
+        GetHasFunctionalAbilityDocument getHasFunctionalAbilityDocument =
+                new GetHasFunctionalAbilityDocument();
         getHasFunctionalAbilityDocument.setHasFunctionalAbility(hasFunctionalAbility);
         getHasFunctionalAbilityDocument.setUserToken(userToken);
 
         // Set up to mock ords response
-        ResponseEntity<HasFunctionalAbility> responseEntity = new ResponseEntity<>(hasFunctionalAbility, HttpStatus.OK);
+        ResponseEntity<HasFunctionalAbility> responseEntity =
+                new ResponseEntity<>(hasFunctionalAbility, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
@@ -100,8 +99,11 @@ public class AuthenticationControllerTests {
                 .thenReturn(responseEntity);
 
         GetHasFunctionalAbility req = new GetHasFunctionalAbility();
-        req.setXMLString(XMLUtilities.serializeXmlStr(getHasFunctionalAbilityDocument.getHasFunctionalAbility()));
-        req.setUserTokenString(XMLUtilities.serializeXmlStr(getHasFunctionalAbilityDocument.getUserToken()));
+        req.setXMLString(
+                XMLUtilities.serializeXmlStr(
+                        getHasFunctionalAbilityDocument.getHasFunctionalAbility()));
+        req.setUserTokenString(
+                XMLUtilities.serializeXmlStr(getHasFunctionalAbilityDocument.getUserToken()));
         var resp = controller.getHasFunctionalAbility(req);
         Assertions.assertNotNull(resp);
     }
