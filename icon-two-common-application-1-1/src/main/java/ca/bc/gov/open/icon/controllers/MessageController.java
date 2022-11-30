@@ -7,6 +7,7 @@ import ca.bc.gov.open.icon.audit.MessageAccessedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.message.*;
+import ca.bc.gov.open.icon.message.UserToken;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -177,9 +179,12 @@ public class MessageController {
     public SetMessageDetailsResponse setMessageDetails(
             @RequestPayload SetMessageDetails setMessageDetails) throws JsonProcessingException {
 
-        var setMessageDetailsDocument =
-                XMLUtilities.convertReq(
-                        setMessageDetails, new SetMessageDetailsDocument(), "setMessageDetails");
+        SetMessageDetailsDocument setMessageDetailsDocument = new SetMessageDetailsDocument();
+        setMessageDetailsDocument.setMessages(
+                XMLUtilities.deserializeXmlStr(setMessageDetails.getXMLString(), new Messages()));
+        setMessageDetailsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        setMessageDetails.getUserTokenString(), new UserToken()));
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "message/details/set");
@@ -187,24 +192,18 @@ public class MessageController {
                 new HttpEntity<>(setMessageDetailsDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Messages> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Messages.class);
+            restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    payload,
+                    new ParameterizedTypeReference<>() {});
+
+            SetMessageDetailsResponse setMessageDetailsResponse = new SetMessageDetailsResponse();
+            setMessageDetailsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(setMessageDetailsDocument.getMessages()));
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDetails")));
-            SetMessageDetailsResponseDocument setMessageDetailsResponseDocument =
-                    new SetMessageDetailsResponseDocument();
-            MessagesOuter outResp = new MessagesOuter();
-            outResp.setMessages(resp.getBody());
-            setMessageDetailsResponseDocument.setXMLString(outResp);
-
-            var setMessageDetailsResponse =
-                    XMLUtilities.convertResp(
-                            setMessageDetailsResponseDocument,
-                            new SetMessageDetailsResponse(),
-                            "setMessageDetailsResponse");
-
             return setMessageDetailsResponse;
         } catch (Exception ex) {
             log.error(
@@ -223,8 +222,11 @@ public class MessageController {
     public GetMessagesResponse getMessages(@RequestPayload GetMessages getMessages)
             throws JsonProcessingException {
 
-        var getMessagesDocument =
-                XMLUtilities.convertReq(getMessages, new GetMessagesDocument(), "getMessages");
+        GetMessagesDocument getMessagesDocument = new GetMessagesDocument();
+        getMessagesDocument.setMessages(
+                XMLUtilities.deserializeXmlStr(getMessages.getXMLString(), new Messages()));
+        getMessagesDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getMessages.getUserTokenString(), new UserToken()));
 
         HttpEntity<GetMessagesDocument> payload =
                 new HttpEntity<>(getMessagesDocument, new HttpHeaders());
@@ -235,22 +237,23 @@ public class MessageController {
             HttpEntity<Messages> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Messages.class);
+
+            GetMessagesResponse getMessagesResponse = new GetMessagesResponse();
+            getMessagesDocument.getMessages().setRow(resp.getBody().getRow());
+            getMessagesDocument
+                    .getMessages()
+                    .setUnreadMessageCount(resp.getBody().getUnreadMessageCount());
+            if (!resp.getBody().getMessageDetails().isEmpty()) {
+                getMessagesDocument
+                        .getMessages()
+                        .setMessageDetails(resp.getBody().getMessageDetails());
+            }
+            getMessagesResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getMessagesDocument.getMessages()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessages")));
-
-            GetMessagesResponseDocument getMessagesResponseDocument =
-                    new GetMessagesResponseDocument();
-            MessagesOuter outResp = new MessagesOuter();
-            outResp.setMessages(resp.getBody());
-            getMessagesResponseDocument.setXMLString(outResp);
-
-            var getMessagesResponse =
-                    XMLUtilities.convertResp(
-                            getMessagesResponseDocument,
-                            new GetMessagesResponse(),
-                            "getMessagesResponse");
-
             return getMessagesResponse;
         } catch (Exception ex) {
             log.error(
@@ -271,12 +274,15 @@ public class MessageController {
     public GetMessageDetailsResponse getMessageDetails(
             @RequestPayload GetMessageDetails getMessageDetails) throws JsonProcessingException {
 
-        var getMessageDetailsDocument =
-                XMLUtilities.convertReq(
-                        getMessageDetails, new GetMessageDetailsDocument(), "getMessageDetails");
+        GetMessagesDocument getMessagesDocument = new GetMessagesDocument();
+        getMessagesDocument.setMessages(
+                XMLUtilities.deserializeXmlStr(getMessageDetails.getXMLString(), new Messages()));
+        getMessagesDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getMessageDetails.getUserTokenString(), new UserToken()));
 
-        HttpEntity<GetMessageDetailsDocument> payload =
-                new HttpEntity<>(getMessageDetailsDocument, new HttpHeaders());
+        HttpEntity<GetMessagesDocument> payload =
+                new HttpEntity<>(getMessagesDocument, new HttpHeaders());
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/details");
 
@@ -285,22 +291,18 @@ public class MessageController {
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Messages.class);
 
-            GetMessageDetailsResponseDocument getMessageDetailsResponseDocument =
-                    new GetMessageDetailsResponseDocument();
-            MessagesOuter outResp = new MessagesOuter();
-            outResp.setMessages(resp.getBody());
-            getMessageDetailsResponseDocument.setXMLString(outResp);
-
-            var getMessageDetailsResponse =
-                    XMLUtilities.convertResp(
-                            getMessageDetailsResponseDocument,
-                            new GetMessageDetailsResponse(),
-                            "getMessageDetailsResponse");
+            GetMessageDetailsResponse getMessageDetailsResponse = new GetMessageDetailsResponse();
+            if (!resp.getBody().getMessageDetails().isEmpty()) {
+                getMessagesDocument
+                        .getMessages()
+                        .setMessageDetails(resp.getBody().getMessageDetails());
+            }
+            getMessageDetailsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getMessagesDocument.getMessages()));
 
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessageDetails")));
-
             return getMessageDetailsResponse;
         } catch (Exception ex) {
             log.error(
