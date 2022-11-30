@@ -219,21 +219,21 @@ public class AuditController {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/session-parameters");
-        HttpEntity<GetSessionParametersDocument> payload =
-                new HttpEntity<>(getSessionParametersDocument, new HttpHeaders());
+        HttpEntity<SessionParameters> payload =
+                new HttpEntity<>(
+                        getSessionParametersDocument.getSessionParameters(), new HttpHeaders());
 
         try {
-            HttpEntity<GetSessionParametersDocument> resp =
+            HttpEntity<SessionParameters> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            GetSessionParametersDocument.class);
+                            SessionParameters.class);
 
             GetSessionParametersResponse getSessionParametersResponse =
                     new GetSessionParametersResponse();
-            getSessionParametersResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(resp.getBody().getSessionParameters()));
+            getSessionParametersResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
 
             log.info(
                     objectMapper.writeValueAsString(

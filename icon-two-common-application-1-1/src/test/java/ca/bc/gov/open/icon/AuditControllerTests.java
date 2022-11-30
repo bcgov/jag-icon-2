@@ -192,15 +192,15 @@ public class AuditControllerTests {
         GetSessionParameters req = new GetSessionParameters();
         req.setXMLString("A");
 
-        ResponseEntity<GetSessionParametersDocument> responseEntity =
-                new ResponseEntity<>(getSessionParametersDocument, HttpStatus.OK);
+        ResponseEntity<SessionParameters> responseEntity =
+                new ResponseEntity<>(sessionParameters, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<GetSessionParametersDocument>>any()))
+                        Mockito.<Class<SessionParameters>>any()))
                 .thenReturn(responseEntity);
 
         var resp = auditController.getSessionParameters(req);
