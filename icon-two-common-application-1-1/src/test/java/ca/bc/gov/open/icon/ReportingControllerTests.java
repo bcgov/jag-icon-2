@@ -74,9 +74,9 @@ public class ReportingControllerTests {
     @Test
     public void testGetReportingCmpltInstruction() throws JsonProcessingException {
         var req = new GetReportingCmpltInstruction();
-        var ReportingCmpltInstruction = new ReportingCmpltInstruction();
-        ReportingCmpltInstruction.setCsNum("A");
-        ReportingCmpltInstruction.setText("A");
+        var reportingCmpltInstruction = new ReportingCmpltInstruction();
+        reportingCmpltInstruction.setCsNum("A");
+        reportingCmpltInstruction.setText("A");
         req.setXMLString("A");
 
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
@@ -91,11 +91,6 @@ public class ReportingControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        req.setUserTokenString("A");
-
-        var reportingCmpltInstruction = new ReportingCmpltInstruction();
-        reportingCmpltInstruction.setText("A");
-        reportingCmpltInstruction.setCsNum("A");
         ResponseEntity<ReportingCmpltInstruction> responseEntity =
                 new ResponseEntity<>(reportingCmpltInstruction, HttpStatus.OK);
 
@@ -115,19 +110,16 @@ public class ReportingControllerTests {
     public void testGetLocationsResponse()
             throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
         var req = new GetLocations();
-        var Locations = new Locations();
+        var locations = new Locations();
         List<Location> draftl = new ArrayList<>();
         var Location = new Location();
         Location.setLocationCd("A");
         draftl.add(Location);
-        Locations.setLocation(draftl);
+        locations.setLocation(draftl);
         req.setXMLString("A");
 
         req.setUserTokenString("A");
-
-        var locations1 = new Locations();
-        locations1 = Locations;
-        ResponseEntity<Locations> responseEntity = new ResponseEntity<>(locations1, HttpStatus.OK);
+        ResponseEntity<Locations> responseEntity = new ResponseEntity<>(locations, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -205,14 +197,13 @@ public class ReportingControllerTests {
     public void testGetAppointment()
             throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
         var req = new GetAppointment();
+        var appointment = new Appointment();
 
-        var Appointment = new Appointment();
-
-        Appointment.setCsNum("A");
-        Appointment.setStartDate("A");
-        Appointment.setEndDate("A");
-        Appointment.setStartTime("A");
-        Appointment.setEndTime("A");
+        appointment.setCsNum("A");
+        appointment.setStartDate("A");
+        appointment.setEndDate("A");
+        appointment.setStartTime("A");
+        appointment.setEndTime("A");
 
         req.setXMLString("A");
 
@@ -230,9 +221,8 @@ public class ReportingControllerTests {
 
         req.setUserTokenString("A");
 
-        var appointment1 = new Appointment();
         ResponseEntity<Appointment> responseEntity =
-                new ResponseEntity<>(appointment1, HttpStatus.OK);
+                new ResponseEntity<>(appointment, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -254,19 +244,19 @@ public class ReportingControllerTests {
         report.setDeviceNo("A");
         report.setEventID("A");
         report.setState("A");
-        List<Question> Questions = new ArrayList<>();
-        var Question = new Question();
-        Question.setStandardQuestionID("A");
-        Question.setStandardText("A");
-        Question.setAdditionalText("A");
-        List<Answer> Answers = new ArrayList<>();
-        var Answer = new Answer();
-        Answer.setCode("A");
-        Answer.setDescription("A");
-        Answers.add(Answer);
-        Question.setAnswer(Answers);
-        Questions.add(Question);
-        report.setQuestion(Questions);
+        List<Question> questions = new ArrayList<>();
+        var question = new Question();
+        question.setStandardQuestionID("A");
+        question.setStandardText("A");
+        question.setAdditionalText("A");
+        List<Answer> answers = new ArrayList<>();
+        var answer = new Answer();
+        answer.setCode("A");
+        answer.setDescription("A");
+        answers.add(answer);
+        question.setAnswer(answers);
+        questions.add(question);
+        report.setQuestion(questions);
         req.setXMLString("A");
 
         req.setUserTokenString("A");
@@ -289,15 +279,15 @@ public class ReportingControllerTests {
     public void testGetStatus() throws JsonProcessingException {
         var req = new GetStatus();
 
-        var Status = new ca.bc.gov.open.icon.ereporting.Status();
+        var status = new ca.bc.gov.open.icon.ereporting.Status();
 
-        Status.setEventId("A");
-        Status.setCsNum("A");
-        Status.setHasNextAppointment("A");
-        Status.setIsCurrentAppointment("A");
-        Status.setProfileEnabled("A");
-        Status.setAnswersSubmitted("A");
-        Status.setAnswersCorrect("A");
+        status.setEventId("A");
+        status.setCsNum("A");
+        status.setHasNextAppointment("A");
+        status.setIsCurrentAppointment("A");
+        status.setProfileEnabled("A");
+        status.setAnswersSubmitted("A");
+        status.setAnswersCorrect("A");
 
         req.setXMLString("A");
 
@@ -315,7 +305,6 @@ public class ReportingControllerTests {
 
         req.setUserTokenString("A");
 
-        var status = new ca.bc.gov.open.icon.ereporting.Status();
         ResponseEntity<ca.bc.gov.open.icon.ereporting.Status> responseEntity =
                 new ResponseEntity<>(status, HttpStatus.OK);
 
