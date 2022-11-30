@@ -114,8 +114,10 @@ public class ReportingController {
 
             GetReportingCmpltInstructionResponse getReportingCmpltInstructionResponse =
                     new GetReportingCmpltInstructionResponse();
+            getReportingCmpltInstructionDocument.setReportingCmpltInstruction(resp.getBody());
             getReportingCmpltInstructionResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(resp.getBody()));
+                    XMLUtilities.serializeXmlStr(
+                            getReportingCmpltInstructionDocument.getReportingCmpltInstruction()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -162,7 +164,9 @@ public class ReportingController {
                             builder.toUriString(), HttpMethod.POST, payload, Locations.class);
 
             GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
-            getLocationsResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+            getLocationsDocument.setLocations(resp.getBody());
+            getLocationsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getLocationsDocument.getLocations()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -264,7 +268,9 @@ public class ReportingController {
                             builder.toUriString(), HttpMethod.POST, payload, Appointment.class);
 
             GetAppointmentResponse getAppointmentResponse = new GetAppointmentResponse();
-            getAppointmentResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+            getAppointmentDocument.setAppointment(resp.getBody());
+            getAppointmentResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getAppointmentDocument.getAppointment()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -311,11 +317,9 @@ public class ReportingController {
                             builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
 
             GetQuestionsResponse getQuestionsResponse = new GetQuestionsResponse();
-            var ereport = resp.getBody();
-            if (ereport != null && getQuestionsDocument.getEReport() != null) {
-                ereport.setState(getQuestionsDocument.getEReport().getState());
-            }
-            getQuestionsResponse.setXMLString(XMLUtilities.serializeXmlStr(ereport));
+            getQuestionsDocument.getEReport().setQuestion(resp.getBody().getQuestion());
+            getQuestionsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getQuestionsDocument.getEReport()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -364,7 +368,9 @@ public class ReportingController {
                             ca.bc.gov.open.icon.ereporting.Status.class);
 
             GetStatusResponse getStatusResponse = new GetStatusResponse();
-            getStatusResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+            getStatusDocument.setStatus(resp.getBody());
+            getStatusResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getStatusDocument.getStatus()));
 
             log.info(
                     objectMapper.writeValueAsString(

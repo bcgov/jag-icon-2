@@ -239,6 +239,8 @@ public class ReportingControllerTests {
     @Test
     public void testGetQuestions() throws JsonProcessingException {
         var req = new GetQuestions();
+        req.setXMLString("<EReport>\n" + "    <csNum>1</csNum>\n" + "</EReport> ");
+
         var report = new Ereport();
         report.setCsNum("A");
         report.setDeviceNo("A");
@@ -257,7 +259,6 @@ public class ReportingControllerTests {
         question.setAnswer(answers);
         questions.add(question);
         report.setQuestion(questions);
-        req.setXMLString("A");
 
         req.setUserTokenString("A");
 

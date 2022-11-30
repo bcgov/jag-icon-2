@@ -101,7 +101,10 @@ public class MessageController {
                             AppointmentMessage.class);
 
             GetMessageResponse getMessageResponse = new GetMessageResponse();
-            getMessageResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+
+            getMessageDocument.setAppointmentMessage(resp.getBody());
+            getMessageResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getMessageDocument.getAppointmentMessage()));
 
             log.info(
                     objectMapper.writeValueAsString(
