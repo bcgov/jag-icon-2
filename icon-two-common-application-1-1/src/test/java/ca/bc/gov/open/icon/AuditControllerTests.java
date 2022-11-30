@@ -4,7 +4,6 @@ import static org.mockito.Mockito.when;
 
 import ca.bc.gov.open.icon.audit.*;
 import ca.bc.gov.open.icon.controllers.AuditController;
-import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfoResponse;
 import ca.bc.gov.open.icon.session.*;
@@ -13,27 +12,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuditControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private AuditController auditController;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        auditController = Mockito.spy(new AuditController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testeServiceAccessed() throws JsonProcessingException {
@@ -177,41 +178,32 @@ public class AuditControllerTests {
 
     @Test
     public void testGetSessionParameters() throws JsonProcessingException {
-        var req = new GetSessionParameters();
-        var sessionParameterOutest = new SessionParameterOutest();
-        var sessionParameterOuter = new SessionParameterOuter();
-        List<SessionParameter> sessions = new ArrayList<>();
-        var sessionParameter = new SessionParameter();
+        GetSessionParametersDocument getSessionParametersDocument =
+                new GetSessionParametersDocument();
+        SessionParameters sessionParameters = new SessionParameters();
+        List<SessionParameter> sessionParameterList = new ArrayList<>();
+        SessionParameter sessionParameter = new SessionParameter();
         sessionParameter.setParameterCd("A");
         sessionParameter.setValue("A");
-        sessions.add(sessionParameter);
-        sessionParameterOuter.setSessionParameter(sessions);
-        sessionParameterOutest.setSessionParameters(sessionParameterOuter);
+        sessionParameterList.add(sessionParameter);
+        sessionParameters.setSessionParameter(sessionParameterList);
+        getSessionParametersDocument.setSessionParameters(sessionParameters);
+
+        GetSessionParameters req = new GetSessionParameters();
         req.setXMLString("A");
 
-        var out = new SessionParameterOuter();
-        List<SessionParameter> sessions1 = new ArrayList<>();
-        var sessionParameter1 = new SessionParameter();
-        sessionParameter1.setParameterCd("A");
-        sessionParameter1.setValue("A");
-        sessions1.add(sessionParameter1);
-        out.setSessionParameter(sessions1);
-
-        ResponseEntity<SessionParameterOuter> responseEntity =
-                new ResponseEntity<>(out, HttpStatus.OK);
+        ResponseEntity<SessionParameters> responseEntity =
+                new ResponseEntity<>(sessionParameters, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<SessionParameterOuter>>any()))
+                        Mockito.<Class<SessionParameters>>any()))
                 .thenReturn(responseEntity);
 
-        AuditController auditController = new AuditController(restTemplate, objectMapper);
         var resp = auditController.getSessionParameters(req);
         Assertions.assertNotNull(resp);
     }
-
-    //    public static class MessageControllerTests {}
 }
