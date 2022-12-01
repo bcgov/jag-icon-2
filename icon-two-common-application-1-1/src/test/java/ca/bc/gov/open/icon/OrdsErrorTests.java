@@ -22,7 +22,6 @@ import ca.bc.gov.open.icon.session.GetSessionParameters;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
 import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
-import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
@@ -238,6 +237,7 @@ public class OrdsErrorTests {
     */
     @Test
     public void testHealthServiceRequestSubmittedFail() {
+
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
@@ -247,11 +247,16 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetHealthServiceRequestHistoryFail() {
+        GetHealthServiceRequestHistory getHealthServiceRequestHistory =
+                new GetHealthServiceRequestHistory();
+        getHealthServiceRequestHistory.setXMLString("A");
+        getHealthServiceRequestHistory.setUserTokenString("A");
+
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
                         healthController.getHealthServiceRequestHistory(
-                                new GetHealthServiceRequestHistory()));
+                                getHealthServiceRequestHistory));
     }
 
     @Test
@@ -264,14 +269,22 @@ public class OrdsErrorTests {
 
     @Test
     public void testPublishHSRFail() {
+        PublishHSR publishHSR = new PublishHSR();
+        publishHSR.setXMLString("A");
+        publishHSR.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ServiceFaultException.class, () -> healthController.publishHSR(new PublishHSR()));
+                ServiceFaultException.class, () -> healthController.publishHSR(publishHSR));
     }
 
     @Test
     public void testGetHSRCountFail() {
+        GetHSRCount getHSRCount = new GetHSRCount();
+        getHSRCount.setXMLString("A");
+        getHSRCount.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class, () -> healthController.getHSRCount(new GetHSRCount()));
+                ORDSException.class, () -> healthController.getHSRCount(getHSRCount));
     }
 
     /*

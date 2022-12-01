@@ -47,18 +47,18 @@ public class ClientController {
             @RequestPayload GetTombStoneInfo getTombStoneInfo) throws JsonProcessingException {
 
         GetTombStoneInfoDocument getTombStoneInfoDocument = new GetTombStoneInfoDocument();
-        getTombStoneInfoDocument.setTombStoneInfo(XMLUtilities.deserializeXmlStr(getTombStoneInfo.getXMLString(), new TombStoneInfo()));
+        getTombStoneInfoDocument.setTombStoneInfo(
+                XMLUtilities.deserializeXmlStr(
+                        getTombStoneInfo.getXMLString(), new TombStoneInfo()));
 
-        HttpEntity<GetTombStoneInfoDocument> payload = new HttpEntity<>(getTombStoneInfoDocument, new HttpHeaders());
+        HttpEntity<GetTombStoneInfoDocument> payload =
+                new HttpEntity<>(getTombStoneInfoDocument, new HttpHeaders());
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "tombstone-info");
 
         try {
             HttpEntity<TombStoneInfo> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            TombStoneInfo.class);
+                            builder.toUriString(), HttpMethod.POST, payload, TombStoneInfo.class);
 
             GetTombStoneInfoResponse getTombStoneInfoResponse = new GetTombStoneInfoResponse();
             getTombStoneInfoDocument.setTombStoneInfo(resp.getBody());
@@ -91,22 +91,23 @@ public class ClientController {
             throws JsonProcessingException {
 
         GetTrustAccountDocument doc = new GetTrustAccountDocument();
-        doc.setTrustAccount(XMLUtilities.deserializeXmlStr(getTrustAccount.getXMLString(), new TrustAccount()));
-        doc.setUserToken(XMLUtilities.deserializeXmlStr(getTrustAccount.getUserTokenString(), new UserToken()));
+        doc.setTrustAccount(
+                XMLUtilities.deserializeXmlStr(getTrustAccount.getXMLString(), new TrustAccount()));
+        doc.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getTrustAccount.getUserTokenString(), new UserToken()));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "trust-account");
         HttpEntity<GetTrustAccountDocument> payload = new HttpEntity<>(doc, new HttpHeaders());
         try {
             HttpEntity<TrustAccount> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            TrustAccount.class);
+                            builder.toUriString(), HttpMethod.POST, payload, TrustAccount.class);
 
             doc.setTrustAccount(resp.getBody());
             GetTrustAccountResponse getTrustAccountResponse = new GetTrustAccountResponse();
-            getTrustAccountResponse.setXMLString(XMLUtilities.serializeXmlStr(doc.getTrustAccount()));
+            getTrustAccountResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(doc.getTrustAccount()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -134,23 +135,25 @@ public class ClientController {
             @RequestPayload GetVisitSchedule getVisitSchedule) throws JsonProcessingException {
 
         GetVisitScheduleDocument doc = new GetVisitScheduleDocument();
-        doc.setVisitSchedule(XMLUtilities.deserializeXmlStr(getVisitSchedule.getXMLString(), new VisitSchedule()));
-        doc.setUserToken(XMLUtilities.deserializeXmlStr(getVisitSchedule.getUserTokenString(),
-                new ca.bc.gov.open.icon.visitschedule.UserToken()));
+        doc.setVisitSchedule(
+                XMLUtilities.deserializeXmlStr(
+                        getVisitSchedule.getXMLString(), new VisitSchedule()));
+        doc.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getVisitSchedule.getUserTokenString(),
+                        new ca.bc.gov.open.icon.visitschedule.UserToken()));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "visit-schedule");
         HttpEntity<GetVisitScheduleDocument> payload = new HttpEntity<>(doc, new HttpHeaders());
         try {
             HttpEntity<VisitSchedule> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            VisitSchedule.class);
+                            builder.toUriString(), HttpMethod.POST, payload, VisitSchedule.class);
 
             doc.setVisitSchedule(resp.getBody());
             GetVisitScheduleResponse getVisitScheduleResponse = new GetVisitScheduleResponse();
-            getVisitScheduleResponse.setXMLString(XMLUtilities.serializeXmlStr(doc.getVisitSchedule()));
+            getVisitScheduleResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(doc.getVisitSchedule()));
 
             log.info(
                     objectMapper.writeValueAsString(
