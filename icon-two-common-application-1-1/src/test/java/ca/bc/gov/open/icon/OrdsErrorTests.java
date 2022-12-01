@@ -22,7 +22,6 @@ import ca.bc.gov.open.icon.session.GetSessionParameters;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
 import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
-import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;

@@ -16,8 +16,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.catalina.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,15 +23,11 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ClientControllerTests {
@@ -64,7 +58,8 @@ public class ClientControllerTests {
         req.setXMLString(XMLUtilities.serializeXmlStr(getTombStoneInfoDocument.getTombStoneInfo()));
 
         // Set up to mock ords response
-        ResponseEntity<TombStoneInfo> responseEntity = new ResponseEntity<>(tombStoneInfo, HttpStatus.OK);
+        ResponseEntity<TombStoneInfo> responseEntity =
+                new ResponseEntity<>(tombStoneInfo, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
@@ -124,7 +119,8 @@ public class ClientControllerTests {
         req.setUserTokenString(XMLUtilities.serializeXmlStr(doc.getUserToken()));
 
         // Set up to mock ords response
-        ResponseEntity<TrustAccount> responseEntity = new ResponseEntity<>(trustAccount, HttpStatus.OK);
+        ResponseEntity<TrustAccount> responseEntity =
+                new ResponseEntity<>(trustAccount, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
@@ -176,7 +172,8 @@ public class ClientControllerTests {
         req.setUserTokenString(XMLUtilities.serializeXmlStr(doc.getUserToken()));
 
         // Set up to mock ords response
-        ResponseEntity<VisitSchedule> responseEntity = new ResponseEntity<>(visitSchedule, HttpStatus.OK);
+        ResponseEntity<VisitSchedule> responseEntity =
+                new ResponseEntity<>(visitSchedule, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
