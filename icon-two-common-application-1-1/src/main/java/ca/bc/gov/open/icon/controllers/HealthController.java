@@ -230,8 +230,10 @@ public class HealthController {
             healthService.setHealthServiceRequest(healthServiceRequests);
             healthService.setRow(row);
 
+            getHealthServiceRequestHistoryDocument.setHealthService(healthService);
             getHealthServiceRequestHistoryResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(healthService));
+                    XMLUtilities.serializeXmlStr(
+                            getHealthServiceRequestHistoryDocument.getHealthService()));
             getHealthServiceRequestHistoryResponse.setUserTokenString(
                     XMLUtilities.serializeXmlStr(
                             getHealthServiceRequestHistoryDocument.getUserToken()));
@@ -310,7 +312,9 @@ public class HealthController {
             healthService.setHealthServiceRequest(healthServiceRequests);
             healthService.setRow(publishHSRDocument.getHealthService().getRow());
 
-            publishHSRResponse.setXMLString(XMLUtilities.serializeXmlStr(healthService));
+            publishHSRDocument.setHealthService(healthService);
+            publishHSRResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(publishHSRDocument.getHealthService()));
             publishHSRResponse.setUserTokenString(
                     XMLUtilities.serializeXmlStr(publishHSRDocument.getUserToken()));
             log.info(
@@ -378,7 +382,7 @@ public class HealthController {
             getHSRCountResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(getHSRCountDocument.getHSRCount()));
             getHSRCountResponse.setUserTokenString(
-                    XMLUtilities.serializeXmlStr(getHSRCount.getUserTokenString()));
+                    XMLUtilities.serializeXmlStr(getHSRCountDocument.getUserToken()));
 
             log.info(
                     objectMapper.writeValueAsString(
