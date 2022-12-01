@@ -8,13 +8,14 @@ import ca.bc.gov.open.icon.audit.HealthServiceRequest;
 import ca.bc.gov.open.icon.audit.HealthServiceRequestSubmitted;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.configuration.QueueConfig;
-import ca.bc.gov.open.icon.controllers.HealthController;
+import ca.bc.gov.open.icon.controllers.*;
 import ca.bc.gov.open.icon.hsr.*;
 import ca.bc.gov.open.icon.hsrservice.ArrayOfHealthServiceRequest;
 import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary;
 import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
 import ca.bc.gov.open.icon.hsrservice.HealthServiceRequestBundle;
 import ca.bc.gov.open.icon.models.HealthServicePub;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
@@ -24,32 +25,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class HealthControllerTests {
-    @Autowired private ObjectMapper objectMapper;
-
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @Mock private ObjectMapper objectMapper;
+    @Mock private WebServiceTemplate webServiceTemplate;
+    @Mock private RestTemplate restTemplate;
 
     @Qualifier("hsr-queue")
     private org.springframework.amqp.core.Queue hsrQueue;
@@ -59,21 +57,41 @@ public class HealthControllerTests {
 
     @MockBean private RabbitTemplate rabbitTemplate;
     @MockBean private AmqpAdmin amqpAdmin;
+    @Mock private QueueConfig queueConfig;
+    @Mock private InformationController controller;
+    @Mock private HealthController healthController;
 
-    @Mock private QueueConfig queueConfig = new QueueConfig();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        rabbitTemplate = Mockito.mock(RabbitTemplate.class);
+        controller = Mockito.spy(new InformationController(restTemplate, objectMapper));
+
+        healthController =
+                Mockito.spy(
+                        new HealthController(
+                                webServiceTemplate,
+                                restTemplate,
+                                objectMapper,
+                                hsrQueue,
+                                pingQueue,
+                                rabbitTemplate,
+                                amqpAdmin,
+                                queueConfig));
+    }
 
     @Test
     public void testHealthServiceRequestSubmitted() throws JsonProcessingException {
         var req = new HealthServiceRequestSubmitted();
-        var HealthServiceRequest = new HealthServiceRequest();
+        var healthServiceRequest = new HealthServiceRequest();
         var base = new Base();
         base.setSessionID("A");
         base.setCsNumber("A");
         base.setSessionID("A");
-        HealthServiceRequest.setBase(base);
-        HealthServiceRequest.setHealthServiceRequestID("A");
-        HealthServiceRequest.setServiceCD("A");
-        HealthServiceRequest.setFunctionCD("A");
+        healthServiceRequest.setBase(base);
+        healthServiceRequest.setHealthServiceRequestID("A");
+        healthServiceRequest.setServiceCD("A");
+        healthServiceRequest.setFunctionCD("A");
 
         Status status = new Status();
         status.setSuccess(true);
@@ -87,16 +105,6 @@ public class HealthControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        var healthController =
-                new HealthController(
-                        webServiceTemplate,
-                        restTemplate,
-                        objectMapper,
-                        hsrQueue,
-                        pingQueue,
-                        rabbitTemplate,
-                        amqpAdmin,
-                        queueConfig);
         var resp = healthController.healthServiceRequestSubmitted(req);
         Assertions.assertNotNull(resp);
     }
@@ -113,6 +121,18 @@ public class HealthControllerTests {
                         + "    </Row>\n"
                         + "</HealthService>");
 
+        var userToken = new ca.bc.gov.open.icon.hsr.UserToken();
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(userToken));
+
         Map<String, String> out = new HashMap<>();
         out.put("isAllowed", "1");
         ResponseEntity<Map<String, String>> responseEntity =
@@ -126,29 +146,18 @@ public class HealthControllerTests {
                         Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
                 .thenReturn(responseEntity);
 
-        var healthController =
-                new HealthController(
-                        webServiceTemplate,
-                        restTemplate,
-                        objectMapper,
-                        hsrQueue,
-                        pingQueue,
-                        rabbitTemplate,
-                        amqpAdmin,
-                        queueConfig);
-
         // Set up to mock soap service response
         GetHealthServiceRequestSummaryResponse soapResp =
                 new GetHealthServiceRequestSummaryResponse();
         var healthServiceRequestBundle = new HealthServiceRequestBundle();
         var arrayOfHealthServiceRequest = new ArrayOfHealthServiceRequest();
-        List<ca.bc.gov.open.icon.hsrservice.HealthServiceRequest> hsrs1 = new ArrayList<>();
-        var hsr1 = new ca.bc.gov.open.icon.hsrservice.HealthServiceRequest();
-        hsr1.setDetailsTxt("A");
-        hsr1.setSubmittedDtm(Instant.now());
-        hsr1.setId(1);
-        hsrs1.add(hsr1);
-        arrayOfHealthServiceRequest.setRequests(hsrs1);
+        List<ca.bc.gov.open.icon.hsrservice.HealthServiceRequest> hsrs = new ArrayList<>();
+        var hsr = new ca.bc.gov.open.icon.hsrservice.HealthServiceRequest();
+        hsr.setDetailsTxt("A");
+        hsr.setSubmittedDtm(Instant.now());
+        hsr.setId(1);
+        hsrs.add(hsr);
+        arrayOfHealthServiceRequest.setRequests(hsrs);
         healthServiceRequestBundle.setTotalRequestCount(1);
         healthServiceRequestBundle.setRequests(arrayOfHealthServiceRequest);
         soapResp.setGetHealthServiceRequestSummaryReturn(healthServiceRequestBundle);
@@ -191,8 +200,20 @@ public class HealthControllerTests {
         healthServicePub.setHealthRequest("A");
         healthServicePub.setPacId("A");
         healthServicePubs.add(healthServicePub);
-        ResponseEntity<List<HealthServicePub>> responseEntity =
+        ResponseEntity<List<HealthServicePub>> responseEntities =
                 new ResponseEntity<>(healthServicePubs, HttpStatus.OK);
+
+        var userToken = new ca.bc.gov.open.icon.hsr.UserToken();
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(userToken));
 
         // Set up to mock ords response
         when(restTemplate.exchange(
@@ -200,28 +221,18 @@ public class HealthControllerTests {
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
                         Mockito.<ParameterizedTypeReference<List<HealthServicePub>>>any()))
-                .thenReturn(responseEntity);
+                .thenReturn(responseEntities);
 
         // Set up to mock ords response
-        ResponseEntity<HealthServicePub> responseEntity1 =
+        ResponseEntity<HealthServicePub> responseEntity =
                 new ResponseEntity<>(healthServicePub, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
                         Mockito.<Class<HealthServicePub>>any()))
-                .thenReturn(responseEntity1);
+                .thenReturn(responseEntity);
 
-        var healthController =
-                new HealthController(
-                        webServiceTemplate,
-                        restTemplate,
-                        objectMapper,
-                        hsrQueue,
-                        pingQueue,
-                        rabbitTemplate,
-                        amqpAdmin,
-                        queueConfig);
         var resp = healthController.publishHSR(req);
         Assertions.assertNotNull(resp);
     }
@@ -231,6 +242,18 @@ public class HealthControllerTests {
         var req = new GetHSRCount();
         req.setXMLString(
                 "<HealthServiceCount>\n" + "    <csNum>1</csNum>\n" + "</HealthServiceCount>");
+
+        var userToken = new ca.bc.gov.open.icon.hsr.UserToken();
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(userToken));
 
         var hsrCount = new HSRCount();
         hsrCount.setCount("1");
@@ -248,16 +271,6 @@ public class HealthControllerTests {
                         Mockito.<Class<HSRCount>>any()))
                 .thenReturn(responseEntity);
 
-        var healthController =
-                new HealthController(
-                        webServiceTemplate,
-                        restTemplate,
-                        objectMapper,
-                        hsrQueue,
-                        pingQueue,
-                        rabbitTemplate,
-                        amqpAdmin,
-                        queueConfig);
         var resp = healthController.getHSRCount(req);
         Assertions.assertNotNull(resp);
     }

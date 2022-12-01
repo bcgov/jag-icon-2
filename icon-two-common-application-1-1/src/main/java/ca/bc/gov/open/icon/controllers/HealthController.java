@@ -374,7 +374,9 @@ public class HealthController {
                             builder.toUriString(), HttpMethod.POST, payload, HSRCount.class);
 
             GetHSRCountResponse getHSRCountResponse = new GetHSRCountResponse();
-            getHSRCountResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+            getHSRCountDocument.setHSRCount(resp.getBody());
+            getHSRCountResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getHSRCountDocument.getHSRCount()));
             getHSRCountResponse.setUserTokenString(
                     XMLUtilities.serializeXmlStr(getHSRCount.getUserTokenString()));
 
