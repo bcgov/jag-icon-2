@@ -211,48 +211,33 @@ public class AuditController {
             @RequestPayload GetSessionParameters getSessionParameters)
             throws JsonProcessingException {
 
-        var getSessionParametersDocument =
-                XMLUtilities.convertReq(
-                        getSessionParameters,
-                        new GetSessionParametersDocument(),
-                        "getSessionParameters");
-
-        SessionParameterOuter inner =
-                getSessionParametersDocument.getXMLString() != null
-                                && getSessionParametersDocument.getXMLString() != null
-                        ? getSessionParametersDocument.getXMLString().getSessionParameters()
-                        : new SessionParameterOuter();
+        GetSessionParametersDocument getSessionParametersDocument =
+                new GetSessionParametersDocument();
+        getSessionParametersDocument.setSessionParameters(
+                XMLUtilities.deserializeXmlStr(
+                        getSessionParameters.getXMLString(), new SessionParameters()));
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/session-parameters");
-        HttpEntity<SessionParameterOuter> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<SessionParameters> payload =
+                new HttpEntity<>(
+                        getSessionParametersDocument.getSessionParameters(), new HttpHeaders());
 
         try {
-            HttpEntity<SessionParameterOuter> resp =
+            HttpEntity<SessionParameters> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            SessionParameterOuter.class);
+                            SessionParameters.class);
+
+            GetSessionParametersResponse getSessionParametersResponse =
+                    new GetSessionParametersResponse();
+            getSessionParametersResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getSessionParameters")));
-
-            GetSessionParametersResponseDocument getSessionParametersResponseDocument =
-                    new GetSessionParametersResponseDocument();
-            SessionParameterOutest sessionParameterOutest = new SessionParameterOutest();
-            SessionParameterOuter sessionParameterOuter = new SessionParameterOuter();
-
-            getSessionParametersResponseDocument.setXMLString(sessionParameterOutest);
-            sessionParameterOutest.setSessionParameters(sessionParameterOuter);
-            sessionParameterOuter.setSessionParameter(resp.getBody().getSessionParameter());
-
-            var getSessionParametersResponse =
-                    XMLUtilities.convertResp(
-                            getSessionParametersResponseDocument,
-                            new GetSessionParametersResponse(),
-                            "getSessionParametersResponse");
-
             return getSessionParametersResponse;
         } catch (Exception ex) {
             log.error(

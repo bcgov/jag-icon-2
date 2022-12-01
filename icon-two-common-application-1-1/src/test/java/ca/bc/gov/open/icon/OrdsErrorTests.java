@@ -20,11 +20,11 @@ import ca.bc.gov.open.icon.myinfo.GetLocations;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
 import ca.bc.gov.open.icon.session.GetSessionParameters;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo2;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoRequest;
 import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
 import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
+import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -136,9 +136,11 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetSessionParametersFail() {
+        GetSessionParameters getSessionParameters = new GetSessionParameters();
+        getSessionParameters.setXMLString("A");
         Assertions.assertThrows(
                 ORDSException.class,
-                () -> auditController.getSessionParameters(new GetSessionParameters()));
+                () -> auditController.getSessionParameters(getSessionParameters));
     }
 
     /*
@@ -190,28 +192,28 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetTombStoneInfoFail() {
-        var getTombStoneInfo = new GetTombStoneInfo();
-        var getTombStoneInfo2 = new GetTombStoneInfo2();
-        var getTombStoneInfoRequest = new GetTombStoneInfoRequest();
-
+        GetTombStoneInfo getTombStoneInfo = new GetTombStoneInfo();
         getTombStoneInfo.setXMLString("A");
-        getTombStoneInfo2.setTombStoneInfo(getTombStoneInfoRequest);
-
         Assertions.assertThrows(
                 ORDSException.class, () -> clientController.getTombStoneInfo(getTombStoneInfo));
     }
 
     @Test
     public void testGetTrustAccountFail() {
+        GetTrustAccount getTrustAccount = new GetTrustAccount();
+        getTrustAccount.setXMLString("A");
+        getTrustAccount.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> clientController.getTrustAccount(new GetTrustAccount()));
+                ORDSException.class, () -> clientController.getTrustAccount(getTrustAccount));
     }
 
     @Test
     public void testGetVisitScheduleFail() {
+        GetVisitSchedule getVisitSchedule = new GetVisitSchedule();
+        getVisitSchedule.setUserTokenString("A");
+        getVisitSchedule.setXMLString("A");
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> clientController.getVisitSchedule(new GetVisitSchedule()));
+                ORDSException.class, () -> clientController.getVisitSchedule(getVisitSchedule));
     }
 
     /*
@@ -368,34 +370,70 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetMessageFail() {
+        GetMessage getMessage = new GetMessage();
+        getMessage.setXMLString("A");
+        getMessage.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class, () -> messageController.getMessage(new GetMessage()));
+                ORDSException.class, () -> messageController.getMessage(getMessage));
     }
 
     @Test
     public void testSetMessageDateFail() {
+        SetMessageDate setMessageDate = new SetMessageDate();
+        setMessageDate.setXMLString("A");
+        setMessageDate.setUserTokenString("A");
+
+        Map<String, String> out = new HashMap<>();
+        ResponseEntity<Map<String, String>> responseEntity =
+                new ResponseEntity<>(out, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenReturn(responseEntity);
+
         Assertions.assertThrows(
-                ORDSException.class, () -> messageController.setMessageDate(new SetMessageDate()));
+                ORDSException.class, () -> messageController.setMessageDate(setMessageDate));
     }
 
     @Test
     public void testSetMessageDetailsFail() {
+        SetMessageDetails setMessageDetails = new SetMessageDetails();
+        setMessageDetails.setXMLString("A");
+        setMessageDetails.setUserTokenString("A");
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenThrow(new ORDSException());
+
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> messageController.setMessageDetails(new SetMessageDetails()));
+                ORDSException.class, () -> messageController.setMessageDetails(setMessageDetails));
     }
 
     @Test
     public void testGetMessagesFail() {
+        GetMessages getMessages = new GetMessages();
+        getMessages.setXMLString("A");
+        getMessages.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class, () -> messageController.getMessages(new GetMessages()));
+                ORDSException.class, () -> messageController.getMessages(getMessages));
     }
 
     @Test
     public void testGetMessageDetailsFail() {
+        GetMessageDetails getMessageDetails = new GetMessageDetails();
+        getMessageDetails.setXMLString("A");
+        getMessageDetails.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> messageController.getMessageDetails(new GetMessageDetails()));
+                ORDSException.class, () -> messageController.getMessageDetails(getMessageDetails));
     }
 
     /*
@@ -403,6 +441,9 @@ public class OrdsErrorTests {
     */
     @Test
     public void testRecordCompletedFail() {
+        RecordCompleted recordCompleted = new RecordCompleted();
+        recordCompleted.setXMLString("A");
+
         when(restTemplate.exchange(
                         Mockito.anyString(),
                         Mockito.eq(HttpMethod.POST),
@@ -412,11 +453,14 @@ public class OrdsErrorTests {
 
         Assertions.assertThrows(
                 ServiceFaultException.class,
-                () -> recordController.recordCompleted(new RecordCompleted()));
+                () -> recordController.recordCompleted(recordCompleted));
     }
 
     @Test
     public void testRecordExceptionFail() {
+        RecordException recordException = new RecordException();
+        recordException.setXMLString("A");
+
         when(restTemplate.exchange(
                         Mockito.anyString(),
                         Mockito.eq(HttpMethod.POST),
@@ -426,7 +470,7 @@ public class OrdsErrorTests {
 
         Assertions.assertThrows(
                 ServiceFaultException.class,
-                () -> recordController.recordException(new RecordException()));
+                () -> recordController.recordException(recordException));
     }
 
     /*
@@ -441,44 +485,89 @@ public class OrdsErrorTests {
 
     @Test
     public void testGetReportingCmpltInstructionFail() {
+        GetReportingCmpltInstruction getReportingCmpltInstruction =
+                new GetReportingCmpltInstruction();
+        getReportingCmpltInstruction.setXMLString("A");
+        getReportingCmpltInstruction.setUserTokenString("A");
+
         Assertions.assertThrows(
                 ORDSException.class,
                 () ->
                         reportingController.getReportingCmpltInstruction(
-                                new GetReportingCmpltInstruction()));
+                                getReportingCmpltInstruction));
     }
 
     @Test
     public void testGetLocationsResponseFail() {
+        ca.bc.gov.open.icon.ereporting.GetLocations getLocations =
+                new ca.bc.gov.open.icon.ereporting.GetLocations();
+        getLocations.setXMLString("A");
+        getLocations.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class,
-                () ->
-                        reportingController.getLocationsResponse(
-                                new ca.bc.gov.open.icon.ereporting.GetLocations()));
+                ORDSException.class, () -> reportingController.getLocationsResponse(getLocations));
     }
 
     @Test
     public void testSubmitAnswersFail() {
+        SubmitAnswers submitAnswers = new SubmitAnswers();
+        submitAnswers.setXMLString(
+                "<EReport>\n"
+                        + "    <csNum>1</csNum>\n"
+                        + "    <eventId>1</eventId>\n"
+                        + "    <pacID>1</pacID>\n"
+                        + "    <deviceNo>1</deviceNo>\n"
+                        + "    <Question>\n"
+                        + "        <QuestionId>0</QuestionId>\n"
+                        + "        <standardQuestionID>standardQuestionID1</standardQuestionID>\n"
+                        + "    </Question>\n"
+                        + "</EReport> ");
+
+        submitAnswers.setUserTokenString("A");
+
+        Map<String, String> out = new HashMap<>();
+        ResponseEntity<Map<String, String>> responseEntity =
+                new ResponseEntity<>(out, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenThrow(ORDSException.class);
+
         Assertions.assertThrows(
-                ORDSException.class, () -> reportingController.submitAnswers(new SubmitAnswers()));
+                ORDSException.class, () -> reportingController.submitAnswers(submitAnswers));
     }
 
     @Test
     public void testGetAppointmentFail() {
+        GetAppointment getAppointment = new GetAppointment();
+        getAppointment.setXMLString("A");
+        getAppointment.setUserTokenString("A");
         Assertions.assertThrows(
-                ORDSException.class,
-                () -> reportingController.getAppointment(new GetAppointment()));
+                ORDSException.class, () -> reportingController.getAppointment(getAppointment));
     }
 
     @Test
     public void testGetQuestionsFail() {
+        GetQuestions getQuestions = new GetQuestions();
+        getQuestions.setXMLString("A");
+        getQuestions.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class, () -> reportingController.getQuestions(new GetQuestions()));
+                ORDSException.class, () -> reportingController.getQuestions(getQuestions));
     }
 
     @Test
     public void testGetStatusFail() {
+        ca.bc.gov.open.icon.ereporting.GetStatus getStatus =
+                new ca.bc.gov.open.icon.ereporting.GetStatus();
+        getStatus.setXMLString("A");
+        getStatus.setUserTokenString("A");
+
         Assertions.assertThrows(
-                ORDSException.class, () -> reportingController.getStatus(new GetStatus()));
+                ORDSException.class, () -> reportingController.getStatus(getStatus));
     }
 }
