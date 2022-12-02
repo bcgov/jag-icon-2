@@ -7,7 +7,7 @@
         <complexType>
             <sequence>
                 <element name="csNumber" type="xsd:string"/>
-                <element name="submissionDate" type="xsd:dateTime"/>
+                <element name="submissionDate" type="xsd:string"/>
                 <element name="centre" type="xsd:string"/>
                 <element name="details" type="xsd:string"/>
             </sequence>
@@ -39,7 +39,7 @@
     </element>
     <complexType name="HealthServiceRequest">
         <sequence>
-            <element name="submittedDtm" nillable="true" type="xsd:dateTime"/>
+            <element name="submittedDtm" nillable="true" type="xsd:string"/>
             <element name="detailsTxt" nillable="true" type="xsd:string"/>
             <element name="id" type="xsd:int"/>
         </sequence>
