@@ -15,8 +15,6 @@ import ca.bc.gov.open.icon.models.*;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -214,13 +212,7 @@ public class HealthController {
 
                 ca.bc.gov.open.icon.hsr.HealthServiceRequest request =
                         new ca.bc.gov.open.icon.hsr.HealthServiceRequest();
-
-                var submittedDtm =
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                                .withZone(ZoneId.of("GMT-7"))
-                                .withLocale(Locale.US)
-                                .format(service.getSubmittedDtm());
-                request.setRequestDate(submittedDtm);
+                request.setRequestDate(service.getSubmittedDtm());
                 request.setHealthRequest(service.getDetailsTxt());
                 request.setHsrId(String.valueOf(service.getId()));
 
@@ -300,12 +292,7 @@ public class HealthController {
                 healthServiceRequest.setHsrId(pub.getHsrId());
                 healthServiceRequest.setPacID(pub.getPacId());
                 healthServiceRequest.setLocation(pub.getLocation());
-                var requestDate =
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                                .withZone(ZoneId.of("GMT-7"))
-                                .withLocale(Locale.US)
-                                .format(pub.getRequestDate());
-                healthServiceRequest.setRequestDate(requestDate);
+                healthServiceRequest.setRequestDate(pub.getRequestDate());
                 healthServiceRequest.setHealthRequest(pub.getHealthRequest());
                 healthServiceRequests.add(healthServiceRequest);
             }

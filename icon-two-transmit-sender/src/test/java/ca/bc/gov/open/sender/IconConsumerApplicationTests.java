@@ -6,7 +6,6 @@ import ca.bc.gov.open.icon.models.HealthServicePub;
 import ca.bc.gov.open.sender.services.HSRService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -42,7 +41,7 @@ class IconConsumerApplicationTests {
         req.setCsNum("A");
         req.setHsrId("A");
         req.setPacId("A");
-        req.setRequestDate(Instant.now());
+        req.setRequestDate("A");
         req.setLocation("A");
 
         List<HealthServicePub> healthServicePubs = new ArrayList();
@@ -50,13 +49,13 @@ class IconConsumerApplicationTests {
         healthServicePub.setCsNum("A");
         healthServicePub.setHsrId("A");
         healthServicePub.setLocation("A");
-        healthServicePub.setRequestDate(Instant.now());
+        healthServicePub.setRequestDate("A");
         healthServicePub.setHealthRequest("A");
         healthServicePub.setPacId("A");
         healthServicePub.setCsNum("A");
         healthServicePub.setHsrId("A");
         healthServicePub.setLocation("A");
-        healthServicePub.setRequestDate(Instant.now());
+        healthServicePub.setRequestDate("A");
         healthServicePub.setHealthRequest("A");
         healthServicePub.setPacId("A");
         healthServicePubs.add(healthServicePub);
