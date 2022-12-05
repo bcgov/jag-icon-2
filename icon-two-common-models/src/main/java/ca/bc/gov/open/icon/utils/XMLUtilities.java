@@ -11,7 +11,7 @@ import javax.xml.transform.stream.StreamSource;
 public final class XMLUtilities {
 
     private static final String XML_HEADER = "<?xml version=\"1.0\"?>";
-    private static final Integer BUFFER_SIZE = 4000;
+    private static final Integer BUFFER_SIZE = 32000;
 
     public static <T> T deserializeXmlStr(String xmlString, T obj) {
         try {
