@@ -11,6 +11,7 @@ import javax.xml.transform.stream.StreamSource;
 public final class XMLUtilities {
 
     private static final String XML_HEADER = "<?xml version=\"1.0\"?>";
+    private static final Integer BUFFER_SIZE = 4000;
 
     public static <T> T deserializeXmlStr(String xmlString, T obj) {
         try {
@@ -28,7 +29,7 @@ public final class XMLUtilities {
 
     public static <T> String serializeXmlStr(T obj) {
         try {
-            StringWriter stringWriter = new StringWriter();
+            StringWriter stringWriter = new StringWriter(BUFFER_SIZE);
             stringWriter.write(XML_HEADER);
             XMLStreamWriter xmlStreamWriter =
                     XMLOutputFactory.newInstance().createXMLStreamWriter(stringWriter);

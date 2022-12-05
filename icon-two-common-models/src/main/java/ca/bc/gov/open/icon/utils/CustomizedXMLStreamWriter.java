@@ -1,5 +1,7 @@
 package ca.bc.gov.open.icon.utils;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -151,6 +153,7 @@ public class CustomizedXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeCharacters(char[] text, int start, int len) throws XMLStreamException {
+//        xmlStreamWriter.writeCharacters(String.valueOf(text).replaceAll("\"", "&quot;").toCharArray(), start, len);
         xmlStreamWriter.writeCharacters(text, start, len);
     }
 
