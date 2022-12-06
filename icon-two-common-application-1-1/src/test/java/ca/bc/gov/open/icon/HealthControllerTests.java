@@ -254,20 +254,21 @@ public class HealthControllerTests {
         userToken.setSiteMinderTransactionID("A");
         req.setUserTokenString(XMLUtilities.serializeXmlStr(userToken));
 
-        var hsrCount = new HSRCount();
+        var hsrCount = new HealthServiceCount();
         hsrCount.setCount("1");
         hsrCount.setMax("1");
         hsrCount.setHsrId("A");
         hsrCount.setCsNum("1");
         hsrCount.setXmitOkay("A");
-        ResponseEntity<HSRCount> responseEntity = new ResponseEntity<>(hsrCount, HttpStatus.OK);
+        ResponseEntity<HealthServiceCount> responseEntity =
+                new ResponseEntity<>(hsrCount, HttpStatus.OK);
 
         // Set up to mock ords response
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<HSRCount>>any()))
+                        Mockito.<Class<HealthServiceCount>>any()))
                 .thenReturn(responseEntity);
 
         var resp = healthController.getHSRCount(req);
