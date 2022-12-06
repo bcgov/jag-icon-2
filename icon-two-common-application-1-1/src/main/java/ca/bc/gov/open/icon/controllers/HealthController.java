@@ -348,8 +348,9 @@ public class HealthController {
             throws JsonProcessingException {
 
         GetHSRCountDocument getHSRCountDocument = new GetHSRCountDocument();
-        getHSRCountDocument.setHSRCount(
-                XMLUtilities.deserializeXmlStr(getHSRCount.getXMLString(), new HSRCount()));
+        getHSRCountDocument.setHealthServiceCount(
+                XMLUtilities.deserializeXmlStr(
+                        getHSRCount.getXMLString(), new HealthServiceCount()));
         getHSRCountDocument.setUserToken(
                 XMLUtilities.deserializeXmlStr(
                         getHSRCount.getUserTokenString(), new ca.bc.gov.open.icon.hsr.UserToken()));
@@ -360,14 +361,17 @@ public class HealthController {
 
         try {
 
-            HttpEntity<HSRCount> resp =
+            HttpEntity<HealthServiceCount> resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, HSRCount.class);
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            payload,
+                            HealthServiceCount.class);
 
             GetHSRCountResponse getHSRCountResponse = new GetHSRCountResponse();
-            getHSRCountDocument.setHSRCount(resp.getBody());
+            getHSRCountDocument.setHealthServiceCount(resp.getBody());
             getHSRCountResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(getHSRCountDocument.getHSRCount()));
+                    XMLUtilities.serializeXmlStr(getHSRCountDocument.getHealthServiceCount()));
             getHSRCountResponse.setUserTokenString(
                     XMLUtilities.serializeXmlStr(getHSRCountDocument.getUserToken()));
 
