@@ -133,7 +133,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-transmit-sender
+          CONTEXT: ./icon-two-hsr-application
         run: |
           docker build -t ${{github.event.inputs.app5}}:${{env.gitsha}} ${CONTEXT}
 

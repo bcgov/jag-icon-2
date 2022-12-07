@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-transmit-models</artifactId>
+            <artifactId>icon-two-hsr-models</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
@@ -51,7 +51,7 @@
         </dependency>
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-transmit-sender</artifactId>
+            <artifactId>icon-two-hsr-application</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
