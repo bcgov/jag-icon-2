@@ -63,7 +63,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/Audit;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/Audit;
         }
 
         location /common-1-1/EReporting {
@@ -79,7 +79,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/EReporting;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/EReporting;
         }
 
         location /common-1-1/HSR {
@@ -95,7 +95,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/HSR;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/HSR;
         }
 
         location /common-1-1/Message {
@@ -111,7 +111,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/Message;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/Message;
         }
 
         location /common-1-1/MyInfo {
@@ -127,7 +127,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/MyInfo;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/MyInfo;
         }
 
         location /common-1-1/VisitSchedule {
@@ -143,7 +143,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/VisitSchedule;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/VisitSchedule;
         }
 
         location /common-1-1/TrustAccount {
@@ -159,7 +159,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/TrustAccount;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/TrustAccount;
         }
 
         location /common-1-1/TombStoneInfo {
@@ -175,7 +175,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/TombStoneInfo;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/TombStoneInfo;
         }
 
         location /common-1-1/SessionParameter {
@@ -191,7 +191,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/SessionParameter;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/Common;
         }
 
         location /common-1-1/ErrorHandling {
@@ -207,7 +207,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/ErrorHandling;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/ErrorHandling;
         }
 
         location /common-1-2 {
@@ -223,7 +223,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/AuthAuth;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/AuthAuth;
         }
 
         location /Biometrics {
@@ -239,7 +239,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/Biometrics;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/Biometrics;
         }
 
         location /MyFiles{
@@ -255,7 +255,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass https://wsgw.jag.gov.bc.ca/icon2/dev/ocp/MyFiles;
+          proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/MyFiles;
         }
 
           
