@@ -62,6 +62,16 @@ public class ClientController {
 
             GetTombStoneInfoResponse getTombStoneInfoResponse = new GetTombStoneInfoResponse();
             getTombStoneInfoDocument.setTombStoneInfo(resp.getBody());
+            if (getTombStoneInfoDocument.getTombStoneInfo() != null
+                    && getTombStoneInfoDocument.getTombStoneInfo().getLatestPhoto() != null) {
+                getTombStoneInfoDocument
+                        .getTombStoneInfo()
+                        .setLatestPhoto(
+                                getTombStoneInfoDocument
+                                        .getTombStoneInfo()
+                                        .getLatestPhoto()
+                                        .replaceAll("\r\n", "\n"));
+            }
             getTombStoneInfoResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(getTombStoneInfoDocument.getTombStoneInfo()));
 
