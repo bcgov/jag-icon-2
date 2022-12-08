@@ -62,6 +62,16 @@ public class InformationController {
 
             GetUserInfoResponse getUserInfoResponse = new GetUserInfoResponse();
             getUserInfoDocument.setUserInfo(resp.getBody());
+            if (getUserInfoDocument.getUserInfo() != null
+                    && getUserInfoDocument.getUserInfo().getLatestPhoto() != null) {
+                getUserInfoDocument
+                        .getUserInfo()
+                        .setLatestPhoto(
+                                getUserInfoDocument
+                                        .getUserInfo()
+                                        .getLatestPhoto()
+                                        .replaceAll("\r\n", "\n"));
+            }
             getUserInfoResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(getUserInfoDocument.getUserInfo()));
             log.info(
