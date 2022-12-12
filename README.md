@@ -15,42 +15,43 @@
 Local Host: http://127.0.0.1:8080
 
 WSDL Endpoint Local:
-* common-1-1
-* localhost:8080/common-1-1/ICON2.Source.EReporting.ws.provider:Audit?WSDL
+* common-1-1:
+  * localhost:8080/common-1-1/ICON2.Source.EReporting.ws.provider:Audit?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.MyInfo.ws.provider:MyInfo?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.MyInfo.ws.provider:MyInfo?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.EReporting.ws.provider:EReporting?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.EReporting.ws.provider:EReporting?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.Common.ws.provider:ErrorHandling?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.Common.ws.provider:ErrorHandling?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.HealthServiceRequest.ws.provider:HSR?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.HealthServiceRequest.ws.provider:HSR?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.Message.ws.provider:Message?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.Message.ws.provider:Message?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.Version.ws.provider:PackageInfo?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.Version.ws.provider:PackageInfo?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.Common.ws.provider:SessionParameter?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.Common.ws.provider:SessionParameter?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.TrustAccount.ws.provider:TrustAccount?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.TrustAccount.ws.provider:TrustAccount?WSDL
 
-* localhost:8080/common-1-1/ICON2.Source.VisitSchedule.ws.provider:VisitSchedule?WSDL
+  * localhost:8080/common-1-1/ICON2.Source.VisitSchedule.ws.provider:VisitSchedule?WSDL
 
-* Biometrics
+* Biometrics:
 
-* localhost:8080/Biometrics/ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics?WSDL
+  * localhost:8080/Biometrics/ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics?WSDL
 
-* common-1-2
+* common-1-2:
 
-* localhost:8080/common-1-2/ICON2.Source.Authorization.ws.provider:AuthAuth?WSDL
+  * localhost:8080/common-1-2/ICON2.Source.Authorization.ws.provider:AuthAuth?WSDL
 
-* MyFiles
+* MyFiles:
 
-* localhost:8080/MyFiles/ICON2_MyFiles.Source.MyFiles.ws:MyFiles?WSDL
+  * localhost:8080/MyFiles/ICON2_MyFiles.Source.MyFiles.ws:MyFiles?WSDL
 
-* Actuator Endpoint Local: http://localhost:8080/actuator/health
+* Actuator Endpoint Local: http:
+  * //localhost:8080/actuator/health
 
 ### Required Environmental Variables
 
@@ -61,38 +62,38 @@ BASIC_AUTH_USER: The username for the basic authentication. This can be any valu
 ORDS_HOST: The url for ords rest package.
 
 Additional Evn Variables
-* common-application-1-1
-* PING_QUEUE_NAME
-* PING_ROUTING_KEY
-* HSR_SERVICE_URL
-* HSR_QUEUE_NAME
-* HSR_ROUTING_KEY
-* RABBIT_EXCHANGE_NAME
-* RABBIT_MQ_HOST
-* RABBIT_MQ_USERNAME
-* RABBIT_MQ_PASSWORD
-* common-Comparison-Tool-1-1/Common-Comparison-Tool-1-2
-* ORACLE_HOST
-* API_HOST
-* WM_HOST
-* hsr-application
-* HSR_QUEUE_NAME
-* HSR_SERVICE_URL
-* RABBIT_MQ_HOST
-* RABBIT_MQ_USERNAME
-* RABBIT_MQ_PASSWORD
-* biometrics-application
-* HSR_SERVICE_URL
-* WS_AUTH_PASS
-* WS_AUTH_USER
-* BCS_HOST
-* ONLINE_SERVICE_ID
-* IPS_HOST
-* IIS_HOST
-* AutomatedTests
-* API_HOST
-* myfiles-application/common-application-1-2
-* none
+* common-application-1-1:
+  * PING_QUEUE_NAME
+  * PING_ROUTING_KEY
+  * HSR_SERVICE_URL
+  * HSR_QUEUE_NAME
+  * HSR_ROUTING_KEY
+  * RABBIT_EXCHANGE_NAME
+  * RABBIT_MQ_HOST
+  * RABBIT_MQ_USERNAME
+  * RABBIT_MQ_PASSWORD
+* common-Comparison-Tool-1-1/Common-Comparison-Tool-1-2:
+  * ORACLE_HOST
+  * API_HOST
+  * WM_HOST
+  * hsr-application
+  * HSR_QUEUE_NAME
+  * HSR_SERVICE_URL
+  * RABBIT_MQ_HOST
+  * RABBIT_MQ_USERNAME
+  * RABBIT_MQ_PASSWORD
+* biometrics-application:
+  * HSR_SERVICE_URL
+  * WS_AUTH_PASS
+  * WS_AUTH_USER
+  * BCS_HOST
+  * ONLINE_SERVICE_ID
+  * IPS_HOST
+  * IIS_HOST
+  * AutomatedTests
+  * API_HOST
+* myfiles-application/common-application-1-2:
+  * none
 
 ### Optional Enviromental Variables
 SPLUNK_HTTP_URL: The url for the splunk hec.
