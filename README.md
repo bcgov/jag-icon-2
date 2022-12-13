@@ -18,6 +18,8 @@ Local Host: http://127.0.0.1:8080
 
 Actuator Endpoint Local: http://localhost:8080/actuator/health
 
+Code Climate: https://codeclimate.com/github/bcgov/jag-icon-2
+
 WSDL Endpoint Local:
 * common-1-1:
 1) localhost:8080/common-1-1/ICON2.Source.EReporting.ws.provider:Audit?WSDL
