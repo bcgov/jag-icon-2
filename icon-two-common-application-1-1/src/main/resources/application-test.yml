@@ -2,9 +2,6 @@ security:
   basic-auth:
     password: ${BASIC_AUTH_PASS}
     username: ${BASIC_AUTH_USER}
-  web-service:
-    password: ${BASIC_AUTH_PASS}
-    username: ${BASIC_AUTH_USER}
 icon:
   host: http://127.0.0.1
   hsr-service-url: http://127.0.0.1
