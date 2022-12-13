@@ -107,7 +107,7 @@ before they can be pushed to.
 ### Building the Application
 1) Make sure using java 11 for the project modals and sdk
 2) Run ```mvn compile```
-3) Make sure ```target/generated-sources/xjc``` folder in included in module path
+3) Make sure ```icon-two-common-models``` and ```icon-two-hsr-models``` are marked as generated sources roots (xjc)
 
 ### Pre-running the application
 Run ```docker run -p 5672:5672 -p 15672:15672 rabbitmq:management```
