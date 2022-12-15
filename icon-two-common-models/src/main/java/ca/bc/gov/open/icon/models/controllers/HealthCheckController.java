@@ -1,4 +1,4 @@
-package ca.bc.gov.open.sender.controllers;
+package ca.bc.gov.open.icon.models.controllers;
 
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 
@@ -62,7 +62,7 @@ public class HealthCheckController {
                                     "getHealth",
                                     ex.getMessage(),
                                     null)));
-            throw handleError(ex, new ca.bc.gov.open.icon.hsr.Error());
+            throw handleError(ex);
         }
     }
 
