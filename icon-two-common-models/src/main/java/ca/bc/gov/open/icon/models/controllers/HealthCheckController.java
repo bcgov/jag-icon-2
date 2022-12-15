@@ -1,7 +1,6 @@
 package ca.bc.gov.open.icon.models.controllers;
 
-import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
-
+import ca.bc.gov.open.icon.exceptions.RestTemplateException;
 import ca.bc.gov.open.icon.models.GetHealthResponse;
 import ca.bc.gov.open.icon.models.GetPingResponse;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
@@ -62,7 +61,7 @@ public class HealthCheckController {
                                     "getHealth",
                                     ex.getMessage(),
                                     null)));
-            throw handleError(ex);
+            throw new RestTemplateException(ex.getMessage());
         }
     }
 
