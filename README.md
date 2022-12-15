@@ -113,16 +113,16 @@ before they can be pushed to.
 Run ```docker run -p 5672:5672 -p 15672:15672 rabbitmq:management```
 
 ### Running the application
-Via IDE
+Option A) Intellij
 1) Set env variables.
 2) Run the application
 
-Via Jar, ex. to run 'icon-two-common-application-1-1' application
+Option B) Jar, e.g., to run 'icon-two-common-application-1-1' application
 1) Run ```mvn package```
 2) Run ```cd icon-two-common-application-1-1```
 3) Run ```java -jar ./target/icon-two-common-application-1-1.jar $ENV_VAR$```  (Note that $ENV_VAR$ are environment variables)
 
-Via Docker in an application, ex. to run 'icon-two-common-application-1-1' application
+Option C) Docker, e.g., to run 'icon-two-common-application-1-1' application
 1) Run ```mvn package```
 2) Run ```cd icon-two-common-application-1-1```
 3) Run ```docker build -t icon-two-common-application-1-1 .``` from root folder
@@ -138,6 +138,5 @@ Via Docker in an application, ex. to run 'icon-two-common-application-1-1' appli
 2) Run the linter ```mvn spotless:apply```
 
 ### JaCoCo Coverage Report
-1) Run ```mvn test```
-2) Run ```mvn jacoco:report```
-3) Open ```target/site/jacoco/index.html``` in a browser
+1) Run ```mvn clean verify```
+2) Open ```ccd-code-coverage/target/site/jacoco/index.html``` in a browser
