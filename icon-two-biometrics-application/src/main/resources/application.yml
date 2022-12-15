@@ -3,7 +3,7 @@ security:
     password: ${BASIC_AUTH_PASS}
     username: ${BASIC_AUTH_USER}
 icon:
-  ords-host: ${ORDS_HOST}
+  host: ${ORDS_HOST}
   iis-host: ${IIS_HOST}
   ips-host: ${IPS_HOST}
   bsc-host: ${BCS_HOST}
