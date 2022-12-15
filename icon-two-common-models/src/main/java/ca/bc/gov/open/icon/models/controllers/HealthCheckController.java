@@ -28,7 +28,7 @@ public class HealthCheckController {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${ords.host}")
+    @Value("${icon.host}")
     private String ordsHost = "https://127.0.0.1/";
 
     @Autowired
