@@ -9,10 +9,10 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<artifactId>icon-two-transmit-sender</artifactId>
+	<artifactId>icon-two-hsr-application</artifactId>
 	<version>1.0.0</version>
-	<name>icon-two-transmit-sender</name>
-	<description>icon-two-transmit-sender</description>
+	<name>icon-two-hsr-application</name>
+	<description>icon-two-hsr-application</description>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ca.bc.gov.open</groupId>
-			<artifactId>icon-two-transmit-models</artifactId>
+			<artifactId>icon-two-hsr-models</artifactId>
 			<version>1.0.0</version>
 			<scope>compile</scope>
 		</dependency>
@@ -111,7 +111,7 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>icon-two-transmit-sender</finalName>
+		<finalName>icon-two-hsr-application</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

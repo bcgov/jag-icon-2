@@ -9,5 +9,3 @@ test:
   api-host-1: ${API_HOST_1}
   api-host-2: ${API_HOST_2}
   api-host-MyFiles: ${API_HOST_MyFiles}
-  server:
-    port: 8081

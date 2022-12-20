@@ -42,10 +42,10 @@
                 <module>icon-two-common-models</module>
                 <module>icon-two-common-application-1-1</module>
                 <module>icon-two-common-application-1-2</module>
-                <module>icon-two-transmit-models</module>
+                <module>icon-two-hsr-models</module>
                 <module>icon-two-comparison-tool-1-1</module>
                 <module>icon-two-comparison-tool-1-2</module>
-                <module>icon-two-transmit-sender</module>
+                <module>icon-two-hsr-application</module>
                 <module>AutomatedTests</module>
                 <module>icon-two-code-coverage</module>
             </modules>
@@ -81,7 +81,7 @@
             <modules>
                 <module>bom/icon-two-starters-bom</module>
                 <module>icon-two-common-models</module>
-                <module>icon-two-transmit-models</module>
+                <module>icon-two-hsr-models</module>
                 <module>icon-two-common-application-1-1</module>
             </modules>
         </profile>
@@ -92,7 +92,6 @@
             <modules>
                 <module>bom/icon-two-starters-bom</module>
                 <module>icon-two-common-models</module>
-                <module>icon-two-transmit-models</module>
                 <module>icon-two-common-application-1-2</module>
             </modules>
         </profile>
@@ -103,7 +102,7 @@
             <modules>
                 <module>bom/icon-two-starters-bom</module>
                 <module>icon-two-common-models</module>
-                <module>icon-two-transmit-models</module>
+                <module>icon-two-hsr-models</module>
                 <module>icon-two-comparison-tool-1-1</module>
             </modules>
         </profile>
@@ -114,7 +113,6 @@
             <modules>
                 <module>bom/icon-two-starters-bom</module>
                 <module>icon-two-common-models</module>
-                <module>icon-two-transmit-models</module>
                 <module>icon-two-comparison-tool-1-2</module>
             </modules>
         </profile>
@@ -130,13 +128,13 @@
         </profile>
         <profile>
             <id>
-                icon-two-transmit-sender
+                icon-two-hsr-application
             </id>
             <modules>
                 <module>bom/icon-two-starters-bom</module>
                 <module>icon-two-common-models</module>
-                <module>icon-two-transmit-models</module>
-                <module>icon-two-transmit-sender</module>
+                <module>icon-two-hsr-models</module>
+                <module>icon-two-hsr-application</module>
             </modules>
         </profile>
     </profiles>

@@ -2,9 +2,6 @@ security:
   basic-auth:
     password: ${BASIC_AUTH_PASS}
     username: ${BASIC_AUTH_USER}
-  web-service:
-    password: ${WS_AUTH_PASS}
-    username: ${WS_AUTH_USER}
 icon:
   host: ${ORDS_HOST}
   hsr-service-url: ${HSR_SERVICE_URL}

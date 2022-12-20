@@ -46,7 +46,7 @@ public class RemovalController {
     @Value("${icon.bsc-host}")
     private String bcsHost = "https://127.0.0.1/";
 
-    @Value("${icon.ords-host}")
+    @Value("${icon.host}")
     private String ordsHost = "https://127.0.0.1/";
 
     @Value("${icon.online-service-id}")

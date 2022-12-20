@@ -13,8 +13,8 @@ COPY ./bom/icon-two-starters-bom/pom.xml bom/icon-two-starters-bom/pom.xml
 COPY ./AutomatedTests/pom.xml AutomatedTests/pom.xml
 COPY ./icon-two-biometrics-application/pom.xml icon-two-biometrics-application/pom.xml
 COPY ./icon-two-comparison-tool-1-2/pom.xml icon-two-comparison-tool-1-2/pom.xml
-COPY ./icon-two-transmit-models/pom.xml icon-two-transmit-models/pom.xml
-COPY ./icon-two-transmit-sender/pom.xml icon-two-transmit-sender/pom.xml
+COPY ./icon-two-hsr-models/pom.xml icon-two-hsr-models/pom.xml
+COPY ./icon-two-hsr-application/pom.xml icon-two-hsr-application/pom.xml
 COPY ./icon-two-common-application-1-2/pom.xml icon-two-common-application-1-2/pom.xml
 COPY ./icon-two-code-coverage/pom.xml icon-two-code-coverage/pom.xml
 COPY ./icon-two-common-models/pom.xml icon-two-common-models/pom.xml
@@ -41,8 +41,8 @@ WORKDIR /build
 COPY ./AutomatedTests/src AutomatedTests/src
 COPY ./icon-two-biometrics-application/src icon-two-biometrics-application/src
 COPY ./icon-two-comparison-tool-1-2/src icon-two-comparison-tool-1-2/src
-COPY ./icon-two-transmit-models/src icon-two-transmit-models/src
-COPY ./icon-two-transmit-sender/src icon-two-transmit-sender/src
+COPY ./icon-two-hsr-models/src icon-two-hsr-models/src
+COPY ./icon-two-hsr-application/src icon-two-hsr-application/src
 COPY ./icon-two-common-application-1-2/src icon-two-common-application-1-2/src
 COPY ./icon-two-code-coverage/lombok.config icon-two-code-coverage/lombok.config
 COPY ./icon-two-common-models/src icon-two-common-models/src
