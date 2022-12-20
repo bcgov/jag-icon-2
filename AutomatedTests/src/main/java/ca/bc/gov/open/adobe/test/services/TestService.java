@@ -18,8 +18,8 @@ public class TestService {
     @Value("${test.password}")
     private String password;
 
-    @Value("${test.api-host}")
-    private String apiHostCommon;
+    @Value("${test.api-host-1}")
+    private String apiHost1;
 
     public TestService() {}
 
@@ -43,8 +43,8 @@ public class TestService {
                 line = line.replaceAll("\\{AUTHENTICATION_PASSWORD}", password);
             }
 
-            if (line.contains("{API_HOST}")) {
-                line = line.replaceAll("\\{API_HOST}", apiHostCommon);
+            if (line.contains("{API_HOST_1}")) {
+                line = line.replaceAll("\\{API_HOST_1}", apiHost1);
             }
 
             writer.append(line + "\n");
@@ -103,7 +103,7 @@ public class TestService {
 
         }
         try {
-            runner.setProjectFile("");
+            runner.setProjectFile("ICON2Audit-soapui-project.xml");
             runner.run();
         } catch (Exception Ignore) {
 
