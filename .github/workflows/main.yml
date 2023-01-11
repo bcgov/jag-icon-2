@@ -7,30 +7,33 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-        app1:
-            description: 'App Name (jag-icon2-common-1-1)'    
-            required: true
-            default: 'jag-icon2-common-1-1'
-        app2:
-            description: 'App Name (jag-icon2-common-1-2)'    
-            required: true
-            default: 'jag-icon2-common-1-2'
-        app3:
-            description: 'App Name (jag-icon2-biometrics)'    
-            required: true
-            default: 'jag-icon2-biometrics'
-        app4:
-            description: 'App Name (jag-icon2-myfiles)'    
-            required: true
-            default: 'jag-icon2-myfiles'
-        app5:
-            description: 'App Name (jag-icon2-rabbitconsumer)'    
-            required: true
-            default: 'jag-icon2-rabbitconsumer'
-        env:
-            description: 'Image Target Env'  
-            required: true
-            default: 'dev'
+      app1:
+        description: 'App Name (jag-icon2-common-1-1)'    
+        required: true
+        default: 'jag-icon2-common-1-1'
+      app2:
+        description: 'App Name (jag-icon2-common-1-2)'    
+        required: true
+        default: 'jag-icon2-common-1-2'
+      app3:
+        description: 'App Name (jag-icon2-biometrics)'    
+        required: true
+        default: 'jag-icon2-biometrics'
+      app4:
+        description: 'App Name (jag-icon2-myfiles)'    
+        required: true
+        default: 'jag-icon2-myfiles'
+      app5:
+        description: 'App Name (jag-icon2-rabbitconsumer)'    
+        required: true
+        default: 'jag-icon2-rabbitconsumer'
+      env:
+        type: choice
+        description: Image Target environment
+        options: 
+        - dev
+        required: true
+        default: 'dev'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
