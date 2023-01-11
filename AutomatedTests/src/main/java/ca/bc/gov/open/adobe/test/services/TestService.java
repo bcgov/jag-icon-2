@@ -21,6 +21,9 @@ public class TestService {
     @Value("${test.api-host-1}")
     private String apiHost1;
 
+    @Value("${test.api-host-2}")
+    private String apiHost2;
+
     public TestService() {}
 
     public void setAuthentication(String filename) throws IOException {
@@ -45,6 +48,9 @@ public class TestService {
 
             if (line.contains("{API_HOST_1}")) {
                 line = line.replaceAll("\\{API_HOST_1}", apiHost1);
+            }
+            if (line.contains("{API_HOST_2}")) {
+                line = line.replaceAll("\\{API_HOST_2}", apiHost2);
             }
 
             writer.append(line + "\n");
@@ -104,6 +110,24 @@ public class TestService {
         }
         try {
             runner.setProjectFile("ICON2Audit-soapui-project.xml");
+            runner.run();
+        } catch (Exception Ignore) {
+
+        }
+        try {
+            runner.setProjectFile("ICON2Auth-soapui-project.xml");
+            runner.run();
+        } catch (Exception Ignore) {
+
+        }
+        try {
+            runner.setProjectFile("ICON2Message-soapui-project.xml");
+            runner.run();
+        } catch (Exception Ignore) {
+
+        }
+        try {
+            runner.setProjectFile("ICON2MyInfo-soapui-project.xml");
             runner.run();
         } catch (Exception Ignore) {
 

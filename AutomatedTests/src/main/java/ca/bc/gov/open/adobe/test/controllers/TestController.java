@@ -24,6 +24,9 @@ public class TestController {
         this.testService = testService;
         this.testService.setAuthentication("ICON2HSR-soapui-project-template.xml");
         this.testService.setAuthentication("ICON2Audit-soapui-project-template.xml");
+        this.testService.setAuthentication("ICON2Message-soapui-project-template.xml");
+        this.testService.setAuthentication("ICON2MyInfo-soapui-project-template.xml");
+        this.testService.setAuthentication("ICON2Auth-soapui-project-template.xml");
     }
 
     @GetMapping(value = "/all")
