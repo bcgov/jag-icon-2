@@ -44,6 +44,7 @@ cc-test-reporter
 /TestErrors.zip
 /ICON2Audit-soapui-project.xml
 /ICON2HSR-soapui-project.xml
-ICON2-*-FAILED.txt
-
-
+/ICON2-*-FAILED.txt
+/ICON2Auth-soapui-project.xml
+/ICON2Message-soapui-project.xml
+/ICON2MyInfo-soapui-project.xml
