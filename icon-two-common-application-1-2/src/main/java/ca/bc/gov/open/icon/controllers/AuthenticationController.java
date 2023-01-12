@@ -66,7 +66,8 @@ public class AuthenticationController {
                     new GetPreAuthorizeClientResponse();
             getPreAuthorizeClientDocument.setPreAuthorizeClient(resp.getBody());
             getPreAuthorizeClientResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(getPreAuthorizeClientDocument));
+                    XMLUtilities.serializeXmlStr(
+                            getPreAuthorizeClientDocument.getPreAuthorizeClient()));
 
             log.info(
                     objectMapper.writeValueAsString(
@@ -119,7 +120,8 @@ public class AuthenticationController {
                     new GetHasFunctionalAbilityResponse();
             getHasFunctionalAbilityDocument.setHasFunctionalAbility(resp.getBody());
             getHasFunctionalAbilityResponse.setXMLString(
-                    XMLUtilities.serializeXmlStr(getHasFunctionalAbilityDocument));
+                    XMLUtilities.serializeXmlStr(
+                            getHasFunctionalAbilityDocument.getHasFunctionalAbility()));
 
             log.info(
                     objectMapper.writeValueAsString(
