@@ -1,11 +1,13 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.audit.MessageAccessed;
 import ca.bc.gov.open.icon.audit.MessageAccessedResponse;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.message.*;
+import ca.bc.gov.open.icon.message.UserToken;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -65,7 +68,7 @@ public class MessageController {
                                     "messageAccessed",
                                     ex.getMessage(),
                                     messageAccessed)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -76,8 +79,14 @@ public class MessageController {
     public GetMessageResponse getMessage(@RequestPayload GetMessage getMessage)
             throws JsonProcessingException {
 
-        var getMessageDocument =
-                XMLUtilities.convertReq(getMessage, new GetMessageDocument(), "getMessage");
+        GetMessageDocument getMessageDocument = new GetMessageDocument();
+        getMessageDocument.setAppointmentMessage(
+                XMLUtilities.deserializeXmlStr(
+                        getMessage.getXMLString(), new AppointmentMessage()));
+        getMessageDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getMessage.getUserTokenString(),
+                        new ca.bc.gov.open.icon.ereporting.UserToken()));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/response");
         HttpEntity<GetMessageDocument> payload =
@@ -90,18 +99,16 @@ public class MessageController {
                             HttpMethod.POST,
                             payload,
                             AppointmentMessage.class);
+
+            GetMessageResponse getMessageResponse = new GetMessageResponse();
+
+            getMessageDocument.setAppointmentMessage(resp.getBody());
+            getMessageResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getMessageDocument.getAppointmentMessage()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessage")));
-
-            GetMessageResponseDocument getMessageResponseDoc = new GetMessageResponseDocument();
-            AppointmentMessageOuter outResp = new AppointmentMessageOuter();
-            outResp.setAppointmentMessage(resp.getBody());
-            getMessageResponseDoc.setXMLString(outResp);
-
-            var getMessageResponse =
-                    XMLUtilities.convertResp(
-                            getMessageResponseDoc, new GetMessageResponse(), "getMessageResponse");
 
             return getMessageResponse;
 
@@ -113,7 +120,7 @@ public class MessageController {
                                     "getMessage",
                                     ex.getMessage(),
                                     getMessage)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -124,36 +131,34 @@ public class MessageController {
     public SetMessageDateResponse setMessageDate(@RequestPayload SetMessageDate setMessageDate)
             throws JsonProcessingException {
 
-        var setMessageDateDocument =
-                XMLUtilities.convertReq(
-                        setMessageDate, new SetMessageDateDocument(), "setMessageDate");
+        SetMessageDateDocument setMessageDateDocument = new SetMessageDateDocument();
+        setMessageDateDocument.setAppointmentMessage(
+                XMLUtilities.deserializeXmlStr(
+                        setMessageDate.getXMLString(), new AppointmentMessage()));
+        setMessageDateDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        setMessageDate.getUserTokenString(),
+                        new ca.bc.gov.open.icon.ereporting.UserToken()));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/date");
         HttpEntity<SetMessageDateDocument> payload =
                 new HttpEntity<>(setMessageDateDocument, new HttpHeaders());
 
         try {
-            HttpEntity<AppointmentMessage> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            AppointmentMessage.class);
+
+            restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    payload,
+                    new ParameterizedTypeReference<>() {});
+
+            SetMessageDateResponse setMessageDateResponse = new SetMessageDateResponse();
+            setMessageDateResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(setMessageDateDocument.getAppointmentMessage()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDate")));
-
-            SetMessageDateResponseDocument setMessageDateResponseDocument =
-                    new SetMessageDateResponseDocument();
-            AppointmentMessageOuter outResp = new AppointmentMessageOuter();
-            outResp.setAppointmentMessage(resp.getBody());
-            setMessageDateResponseDocument.setXMLString(outResp);
-
-            var setMessageDateResponse =
-                    XMLUtilities.convertResp(
-                            setMessageDateResponseDocument,
-                            new SetMessageDateResponse(),
-                            "setMessageDateResponse");
 
             return setMessageDateResponse;
         } catch (Exception ex) {
@@ -164,7 +169,8 @@ public class MessageController {
                                     "setMessageDate",
                                     ex.getMessage(),
                                     setMessageDate)));
-            throw new ORDSException();
+
+            throw handleError(ex, new ca.bc.gov.open.icon.ereporting.Error());
         }
     }
 
@@ -175,24 +181,31 @@ public class MessageController {
     public SetMessageDetailsResponse setMessageDetails(
             @RequestPayload SetMessageDetails setMessageDetails) throws JsonProcessingException {
 
+        SetMessageDetailsDocument setMessageDetailsDocument = new SetMessageDetailsDocument();
+        setMessageDetailsDocument.setMessages(
+                XMLUtilities.deserializeXmlStr(setMessageDetails.getXMLString(), new Messages()));
+        setMessageDetailsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        setMessageDetails.getUserTokenString(), new UserToken()));
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "message/details/set");
-        HttpEntity<SetMessageDetails> payload =
-                new HttpEntity<>(setMessageDetails, new HttpHeaders());
+        HttpEntity<SetMessageDetailsDocument> payload =
+                new HttpEntity<>(setMessageDetailsDocument, new HttpHeaders());
 
         try {
-            HttpEntity<Messages> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, Messages.class);
+            restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    payload,
+                    new ParameterizedTypeReference<>() {});
+
+            SetMessageDetailsResponse setMessageDetailsResponse = new SetMessageDetailsResponse();
+            setMessageDetailsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(setMessageDetailsDocument.getMessages()));
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "setMessageDetails")));
-            SetMessageDetailsResponse setMessageDetailsResponse = new SetMessageDetailsResponse();
-            MessagesOuter outResp = new MessagesOuter();
-            MessagesInner inResp = new MessagesInner();
-            inResp.setMessages(resp.getBody());
-            outResp.setMessages(inResp);
-            setMessageDetailsResponse.setXMLString(outResp);
             return setMessageDetailsResponse;
         } catch (Exception ex) {
             log.error(
@@ -202,7 +215,7 @@ public class MessageController {
                                     "setMessageDetails",
                                     ex.getMessage(),
                                     setMessageDetails)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.message.Error());
         }
     }
 
@@ -211,7 +224,14 @@ public class MessageController {
     public GetMessagesResponse getMessages(@RequestPayload GetMessages getMessages)
             throws JsonProcessingException {
 
-        HttpEntity<GetMessages> payload = new HttpEntity<>(getMessages, new HttpHeaders());
+        GetMessagesDocument getMessagesDocument = new GetMessagesDocument();
+        getMessagesDocument.setMessages(
+                XMLUtilities.deserializeXmlStr(getMessages.getXMLString(), new Messages()));
+        getMessagesDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getMessages.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetMessagesDocument> payload =
+                new HttpEntity<>(getMessagesDocument, new HttpHeaders());
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/responses");
 
@@ -219,15 +239,23 @@ public class MessageController {
             HttpEntity<Messages> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Messages.class);
+
+            GetMessagesResponse getMessagesResponse = new GetMessagesResponse();
+            getMessagesDocument.getMessages().setRow(resp.getBody().getRow());
+            getMessagesDocument
+                    .getMessages()
+                    .setUnreadMessageCount(resp.getBody().getUnreadMessageCount());
+            if (!resp.getBody().getMessageDetails().isEmpty()) {
+                getMessagesDocument
+                        .getMessages()
+                        .setMessageDetails(resp.getBody().getMessageDetails());
+            }
+            getMessagesResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getMessagesDocument.getMessages()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessages")));
-            GetMessagesResponse getMessagesResponse = new GetMessagesResponse();
-            MessagesOuter outResp = new MessagesOuter();
-            MessagesInner inResp = new MessagesInner();
-            inResp.setMessages(resp.getBody());
-            outResp.setMessages(inResp);
-            getMessagesResponse.setXMLString(outResp);
             return getMessagesResponse;
         } catch (Exception ex) {
             log.error(
@@ -237,7 +265,7 @@ public class MessageController {
                                     "getMessages",
                                     ex.getMessage(),
                                     getMessages)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.message.Error());
         }
     }
 
@@ -248,8 +276,15 @@ public class MessageController {
     public GetMessageDetailsResponse getMessageDetails(
             @RequestPayload GetMessageDetails getMessageDetails) throws JsonProcessingException {
 
-        HttpEntity<GetMessageDetails> payload =
-                new HttpEntity<>(getMessageDetails, new HttpHeaders());
+        GetMessagesDocument getMessagesDocument = new GetMessagesDocument();
+        getMessagesDocument.setMessages(
+                XMLUtilities.deserializeXmlStr(getMessageDetails.getXMLString(), new Messages()));
+        getMessagesDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getMessageDetails.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetMessagesDocument> payload =
+                new HttpEntity<>(getMessagesDocument, new HttpHeaders());
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/details");
 
@@ -257,15 +292,19 @@ public class MessageController {
             HttpEntity<Messages> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Messages.class);
+
+            GetMessageDetailsResponse getMessageDetailsResponse = new GetMessageDetailsResponse();
+            if (!resp.getBody().getMessageDetails().isEmpty()) {
+                getMessagesDocument
+                        .getMessages()
+                        .setMessageDetails(resp.getBody().getMessageDetails());
+            }
+            getMessageDetailsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getMessagesDocument.getMessages()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getMessageDetails")));
-            GetMessageDetailsResponse getMessageDetailsResponse = new GetMessageDetailsResponse();
-            MessagesOuter outResp = new MessagesOuter();
-            MessagesInner inResp = new MessagesInner();
-            inResp.setMessages(resp.getBody());
-            outResp.setMessages(inResp);
-            getMessageDetailsResponse.setXMLString(outResp);
             return getMessageDetailsResponse;
         } catch (Exception ex) {
             log.error(
@@ -275,7 +314,7 @@ public class MessageController {
                                     "getMessageDetails",
                                     ex.getMessage(),
                                     getMessageDetails)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.message.Error());
         }
     }
 }

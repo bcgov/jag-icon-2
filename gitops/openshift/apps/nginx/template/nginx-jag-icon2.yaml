@@ -87,6 +87,77 @@ parameters:
 
 objects:
 
+- kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: nginx-default-conf
+      namespace: ${OC_NAMESPACE}-${OC_ENV}
+    data:
+      nginx.conf: >-
+        worker_processes auto;
+
+        error_log /var/opt/rh/rh-nginx118/log/nginx/error.log;
+
+        pid /var/opt/rh/rh-nginx118/run/nginx/nginx.pid;
+
+
+        # Load dynamic modules. See
+        /opt/rh/rh-nginx118/root/usr/share/doc/README.dynamic.
+
+        include /opt/rh/rh-nginx118/root/usr/share/nginx/modules/*.conf;
+
+
+        events {
+          worker_connections  1024;
+        }
+
+
+        http {
+
+          log_format main escape=json '{ "time": "$time_iso8601", '
+          '"remote_addr": "$remote_addr", '
+          '"remote_user": "$remote_user", '
+          '"body_bytes_sent": "$body_bytes_sent", '
+          '"request_time": "$request_time", '
+          '"status": "$status", '
+          '"request": "$request", '
+          '"request_method": "$request_method", '
+          '"http_referrer": "$http_referer", '
+          '"http_x_forwarded_for": "$http_x_forwarded_for", '
+          '"host": "$host", '
+          '"server_name": "$server_name", '
+          '"upstream_address": "$upstream_addr", '
+          '"upstream_status": "$upstream_status", '
+          '"upstream_response_time": "$upstream_response_time", '
+          '"upstream_response_length": "$upstream_response_length", '
+          '"http_user_agent": "$http_user_agent", '
+          '"request_body": "$request_body" }';
+
+          access_log  /var/opt/rh/rh-nginx118/log/nginx/access.log  main;
+
+          sendfile        on;
+          tcp_nopush      on;
+          tcp_nodelay     on;
+          keepalive_timeout  65;
+          types_hash_max_size 4096;
+
+          include       /etc/opt/rh/rh-nginx118/nginx/mime.types;
+          default_type  application/octet-stream;
+
+          # Load modular configuration files from the /etc/nginx/conf.d directory.
+          include /opt/app-root/etc/nginx.d/*.conf;
+
+          server {
+            listen       8080 default_server;
+            listen       [::]:8080 default_server;
+            server_name  _;
+            root         /opt/app-root/src;
+
+            # Load configuration files for the default server block.
+            include      /opt/app-root/etc/nginx.default.d/*.conf;
+          }
+        }
+
   - kind: ConfigMap
     apiVersion: v1
     metadata:
@@ -109,7 +180,7 @@ objects:
           access_log off;
         }
 
-        location /api/common-1-1 {
+        location /api/common-1-1/Audit {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -122,9 +193,143 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-common-1-1/common-1-1;
+          proxy_pass http://splitter-audit/common-1-1/Audit;
         }
-
+        location /api/common-1-1/EReporting {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-ereporting/common-1-1/EReporting;
+        }
+        location /api/common-1-1/HSR {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-hsr/common-1-1/HSR;
+        }
+        location /api/common-1-1/Message {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-message/common-1-1/Message;
+        }
+        location /api/common-1-1/MyInfo {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-myinfo/common-1-1/MyInfo;
+        }
+        location /api/common-1-1/VisitSchedule {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-visitschedule/common-1-1/VisitSchedule;
+        }
+        location /api/common-1-1/TrustAccount {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-trustaccount/common-1-1/TrustAccount;
+        }
+        location /api/common-1-1/TombStoneInfo {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-tombstoneinfo/common-1-1/TombStoneInfo;
+        }
+        location /api/common-1-1/SessionParameter {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-sessionparameter/common-1-1/SessionParameter;
+        }
+        location /api/common-1-1/ErrorHandling {
+          client_max_body_size 100m;
+          proxy_read_timeout 240s;
+          proxy_send_timeout 80s;
+          proxy_redirect off;
+          port_in_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host $server_name;
+          proxy_pass_request_headers on;
+          proxy_pass http://splitter-errorhandling/common-1-1/ErrorHandling;
+        }
         location /api/common-1-2 {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
@@ -140,8 +345,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass http://splitter-common-1-2/common-1-2;
         }
-
-        location /api/biometrics {
+        location /api/Biometrics {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -154,10 +358,9 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-biometrics/biometrics;
+          proxy_pass http://splitter-biometrics/Biometrics;
         }
-
-        location /api/myfiles {
+        location /api/MyFiles {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -170,24 +373,9 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-myfiles/myfiles;
+          proxy_pass http://splitter-myfiles/MyFiles;
         }
 
-        location /api/rabbitconsumer {
-          client_max_body_size 100m;
-          proxy_read_timeout 240s;
-          proxy_send_timeout 80s;
-          proxy_redirect off;
-          port_in_redirect off;
-          proxy_http_version 1.1;
-          proxy_set_header Host $host;
-          proxy_set_header X-Forwarded-Proto $scheme;
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Forwarded-Host $server_name;
-          proxy_pass_request_headers on;
-          proxy_pass http://splitter-rabbitconsumer/rabbitconsumer;
-        }
 
   - kind: ConfigMap
     apiVersion: v1
@@ -196,29 +384,69 @@ objects:
       namespace: ${OC_NAMESPACE}-${OC_ENV}
     data:
       nginx-upstream.conf: |-
-        upstream splitter-common-1-1 {
+        upstream splitter-audit {
           server jag-icon2-common-1-1;
-          #server nginx-jag-staffnet-oldwm;
+          #server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-ereporting {
+          server jag-icon2-common-1-1;
+          #server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-hsr {
+          server jag-icon2-common-1-1;
+          #server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-message {
+          #server jag-icon2-common-1-1;
+          server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-myinfo {
+          server jag-icon2-common-1-1;
+          #server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-visitschedule {
+          #server jag-icon2-common-1-1;
+          server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-trustaccount {
+          #server jag-icon2-common-1-1;
+          server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-tombstoneinfo {
+          server jag-icon2-common-1-1;
+          #server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-sessionparameter {
+          #server jag-icon2-common-1-1;
+          server nginx-jag-icon2-oldwm;
+        }
+
+        upstream splitter-errorhandling {
+          server jag-icon2-common-1-1;
+          #server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-common-1-2 {
-          server jag-icon2-common-1-2;
-          #server nginx-jag-staffnet-oldwm;
+          #server jag-icon2-common-1-2;
+          server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-biometrics {
           server jag-icon2-biometrics;
-          #server nginx-jag-staffnet-oldwm;
+          #server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-myfiles {
           server jag-icon2-myfiles;
-          #server nginx-jag-staffnet-oldwm;
-        }
-
-        upstream splitter-rabbitconsumer {
-          server jag-icon2-rabbitconsumer;
-          #server nginx-jag-staffnet-oldwm;
+          #server nginx-jag-icon2-oldwm;
         }
 
   - kind: DeploymentConfig
@@ -271,6 +499,10 @@ objects:
               configMap:
                 name: ${COMPONENT_NAME}-upstream
                 defaultMode: 420
+            - name: nginx-default-conf
+              configMap:
+                name: nginx-default-conf
+                defaultMode: 420
           containers:
             - name: ${COMPONENT_NAME}
               # Below Immage url must be changed as per gold cluster image stream
@@ -284,10 +516,10 @@ objects:
                resources:
                 limits:
                   cpu: 50m
-                  memory: 200Mi
+                  memory: 50Mi
                 requests:
-                  cpu: 50m
-                  memory: 100Mi
+                  cpu: 40m
+                  memory: 50Mi
               volumeMounts:
                 - name: ${COMPONENT_NAME}-conf
                   readOnly: true
@@ -295,6 +527,10 @@ objects:
                 - name: ${COMPONENT_NAME}-upstream
                   readOnly: true
                   mountPath: /opt/app-root/etc/nginx.d
+                - name: nginx-default-conf
+                  readOnly: true
+                  mountPath: /etc/opt/rh/rh-nginx118/nginx/nginx.conf
+                  subPath: nginx.conf
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
               imagePullPolicy: Always

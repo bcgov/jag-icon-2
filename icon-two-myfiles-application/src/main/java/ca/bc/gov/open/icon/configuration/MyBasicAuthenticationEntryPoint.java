@@ -37,7 +37,7 @@ public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoi
         resp.put("status", HttpStatus.UNAUTHORIZED.value());
         resp.put("timestamp", Instant.now().toString());
 
-        log.warn("Unauthorized request to the api received");
+        log.warn("Unauthorized request to the api received: " + request.getHeader("authorization"));
         writer.println(objectMapper.writeValueAsString(resp));
     }
 

@@ -1,8 +1,9 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.error.SetErrorMessage;
 import ca.bc.gov.open.icon.error.SetErrorMessageResponse;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,7 +68,7 @@ public class ErrorHandlingController {
                                     "setErrorMessage",
                                     ex.getMessage(),
                                     setErrorMessage)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 }

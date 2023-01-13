@@ -1,7 +1,8 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -63,7 +64,7 @@ public class AuthenticationController {
                                     "reauthenticationFailed",
                                     ex.getMessage(),
                                     reauthenticationFailed)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -104,7 +105,7 @@ public class AuthenticationController {
                                     "reauthenticationSucceeded",
                                     ex.getMessage(),
                                     reauthenticationSucceeded)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -139,7 +140,7 @@ public class AuthenticationController {
                                     "logoutExecuted",
                                     ex.getMessage(),
                                     logoutExecuted)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -175,7 +176,7 @@ public class AuthenticationController {
                                     "idleTimeoutExecuted",
                                     ex.getMessage(),
                                     idleTimeoutExecuted)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -215,7 +216,7 @@ public class AuthenticationController {
                                     "primaryAuthentication",
                                     ex.getMessage(),
                                     primaryAuthentication)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 }

@@ -9,32 +9,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RecordControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private WebServiceTemplate webServiceTemplate;
+    @Mock private RestTemplate restTemplate;
+    @Mock private RecordController recordController;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        recordController = Mockito.spy(new RecordController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testRecordCompleted() throws JsonProcessingException {
         var req = new RecordCompleted();
-        var clientLogNotificationOuter = new ClientLogNotificationOuter();
         var clientLogNotification = new ClientLogNotification();
         clientLogNotification.setCsNum("A");
         clientLogNotification.setEventID("A");
@@ -45,7 +48,6 @@ public class RecordControllerTests {
         clientLogNotification.setReauthTransactionNo("A");
 
         req.setXMLString("A");
-        clientLogNotificationOuter.setClientLogNotification(clientLogNotification);
 
         var out = new HashMap<>();
         ResponseEntity<Map> responseEntity = new ResponseEntity<>(out, HttpStatus.OK);
@@ -58,7 +60,6 @@ public class RecordControllerTests {
                         Mockito.<Class<Map>>any()))
                 .thenReturn(responseEntity);
 
-        RecordController recordController = new RecordController(restTemplate, objectMapper);
         var resp = recordController.recordCompleted(req);
         Assertions.assertNotNull(resp);
     }
@@ -66,7 +67,6 @@ public class RecordControllerTests {
     @Test
     public void testRecordException() throws JsonProcessingException {
         var req = new RecordException();
-        var clientLogNotificationOuter = new ClientLogNotificationOuter();
         var clientLogNotification = new ClientLogNotification();
         clientLogNotification.setCsNum("A");
         clientLogNotification.setEventID("A");
@@ -77,7 +77,6 @@ public class RecordControllerTests {
         clientLogNotification.setReauthTransactionNo("A");
 
         req.setXMLString("A");
-        clientLogNotificationOuter.setClientLogNotification(clientLogNotification);
 
         var out = new HashMap<>();
         ResponseEntity<Map> responseEntity = new ResponseEntity<>(out, HttpStatus.OK);
@@ -90,7 +89,6 @@ public class RecordControllerTests {
                         Mockito.<Class<Map>>any()))
                 .thenReturn(responseEntity);
 
-        RecordController recordController = new RecordController(restTemplate, objectMapper);
         var resp = recordController.recordException(req);
         Assertions.assertNotNull(resp);
     }

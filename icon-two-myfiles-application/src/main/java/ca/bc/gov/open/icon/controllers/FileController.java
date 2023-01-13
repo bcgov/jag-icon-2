@@ -1,7 +1,8 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.configuration.SoapConfig;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.myfiles.*;
@@ -66,7 +67,7 @@ public class FileController {
                                     "getClientClaims",
                                     ex.getMessage(),
                                     getClientClaims)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myfiles.Error());
         }
     }
 
@@ -100,7 +101,7 @@ public class FileController {
                                     "getCsNumsByDate",
                                     ex.getMessage(),
                                     getCsNumsByDate)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myfiles.Error());
         }
     }
 
@@ -135,7 +136,7 @@ public class FileController {
                                     "getAgencyFile",
                                     ex.getMessage(),
                                     getAgencyFile)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myfiles.Error());
         }
     }
 
@@ -168,7 +169,7 @@ public class FileController {
                                     "getClientInfo",
                                     ex.getMessage(),
                                     getClientInfo)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myfiles.Error());
         }
     }
 
@@ -201,7 +202,7 @@ public class FileController {
                                     "setMessage",
                                     ex.getMessage(),
                                     setMessage)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myfiles.Error());
         }
     }
 
@@ -234,7 +235,7 @@ public class FileController {
                                     "setDisclosure",
                                     ex.getMessage(),
                                     setDisclosure)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myfiles.Error());
         }
     }
 }

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.12</version>
+        <version>2.5.14</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ca.bc.gov.open</groupId>
@@ -17,6 +17,10 @@
     <properties>
         <java.version>11</java.version>
         <log4j2.version>2.17.1</log4j2.version>
+        <snakeyaml.version>1.33</snakeyaml.version>
+        <jackson-bom.version>2.13.4.20221013</jackson-bom.version>
+        <spring-security.version>5.7.5</spring-security.version>
+        <spring-security-test.version>5.7.5</spring-security-test.version>
     </properties>
     <repositories>
         <repository>
@@ -26,20 +30,114 @@
         </repository>
     </repositories>
 
-    <modules>
-        <module>icon-two-myfiles-application</module>
-        <module>icon-two-biometrics-application</module>
-        <module>icon-two-common-models</module>
-        <module>icon-two-common-application-1-1</module>
-        <module>icon-two-common-application-1-2</module>
-        <module>icon-two-consumer-models</module>
-        <module>icon-two-comparison-tool-1-1</module>
-        <module>icon-two-comparison-tool-1-2</module>
-        <module>icon-two-poller</module>
-        <module>icon-two-rabbit-consumer</module>
-        <module>AutomatedTests</module>
-        <module>icon-two-code-coverage</module>
-    </modules>
+    <profiles>
+        <profile>
+            <id>
+                all
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-myfiles-application</module>
+                <module>icon-two-biometrics-application</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-common-application-1-1</module>
+                <module>icon-two-common-application-1-2</module>
+                <module>icon-two-hsr-models</module>
+                <module>icon-two-comparison-tool-1-1</module>
+                <module>icon-two-comparison-tool-1-2</module>
+                <module>icon-two-hsr-application</module>
+                <module>AutomatedTests</module>
+                <module>icon-two-code-coverage</module>
+            </modules>
+            <activation>
+                <activeByDefault>
+                    true
+                </activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>
+                AutomatedTests
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>AutomatedTests</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-biometrics-application
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-biometrics-application</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-common-application-1-1
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-hsr-models</module>
+                <module>icon-two-common-application-1-1</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-common-application-1-2
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-common-application-1-2</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-comparison-tool-1-1
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-hsr-models</module>
+                <module>icon-two-comparison-tool-1-1</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-comparison-tool-1-2
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-comparison-tool-1-2</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-myfiles-application
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-myfiles-application</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>
+                icon-two-hsr-application
+            </id>
+            <modules>
+                <module>bom/icon-two-starters-bom</module>
+                <module>icon-two-common-models</module>
+                <module>icon-two-hsr-models</module>
+                <module>icon-two-hsr-application</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>

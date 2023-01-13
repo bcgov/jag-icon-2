@@ -1,20 +1,14 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo2;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoRequest;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoResponse;
-import ca.bc.gov.open.icon.trustaccount.GetTrustAccount;
-import ca.bc.gov.open.icon.trustaccount.GetTrustAccount2;
-import ca.bc.gov.open.icon.trustaccount.GetTrustAccountRequest;
-import ca.bc.gov.open.icon.trustaccount.GetTrustAccountResponse;
-import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
-import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule2;
-import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleRequest;
-import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleResponse;
+import ca.bc.gov.open.icon.tombstone.*;
+import ca.bc.gov.open.icon.trustaccount.*;
+import ca.bc.gov.open.icon.trustaccount.UserToken;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
+import ca.bc.gov.open.icon.visitschedule.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -46,33 +40,46 @@ public class ClientController {
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo",
+            namespace = "ICON2.Source.TombStoneInfo.ws.provider:TombStoneInfo",
             localPart = "getTombStoneInfo")
     @ResponsePayload
     public GetTombStoneInfoResponse getTombStoneInfo(
             @RequestPayload GetTombStoneInfo getTombStoneInfo) throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/tombstone-info");
-        HttpEntity<GetTombStoneInfoRequest> payload =
-                new HttpEntity<>(
-                        getTombStoneInfo.getXMLString().getTombStoneInfo(), new HttpHeaders());
+        GetTombStoneInfoDocument getTombStoneInfoDocument = new GetTombStoneInfoDocument();
+        getTombStoneInfoDocument.setTombStoneInfo(
+                XMLUtilities.deserializeXmlStr(
+                        getTombStoneInfo.getXMLString(), new TombStoneInfo()));
+
+        HttpEntity<GetTombStoneInfoDocument> payload =
+                new HttpEntity<>(getTombStoneInfoDocument, new HttpHeaders());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "tombstone-info");
 
         try {
-            HttpEntity<GetTombStoneInfoRequest> resp =
+            HttpEntity<TombStoneInfo> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetTombStoneInfoRequest.class);
+                            builder.toUriString(), HttpMethod.POST, payload, TombStoneInfo.class);
+
+            GetTombStoneInfoResponse getTombStoneInfoResponse = new GetTombStoneInfoResponse();
+            getTombStoneInfoDocument.setTombStoneInfo(resp.getBody());
+            if (getTombStoneInfoDocument.getTombStoneInfo() != null
+                    && getTombStoneInfoDocument.getTombStoneInfo().getLatestPhoto() != null) {
+                getTombStoneInfoDocument
+                        .getTombStoneInfo()
+                        .setLatestPhoto(
+                                getTombStoneInfoDocument
+                                        .getTombStoneInfo()
+                                        .getLatestPhoto()
+                                        .replaceAll("\r\n", "\n"));
+            }
+            getTombStoneInfoResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getTombStoneInfoDocument.getTombStoneInfo()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getTombStoneInfo")));
-            GetTombStoneInfoResponse getTombStoneInfoResponseOut = new GetTombStoneInfoResponse();
-            GetTombStoneInfo2 getTombStoneInfoOut = new GetTombStoneInfo2();
-            getTombStoneInfoOut.setTombStoneInfo(resp.getBody());
-            getTombStoneInfoResponseOut.setXMLString(getTombStoneInfoOut);
-            return getTombStoneInfoResponseOut;
+
+            return getTombStoneInfoResponse;
 
         } catch (Exception ex) {
             log.error(
@@ -82,37 +89,41 @@ public class ClientController {
                                     "getTombStoneInfo",
                                     ex.getMessage(),
                                     getTombStoneInfo)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.tombstone.Error());
         }
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.TrustAccount.ws.provider:TrustAccount",
+            namespace = "ICON2.Source.TrustAccount.ws.provider:TrustAccount",
             localPart = "getTrustAccount")
     @ResponsePayload
     public GetTrustAccountResponse getTrustAccount(@RequestPayload GetTrustAccount getTrustAccount)
             throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/trust-account");
+        GetTrustAccountDocument doc = new GetTrustAccountDocument();
+        doc.setTrustAccount(
+                XMLUtilities.deserializeXmlStr(getTrustAccount.getXMLString(), new TrustAccount()));
+        doc.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getTrustAccount.getUserTokenString(), new UserToken()));
 
-        HttpEntity<GetTrustAccount> payload = new HttpEntity<>(getTrustAccount, new HttpHeaders());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "trust-account");
+        HttpEntity<GetTrustAccountDocument> payload = new HttpEntity<>(doc, new HttpHeaders());
         try {
-            HttpEntity<GetTrustAccountRequest> resp =
+            HttpEntity<TrustAccount> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetTrustAccountRequest.class);
+                            builder.toUriString(), HttpMethod.POST, payload, TrustAccount.class);
+
+            doc.setTrustAccount(resp.getBody());
+            GetTrustAccountResponse getTrustAccountResponse = new GetTrustAccountResponse();
+            getTrustAccountResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(doc.getTrustAccount()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getTrustAccount")));
 
-            GetTrustAccountResponse getTrustAccountResponseOut = new GetTrustAccountResponse();
-            GetTrustAccount2 getTrustAccountInner = new GetTrustAccount2();
-            getTrustAccountInner.setTrustAccount(resp.getBody());
-            getTrustAccountResponseOut.setXMLString(getTrustAccountInner);
-            return getTrustAccountResponseOut;
+            return getTrustAccountResponse;
 
         } catch (Exception ex) {
             log.error(
@@ -122,37 +133,43 @@ public class ClientController {
                                     "getTrustAccount",
                                     ex.getMessage(),
                                     getTrustAccount)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.trustaccount.Error());
         }
     }
 
     @PayloadRoot(
-            namespace = "http://reeks.bcgov/ICON2.Source.VisitSchedule.ws.provider:VisitSchedule",
-            localPart = "getVisitScheduleResponse")
+            namespace = "ICON2.Source.VisitSchedule.ws.provider:VisitSchedule",
+            localPart = "getVisitSchedule")
     @ResponsePayload
     public GetVisitScheduleResponse getVisitSchedule(
             @RequestPayload GetVisitSchedule getVisitSchedule) throws JsonProcessingException {
 
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "client/visit-schedule");
-        HttpEntity<GetVisitSchedule> payload =
-                new HttpEntity<>(getVisitSchedule, new HttpHeaders());
+        GetVisitScheduleDocument doc = new GetVisitScheduleDocument();
+        doc.setVisitSchedule(
+                XMLUtilities.deserializeXmlStr(
+                        getVisitSchedule.getXMLString(), new VisitSchedule()));
+        doc.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getVisitSchedule.getUserTokenString(),
+                        new ca.bc.gov.open.icon.visitschedule.UserToken()));
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "visit-schedule");
+        HttpEntity<GetVisitScheduleDocument> payload = new HttpEntity<>(doc, new HttpHeaders());
         try {
-            HttpEntity<GetVisitScheduleRequest> resp =
+            HttpEntity<VisitSchedule> resp =
                     restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.POST,
-                            payload,
-                            GetVisitScheduleRequest.class);
+                            builder.toUriString(), HttpMethod.POST, payload, VisitSchedule.class);
+
+            doc.setVisitSchedule(resp.getBody());
+            GetVisitScheduleResponse getVisitScheduleResponse = new GetVisitScheduleResponse();
+            getVisitScheduleResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(doc.getVisitSchedule()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getVisitSchedule")));
 
-            GetVisitScheduleResponse getVisitScheduleResponseOut = new GetVisitScheduleResponse();
-            GetVisitSchedule2 getVisitScheduleInner = new GetVisitSchedule2();
-            getVisitScheduleInner.setVisitSchedule(resp.getBody());
-            getVisitScheduleResponseOut.setXMLString(getVisitScheduleInner);
-            return getVisitScheduleResponseOut;
+            return getVisitScheduleResponse;
 
         } catch (Exception ex) {
             log.error(
@@ -162,7 +179,7 @@ public class ClientController {
                                     "getVisitSchedule",
                                     ex.getMessage(),
                                     getVisitSchedule)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.visitschedule.Error());
         }
     }
 }

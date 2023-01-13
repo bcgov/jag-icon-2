@@ -50,7 +50,7 @@ parameters:
 
 objects:
 
-  ### JAG-ICON2-BIOMETRICS Deployment Config ###
+  ### JAG-ICON2-RABBITCONSUMER Deployment Config ###
   - apiVersion: apps.openshift.io/v1
     kind: DeploymentConfig
     metadata:
@@ -90,10 +90,45 @@ objects:
                     secretKeyRef:
                       name: jag-icon2-rabbitconsumer-application-secrets
                       key: BASIC_AUTH_PASS
-                - name: SPRING_PROFILES_ACTIVE
+                - name: HSR_QUEUE_NAME
                   valueFrom:
                     secretKeyRef:
                       name: jag-icon2-rabbitconsumer-application-secrets
+                      key: HSR_QUEUE_NAME
+                - name: HSR_SERVICE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: HSR_SERVICE_URL
+                - name: ORDS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: ORDS_HOST
+                - name: PING_QUEUE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: PING_QUEUE_NAME
+                - name: RABBIT_MQ_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: RABBIT_MQ_HOST
+                - name: RABBIT_MQ_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: rabbitmq-cluster-secret
+                      key: username
+                - name: RABBIT_MQ_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: rabbitmq-cluster-secret
+                      key: password
+                - name: SPRING_PROFILES_ACTIVE
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-splunk-config
                       key: SPRING_PROFILE
                 - name: SPLUNK_HTTP_URL
                   valueFrom:
@@ -113,9 +148,9 @@ objects:
               resources:
                 limits:
                   cpu: 100m
-                  memory: 100Mi
+                  memory: 200Mi
                 requests:
-                  cpu: 50m
+                  cpu: 40m
                   memory: 100Mi
               livenessProbe:
                 httpGet:

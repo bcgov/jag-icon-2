@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-consumer-models</artifactId>
+            <artifactId>icon-two-hsr-models</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
@@ -51,17 +51,23 @@
         </dependency>
         <dependency>
             <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-poller</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>ca.bc.gov.open</groupId>
-            <artifactId>icon-two-rabbit-consumer</artifactId>
+            <artifactId>icon-two-hsr-application</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ca.bc.gov.open</groupId>
+                <artifactId>icon-two-starters-bom</artifactId>
+                <version>0.2.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -77,7 +83,6 @@
                         <exclude>**/IconTwoBiometricsApplication.class</exclude>
                         <exclude>**/IconTwoMyFilesApplication.class</exclude>
                         <exclude>**/IconConsumerApplication.class</exclude>
-                        <exclude>**/IconPollerApplication.class</exclude>
                         <exclude>**/ObjectFactory.class</exclude>
                         <exclude>**/Adapter1.class</exclude>
                     </excludes>

@@ -8,12 +8,10 @@ import ca.bc.gov.open.icon.biometrics.StartSearch;
 import ca.bc.gov.open.icon.controllers.SearchController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,8 +28,6 @@ public class SearchControllerTests {
 
     @Mock private RestTemplate restTemplate = new RestTemplate();
 
-    @Mock private ModelMapper modalMapper = new ModelMapper();
-
     @Test
     public void testStartSearch() throws JsonProcessingException {
         var req = new StartSearch();
@@ -46,7 +42,7 @@ public class SearchControllerTests {
         var searchToken = new SearchToken();
         searchToken.setSearchID("A");
         searchToken.setSearchURL("A");
-        searchToken.setExpiry(Instant.now());
+        searchToken.setExpiry("A");
         startSearchResponse2.setSearch(searchToken);
         startSearchResponse2.setCode(ResponseCode.SUCCESS);
 
@@ -54,8 +50,7 @@ public class SearchControllerTests {
                         anyString(), Mockito.any(ca.bc.gov.open.icon.bcs.StartSearch.class)))
                 .thenReturn(soapResp);
 
-        SearchController searchController =
-                new SearchController(soapTemplate, objectMapper, modalMapper);
+        SearchController searchController = new SearchController(soapTemplate, objectMapper);
         var resp = searchController.startSearch(req);
         Assertions.assertNotNull(resp);
     }
@@ -79,8 +74,7 @@ public class SearchControllerTests {
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(FinishSearch.class)))
                 .thenReturn(soapResp);
 
-        SearchController searchController =
-                new SearchController(soapTemplate, objectMapper, modalMapper);
+        SearchController searchController = new SearchController(soapTemplate, objectMapper);
         var resp = searchController.finishSearch(req);
         Assertions.assertNotNull(resp);
     }

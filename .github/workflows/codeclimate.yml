@@ -29,12 +29,13 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Git Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Set up JDK build environment
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: 11
 
       # Get Code Climate binary
@@ -85,11 +86,11 @@ jobs:
 
         # Formatting the Code Coverage Report
       - name: Format the coverage report
-        run: JACOCO_SOURCE_PATH="icon-two-biometrics-application/src/main/java icon-two-common-models/target/generated-sources/xjc icon-two-consumer-models/target/generated-sources/xjc icon-two-common-application-1-1/src/main/java icon-two-common-application-1-2/src/main/java icon-two-myfiles-application/src/main/java icon-two-poller/src/main/java icon-two-rabbit-consumer/src/main/java" ./cc-test-reporter format-coverage icon-two-code-coverage/target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml --input-type jacoco -o ./target/site/jacoco/codeclimate.json
+        run: JACOCO_SOURCE_PATH="icon-two-biometrics-application/src/main/java icon-two-common-models/target/generated-sources/xjc icon-two-hsr-models/target/generated-sources/xjc icon-two-common-application-1-1/src/main/java icon-two-common-application-1-2/src/main/java icon-two-myfiles-application/src/main/java icon-two-hsr-application/src/main/java" ./cc-test-reporter format-coverage icon-two-code-coverage/target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml --input-type jacoco -o ./target/site/jacoco/codeclimate.json
 
 # Upload JSON for debugging purposes
       - name: Upload JSON for debugging purposes
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: icon-two-coverage-report
           path: ./target/site/jacoco/codeclimate.json

@@ -1,3 +1,4 @@
+
 package ca.bc.gov.open.adobe.test.services;
 
 import com.eviware.soapui.tools.SoapUITestCaseRunner;
@@ -18,8 +19,14 @@ public class TestService {
     @Value("${test.password}")
     private String password;
 
-    @Value("${test.api-host}")
-    private String apiHostCommon;
+    @Value("${test.api-host-1}")
+    private String apiHost1;
+
+    @Value("${test.api-host-2}")
+    private String apiHost2;
+
+    @Value("${test.api-host-MyFiles}")
+    private String apiHostMyFiles;
 
     public TestService() {}
 
@@ -43,8 +50,14 @@ public class TestService {
                 line = line.replaceAll("\\{AUTHENTICATION_PASSWORD}", password);
             }
 
-            if (line.contains("{API_HOST}")) {
-                line = line.replaceAll("\\{API_HOST}", apiHostCommon);
+            if (line.contains("{API_HOST_1}")) {
+                line = line.replaceAll("\\{API_HOST_1}", apiHost1);
+            }
+            if (line.contains("{API_HOST_2}")) {
+                line = line.replaceAll("\\{API_HOST_2}", apiHost2);
+            }
+            if (line.contains("{API_HOST_MyFiles}")) {
+                line = line.replaceAll("\\{API_HOST_MyFiles}", apiHostMyFiles);
             }
 
             writer.append(line + "\n");
@@ -103,7 +116,31 @@ public class TestService {
 
         }
         try {
-            runner.setProjectFile("");
+            runner.setProjectFile("ICON2Audit-soapui-project.xml");
+            runner.run();
+        } catch (Exception Ignore) {
+
+        }
+        try {
+            runner.setProjectFile("ICON2Auth-soapui-project.xml");
+            runner.run();
+        } catch (Exception Ignore) {
+
+        }
+        try {
+            runner.setProjectFile("ICON2Message-soapui-project.xml");
+            runner.run();
+        } catch (Exception Ignore) {
+
+        }
+        try {
+            runner.setProjectFile("ICON2MyInfo-soapui-project.xml");
+            runner.run();
+        } catch (Exception Ignore) {
+
+        }
+        try {
+            runner.setProjectFile("ICON2MyFiles-soapui-project.xml");
             runner.run();
         } catch (Exception Ignore) {
 

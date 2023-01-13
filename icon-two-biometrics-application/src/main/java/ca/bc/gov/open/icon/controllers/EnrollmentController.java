@@ -1,21 +1,25 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.configuration.SoapConfig.ACCOUNT_TYPE_FIVE;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.bcs.FinishEnrollmentRequest;
 import ca.bc.gov.open.icon.bcs.StartEnrollmentRequest;
 import ca.bc.gov.open.icon.biometrics.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.iis.RegisterIndividual;
 import ca.bc.gov.open.icon.iis.RegisterIndividualRequest;
 import ca.bc.gov.open.icon.iis.RegisterIndividualResponse;
 import ca.bc.gov.open.icon.ips.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -42,7 +46,7 @@ public class EnrollmentController {
     @Value("${icon.bsc-host}")
     private String bcsHost = "https://127.0.0.1/";
 
-    @Value("${icon.ords-host}")
+    @Value("${icon.host}")
     private String ordsHost = "https://127.0.0.1/";
 
     @Value("${icon.online-service-id}")
@@ -51,30 +55,23 @@ public class EnrollmentController {
     private final WebServiceTemplate soapTemplate;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
-    private final ModelMapper modalMapper;
 
     public EnrollmentController(
-            WebServiceTemplate soapTemplate,
-            ObjectMapper objectMapper,
-            RestTemplate restTemplate,
-            ModelMapper modalMapper) {
+            WebServiceTemplate soapTemplate, ObjectMapper objectMapper, RestTemplate restTemplate) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
-        this.modalMapper = modalMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "startEnrollment")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "startEnrollment")
     @ResponsePayload
     public StartEnrollmentResponse startEnrollment(@RequestPayload StartEnrollment startEnrollment)
             throws JsonProcessingException {
 
         try {
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
-                            .queryParam("csnum", startEnrollment.getCsNum());
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
+                            .queryParam("csNum", startEnrollment.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =
                     restTemplate.exchange(
@@ -92,6 +89,7 @@ public class EnrollmentController {
             issReqInner.setRequesterUserId(startEnrollment.getRequestorUserId());
             issReqInner.setRequesterAccountTypeCode(
                     BCeIDAccountTypeCode.fromValue(startEnrollment.getRequestorType()));
+            issReqInner.setAccountType(ACCOUNT_TYPE_FIVE);
             iisReq.setRequest(issReqInner);
 
             // The response is wrapped in 2 objects. Here we are doing the correct cast to receive
@@ -104,7 +102,7 @@ public class EnrollmentController {
                     .getRegisterIndividualResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.iis.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to register individual "
                                 + registerIndividualResponse
                                         .getRegisterIndividualResult()
@@ -121,6 +119,7 @@ public class EnrollmentController {
             ipsLinkInner.setRequesterAccountTypeCode(
                     ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.fromValue(
                             startEnrollment.getRequestorType()));
+            ipsLinkInner.setOnlineServiceId(onlineServiceId);
             ipsLink.setRequest(ipsLinkInner);
 
             //      We do nothing with the response so ignored
@@ -128,7 +127,7 @@ public class EnrollmentController {
                     (LinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, ipsLink);
 
             if (!linkResponse.getLinkResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to get IPS Link " + linkResponse.getLinkResult().getMessage());
             }
 
@@ -147,7 +146,7 @@ public class EnrollmentController {
                     (GetIdRefResponse) soapTemplate.marshalSendAndReceive(ipsHost, getIdRef);
 
             if (!idRefResponse.getGetIdRefResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to get ID Ref response "
                                 + idRefResponse.getGetIdRefResult().getMessage());
             }
@@ -173,17 +172,22 @@ public class EnrollmentController {
             if (!bcsResp.getStartEnrollmentResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to enroll in BCS "
                                 + bcsResp.getStartEnrollmentResult().getMessage());
             }
 
             StartEnrollmentResponse startEnrollmentResponse = new StartEnrollmentResponse();
 
-            Issuance issuance =
-                    modalMapper.map(
-                            bcsResp.getStartEnrollmentResult().getIssuance(), Issuance.class);
+            Issuance issuance = new Issuance();
+            issuance.setId(bcsResp.getStartEnrollmentResult().getIssuance().getIssuanceID());
+            issuance.setUrl(bcsResp.getStartEnrollmentResult().getIssuance().getEnrollmentURL());
+            issuance.setExpiryDate(bcsResp.getStartEnrollmentResult().getIssuance().getExpiry());
             startEnrollmentResponse.setIssuance(issuance);
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "startEnrollment")));
 
             return startEnrollmentResponse;
 
@@ -195,13 +199,11 @@ public class EnrollmentController {
                                     "startEnrollment",
                                     ex.getMessage(),
                                     startEnrollment)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "finishEnrollment")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "finishEnrollment")
     @ResponsePayload
     public FinishEnrollmentResponse finishEnrollment(
             @RequestPayload FinishEnrollment finishEnrollment) throws JsonProcessingException {
@@ -224,13 +226,18 @@ public class EnrollmentController {
             if (!bcsResp.getFinishEnrollmentResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+
+                throw new APIThrownException(
                         "Failed to finish BCS enrollment "
                                 + bcsResp.getFinishEnrollmentResult().getMessage());
             }
 
             FinishEnrollmentResponse out = new FinishEnrollmentResponse();
             out.setCredentialRef(bcsResp.getFinishEnrollmentResult().getCredentialReference());
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "finishEnrollment")));
             return out;
         } catch (Exception ex) {
             log.error(
@@ -240,7 +247,7 @@ public class EnrollmentController {
                                     "finishEnrollment",
                                     ex.getMessage(),
                                     finishEnrollment)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 }

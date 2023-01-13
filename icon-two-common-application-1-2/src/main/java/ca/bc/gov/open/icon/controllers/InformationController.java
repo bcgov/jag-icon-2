@@ -1,9 +1,11 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.auth.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.utils.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -41,43 +43,40 @@ public class InformationController {
     public GetUserInfoResponse getUserInfo(@RequestPayload GetUserInfo getUserInfo)
             throws JsonProcessingException {
 
-        // fetch the inmost UserInfo layer
-        var inner =
-                getUserInfo.getXMLString() != null
-                                && getUserInfo.getXMLString().getUserInfo() != null
-                                && getUserInfo.getXMLString().getUserInfo().getUserInfo() != null
-                        ? getUserInfo.getXMLString().getUserInfo().getUserInfo()
-                        : new UserInfo();
+        GetUserInfoDocument getUserInfoDocument = new GetUserInfoDocument();
+        getUserInfoDocument.setUserInfo(
+                XMLUtilities.deserializeXmlStr(getUserInfo.getXMLString(), new UserInfo()));
+        getUserInfoDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getUserInfo.getUserTokenString(), new UserToken()));
 
-        HttpEntity<UserInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<GetUserInfoDocument> payload =
+                new HttpEntity<>(getUserInfoDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
 
         try {
-
             HttpEntity<UserInfo> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, UserInfo.class);
 
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
-
+            GetUserInfoResponse getUserInfoResponse = new GetUserInfoResponse();
+            getUserInfoDocument.setUserInfo(resp.getBody());
+            if (getUserInfoDocument.getUserInfo() != null
+                    && getUserInfoDocument.getUserInfo().getLatestPhoto() != null) {
+                getUserInfoDocument
+                        .getUserInfo()
+                        .setLatestPhoto(
+                                getUserInfoDocument
+                                        .getUserInfo()
+                                        .getLatestPhoto()
+                                        .replaceAll("\r\n", "\n"));
+            }
+            getUserInfoResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getUserInfoDocument.getUserInfo()));
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getUserInfo")));
-
-            var getUserInfoResponse = new GetUserInfoResponse();
-            var outResp = new UserInfoOut();
-            var inResp = new UserInfoInner();
-            var innerResp = resp.getBody();
-
-            inResp.setUserInfo(innerResp);
-            outResp.setUserInfo(inResp);
-            getUserInfoResponse.setXMLString(outResp);
-
             return getUserInfoResponse;
         } catch (Exception ex) {
             log.error(
@@ -86,8 +85,8 @@ public class InformationController {
                                     "Error received from ORDS",
                                     "getUserInfo",
                                     ex.getMessage(),
-                                    inner)));
-            throw new ORDSException();
+                                    getUserInfo)));
+            throw handleError(ex, new ca.bc.gov.open.icon.auth.Error());
         }
     }
 
@@ -98,17 +97,15 @@ public class InformationController {
     public GetDeviceInfoResponse getDeviceInfo(@RequestPayload GetDeviceInfo getDeviceInfo)
             throws JsonProcessingException {
 
-        // fetch the inmost DeviceInfo layer
-        DeviceInfo inner =
-                (getDeviceInfo.getXMLString() != null
-                                && getDeviceInfo.getXMLString().getDeviceInfo() != null
-                                && getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo()
-                                        != null
-                        ? getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo()
-                        : new DeviceInfo());
+        GetDeviceInfoDocument getDeviceInfoDocument = new GetDeviceInfoDocument();
+        getDeviceInfoDocument.setDeviceInfo(
+                XMLUtilities.deserializeXmlStr(getDeviceInfo.getXMLString(), new DeviceInfo()));
+        getDeviceInfoDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getDeviceInfo.getUserTokenString(), new UserToken()));
 
-        HttpEntity<DeviceInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
-
+        HttpEntity<GetDeviceInfoDocument> payload =
+                new HttpEntity<>(getDeviceInfoDocument, new HttpHeaders());
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
 
@@ -117,24 +114,15 @@ public class InformationController {
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, DeviceInfo.class);
 
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
+            GetDeviceInfoResponse getDeviceInfoResponse = new GetDeviceInfoResponse();
+            getDeviceInfoDocument.setDeviceInfo(resp.getBody());
+            getDeviceInfoResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getDeviceInfoDocument.getDeviceInfo()));
 
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getDeviceInfo")));
-
-            var getDeviceInfoResponse = new GetDeviceInfoResponse();
-            var outResp = new DeviceInfoOut();
-            var inResp = new DeviceInfoInner();
-
-            inResp.setDeviceInfo(resp.getBody());
-            outResp.setDeviceInfo(inResp);
-            getDeviceInfoResponse.setXMLString(outResp);
             return getDeviceInfoResponse;
-
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -142,8 +130,9 @@ public class InformationController {
                                     "Error received from ORDS",
                                     "getDeviceInfo",
                                     ex.getMessage(),
-                                    inner)));
-            throw new ORDSException();
+                                    getDeviceInfo)));
+
+            throw handleError(ex, new ca.bc.gov.open.icon.auth.Error());
         }
     }
 }

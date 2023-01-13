@@ -4,114 +4,102 @@ import static org.mockito.Mockito.when;
 
 import ca.bc.gov.open.icon.controllers.ClientController;
 import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfo2;
-import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoRequest;
+import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoDocument;
+import ca.bc.gov.open.icon.tombstone.GetTombStoneInfoResponse;
+import ca.bc.gov.open.icon.tombstone.TombStoneInfo;
 import ca.bc.gov.open.icon.trustaccount.*;
-import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule;
-import ca.bc.gov.open.icon.visitschedule.GetVisitSchedule2;
-import ca.bc.gov.open.icon.visitschedule.GetVisitScheduleRequest;
-import ca.bc.gov.open.icon.visitschedule.VisitScheduleDetails;
+import ca.bc.gov.open.icon.trustaccount.Row;
+import ca.bc.gov.open.icon.trustaccount.UserToken;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
+import ca.bc.gov.open.icon.visitschedule.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ClientControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private ClientController controller;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        controller = Mockito.spy(new ClientController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testGetTombStoneInfo() throws JsonProcessingException {
-        var req = new GetTombStoneInfo();
-        var getTombStoneInfo2 = new GetTombStoneInfo2();
-        var getTombStoneInfoRequest = new GetTombStoneInfoRequest();
-        getTombStoneInfoRequest.setCsNum("A");
-        getTombStoneInfoRequest.setLastName("A");
-        getTombStoneInfoRequest.setFirstName("A");
-        getTombStoneInfoRequest.setLatestPhoto("A");
-        getTombStoneInfoRequest.setBusinessRole("A");
-        getTombStoneInfoRequest.setUnreadMessageCount("A");
+        TombStoneInfo tombStoneInfo = new TombStoneInfo();
+        tombStoneInfo.setCsNum("A");
+        tombStoneInfo.setBusinessRole("A");
+        tombStoneInfo.setFirstName("A");
+        tombStoneInfo.setLastName("A");
+        tombStoneInfo.setLatestPhoto("A");
+        tombStoneInfo.setUnreadMessageCount("A");
 
-        req.setXMLString(getTombStoneInfo2);
-        getTombStoneInfo2.setTombStoneInfo(getTombStoneInfoRequest);
+        GetTombStoneInfoDocument getTombStoneInfoDocument = new GetTombStoneInfoDocument();
+        getTombStoneInfoDocument.setTombStoneInfo(tombStoneInfo);
 
-        var getTombStoneInfoRequest1 = new GetTombStoneInfoRequest();
-        getTombStoneInfoRequest1.setCsNum("A");
-        getTombStoneInfoRequest1.setLastName("A");
-        getTombStoneInfoRequest1.setFirstName("A");
-        getTombStoneInfoRequest1.setLatestPhoto("A");
-        getTombStoneInfoRequest1.setBusinessRole("A");
-        getTombStoneInfoRequest1.setUnreadMessageCount("A");
-
-        ResponseEntity<GetTombStoneInfoRequest> responseEntity =
-                new ResponseEntity<>(getTombStoneInfoRequest1, HttpStatus.OK);
+        GetTombStoneInfo req = new GetTombStoneInfo();
+        req.setXMLString(XMLUtilities.serializeXmlStr(getTombStoneInfoDocument.getTombStoneInfo()));
 
         // Set up to mock ords response
+        ResponseEntity<TombStoneInfo> responseEntity =
+                new ResponseEntity<>(tombStoneInfo, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<GetTombStoneInfoRequest>>any()))
+                        Mockito.<Class<TombStoneInfo>>any()))
                 .thenReturn(responseEntity);
 
         ClientController clientController = new ClientController(restTemplate, objectMapper);
-        var resp = clientController.getTombStoneInfo(req);
+        GetTombStoneInfoResponse resp = clientController.getTombStoneInfo(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testGetTrustAccount() throws JsonProcessingException {
-        var req = new GetTrustAccount();
+        TrustAccount trustAccount = new TrustAccount();
+        trustAccount.setCsNum("A");
+        trustAccount.setBusinessRole("A");
+        trustAccount.setFundsAvailable("A");
+        trustAccount.setTotalFunds("A");
+        trustAccount.setFundsOnHold("A");
 
-        var getTrustAccount2 = new GetTrustAccount2();
-        var getTrustAccountRequest = new GetTrustAccountRequest();
-        getTrustAccountRequest.setCsNum("A");
-        getTrustAccountRequest.setFundsAvailable("A");
-        getTrustAccountRequest.setFundsOnHold("A");
-        getTrustAccountRequest.setTotalFunds("A");
-        getTrustAccountRequest.setBusinessRole("A");
-        var row = new ca.bc.gov.open.icon.trustaccount.Row();
-        row.setEnd("A");
+        Row row = new Row();
         row.setStart("A");
+        row.setEnd("A");
         row.setTotal("A");
-        getTrustAccountRequest.setRow(row);
-        List<TransactionDetails> transactionDetails = new ArrayList<>();
-        var transactionDetail = new TransactionDetails();
-        transactionDetail.setId("A");
-        transactionDetail.setDate("A");
-        transactionDetail.setDeposit("A");
-        transactionDetail.setWithdrawal("A");
-        transactionDetail.setOnHold("A");
-        transactionDetail.setTotal("A");
-        transactionDetail.setComment("A");
-        transactionDetails.add(transactionDetail);
-        getTrustAccountRequest.setTransactionDetails(transactionDetails);
+        trustAccount.setRow(row);
 
-        req.setXMLString(getTrustAccount2);
-        getTrustAccount2.setTrustAccount(getTrustAccountRequest);
+        List<TransactionDetails> transactionDetailsList = new ArrayList<>();
+        TransactionDetails transactionDetails = new TransactionDetails();
+        transactionDetails.setComment("A");
+        transactionDetails.setDate("A");
+        transactionDetails.setDeposit("A");
+        transactionDetails.setTotal("A");
+        transactionDetails.setId("A");
+        transactionDetails.setWithdrawal("A");
+        transactionDetails.setOnHold("A");
+        transactionDetailsList.add(transactionDetails);
+        trustAccount.setTransactionDetails(transactionDetailsList);
 
-        var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
         var userToken = new UserToken();
-
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -122,58 +110,78 @@ public class ClientControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        GetTrustAccountDocument doc = new GetTrustAccountDocument();
+        doc.setTrustAccount(trustAccount);
+        doc.setUserToken(userToken);
 
-        var getTrustAccountRequest1 = new GetTrustAccountRequest();
-        ResponseEntity<GetTrustAccountRequest> responseEntity =
-                new ResponseEntity<>(getTrustAccountRequest1, HttpStatus.OK);
+        GetTrustAccount req = new GetTrustAccount();
+        req.setXMLString(XMLUtilities.serializeXmlStr(doc.getTrustAccount()));
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(doc.getUserToken()));
 
         // Set up to mock ords response
+        ResponseEntity<TrustAccount> responseEntity =
+                new ResponseEntity<>(trustAccount, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<GetTrustAccountRequest>>any()))
+                        Mockito.<Class<TrustAccount>>any()))
                 .thenReturn(responseEntity);
 
-        ClientController clientController = new ClientController(restTemplate, objectMapper);
-        var resp = clientController.getTrustAccount(req);
+        GetTrustAccountResponse resp = controller.getTrustAccount(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testGetVisitSchedule() throws JsonProcessingException {
-        var req = new GetVisitSchedule();
-        var getVisitSchedule2 = new GetVisitSchedule2();
-        var getVisitScheduleRequest = new GetVisitScheduleRequest();
-        List<VisitScheduleDetails> VisitScheduleDetails = new ArrayList<>();
-        var VisitScheduleDetail = new VisitScheduleDetails();
-        VisitScheduleDetail.setDate("A");
-        VisitScheduleDetail.setEndTime("A");
-        VisitScheduleDetail.setStartTime("A");
-        VisitScheduleDetail.setWeekDay("A");
-        VisitScheduleDetails.add(VisitScheduleDetail);
-        getVisitScheduleRequest.setVisitScheduleDetails(VisitScheduleDetails);
+        VisitSchedule visitSchedule = new VisitSchedule();
+        visitSchedule.setCsNum("A");
 
-        req.setXMLString(getVisitSchedule2);
-        getVisitSchedule2.setVisitSchedule(getVisitScheduleRequest);
+        var row = new ca.bc.gov.open.icon.visitschedule.Row();
+        row.setStart("A");
+        row.setEnd("A");
+        row.setStart("A");
+        visitSchedule.setRow(row);
 
-        var getVisitScheduleRequest1 = new GetVisitScheduleRequest();
-        ResponseEntity<GetVisitScheduleRequest> responseEntity =
-                new ResponseEntity<>(getVisitScheduleRequest1, HttpStatus.OK);
+        List<VisitScheduleDetails> visitScheduleDetailsList = new ArrayList<>();
+        VisitScheduleDetails details = new VisitScheduleDetails();
+        details.setDate("A");
+        details.setStartTime("A");
+        details.setEndTime("A");
+        details.setWeekDay("A");
+        visitScheduleDetailsList.add(details);
+        visitSchedule.setVisitScheduleDetails(visitScheduleDetailsList);
+
+        var userToken = new ca.bc.gov.open.icon.visitschedule.UserToken();
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+
+        GetVisitScheduleDocument doc = new GetVisitScheduleDocument();
+        doc.setVisitSchedule(visitSchedule);
+        doc.setUserToken(userToken);
+
+        GetVisitSchedule req = new GetVisitSchedule();
+        req.setXMLString(XMLUtilities.serializeXmlStr(doc.getVisitSchedule()));
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(doc.getUserToken()));
 
         // Set up to mock ords response
+        ResponseEntity<VisitSchedule> responseEntity =
+                new ResponseEntity<>(visitSchedule, HttpStatus.OK);
         when(restTemplate.exchange(
                         Mockito.any(String.class),
                         Mockito.eq(HttpMethod.POST),
                         Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<GetVisitScheduleRequest>>any()))
+                        Mockito.<Class<VisitSchedule>>any()))
                 .thenReturn(responseEntity);
 
-        ClientController clientController = new ClientController(restTemplate, objectMapper);
-        var resp = clientController.getVisitSchedule(req);
+        GetVisitScheduleResponse resp = controller.getVisitSchedule(req);
         Assertions.assertNotNull(resp);
     }
 }

@@ -1,12 +1,16 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.Deactivate;
 import ca.bc.gov.open.icon.biometrics.DeactivateResponse;
 import ca.bc.gov.open.icon.biometrics.Reactivate;
 import ca.bc.gov.open.icon.biometrics.ReactivateResponse;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +38,7 @@ public class ActivationController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "reactivate")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "reactivate")
     @ResponsePayload
     public ReactivateResponse reactivate(@RequestPayload Reactivate reactivate)
             throws JsonProcessingException {
@@ -44,6 +46,7 @@ public class ActivationController {
             ReactivateCredential reactivateCredential = new ReactivateCredential();
             ReactivateCredentialRequest reactivateCredentialRequest =
                     new ReactivateCredentialRequest();
+            reactivateCredentialRequest.setOnlineServiceId(onlineServiceId);
             reactivateCredentialRequest.setRequesterUserId(reactivate.getRequestorUserId());
             reactivateCredentialRequest.setCredentialReference(reactivate.getCredentialRef());
             reactivateCredentialRequest.setRequesterAccountTypeCode(
@@ -58,12 +61,16 @@ public class ActivationController {
                     .getReactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to reactivate credential "
                                 + reactivateCredentialResponse
                                         .getReactivateCredentialResult()
                                         .getMessage());
             }
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "reactivate")));
 
             return new ReactivateResponse();
         } catch (Exception ex) {
@@ -74,13 +81,11 @@ public class ActivationController {
                                     "reactivate",
                                     ex.getMessage(),
                                     reactivate)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "deactivate")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "deactivate")
     @ResponsePayload
     public DeactivateResponse deactivate(@RequestPayload Deactivate deactivate)
             throws JsonProcessingException {
@@ -96,20 +101,25 @@ public class ActivationController {
             deactivateCredentialRequest.setCredentialReference(deactivate.getCredentialRef());
             deactivateCredential.setRequest(deactivateCredentialRequest);
 
-            DestroyCredentialResponse destroyCredentialResponse =
-                    (DestroyCredentialResponse)
+            DeactivateCredentialResponse deactivateCredentialResponse =
+                    (DeactivateCredentialResponse)
                             soapTemplate.marshalSendAndReceive(bcsHost, deactivateCredential);
 
-            if (!destroyCredentialResponse
-                    .getDestroyCredentialResult()
+            if (!deactivateCredentialResponse
+                    .getDeactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to destroy credential "
-                                + destroyCredentialResponse
-                                        .getDestroyCredentialResult()
+                                + deactivateCredentialResponse
+                                        .getDeactivateCredentialResult()
                                         .getMessage());
             }
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "deactivate")));
+
             return new DeactivateResponse();
         } catch (Exception ex) {
             log.error(
@@ -119,7 +129,7 @@ public class ActivationController {
                                     "deactivate",
                                     ex.getMessage(),
                                     deactivate)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 }

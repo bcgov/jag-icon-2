@@ -1,10 +1,11 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.auth.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.myinfo.*;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -35,125 +36,19 @@ public class InformationController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2.Source.Authorization.ws.provider:AuthAuth",
-            localPart = "getUserInfo")
-    @ResponsePayload
-    public GetUserInfoResponse getUserInfo(@RequestPayload GetUserInfo getUserInfo)
-            throws JsonProcessingException {
-
-        // fetch the inmost UserInfo layer
-        var inner =
-                getUserInfo.getXMLString() != null
-                                && getUserInfo.getXMLString().getUserInfo() != null
-                                && getUserInfo.getXMLString().getUserInfo().getUserInfo() != null
-                        ? getUserInfo.getXMLString().getUserInfo().getUserInfo()
-                        : new UserInfo();
-
-        HttpEntity<UserInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/user-info");
-
-        try {
-
-            HttpEntity<UserInfo> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, UserInfo.class);
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getUserInfo")));
-
-            var getUserInfoResponse = new GetUserInfoResponse();
-            var outResp = new UserInfoOut();
-            var inResp = new UserInfoInner();
-            var innerResp = resp.getBody();
-
-            inResp.setUserInfo(innerResp);
-            outResp.setUserInfo(inResp);
-            getUserInfoResponse.setXMLString(outResp);
-
-            return getUserInfoResponse;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getUserInfo",
-                                    ex.getMessage(),
-                                    inner)));
-            throw new ORDSException();
-        }
-    }
-
-    @PayloadRoot(
-            namespace = "ICON2.Source.Authorization.ws.provider:AuthAuth",
-            localPart = "getDeviceInfo")
-    @ResponsePayload
-    public GetDeviceInfoResponse getDeviceInfo(@RequestPayload GetDeviceInfo getDeviceInfo)
-            throws JsonProcessingException {
-
-        // fetch the inmost DeviceInfo layer
-        DeviceInfo inner =
-                (getDeviceInfo.getXMLString() != null
-                                && getDeviceInfo.getXMLString().getDeviceInfo() != null
-                                && getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo()
-                                        != null
-                        ? getDeviceInfo.getXMLString().getDeviceInfo().getDeviceInfo()
-                        : new DeviceInfo());
-
-        HttpEntity<DeviceInfo> payload = new HttpEntity<>(inner, new HttpHeaders());
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/device-info");
-
-        try {
-            HttpEntity<DeviceInfo> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, DeviceInfo.class);
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
-
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getDeviceInfo")));
-
-            var getDeviceInfoResponse = new GetDeviceInfoResponse();
-            var outResp = new DeviceInfoOut();
-            var inResp = new DeviceInfoInner();
-
-            inResp.setDeviceInfo(resp.getBody());
-            outResp.setDeviceInfo(inResp);
-            getDeviceInfoResponse.setXMLString(outResp);
-            return getDeviceInfoResponse;
-
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getDeviceInfo",
-                                    ex.getMessage(),
-                                    inner)));
-            throw new ORDSException();
-        }
-    }
-
     @PayloadRoot(namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo", localPart = "getOrders")
     @ResponsePayload
     public GetOrdersResponse getOrders(@RequestPayload GetOrders getOrders)
             throws JsonProcessingException {
 
-        HttpEntity<GetOrders> payload = new HttpEntity<>(getOrders, new HttpHeaders());
+        GetOrdersDocument getOrdersDocument = new GetOrdersDocument();
+        getOrdersDocument.setOrders(
+                XMLUtilities.deserializeXmlStr(getOrders.getXMLString(), new Orders()));
+        getOrdersDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getOrders.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetOrdersDocument> payload =
+                new HttpEntity<>(getOrdersDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/orders");
@@ -162,16 +57,15 @@ public class InformationController {
             HttpEntity<Orders> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Orders.class);
+
+            GetOrdersResponse getOrdersResponse = new GetOrdersResponse();
+            getOrdersDocument.setOrders(resp.getBody());
+            getOrdersResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getOrdersDocument.getOrders()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getOrders")));
-
-            GetOrdersResponse getOrdersResponse = new GetOrdersResponse();
-            OrdersOuter outResp = new OrdersOuter();
-            OrdersInner inResp = new OrdersInner();
-            inResp.setOrders(resp.getBody());
-            outResp.setOrders(inResp);
-            getOrdersResponse.setXMLString(outResp);
             return getOrdersResponse;
         } catch (Exception ex) {
             log.error(
@@ -181,7 +75,7 @@ public class InformationController {
                                     "getOrders",
                                     ex.getMessage(),
                                     getOrders)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -190,7 +84,14 @@ public class InformationController {
     public GetProgramsResponse getPrograms(@RequestPayload GetPrograms getPrograms)
             throws JsonProcessingException {
 
-        HttpEntity<GetPrograms> payload = new HttpEntity<>(getPrograms, new HttpHeaders());
+        GetProgramsDocument getProgramsDocument = new GetProgramsDocument();
+        getProgramsDocument.setPrograms(
+                XMLUtilities.deserializeXmlStr(getPrograms.getXMLString(), new Programs()));
+        getProgramsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getPrograms.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetProgramsDocument> payload =
+                new HttpEntity<>(getProgramsDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/programs");
@@ -199,15 +100,15 @@ public class InformationController {
             HttpEntity<Programs> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Programs.class);
+
+            GetProgramsResponse getProgramsResponse = new GetProgramsResponse();
+            getProgramsDocument.setPrograms(resp.getBody());
+            getProgramsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getProgramsDocument.getPrograms()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getPrograms")));
-            GetProgramsResponse getProgramsResponse = new GetProgramsResponse();
-            ProgramsOuter outResp = new ProgramsOuter();
-            ProgramsInner inResp = new ProgramsInner();
-            inResp.setPrograms(resp.getBody());
-            outResp.setPrograms(inResp);
-            getProgramsResponse.setXMLString(outResp);
             return getProgramsResponse;
         } catch (Exception ex) {
             log.error(
@@ -217,7 +118,7 @@ public class InformationController {
                                     "getPrograms",
                                     ex.getMessage(),
                                     getPrograms)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -226,7 +127,14 @@ public class InformationController {
     public GetLocationsResponse getLocations(@RequestPayload GetLocations getLocations)
             throws JsonProcessingException {
 
-        HttpEntity<GetLocations> payload = new HttpEntity<>(getLocations, new HttpHeaders());
+        GetLocationsDocument getLocationsDocument = new GetLocationsDocument();
+        getLocationsDocument.setLocations(
+                XMLUtilities.deserializeXmlStr(getLocations.getXMLString(), new Locations()));
+        getLocationsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getLocations.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetLocationsDocument> payload =
+                new HttpEntity<>(getLocationsDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/locations");
@@ -235,16 +143,15 @@ public class InformationController {
             HttpEntity<Locations> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Locations.class);
+
+            GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
+            getLocationsDocument.setLocations(resp.getBody());
+            getLocationsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getLocationsDocument.getLocations()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getLocations")));
-
-            GetLocationsResponse getLocationsResponse = new GetLocationsResponse();
-            LocationsOuter outResp = new LocationsOuter();
-            LocationsInner inResp = new LocationsInner();
-            inResp.setLocations(resp.getBody());
-            outResp.setLocations(inResp);
-            getLocationsResponse.setXMLString(outResp);
             return getLocationsResponse;
         } catch (Exception ex) {
             log.error(
@@ -254,7 +161,7 @@ public class InformationController {
                                     "getLocations",
                                     ex.getMessage(),
                                     getLocations)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -263,7 +170,15 @@ public class InformationController {
     public GetConditionsResponse getConditions(@RequestPayload GetConditions getConditions)
             throws JsonProcessingException {
 
-        HttpEntity<GetConditions> payload = new HttpEntity<>(getConditions, new HttpHeaders());
+        GetConditionsDocument getConditionsDocument = new GetConditionsDocument();
+        getConditionsDocument.setConditions(
+                XMLUtilities.deserializeXmlStr(getConditions.getXMLString(), new Conditions()));
+        getConditionsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getConditions.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetConditionsDocument> payload =
+                new HttpEntity<>(getConditionsDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "information/conditions");
@@ -272,15 +187,15 @@ public class InformationController {
             HttpEntity<Conditions> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Conditions.class);
+
+            GetConditionsResponse getConditionsResponse = new GetConditionsResponse();
+            getConditionsDocument.setConditions(resp.getBody());
+            getConditionsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getConditionsDocument.getConditions()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getConditions")));
-            GetConditionsResponse getConditionsResponse = new GetConditionsResponse();
-            ConditionsOuter outResp = new ConditionsOuter();
-            ConditionsInner inResp = new ConditionsInner();
-            inResp.setConditions(resp.getBody());
-            outResp.setConditions(inResp);
-            getConditionsResponse.setXMLString(outResp);
             return getConditionsResponse;
         } catch (Exception ex) {
             log.error(
@@ -290,7 +205,7 @@ public class InformationController {
                                     "getConditions",
                                     ex.getMessage(),
                                     getConditions)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -302,11 +217,19 @@ public class InformationController {
             @RequestPayload GetOrdersConditions getOrdersConditions)
             throws JsonProcessingException {
 
+        GetOrdersConditionsDocument getOrdersConditionsDocument = new GetOrdersConditionsDocument();
+        getOrdersConditionsDocument.setOrdersConditions(
+                XMLUtilities.deserializeXmlStr(
+                        getOrdersConditions.getXMLString(), new OrdersConditions()));
+        getOrdersConditionsDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getOrdersConditions.getUserTokenString(), new UserToken()));
+
         HttpEntity<GetOrdersConditions> payload =
                 new HttpEntity<>(getOrdersConditions, new HttpHeaders());
 
         UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "information/order-conditions");
+                UriComponentsBuilder.fromHttpUrl(host + "information/orders-conditions");
 
         try {
             HttpEntity<OrdersConditions> resp =
@@ -315,16 +238,17 @@ public class InformationController {
                             HttpMethod.POST,
                             payload,
                             OrdersConditions.class);
+
+            GetOrdersConditionsResponse getOrdersConditionsResponse =
+                    new GetOrdersConditionsResponse();
+            getOrdersConditionsDocument.setOrdersConditions(resp.getBody());
+            getOrdersConditionsResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getOrdersConditionsDocument.getOrdersConditions()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getOrdersConditions")));
-            GetOrdersConditionsResponse getOrdersConditionsResponse =
-                    new GetOrdersConditionsResponse();
-            OrdersConditionsOuter outResp = new OrdersConditionsOuter();
-            OrdersConditionsInner inResp = new OrdersConditionsInner();
-            inResp.setOrdersConditions(resp.getBody());
-            outResp.setOrdersConditions(inResp);
-            getOrdersConditionsResponse.setXMLString(outResp);
             return getOrdersConditionsResponse;
         } catch (Exception ex) {
             log.error(
@@ -334,7 +258,7 @@ public class InformationController {
                                     "getOrdersConditions",
                                     ex.getMessage(),
                                     getOrdersConditions)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 
@@ -343,7 +267,14 @@ public class InformationController {
     public GetDatesResponse getDates(@RequestPayload GetDates getDates)
             throws JsonProcessingException {
 
-        HttpEntity<GetDates> payload = new HttpEntity<>(getDates, new HttpHeaders());
+        GetDatesDocument getDatesDocument = new GetDatesDocument();
+        getDatesDocument.setDates(
+                XMLUtilities.deserializeXmlStr(getDates.getXMLString(), new Dates()));
+        getDatesDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(getDates.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetDatesDocument> payload =
+                new HttpEntity<>(getDatesDocument, new HttpHeaders());
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "information/dates");
 
@@ -351,16 +282,15 @@ public class InformationController {
             HttpEntity<Dates> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Dates.class);
+
+            GetDatesResponse getDatesResponse = new GetDatesResponse();
+            getDatesDocument.setDates(resp.getBody());
+            getDatesResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getDatesDocument.getDates()));
+
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getDates")));
-
-            GetDatesResponse getDatesResponse = new GetDatesResponse();
-            DatesOuter outResp = new DatesOuter();
-            DatesInner inResp = new DatesInner();
-            inResp.setDates(resp.getBody());
-            outResp.setDates(inResp);
-            getDatesResponse.setXMLString(outResp);
             return getDatesResponse;
         } catch (Exception ex) {
             log.error(
@@ -370,7 +300,54 @@ public class InformationController {
                                     "getDates",
                                     ex.getMessage(),
                                     getDates)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
+        }
+    }
+
+    @PayloadRoot(
+            namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo",
+            localPart = "getClientHistory")
+    @ResponsePayload
+    public GetClientHistoryResponse getClientHistory(
+            @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
+
+        GetClientHistoryDocument getClientHistoryDocument = new GetClientHistoryDocument();
+        getClientHistoryDocument.setClientHistory(
+                XMLUtilities.deserializeXmlStr(
+                        getClientHistory.getXMLString(), new ClientHistory()));
+        getClientHistoryDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getClientHistory.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetClientHistoryDocument> payload =
+                new HttpEntity<>(getClientHistoryDocument, new HttpHeaders());
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(host + "audit/client-history");
+
+        try {
+            HttpEntity<ClientHistory> resp =
+                    restTemplate.exchange(
+                            builder.toUriString(), HttpMethod.POST, payload, ClientHistory.class);
+
+            GetClientHistoryResponse getClientHistoryResponse = new GetClientHistoryResponse();
+            getClientHistoryDocument.setClientHistory(resp.getBody());
+            getClientHistoryResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(getClientHistoryDocument.getClientHistory()));
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getClientHistory")));
+            return getClientHistoryResponse;
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from ORDS",
+                                    "getClientHistory",
+                                    ex.getMessage(),
+                                    getClientHistory)));
+            throw handleError(ex, new ca.bc.gov.open.icon.myinfo.Error());
         }
     }
 }

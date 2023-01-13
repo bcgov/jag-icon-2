@@ -9,36 +9,35 @@ import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.controllers.MessageController;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.message.*;
-import ca.bc.gov.open.icon.message.UserToken;
-import ca.bc.gov.open.icon.message.UserTokenInner;
-import ca.bc.gov.open.icon.message.UserTokenOuter;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MessageControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private MessageController messageController;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeAll
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        messageController = Mockito.spy(new MessageController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testMessageAccessed() throws JsonProcessingException {
@@ -64,7 +63,6 @@ public class MessageControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.messageAccessed(req);
         Assertions.assertNotNull(resp);
     }
@@ -73,14 +71,11 @@ public class MessageControllerTests {
     public void testGetMessage() throws JsonProcessingException {
         var req = new GetMessage();
 
-        var AppointmentMessageOuter = new AppointmentMessageOuter();
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
         req.setXMLString("A");
 
-        var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -93,7 +88,6 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var appointmentMessage = new AppointmentMessage();
@@ -109,8 +103,6 @@ public class MessageControllerTests {
                         Mockito.<HttpEntity<String>>any(),
                         Mockito.<Class<AppointmentMessage>>any()))
                 .thenReturn(responseEntity);
-
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.getMessage(req);
         Assertions.assertNotNull(resp);
     }
@@ -118,15 +110,13 @@ public class MessageControllerTests {
     @Test
     public void testSetMessageDate() throws JsonProcessingException {
         var req = new SetMessageDate();
+        req.setXMLString(
+                "<AppointmentMessage>\n" + "    <csNum>1</csNum>\n" + "</AppointmentMessage> ");
 
-        var AppointmentMessageOuter = new AppointmentMessageOuter();
         var AppointmentMessage = new AppointmentMessage();
         AppointmentMessage.setText("A");
         AppointmentMessage.setCsNum("A");
-        AppointmentMessageOuter.setAppointmentMessage(AppointmentMessage);
-        req.setXMLString("A");
 
-        var userTokenOuter = new ca.bc.gov.open.icon.ereporting.UserTokenOuter();
         var userToken = new ca.bc.gov.open.icon.ereporting.UserToken();
 
         userToken.setRemoteClientBrowserType("A");
@@ -139,7 +129,6 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenOuter.setUserToken(userToken);
         req.setUserTokenString("A");
 
         var appointmentMessage = new AppointmentMessage();
@@ -154,65 +143,52 @@ public class MessageControllerTests {
                         Mockito.<Class<AppointmentMessage>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.setMessageDate(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testSetMessageDetails() throws JsonProcessingException {
-        var req = new SetMessageDetails();
-
-        var MessagesOuter = new MessagesOuter();
-        var MessagesInner = new MessagesInner();
-        var Messages = new Messages();
-
-        req.setXMLString(MessagesOuter);
-        MessagesOuter.setMessages(MessagesInner);
-        MessagesInner.setMessages(Messages);
-
-        Messages.setCsNum("A");
-        Messages.setUnreadMessageCount("A");
-        var row = new Row();
+        Messages messages = new Messages();
+        messages.setCsNum("A");
+        messages.setUnreadMessageCount("A");
+        Row row = new Row();
         row.setStart("1");
-        row.setEnd("3");
+        row.setEnd("2");
         row.setTotal("3");
-        Messages.setRow(row);
-        List<MessageDetails> MessageDetails = new ArrayList<>();
-
-        var MessageDetail = new MessageDetails();
-        MessageDetail.setId("A");
-        MessageDetail.setUnread("A");
-        MessageDetail.setTimestamp(Instant.now());
-        var MessageType = new MessageType();
-        MessageType.setCode("A");
-        MessageType.setDescription("A");
-        MessageDetail.setMessageType(MessageType);
-        MessageDetail.setText("A");
-        var Sender = new Sender();
-        List<Relationships> Relationships = new ArrayList<>();
-        var Relationship = new Relationships();
-        Relationship.setCode("A");
-        Relationship.setDescription("A");
-        Relationships.add(Relationship);
-        var Application = new Application();
-        Application.setCode("Application");
+        messages.setRow(row);
+        List<MessageDetails> messageDetailsList = new ArrayList<>();
+        MessageDetails messageDetails = new MessageDetails();
+        messageDetails.setId("A");
+        messageDetails.setUnread("A");
+        messageDetails.setTimestamp("A");
+        MessageType messageType = new MessageType();
+        messageType.setCode("A");
+        messageType.setDescription("A");
+        messageDetails.setMessageType(messageType);
+        messageDetails.setText("A");
+        Sender Sender = new Sender();
+        List<Relationships> relationships = new ArrayList<>();
+        Relationships relationship = new Relationships();
+        relationship.setCode("A");
+        relationship.setDescription("A");
+        relationships.add(relationship);
+        Application Application = new Application();
+        Application.setCode("A");
         Application.setDescription("A");
         Sender.setApplication(Application);
-        var Individual = new Individual();
-        Individual.setFirstName("A");
-        Individual.setLastName("A");
-        Individual.setRelationships(Relationships);
-        Sender.setIndividual(Individual);
-        MessageDetail.setSender(Sender);
-        MessageDetail.setHasDisclosureSet("A");
-        MessageDetails.add(MessageDetail);
-        Messages.setMessageDetails(MessageDetails);
+        Individual individual = new Individual();
+        individual.setFirstName("A");
+        individual.setLastName("A");
+        individual.setRelationships(relationships);
+        Sender.setIndividual(individual);
+        messageDetails.setSender(Sender);
+        messageDetails.setHasDisclosureSet("A");
+        messageDetailsList.add(messageDetails);
+        messages.setMessageDetails(messageDetailsList);
 
-        var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
-        var userToken = new UserToken();
-
+        ca.bc.gov.open.icon.message.UserToken userToken =
+                new ca.bc.gov.open.icon.message.UserToken();
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -223,11 +199,14 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        SetMessageDetails req = new SetMessageDetails();
+        SetMessageDetailsDocument setMessageDetailsDocument = new SetMessageDetailsDocument();
+        setMessageDetailsDocument.setMessages(messages);
+        setMessageDetailsDocument.setUserToken(userToken);
+        req.setXMLString(XMLUtilities.serializeXmlStr(setMessageDetailsDocument.getMessages()));
+        req.setUserTokenString(
+                XMLUtilities.serializeXmlStr(setMessageDetailsDocument.getUserToken()));
 
-        var messages = new Messages();
         ResponseEntity<Messages> responseEntity = new ResponseEntity<>(messages, HttpStatus.OK);
 
         // Set up to mock ords response
@@ -238,146 +217,52 @@ public class MessageControllerTests {
                         Mockito.<Class<Messages>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
         var resp = messageController.setMessageDetails(req);
         Assertions.assertNotNull(resp);
     }
 
     @Test
     public void testGetMessages() throws JsonProcessingException {
-        var req = new GetMessages();
-        var MessagesOuter = new MessagesOuter();
-        var MessagesInner = new MessagesInner();
-        var Messages = new Messages();
-
-        req.setXMLString(MessagesOuter);
-        MessagesOuter.setMessages(MessagesInner);
-        MessagesInner.setMessages(Messages);
-
-        Messages.setCsNum("A");
-        Messages.setUnreadMessageCount("A");
-        var row = new Row();
-        row.setStart("1");
-        row.setEnd("3");
-        row.setTotal("3");
-        Messages.setRow(row);
-        List<MessageDetails> MessageDetails = new ArrayList<>();
-        var MessageDetail = new MessageDetails();
-        MessageDetail.setId("A");
-        MessageDetail.setUnread("A");
-        MessageDetail.setTimestamp(Instant.now());
-        var MessageType = new MessageType();
-        MessageType.setCode("A");
-        MessageType.setDescription("A");
-        MessageDetail.setMessageType(MessageType);
-        MessageDetail.setText("A");
-        var Sender = new Sender();
-        List<Relationships> Relationships = new ArrayList<>();
-        var Relationship = new Relationships();
-        Relationship.setCode("A");
-        Relationship.setDescription("A");
-        Relationships.add(Relationship);
-        var Application = new Application();
-        Application.setCode("Application");
-        Application.setDescription("A");
-        Sender.setApplication(Application);
-        var Individual = new Individual();
-        Individual.setFirstName("A");
-        Individual.setLastName("A");
-        Individual.setRelationships(Relationships);
-        Sender.setIndividual(Individual);
-        MessageDetail.setSender(Sender);
-        MessageDetail.setHasDisclosureSet("A");
-        MessageDetails.add(MessageDetail);
-        Messages.setMessageDetails(MessageDetails);
-
-        var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
-        var userToken = new UserToken();
-
-        userToken.setRemoteClientBrowserType("A");
-        userToken.setRemoteClientHostName("A");
-        userToken.setRemoteClientIPAddress("A");
-        userToken.setUserIdentifier("A");
-        userToken.setAuthoritativePartyIdentifier("A");
-        userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
-
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
-
-        var messages1 = new Messages();
-        messages1 = Messages;
-        ResponseEntity<Messages> responseEntity = new ResponseEntity<>(messages1, HttpStatus.OK);
-
-        // Set up to mock ords response
-        when(restTemplate.exchange(
-                        Mockito.any(String.class),
-                        Mockito.eq(HttpMethod.POST),
-                        Mockito.<HttpEntity<String>>any(),
-                        Mockito.<Class<Messages>>any()))
-                .thenReturn(responseEntity);
-
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
-        var resp = messageController.getMessages(req);
-        Assertions.assertNotNull(resp);
-    }
-
-    @Test
-    public void testGetMessageDetails() throws JsonProcessingException {
-        var req = new GetMessageDetails();
-        var MessagesOuter = new MessagesOuter();
-        var MessagesInner = new MessagesInner();
-        var messages = new Messages();
-
-        req.setXMLString(MessagesOuter);
-        MessagesOuter.setMessages(MessagesInner);
-        MessagesInner.setMessages(messages);
-
+        Messages messages = new Messages();
         messages.setCsNum("A");
         messages.setUnreadMessageCount("A");
-        var row = new Row();
+        Row row = new Row();
         row.setStart("1");
-        row.setEnd("3");
+        row.setEnd("2");
         row.setTotal("3");
-        List<MessageDetails> MessageDetails = new ArrayList<>();
         messages.setRow(row);
-        var MessageDetail = new MessageDetails();
-        MessageDetail.setId("A");
-        MessageDetail.setUnread("A");
-        MessageDetail.setTimestamp(Instant.now());
-        var MessageType = new MessageType();
-        MessageType.setCode("A");
-        MessageType.setDescription("A");
-        MessageDetail.setMessageType(MessageType);
-        MessageDetail.setText("A");
-        var Sender = new Sender();
-        List<Relationships> Relationships = new ArrayList<>();
-        var Relationship = new Relationships();
-        Relationship.setCode("A");
-        Relationship.setDescription("A");
-        Relationships.add(Relationship);
-        var Application = new Application();
-        Application.setCode("Application");
-        Application.setDescription("A");
-        Sender.setApplication(Application);
-        var Individual = new Individual();
-        Individual.setFirstName("A");
-        Individual.setLastName("A");
-        Individual.setRelationships(Relationships);
-        Sender.setIndividual(Individual);
-        MessageDetail.setSender(Sender);
-        MessageDetail.setHasDisclosureSet("A");
-        MessageDetails.add(MessageDetail);
-        messages.setMessageDetails(MessageDetails);
+        List<MessageDetails> messageDetailsList = new ArrayList<>();
+        MessageDetails messageDetails = new MessageDetails();
+        messageDetails.setId("A");
+        messageDetails.setUnread("A");
+        messageDetails.setTimestamp("A");
+        MessageType messageType = new MessageType();
+        messageType.setCode("A");
+        messageType.setDescription("A");
+        messageDetails.setMessageType(messageType);
+        messageDetails.setText("A");
+        Sender Sender = new Sender();
+        List<Relationships> relationshipsList = new ArrayList<>();
+        Relationships relationships = new Relationships();
+        relationships.setCode("A");
+        relationships.setDescription("A");
+        relationshipsList.add(relationships);
+        Application application = new Application();
+        application.setCode("Application");
+        application.setDescription("A");
+        Sender.setApplication(application);
+        Individual individual = new Individual();
+        individual.setFirstName("A");
+        individual.setLastName("A");
+        individual.setRelationships(relationshipsList);
+        Sender.setIndividual(individual);
+        messageDetails.setSender(Sender);
+        messageDetails.setHasDisclosureSet("A");
+        messageDetailsList.add(messageDetails);
+        messages.setMessageDetails(messageDetailsList);
 
-        var userTokenOuter = new UserTokenOuter();
-        var userTokenInner = new UserTokenInner();
-        var userToken = new UserToken();
-
+        ca.bc.gov.open.icon.message.UserToken userToken =
+                new ca.bc.gov.open.icon.message.UserToken();
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
         userToken.setRemoteClientIPAddress("A");
@@ -388,9 +273,12 @@ public class MessageControllerTests {
         userToken.setSiteMinderSessionID("A");
         userToken.setSiteMinderTransactionID("A");
 
-        userTokenInner.setUserToken(userToken);
-        userTokenOuter.setUserToken(userTokenInner);
-        req.setUserTokenString(userTokenOuter);
+        GetMessages req = new GetMessages();
+        GetMessagesDocument getMessagesDocument = new GetMessagesDocument();
+        getMessagesDocument.setMessages(messages);
+        getMessagesDocument.setUserToken(userToken);
+        req.setXMLString(XMLUtilities.serializeXmlStr(getMessagesDocument.getMessages()));
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(getMessagesDocument.getUserToken()));
 
         ResponseEntity<Messages> responseEntity = new ResponseEntity<>(messages, HttpStatus.OK);
 
@@ -402,7 +290,79 @@ public class MessageControllerTests {
                         Mockito.<Class<Messages>>any()))
                 .thenReturn(responseEntity);
 
-        MessageController messageController = new MessageController(restTemplate, objectMapper);
+        var resp = messageController.getMessages(req);
+        Assertions.assertNotNull(resp);
+    }
+
+    @Test
+    public void testGetMessageDetails() throws JsonProcessingException {
+        Messages messages = new Messages();
+        messages.setCsNum("A");
+        messages.setUnreadMessageCount("A");
+        Row row = new Row();
+        row.setStart("1");
+        row.setEnd("2");
+        row.setTotal("3");
+        messages.setRow(row);
+        List<MessageDetails> messageDetailsList = new ArrayList<>();
+        MessageDetails messageDetails = new MessageDetails();
+        messageDetails.setId("A");
+        messageDetails.setUnread("A");
+        messageDetails.setTimestamp("A");
+        MessageType messageType = new MessageType();
+        messageType.setCode("A");
+        messageType.setDescription("A");
+        messageDetails.setMessageType(messageType);
+        messageDetails.setText("A");
+        Sender Sender = new Sender();
+        List<Relationships> relationshipsList = new ArrayList<>();
+        Relationships relationships = new Relationships();
+        relationships.setCode("A");
+        relationships.setDescription("A");
+        relationshipsList.add(relationships);
+        Application application = new Application();
+        application.setCode("Application");
+        application.setDescription("A");
+        Sender.setApplication(application);
+        Individual individual = new Individual();
+        individual.setFirstName("A");
+        individual.setLastName("A");
+        individual.setRelationships(relationshipsList);
+        Sender.setIndividual(individual);
+        messageDetails.setSender(Sender);
+        messageDetails.setHasDisclosureSet("A");
+        messageDetailsList.add(messageDetails);
+        messages.setMessageDetails(messageDetailsList);
+
+        ca.bc.gov.open.icon.message.UserToken userToken =
+                new ca.bc.gov.open.icon.message.UserToken();
+        userToken.setRemoteClientBrowserType("A");
+        userToken.setRemoteClientHostName("A");
+        userToken.setRemoteClientIPAddress("A");
+        userToken.setUserIdentifier("A");
+        userToken.setAuthoritativePartyIdentifier("A");
+        userToken.setBiometricsSignature("A");
+        userToken.setCSNumber("A");
+        userToken.setSiteMinderSessionID("A");
+        userToken.setSiteMinderTransactionID("A");
+
+        GetMessageDetails req = new GetMessageDetails();
+        GetMessagesDocument getMessagesDocument = new GetMessagesDocument();
+        getMessagesDocument.setMessages(messages);
+        getMessagesDocument.setUserToken(userToken);
+        req.setXMLString(XMLUtilities.serializeXmlStr(getMessagesDocument.getMessages()));
+        req.setUserTokenString(XMLUtilities.serializeXmlStr(getMessagesDocument.getUserToken()));
+
+        ResponseEntity<Messages> responseEntity = new ResponseEntity<>(messages, HttpStatus.OK);
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<String>>any(),
+                        Mockito.<Class<Messages>>any()))
+                .thenReturn(responseEntity);
+
         var resp = messageController.getMessageDetails(req);
         Assertions.assertNotNull(resp);
     }

@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
@@ -45,8 +44,6 @@ public class RemovalControllerTests {
 
     @Mock private RestTemplate restTemplate = new RestTemplate();
 
-    @Mock private ModelMapper modalMapper = new ModelMapper();
-
     @Test
     public void testMove() throws JsonProcessingException {
         var req = new Move();
@@ -57,7 +54,7 @@ public class RemovalControllerTests {
         req.setCredentialRefFrom("A");
         req.setIssuanceID("A");
         req.setEnrollmentURL("A");
-        req.setExpiry(Instant.now());
+        req.setExpiry("A");
 
         Map<String, String> out = new HashMap<>();
         out.put("andid", "1");
@@ -152,7 +149,7 @@ public class RemovalControllerTests {
                 .thenReturn(common);
 
         RemovalController removalController =
-                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(soapTemplate, objectMapper, restTemplate);
         var resp = removalController.move(req);
         Assertions.assertNotNull(resp);
     }
@@ -161,7 +158,7 @@ public class RemovalControllerTests {
     public void testRemove() throws JsonProcessingException {
         var req = new Remove();
         req.setCredentialRef("A");
-        req.setExpiry(Instant.now());
+        req.setExpiry("A");
         req.setRegistrar("A");
         req.setIssuanceID("A");
 
@@ -212,7 +209,7 @@ public class RemovalControllerTests {
                 .thenReturn(common);
 
         RemovalController removalController =
-                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(soapTemplate, objectMapper, restTemplate);
         var resp = removalController.remove(req);
         Assertions.assertNotNull(resp);
     }
@@ -221,10 +218,11 @@ public class RemovalControllerTests {
     public void testRemoveIdentity() throws JsonProcessingException {
         var req = new RemoveIdentity();
         req.setCsNum("A");
-        req.setExpiry(Instant.now());
+        req.setExpiry("A");
         req.setEnrollmentURL("A");
         req.setIssuanceID("A");
         req.setRequestorUserId("A");
+        req.setRequestorType("Business");
 
         Map<String, String> out = new HashMap<>();
         out.put("andid", "1");
@@ -265,7 +263,7 @@ public class RemovalControllerTests {
                 .thenReturn(common);
 
         RemovalController removalController =
-                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(soapTemplate, objectMapper, restTemplate);
         var resp = removalController.removeIdentity(req);
         Assertions.assertNotNull(resp);
     }
@@ -274,10 +272,11 @@ public class RemovalControllerTests {
     public void testRemoveTemplate() throws JsonProcessingException {
         var req = new RemoveTemplate();
         req.setCredentialRef("A");
-        req.setExpiry(Instant.now());
+        req.setExpiry("A");
         req.setEnrollmentURL("A");
         req.setIssuanceID("A");
         req.setRequestorUserId("A");
+        req.setRequestorType("CORNET");
 
         // Set up to mock soap service response
         var soapResp = new DestroyCredentialResponse();
@@ -297,7 +296,7 @@ public class RemovalControllerTests {
                 .thenReturn(common);
 
         RemovalController removalController =
-                new RemovalController(soapTemplate, objectMapper, modalMapper, restTemplate);
+                new RemovalController(soapTemplate, objectMapper, restTemplate);
         var resp = removalController.removeTemplate(req);
         Assertions.assertNotNull(resp);
     }

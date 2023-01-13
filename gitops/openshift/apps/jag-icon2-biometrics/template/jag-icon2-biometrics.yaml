@@ -90,10 +90,35 @@ objects:
                     secretKeyRef:
                       name: jag-icon2-biometrics-application-secrets
                       key: BASIC_AUTH_PASS
-                - name: SPRING_PROFILES_ACTIVE
+                - name: BCS_HOST
                   valueFrom:
                     secretKeyRef:
                       name: jag-icon2-biometrics-application-secrets
+                      key: BCS_HOST
+                - name: IIS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-biometrics-application-secrets
+                      key: IIS_HOST
+                - name: IPS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-biometrics-application-secrets
+                      key: IPS_HOST
+                - name: ONLINE_SERVICE_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-biometrics-application-secrets
+                      key: ONLINE_SERVICE_ID
+                - name: ORDS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-biometrics-application-secrets
+                      key: ORDS_HOST
+                - name: SPRING_PROFILES_ACTIVE
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-splunk-config
                       key: SPRING_PROFILE
                 - name: SPLUNK_HTTP_URL
                   valueFrom:
@@ -113,9 +138,9 @@ objects:
               resources:
                 limits:
                   cpu: 100m
-                  memory: 100Mi
+                  memory: 200Mi
                 requests:
-                  cpu: 50m
+                  cpu: 40m
                   memory: 100Mi
               livenessProbe:
                 httpGet:

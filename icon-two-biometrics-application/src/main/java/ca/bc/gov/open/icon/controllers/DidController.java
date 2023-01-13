@@ -1,12 +1,16 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.biometrics.GetDID;
 import ca.bc.gov.open.icon.biometrics.GetDIDResponse;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.ips.GetDIDRequest;
 import ca.bc.gov.open.icon.ips.ResponseCode;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +39,7 @@ public class DidController {
         this.objectMapper = objectMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "getDID")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "getDID")
     @ResponsePayload
     public GetDIDResponse getDid(@RequestPayload GetDID getDID) throws JsonProcessingException {
         try {
@@ -56,19 +58,24 @@ public class DidController {
                             soapTemplate.marshalSendAndReceive(ipsHost, getDIDIPS);
 
             if (!getDIDResponse.getGetDIDResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to get did " + getDIDResponse.getGetDIDResult().getMessage());
             }
 
             GetDIDResponse out = new GetDIDResponse();
             out.setClientDID(getDIDResponse.getGetDIDResult().getDID());
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getDid")));
+
             return out;
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
-                                    "Processing failed", "remove", ex.getMessage(), getDID)));
-            throw new ORDSException();
+                                    "Processing failed", "getDid", ex.getMessage(), getDID)));
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 }

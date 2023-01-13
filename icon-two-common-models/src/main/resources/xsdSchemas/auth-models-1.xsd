@@ -5,22 +5,20 @@
     <xsd:element name="getUserInfo">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:userInfoOut"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="userInfoOut">
-        <xsd:sequence>
-            <xsd:element name="UserInfo" nillable="true" type="tns:userInfoInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userInfoInner">
-        <xsd:sequence>
-            <xsd:element name="UserInfo" nillable="true" type="tns:userInfo"/>
-        </xsd:sequence>
-    </xsd:complexType>
+    <xsd:element name="getUserInfoDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="UserInfo" nillable="true" type="tns:userInfo"/>
+                <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 
     <xsd:complexType name="userInfo">
         <xsd:sequence>
@@ -52,17 +50,10 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="functionalAbility">
-        <xsd:sequence>
-            <xsd:element name="serviceCd" nillable="true" type="xsd:string"/>
-            <xsd:element name="functionCd" nillable="true" type="xsd:string"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
     <xsd:element name="getUserInfoResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:userInfoOut"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -78,22 +69,20 @@
     <xsd:element name="getDeviceInfo">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:deviceInfoOut"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="deviceInfoOut">
-        <xsd:sequence>
-            <xsd:element name="DeviceInfo" nillable="true" type="tns:deviceInfoInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="deviceInfoInner">
-        <xsd:sequence>
-            <xsd:element name="DeviceInfo" nillable="true" type="tns:deviceInfo"/>
-        </xsd:sequence>
-    </xsd:complexType>
+    <xsd:element name="getDeviceInfoDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="DeviceInfo" nillable="true" type="tns:deviceInfo"/>
+                <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 
     <xsd:complexType name="deviceInfo">
         <xsd:sequence>
@@ -118,44 +107,29 @@
     <xsd:element name="getDeviceInfoResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:deviceInfoOut"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
+
 
     <xsd:element name="getHasFunctionalAbility">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:hasFunctionalAbilityOut"/>
-                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOut"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="hasFunctionalAbilityOut">
-        <xsd:sequence>
-            <xsd:element name="HasFunctionalAbility" nillable="true" type="tns:hasFunctionalAbilityInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userTokenOut">
-        <xsd:sequence>
-            <xsd:element name="UserToken" nillable="true" type="tns:userTokenInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="hasFunctionalAbilityInner">
-        <xsd:sequence>
-            <xsd:element name="HasFunctionalAbility" nillable="true" type="tns:hasFunctionalAbility"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userTokenInner">
-        <xsd:sequence>
-            <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
+    <xsd:element name="getHasFunctionalAbilityDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="HasFunctionalAbility" nillable="true" type="tns:hasFunctionalAbility"/>
+                <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 
     <xsd:complexType name="hasFunctionalAbility">
         <xsd:sequence>
@@ -165,6 +139,12 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:complexType name="functionalAbility">
+        <xsd:sequence>
+            <xsd:element name="serviceCd" nillable="true" type="xsd:string"/>
+            <xsd:element name="functionCd" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
 
     <xsd:complexType name="userToken">
         <xsd:sequence>
@@ -183,7 +163,7 @@
     <xsd:element name="getHasFunctionalAbilityResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:hasFunctionalAbilityOut"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -191,24 +171,20 @@
     <xsd:element name="getPreAuthorizeClient">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:PreAuthorizeClientOut"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="PreAuthorizeClientOut">
-        <xsd:sequence>
-            <xsd:element name="PreAuthorizeClient" nillable="true" type="tns:PreAuthorizeClientInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
+    <xsd:element name="getPreAuthorizeClientDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="PreAuthorizeClient" nillable="true" type="tns:preAuthorizeClient"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 
-    <xsd:complexType name="PreAuthorizeClientInner">
-        <xsd:sequence>
-            <xsd:element name="PreAuthorizeClient" nillable="true" type="tns:PreAuthorizeClient"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="PreAuthorizeClient">
+    <xsd:complexType name="preAuthorizeClient">
         <xsd:sequence>
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
             <xsd:element name="isAllowed" nillable="true" type="xsd:string"/>
@@ -218,10 +194,9 @@
     <xsd:element name="getPreAuthorizeClientResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:PreAuthorizeClientOut"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-
 
 </xsd:schema>

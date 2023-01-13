@@ -90,10 +90,70 @@ objects:
                     secretKeyRef:
                       name: jag-icon2-common-1-1-application-secrets
                       key: BASIC_AUTH_PASS
-                - name: SPRING_PROFILES_ACTIVE
+                - name: HSR_QUEUE_NAME
                   valueFrom:
                     secretKeyRef:
                       name: jag-icon2-common-1-1-application-secrets
+                      key: HSR_QUEUE_NAME
+                - name: HSR_ROUTING_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: HSR_ROUTING_KEY
+                - name: HSR_SERVICE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: HSR_SERVICE_URL
+                - name: ORDS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: ORDS_HOST
+                - name: PING_QUEUE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: PING_QUEUE_NAME
+                - name: PING_ROUTING_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: PING_ROUTING_KEY
+                - name: RABBIT_EXCHANGE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: RABBIT_EXCHANGE_NAME
+                - name: RABBIT_MQ_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: RABBIT_MQ_HOST
+                - name: WS_AUTH_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: WS_AUTH_PASS
+                - name: WS_AUTH_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-common-1-1-application-secrets
+                      key: WS_AUTH_USER
+                - name: RABBIT_MQ_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: rabbitmq-cluster-secret
+                      key: username
+                - name: RABBIT_MQ_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: rabbitmq-cluster-secret
+                      key: password
+                - name: SPRING_PROFILES_ACTIVE
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-splunk-config
                       key: SPRING_PROFILE
                 - name: SPLUNK_HTTP_URL
                   valueFrom:
@@ -113,9 +173,9 @@ objects:
               resources:
                 limits:
                   cpu: 100m
-                  memory: 100Mi
+                  memory: 200Mi
                 requests:
-                  cpu: 50m
+                  cpu: 40m
                   memory: 100Mi
               livenessProbe:
                 httpGet:

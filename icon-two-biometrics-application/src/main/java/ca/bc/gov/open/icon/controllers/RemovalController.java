@@ -1,20 +1,24 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.configuration.SoapConfig.ACCOUNT_TYPE_FIVE;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.iis.*;
 import ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode;
 import ca.bc.gov.open.icon.iis.IssuanceToken;
 import ca.bc.gov.open.icon.iis.ResponseCode;
 import ca.bc.gov.open.icon.ips.*;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -42,7 +46,7 @@ public class RemovalController {
     @Value("${icon.bsc-host}")
     private String bcsHost = "https://127.0.0.1/";
 
-    @Value("${icon.ords-host}")
+    @Value("${icon.host}")
     private String ordsHost = "https://127.0.0.1/";
 
     @Value("${icon.online-service-id}")
@@ -53,24 +57,19 @@ public class RemovalController {
     private final RestTemplate restTemplate;
 
     public RemovalController(
-            WebServiceTemplate soapTemplate,
-            ObjectMapper objectMapper,
-            ModelMapper modelMapper,
-            RestTemplate restTemplate) {
+            WebServiceTemplate soapTemplate, ObjectMapper objectMapper, RestTemplate restTemplate) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "move")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "move")
     @ResponsePayload
     public MoveResponse move(@RequestPayload Move move) throws JsonProcessingException {
         try {
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
-                            .queryParam("csnum", move.getCsNumTo());
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
+                            .queryParam("csNum", move.getCsNumTo());
 
             HttpEntity<Map<String, String>> andidResp =
                     restTemplate.exchange(
@@ -85,6 +84,7 @@ public class RemovalController {
             RegisterIndividualRequest registerIndividualRequest = new RegisterIndividualRequest();
             registerIndividualRequest.setOnlineServiceId(onlineServiceId);
             registerIndividualRequest.setRequesterUserId(move.getRequestorUserId());
+            registerIndividualRequest.setAccountType(ACCOUNT_TYPE_FIVE);
             registerIndividualRequest.setRequesterAccountTypeCode(
                     BCeIDAccountTypeCode.fromValue(move.getRequestorType()));
             registerIndividual.setRequest(registerIndividualRequest);
@@ -97,7 +97,7 @@ public class RemovalController {
                     .getRegisterIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to register individual "
                                 + registerIndividualResponse
                                         .getRegisterIndividualResult()
@@ -124,7 +124,7 @@ public class RemovalController {
                     .getLinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to link ips " + linkResponse.getLinkResult().getMessage());
             }
 
@@ -149,7 +149,7 @@ public class RemovalController {
                     .getRebindCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to rebind bcs "
                                 + rebindCredentialResponse
                                         .getRebindCredentialResult()
@@ -158,8 +158,8 @@ public class RemovalController {
 
             // Grab the did with the from number to start clean up
             builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
-                            .queryParam("csnum", move.getCsNumFrom());
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
+                            .queryParam("csNum", move.getCsNumFrom());
 
             andidResp =
                     restTemplate.exchange(
@@ -196,7 +196,7 @@ public class RemovalController {
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to remove individual "
                                 + removeIndividualResponse
                                         .getRemoveIndividualResult()
@@ -228,21 +228,24 @@ public class RemovalController {
                     .getUnlinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to unlink " + unlinkResponse.getUnlinkResult().getMessage());
             }
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "move")));
+
             return new MoveResponse();
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog("Processing failed", "move", ex.getMessage(), move)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "remove")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "remove")
     @ResponsePayload
     public RemoveResponse remove(@RequestPayload Remove remove) throws JsonProcessingException {
         try {
@@ -270,7 +273,7 @@ public class RemovalController {
                     .getDestroyCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to destroy credential "
                                 + destroyCredentialResponse
                                         .getDestroyCredentialResult()
@@ -278,8 +281,8 @@ public class RemovalController {
             }
 
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
-                            .queryParam("csnum", remove.getCsNum());
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
+                            .queryParam("csNum", remove.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =
                     restTemplate.exchange(
@@ -313,7 +316,7 @@ public class RemovalController {
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to remove individual "
                                 + removeIndividualResponse
                                         .getRemoveIndividualResult()
@@ -345,26 +348,28 @@ public class RemovalController {
                         "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage());
             }
 
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "remove")));
+
             return new RemoveResponse();
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Processing failed", "remove", ex.getMessage(), remove)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "removeIdentity")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "removeIdentity")
     @ResponsePayload
     public RemoveIdentityResponse removeIdentity(@RequestPayload RemoveIdentity removeIdentity)
             throws JsonProcessingException {
         try {
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(ordsHost + "biometrics/client/did")
-                            .queryParam("csnum", removeIdentity.getCsNum());
+                    UriComponentsBuilder.fromHttpUrl(ordsHost + "client/did")
+                            .queryParam("csNum", removeIdentity.getCsNum());
 
             HttpEntity<Map<String, String>> andidResp =
                     restTemplate.exchange(
@@ -383,6 +388,10 @@ public class RemovalController {
 
             RemoveIndividual removeIndividual = new RemoveIndividual();
             RemoveIndividualRequest removeIndividualRequest = new RemoveIndividualRequest();
+            removeIndividualRequest.setRequesterUserId(removeIdentity.getRequestorUserId());
+            removeIndividualRequest.setRequesterAccountTypeCode(
+                    ca.bc.gov.open.icon.iis.BCeIDAccountTypeCode.fromValue(
+                            removeIdentity.getRequestorType()));
             removeIndividualRequest.setOnlineServiceId(onlineServiceId);
             removeIndividualRequest.setIdRef(refId);
 
@@ -402,7 +411,7 @@ public class RemovalController {
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to remove individual "
                                 + removeIndividualResponse
                                         .getRemoveIndividualResult()
@@ -411,6 +420,11 @@ public class RemovalController {
 
             Unlink unlink = new Unlink();
             UnlinkRequest unlinkRequest = new UnlinkRequest();
+            unlinkRequest.setRequesterUserId(removeIdentity.getRequestorUserId());
+            unlinkRequest.setRequesterAccountTypeCode(
+                    ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.fromValue(
+                            removeIdentity.getRequestorType()));
+
             unlinkRequest.setDID(did);
             unlinkRequest.setOnlineServiceId(onlineServiceId);
 
@@ -429,9 +443,13 @@ public class RemovalController {
                     .getUnlinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage());
             }
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "removeIdentity")));
 
             return new RemoveIdentityResponse();
         } catch (Exception ex) {
@@ -439,16 +457,14 @@ public class RemovalController {
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Processing failed",
-                                    "remove",
+                                    "removeIdentity",
                                     ex.getMessage(),
                                     removeIdentity)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "removeTemplate")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "removeTemplate")
     @ResponsePayload
     public RemoveTemplateResponse removeTemplate(@RequestPayload RemoveTemplate removeTemplate)
             throws JsonProcessingException {
@@ -457,8 +473,10 @@ public class RemovalController {
             DestroyCredentialRequest destroyCredentialRequest = new DestroyCredentialRequest();
             destroyCredentialRequest.setCredentialReference(removeTemplate.getCredentialRef());
             destroyCredentialRequest.setOnlineServiceId(onlineServiceId);
+            destroyCredentialRequest.setRequesterUserId(removeTemplate.getRequestorUserId());
             destroyCredentialRequest.setRequesterAccountTypeCode(
-                    ca.bc.gov.open.icon.bcs.BCeIDAccountTypeCode.VOID);
+                    ca.bc.gov.open.icon.bcs.BCeIDAccountTypeCode.fromValue(
+                            removeTemplate.getRequestorType()));
 
             ca.bc.gov.open.icon.bcs.IssuanceToken issuanceToken =
                     new ca.bc.gov.open.icon.bcs.IssuanceToken();
@@ -477,12 +495,16 @@ public class RemovalController {
                     .getDestroyCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to destroy credential "
                                 + destroyCredentialResponse
                                         .getDestroyCredentialResult()
                                         .getMessage());
             }
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "removeTemplate")));
 
             return new RemoveTemplateResponse();
         } catch (Exception ex) {
@@ -490,10 +512,10 @@ public class RemovalController {
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Processing failed",
-                                    "remove",
+                                    "removeTemplate",
                                     ex.getMessage(),
                                     removeTemplate)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
@@ -506,7 +528,7 @@ public class RemovalController {
         getIdRefRequest.setRequesterAccountTypeCode(
                 StringUtils.hasLength(type)
                         ? ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.fromValue(type)
-                        : null);
+                        : ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.VOID);
         getIdRef.setRequest(getIdRefRequest);
 
         GetIdRefResponse getIdRefResponse =
@@ -516,7 +538,7 @@ public class RemovalController {
                 .getGetIdRefResult()
                 .getCode()
                 .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-            throw new RuntimeException(
+            throw new APIThrownException(
                     "Failed to get RefId " + getIdRefResponse.getGetIdRefResult().getMessage());
         }
         return getIdRefResponse.getGetIdRefResult().getIdRef();

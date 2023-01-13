@@ -1,14 +1,18 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.configuration.SoapConfig.ACCOUNT_TYPE_FIVE;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.bcs.*;
 import ca.bc.gov.open.icon.biometrics.Search;
 import ca.bc.gov.open.icon.biometrics.StartSearch;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
+import ca.bc.gov.open.icon.configuration.SoapConfig;
+import ca.bc.gov.open.icon.exceptions.APIThrownException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
+import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -28,18 +32,13 @@ public class SearchController {
 
     private final WebServiceTemplate soapTemplate;
     private final ObjectMapper objectMapper;
-    private final ModelMapper modelMapper;
 
-    public SearchController(
-            WebServiceTemplate soapTemplate, ObjectMapper objectMapper, ModelMapper modelMapper) {
+    public SearchController(WebServiceTemplate soapTemplate, ObjectMapper objectMapper) {
         this.soapTemplate = soapTemplate;
         this.objectMapper = objectMapper;
-        this.modelMapper = modelMapper;
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "startSearch")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "startSearch")
     @ResponsePayload
     public ca.bc.gov.open.icon.biometrics.StartSearchResponse startSearch(
             @RequestPayload StartSearch startSearch) throws JsonProcessingException {
@@ -53,6 +52,7 @@ public class SearchController {
                     ActiveCodeRequest.fromValue(startSearch.getActiveOnly()));
             startSearchRequest.setRequesterAccountTypeCode(
                     BCeIDAccountTypeCode.fromValue(startSearch.getRequestorType()));
+            startSearchRequest.setAccountType(ACCOUNT_TYPE_FIVE);
 
             startSearchBCS.setRequest(startSearchRequest);
 
@@ -61,17 +61,22 @@ public class SearchController {
                             soapTemplate.marshalSendAndReceive(bcsHost, startSearchBCS);
 
             if (!bcsResp.getStartSearchResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to start BCS search "
                                 + bcsResp.getStartSearchResult().getMessage());
             }
 
             ca.bc.gov.open.icon.biometrics.StartSearchResponse out =
                     new ca.bc.gov.open.icon.biometrics.StartSearchResponse();
-
-            Search search =
-                    modelMapper.map(bcsResp.getStartSearchResult().getSearch(), Search.class);
+            Search search = new Search();
+            search.setId(bcsResp.getStartSearchResult().getSearch().getSearchID());
+            search.setUrl(bcsResp.getStartSearchResult().getSearch().getSearchURL());
+            search.setExpiryDate(bcsResp.getStartSearchResult().getSearch().getExpiry().toString());
             out.setSearch(search);
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "startSearch")));
 
             return out;
         } catch (Exception ex) {
@@ -82,13 +87,11 @@ public class SearchController {
                                     "startSearch",
                                     ex.getMessage(),
                                     startSearch)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 
-    @PayloadRoot(
-            namespace = "ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics",
-            localPart = "finishSearch")
+    @PayloadRoot(namespace = SoapConfig.SOAP_NAMESPACE, localPart = "finishSearch")
     @ResponsePayload
     public ca.bc.gov.open.icon.biometrics.FinishSearchResponse finishSearch(
             @RequestPayload ca.bc.gov.open.icon.biometrics.FinishSearch finishSearch)
@@ -110,7 +113,7 @@ public class SearchController {
                             soapTemplate.marshalSendAndReceive(bcsHost, finishSearchBCS);
 
             if (!bcsResp.getFinishSearchResult().getCode().equals(ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
+                throw new APIThrownException(
                         "Failed to finish search " + bcsResp.getFinishSearchResult().getMessage());
             }
 
@@ -120,6 +123,10 @@ public class SearchController {
             out.setActiveFlag(bcsResp.getFinishSearchResult().getActive().value());
             out.setClientId(bcsResp.getFinishSearchResult().getDID());
             out.setCredentialRef(bcsResp.getFinishSearchResult().getCredentialReference());
+
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "finishSearch")));
             return out;
         } catch (Exception ex) {
             log.error(
@@ -129,7 +136,7 @@ public class SearchController {
                                     "finishSearch",
                                     ex.getMessage(),
                                     finishSearch)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         }
     }
 }

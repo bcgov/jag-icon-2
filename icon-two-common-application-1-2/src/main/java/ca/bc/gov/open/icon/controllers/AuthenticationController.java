@@ -1,10 +1,11 @@
 package ca.bc.gov.open.icon.controllers;
 
-import ca.bc.gov.open.icon.audit.*;
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.auth.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
+import ca.bc.gov.open.icon.utils.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -43,24 +44,13 @@ public class AuthenticationController {
             @RequestPayload GetPreAuthorizeClient getPreAuthorizeClient)
             throws JsonProcessingException {
 
-        // fetch the inmost DeviceInfo layer
-        var inner =
-                getPreAuthorizeClient.getXMLString() != null
-                                && getPreAuthorizeClient.getXMLString().getPreAuthorizeClient()
-                                        != null
-                                && getPreAuthorizeClient
-                                                .getXMLString()
-                                                .getPreAuthorizeClient()
-                                                .getPreAuthorizeClient()
-                                        != null
-                        ? getPreAuthorizeClient
-                                .getXMLString()
-                                .getPreAuthorizeClient()
-                                .getPreAuthorizeClient()
-                        : new PreAuthorizeClient();
-
-        HttpEntity<PreAuthorizeClient> payload = new HttpEntity<>(inner, new HttpHeaders());
-
+        GetPreAuthorizeClientDocument getPreAuthorizeClientDocument =
+                new GetPreAuthorizeClientDocument();
+        getPreAuthorizeClientDocument.setPreAuthorizeClient(
+                XMLUtilities.deserializeXmlStr(
+                        getPreAuthorizeClient.getXMLString(), new PreAuthorizeClient()));
+        HttpEntity<GetPreAuthorizeClientDocument> payload =
+                new HttpEntity<>(getPreAuthorizeClientDocument, new HttpHeaders());
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/pre-auth-client");
 
@@ -72,24 +62,17 @@ public class AuthenticationController {
                             payload,
                             PreAuthorizeClient.class);
 
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success", objectMapper.writeValueAsString(inner))));
+            GetPreAuthorizeClientResponse getPreAuthorizeClientResponse =
+                    new GetPreAuthorizeClientResponse();
+            getPreAuthorizeClientDocument.setPreAuthorizeClient(resp.getBody());
+            getPreAuthorizeClientResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getPreAuthorizeClientDocument.getPreAuthorizeClient()));
 
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getPreAuthorizeClient")));
-
-            var getPreAuthorizeClientResponse = new GetPreAuthorizeClientResponse();
-            var outResp = new PreAuthorizeClientOut();
-            var inResp = new PreAuthorizeClientInner();
-
-            inResp.setPreAuthorizeClient(resp.getBody());
-            outResp.setPreAuthorizeClient(inResp);
-            getPreAuthorizeClientResponse.setXMLString(outResp);
             return getPreAuthorizeClientResponse;
-
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -97,8 +80,8 @@ public class AuthenticationController {
                                     "Error received from ORDS",
                                     "getHasFunctionalAbility",
                                     ex.getMessage(),
-                                    inner)));
-            throw new ORDSException();
+                                    getPreAuthorizeClient)));
+            throw handleError(ex, new ca.bc.gov.open.icon.auth.Error());
         }
     }
 
@@ -110,8 +93,17 @@ public class AuthenticationController {
             @RequestPayload GetHasFunctionalAbility getHasFunctionalAbility)
             throws JsonProcessingException {
 
-        HttpEntity<GetHasFunctionalAbility> payload =
-                new HttpEntity<>(getHasFunctionalAbility, new HttpHeaders());
+        GetHasFunctionalAbilityDocument getHasFunctionalAbilityDocument =
+                new GetHasFunctionalAbilityDocument();
+        getHasFunctionalAbilityDocument.setHasFunctionalAbility(
+                XMLUtilities.deserializeXmlStr(
+                        getHasFunctionalAbility.getXMLString(), new HasFunctionalAbility()));
+        getHasFunctionalAbilityDocument.setUserToken(
+                XMLUtilities.deserializeXmlStr(
+                        getHasFunctionalAbility.getUserTokenString(), new UserToken()));
+
+        HttpEntity<GetHasFunctionalAbilityDocument> payload =
+                new HttpEntity<>(getHasFunctionalAbilityDocument, new HttpHeaders());
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/has-functional-ability");
@@ -124,25 +116,17 @@ public class AuthenticationController {
                             payload,
                             HasFunctionalAbility.class);
 
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog(
-                                    "Request Success",
-                                    objectMapper.writeValueAsString(getHasFunctionalAbility))));
+            GetHasFunctionalAbilityResponse getHasFunctionalAbilityResponse =
+                    new GetHasFunctionalAbilityResponse();
+            getHasFunctionalAbilityDocument.setHasFunctionalAbility(resp.getBody());
+            getHasFunctionalAbilityResponse.setXMLString(
+                    XMLUtilities.serializeXmlStr(
+                            getHasFunctionalAbilityDocument.getHasFunctionalAbility()));
 
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "getHasFunctionalAbility")));
-
-            var getHasFunctionalAbilityResponse = new GetHasFunctionalAbilityResponse();
-            var outResp = new HasFunctionalAbilityOut();
-            var inResp = new HasFunctionalAbilityInner();
-
-            inResp.setHasFunctionalAbility(resp.getBody());
-            outResp.setHasFunctionalAbility(inResp);
-            getHasFunctionalAbilityResponse.setXMLString(outResp);
             return getHasFunctionalAbilityResponse;
-
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -151,7 +135,7 @@ public class AuthenticationController {
                                     "getHasFunctionalAbility",
                                     ex.getMessage(),
                                     getHasFunctionalAbility)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.auth.Error());
         }
     }
 }

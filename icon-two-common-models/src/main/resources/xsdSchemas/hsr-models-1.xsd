@@ -6,23 +6,20 @@
     <xsd:element name="publishHSR">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:healthServiceOuter"/>
-                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="healthServiceOuter">
-        <xsd:sequence>
-            <xsd:element name="HealthService" nillable="true" type="tns:healthServiceInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="healthServiceInner">
-        <xsd:sequence>
-            <xsd:element name="HealthService" type="tns:healthService"/>
-        </xsd:sequence>
-    </xsd:complexType>
+    <xsd:element name="publishHSRDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="HealthService" nillable="true" type="tns:healthService"/>
+                <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 
     <xsd:complexType name="healthService">
         <xsd:sequence>
@@ -37,7 +34,7 @@
             <xsd:element name="hsrId" nillable="true" type="xsd:string"/>
             <xsd:element name="pacID" nillable="true" type="xsd:string"/>
             <xsd:element name="location" nillable="true" type="xsd:string"/>
-            <xsd:element name="requestDate" nillable="true" type="xsd:dateTime"/>
+            <xsd:element name="requestDate" nillable="true" type="xsd:string"/>
             <xsd:element name="healthRequest" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
@@ -53,8 +50,8 @@
     <xsd:element name="publishHSRResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:healthServiceOuter"/>
-                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -70,43 +67,28 @@
     <xsd:element name="getHSRCount">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:HSRCountOuter"/>
-                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="HSRCountOuter">
-        <xsd:sequence>
-            <xsd:element name="HealthServiceCount" nillable="true" type="tns:HSRCountInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
+    <xsd:element name="getHSRCountDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="HealthServiceCount" nillable="true" type="tns:HealthServiceCount"/>
+                <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 
-    <xsd:complexType name="HSRCountInner">
-        <xsd:sequence>
-            <xsd:element name="HealthServiceCount" type="tns:HSRCount"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="HSRCount">
+    <xsd:complexType name="HealthServiceCount">
         <xsd:sequence>
             <xsd:element name="csNum" nillable="true" type="xsd:string"/>
             <xsd:element name="count" nillable="true" type="xsd:string"/>
             <xsd:element name="max" nillable="true" type="xsd:string"/>
             <xsd:element name="hsrId" nillable="true" type="xsd:string"/>
             <xsd:element name="xmitOkay" nillable="true" type="xsd:string"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userTokenOuter">
-        <xsd:sequence>
-            <xsd:element name="UserToken" nillable="true" type="tns:userTokenInner"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="userTokenInner">
-        <xsd:sequence>
-            <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -127,8 +109,8 @@
     <xsd:element name="getHSRCountResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:HSRCountOuter"/>
-                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
+                <xsd:element name="XMLString" nillable="true"  type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true"  type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -136,8 +118,17 @@
     <xsd:element name="getHealthServiceRequestHistory">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:healthServiceOuter"/>
-                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="getHealthServiceRequestHistoryDocument">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="HealthService" nillable="true" type="tns:healthService"/>
+                <xsd:element name="UserToken" nillable="true" type="tns:userToken"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -145,10 +136,11 @@
     <xsd:element name="getHealthServiceRequestHistoryResponse">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="XMLString" nillable="true" type="tns:healthServiceOuter"/>
-                <xsd:element name="UserTokenString" nillable="true" type="tns:userTokenOuter"/>
+                <xsd:element name="XMLString" nillable="true" type="xsd:string"/>
+                <xsd:element name="UserTokenString" nillable="true" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
+
 </xsd:schema>
 

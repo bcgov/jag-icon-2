@@ -1,13 +1,15 @@
 package ca.bc.gov.open.icon.controllers;
 
+import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
+
 import ca.bc.gov.open.icon.audit.*;
-import ca.bc.gov.open.icon.exceptions.ORDSException;
 import ca.bc.gov.open.icon.models.OrdsErrorLog;
 import ca.bc.gov.open.icon.models.RequestSuccessLog;
 import ca.bc.gov.open.icon.myinfo.*;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfo;
 import ca.bc.gov.open.icon.packageinfo.GetPackageInfoResponse;
 import ca.bc.gov.open.icon.session.*;
+import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +68,7 @@ public class AuditController {
                                     "eServiceAccessed",
                                     ex.getMessage(),
                                     eServiceAccessed)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -98,7 +100,7 @@ public class AuditController {
                                     "homeScreenAccessed",
                                     ex.getMessage(),
                                     homeScreenAccessed)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -131,7 +133,7 @@ public class AuditController {
                                     "sessionTimeoutExecuted",
                                     ex.getMessage(),
                                     sessionTimeoutExecuted)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -164,47 +166,7 @@ public class AuditController {
                                     "eServiceFunctionAccessed",
                                     ex.getMessage(),
                                     eServiceFunctionAccessed)));
-            throw new ORDSException();
-        }
-    }
-
-    @PayloadRoot(
-            namespace = "ICON2.Source.MyInfo.ws.provider:MyInfo",
-            localPart = "getClientHistory")
-    @ResponsePayload
-    public GetClientHistoryResponse getClientHistory(
-            @RequestPayload GetClientHistory getClientHistory) throws JsonProcessingException {
-
-        HttpEntity<GetClientHistory> payload =
-                new HttpEntity<>(getClientHistory, new HttpHeaders());
-
-        UriComponentsBuilder builder =
-                UriComponentsBuilder.fromHttpUrl(host + "audit/client-history");
-
-        try {
-            HttpEntity<ClientHistory> resp =
-                    restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, payload, ClientHistory.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getClientHistory")));
-
-            GetClientHistoryResponse getClientHistoryResponse = new GetClientHistoryResponse();
-            ClientHistoryOuter outResp = new ClientHistoryOuter();
-            ClientHistoryInner inResp = new ClientHistoryInner();
-            inResp.setClientHistory(resp.getBody());
-            outResp.setClientHistory(inResp);
-            getClientHistoryResponse.setXMLString(outResp);
-            return getClientHistoryResponse;
-        } catch (Exception ex) {
-            log.error(
-                    objectMapper.writeValueAsString(
-                            new OrdsErrorLog(
-                                    "Error received from ORDS",
-                                    "getClientHistory",
-                                    ex.getMessage(),
-                                    getClientHistory)));
-            throw new ORDSException();
+            throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
 
@@ -237,7 +199,7 @@ public class AuditController {
                                     "getPackageInfo",
                                     ex.getMessage(),
                                     getPackageInfo)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 
@@ -249,44 +211,33 @@ public class AuditController {
             @RequestPayload GetSessionParameters getSessionParameters)
             throws JsonProcessingException {
 
-        SessionParameterInner inner =
-                getSessionParameters.getXMLString() != null
-                                && getSessionParameters.getXMLString().getSessionParameters()
-                                        != null
-                                && getSessionParameters
-                                                .getXMLString()
-                                                .getSessionParameters()
-                                                .getSessionParameters()
-                                        != null
-                        ? getSessionParameters
-                                .getXMLString()
-                                .getSessionParameters()
-                                .getSessionParameters()
-                        : new SessionParameterInner();
+        GetSessionParametersDocument getSessionParametersDocument =
+                new GetSessionParametersDocument();
+        getSessionParametersDocument.setSessionParameters(
+                XMLUtilities.deserializeXmlStr(
+                        getSessionParameters.getXMLString(), new SessionParameters()));
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/session-parameters");
-        HttpEntity<SessionParameterInner> payload = new HttpEntity<>(inner, new HttpHeaders());
+        HttpEntity<SessionParameters> payload =
+                new HttpEntity<>(
+                        getSessionParametersDocument.getSessionParameters(), new HttpHeaders());
 
         try {
-            HttpEntity<SessionParameterInner> resp =
+            HttpEntity<SessionParameters> resp =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.POST,
                             payload,
-                            SessionParameterInner.class);
-            log.info(
-                    objectMapper.writeValueAsString(
-                            new RequestSuccessLog("Request Success", "getSessionParameters")));
+                            SessionParameters.class);
 
             GetSessionParametersResponse getSessionParametersResponse =
                     new GetSessionParametersResponse();
-            SessionParameterOutest sessionParameterOutest = new SessionParameterOutest();
-            SessionParameterOuter sessionParameterOuter = new SessionParameterOuter();
+            getSessionParametersResponse.setXMLString(XMLUtilities.serializeXmlStr(resp.getBody()));
 
-            getSessionParametersResponse.setXMLString(sessionParameterOutest);
-            sessionParameterOutest.setSessionParameters(sessionParameterOuter);
-            sessionParameterOuter.setSessionParameters(resp.getBody());
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "getSessionParameters")));
             return getSessionParametersResponse;
         } catch (Exception ex) {
             log.error(
@@ -296,7 +247,7 @@ public class AuditController {
                                     "getSessionParameters",
                                     ex.getMessage(),
                                     getSessionParameters)));
-            throw new ORDSException();
+            throw handleError(ex);
         }
     }
 }
