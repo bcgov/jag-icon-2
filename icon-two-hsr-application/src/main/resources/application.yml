@@ -1,5 +1,7 @@
 icon:
   host: ${ORDS_HOST}
+  username: ${ORDS_USERNAME}
+  password: ${ORDS_PASSWORD}
   hsr-service-url: ${HSR_SERVICE_URL}
   hsr-queue: ${HSR_QUEUE_NAME}
   ping-queue: ${PING_QUEUE_NAME}

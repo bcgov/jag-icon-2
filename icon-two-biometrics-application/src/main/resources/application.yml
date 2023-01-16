@@ -4,6 +4,8 @@ security:
     username: ${BASIC_AUTH_USER}
 icon:
   host: ${ORDS_HOST}
+  username: ${ORDS_USERNAME}
+  password: ${ORDS_PASSWORD}
   iis-host: ${IIS_HOST}
   ips-host: ${IPS_HOST}
   bsc-host: ${BCS_HOST}
