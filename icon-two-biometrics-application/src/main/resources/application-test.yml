@@ -4,6 +4,8 @@ security:
     username: ${BASIC_AUTH_USER}
 icon:
   host: https://127.0.0.1/
+  username: ${BASIC_AUTH_USER}
+  password: ${BASIC_AUTH_PASS}
   iis-host: https://127.0.0.1/
   ips-host: https://127.0.0.1/
   bsc-host: https://127.0.0.1/
