@@ -8,31 +8,32 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IconConsumerApplicationTests {
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private HSRService hsrService;
+    @Mock private WebServiceTemplate webServiceTemplate;
 
-    @Autowired private ObjectMapper objectMapper;
-
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
-
-    @Mock private WebServiceTemplate soapTemplate = new WebServiceTemplate();
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        hsrService = Mockito.spy(new HSRService(restTemplate, objectMapper, webServiceTemplate));
+    }
 
     @Test
     void testProcessHSR() throws JsonProcessingException, InterruptedException {
@@ -80,7 +81,6 @@ class IconConsumerApplicationTests {
                         Mockito.<Class<HealthServicePub>>any()))
                 .thenReturn(responseEntity1);
 
-        HSRService hsrService = new HSRService(restTemplate, objectMapper, webServiceTemplate);
         hsrService.processHSR(req);
     }
 }

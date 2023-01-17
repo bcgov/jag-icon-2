@@ -17,29 +17,33 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EnrollmentControllerTests {
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private WebServiceTemplate soapTemplate;
+    @Mock private EnrollmentController enrollmentController;
 
-    @Autowired private ObjectMapper objectMapper;
-
-    @Mock private WebServiceTemplate soapTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        enrollmentController =
+                Mockito.spy(new EnrollmentController(soapTemplate, objectMapper, restTemplate));
+    }
 
     @Test
     public void testStartEnrollment() throws JsonProcessingException {
@@ -128,8 +132,6 @@ public class EnrollmentControllerTests {
                         anyString(), Mockito.any(ca.bc.gov.open.icon.bcs.StartEnrollment.class)))
                 .thenReturn(soapResp3);
 
-        EnrollmentController enrollmentController =
-                new EnrollmentController(soapTemplate, objectMapper, restTemplate);
         var resp = enrollmentController.startEnrollment(req);
         Assertions.assertNotNull(resp);
     }
