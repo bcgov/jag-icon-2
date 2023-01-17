@@ -9,27 +9,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FileControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private FileController fileController;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        fileController = Mockito.spy(new FileController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testGetClientClaims() throws JsonProcessingException {
@@ -50,7 +52,6 @@ public class FileControllerTests {
                         Mockito.<Class<Claims>>any()))
                 .thenReturn(responseEntity);
 
-        FileController fileController = new FileController(restTemplate, objectMapper);
         var resp = fileController.getClientClaims(req);
         Assertions.assertNotNull(resp);
     }
@@ -76,7 +77,6 @@ public class FileControllerTests {
                         Mockito.<Class<GetCsNumsByDateResponse>>any()))
                 .thenReturn(responseEntity);
 
-        FileController fileController = new FileController(restTemplate, objectMapper);
         var resp = fileController.getCsNumsByDate(req);
         Assertions.assertNotNull(resp);
     }
@@ -130,7 +130,6 @@ public class FileControllerTests {
                         Mockito.<Class<AgencyFile>>any()))
                 .thenReturn(responseEntity);
 
-        FileController fileController = new FileController(restTemplate, objectMapper);
         var resp = fileController.getAgencyFile(req);
         Assertions.assertNotNull(resp);
     }
@@ -167,7 +166,6 @@ public class FileControllerTests {
                         Mockito.<Class<GetClientInfoResponse>>any()))
                 .thenReturn(responseEntity);
 
-        FileController fileController = new FileController(restTemplate, objectMapper);
         var resp = fileController.getClientInfo(req);
         Assertions.assertNotNull(resp);
     }
@@ -191,7 +189,6 @@ public class FileControllerTests {
                         Mockito.<Class<SetMessageResponse>>any()))
                 .thenReturn(responseEntity);
 
-        FileController fileController = new FileController(restTemplate, objectMapper);
         var resp = fileController.setMessage(req);
         Assertions.assertNotNull(resp);
     }
@@ -221,7 +218,6 @@ public class FileControllerTests {
                         Mockito.<Class<SetDisclosureResponse>>any()))
                 .thenReturn(responseEntity);
 
-        FileController fileController = new FileController(restTemplate, objectMapper);
         var resp = fileController.setDisclosure(req);
         Assertions.assertNotNull(resp);
     }

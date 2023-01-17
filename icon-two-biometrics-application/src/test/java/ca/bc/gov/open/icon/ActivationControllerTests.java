@@ -10,23 +10,27 @@ import ca.bc.gov.open.icon.controllers.ActivationController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ActivationControllerTests {
-    @Autowired private ObjectMapper objectMapper;
-
+    @Mock private ObjectMapper objectMapper;
     @Mock private WebServiceTemplate soapTemplate;
+    @Mock private RestTemplate restTemplate;
+    @Mock private ActivationController activationController;
 
-    @Autowired @Mock private RestTemplate restTemplate;
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        activationController = Mockito.spy(new ActivationController(soapTemplate, objectMapper));
+    }
 
     @Test
     public void testReactivate() throws Exception {
@@ -34,8 +38,6 @@ public class ActivationControllerTests {
         req.setCredentialRef("A");
         req.setRequestorUserId("A");
         req.setRequestorType("LDB");
-
-        var activationController = new ActivationController(soapTemplate, objectMapper);
 
         // Set up to mock soap service response
         var soapResp = new ReactivateCredentialResponse();
@@ -56,8 +58,6 @@ public class ActivationControllerTests {
         req.setCredentialRef("A");
         req.setRequestorUserId("A");
         req.setRequestorType("LDB");
-
-        var activationController = new ActivationController(soapTemplate, objectMapper);
 
         // Set up to mock soap service response
         var soapResp = new DeactivateCredentialResponse();

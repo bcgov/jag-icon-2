@@ -9,24 +9,26 @@ import ca.bc.gov.open.icon.controllers.SearchController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.client.RestTemplate;
+import org.mockito.MockitoAnnotations;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SearchControllerTests {
 
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private WebServiceTemplate soapTemplate;
+    @Mock private SearchController searchController;
 
-    @Mock private WebServiceTemplate soapTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        searchController = Mockito.spy(new SearchController(soapTemplate, objectMapper));
+    }
 
     @Test
     public void testStartSearch() throws JsonProcessingException {
@@ -50,7 +52,6 @@ public class SearchControllerTests {
                         anyString(), Mockito.any(ca.bc.gov.open.icon.bcs.StartSearch.class)))
                 .thenReturn(soapResp);
 
-        SearchController searchController = new SearchController(soapTemplate, objectMapper);
         var resp = searchController.startSearch(req);
         Assertions.assertNotNull(resp);
     }
@@ -74,7 +75,6 @@ public class SearchControllerTests {
         when(soapTemplate.marshalSendAndReceive(anyString(), Mockito.any(FinishSearch.class)))
                 .thenReturn(soapResp);
 
-        SearchController searchController = new SearchController(soapTemplate, objectMapper);
         var resp = searchController.finishSearch(req);
         Assertions.assertNotNull(resp);
     }
