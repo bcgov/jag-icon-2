@@ -81,14 +81,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
-
-
-
     </dependencies>
-
-
-
-
 
     <build>
         <finalName>ICON2-test-runner</finalName>
