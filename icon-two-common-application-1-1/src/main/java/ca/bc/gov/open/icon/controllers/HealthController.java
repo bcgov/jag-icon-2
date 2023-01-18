@@ -178,10 +178,22 @@ public class HealthController {
             healthServiceRequestSummary.setEndRecord(Integer.valueOf(endRecord));
             healthServiceRequestSummary.setNumCharacters(4000);
 
-            GetHealthServiceRequestSummaryResponse summaryResponse =
-                    (GetHealthServiceRequestSummaryResponse)
-                            soapTemplate.marshalSendAndReceive(
-                                    hsrServiceUrl, healthServiceRequestSummary);
+            GetHealthServiceRequestSummaryResponse summaryResponse = null;
+            try {
+                summaryResponse =
+                        (GetHealthServiceRequestSummaryResponse)
+                                soapTemplate.marshalSendAndReceive(
+                                        hsrServiceUrl, healthServiceRequestSummary);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - HSR Service",
+                                        "getHealthServiceRequestHistory",
+                                        ex.getMessage(),
+                                        healthServiceRequestSummary)));
+                throw handleError(ex, new ca.bc.gov.open.icon.hsr.Error());
+            }
 
             GetHealthServiceRequestHistoryResponse getHealthServiceRequestHistoryResponse =
                     new GetHealthServiceRequestHistoryResponse();
