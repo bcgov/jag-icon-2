@@ -61,6 +61,10 @@ BASIC_AUTH_USER: The username for the basic authentication. This can be any valu
 
 ORDS_HOST: The url for ords rest package.
 
+ORDS_USERNAME: credential of ORDS_HOST.
+
+ORDS_PASSWORD: credential of ORDS_HOST.
+
 ### Additional Env Variables
 * common-application-1-1:
 1) PING_QUEUE_NAME: RabbitMQ queue name for testing, up to 255 bytes of UTF-8 characters.

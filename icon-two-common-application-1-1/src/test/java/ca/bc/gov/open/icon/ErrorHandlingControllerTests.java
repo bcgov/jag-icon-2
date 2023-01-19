@@ -9,27 +9,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ErrorHandlingControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private WebServiceTemplate webServiceTemplate;
+    @Mock private RestTemplate restTemplate;
+    @Mock private ErrorHandlingController errorHandlingController;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        errorHandlingController =
+                Mockito.spy(new ErrorHandlingController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testSetErrorMessage() throws JsonProcessingException {
@@ -50,7 +55,6 @@ public class ErrorHandlingControllerTests {
                         Mockito.<Class<Map>>any()))
                 .thenReturn(responseEntity);
 
-        var errorHandlingController = new ErrorHandlingController(restTemplate, objectMapper);
         var resp = errorHandlingController.setErrorMessage(req);
         Assertions.assertNotNull(resp);
     }

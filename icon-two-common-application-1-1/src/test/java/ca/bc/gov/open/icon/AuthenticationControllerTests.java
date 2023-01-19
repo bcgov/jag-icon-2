@@ -7,27 +7,30 @@ import ca.bc.gov.open.icon.controllers.AuthenticationController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuthenticationControllerTests {
-    @Autowired private ObjectMapper objectMapper;
+    @Mock private ObjectMapper objectMapper;
+    @Mock private RestTemplate restTemplate;
+    @Mock private AuthenticationController authenticationController;
 
-    @Mock private WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-
-    @Mock private RestTemplate restTemplate = new RestTemplate();
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        authenticationController =
+                Mockito.spy(new AuthenticationController(restTemplate, objectMapper));
+    }
 
     @Test
     public void testReauthenticationFailed() throws JsonProcessingException {
@@ -57,8 +60,6 @@ public class AuthenticationControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        AuthenticationController authenticationController =
-                new AuthenticationController(restTemplate, objectMapper);
         var resp = authenticationController.reauthenticationFailed(req);
         Assertions.assertNotNull(resp);
     }
@@ -91,8 +92,6 @@ public class AuthenticationControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        AuthenticationController authenticationController =
-                new AuthenticationController(restTemplate, objectMapper);
         var resp = authenticationController.reauthenticationSucceeded(req);
         Assertions.assertNotNull(resp);
     }
@@ -122,8 +121,6 @@ public class AuthenticationControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        AuthenticationController authenticationController =
-                new AuthenticationController(restTemplate, objectMapper);
         var resp = authenticationController.logoutExecuted(req);
         Assertions.assertNotNull(resp);
     }
@@ -153,8 +150,6 @@ public class AuthenticationControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        AuthenticationController authenticationController =
-                new AuthenticationController(restTemplate, objectMapper);
         var resp = authenticationController.idleTimeoutExecuted(req);
         Assertions.assertNotNull(resp);
     }
@@ -184,8 +179,6 @@ public class AuthenticationControllerTests {
                         Mockito.<Class<Status>>any()))
                 .thenReturn(responseEntity);
 
-        AuthenticationController authenticationController =
-                new AuthenticationController(restTemplate, objectMapper);
         var resp = authenticationController.primaryAuthenticationCompleted(req);
         Assertions.assertNotNull(resp);
     }

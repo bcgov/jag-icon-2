@@ -105,6 +105,16 @@ objects:
                     secretKeyRef:
                       name: jag-icon2-rabbitconsumer-application-secrets
                       key: ORDS_HOST
+                - name: ORDS_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: ORDS_USERNAME
+                - name: ORDS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: jag-icon2-rabbitconsumer-application-secrets
+                      key: ORDS_PASSWORD
                 - name: PING_QUEUE_NAME
                   valueFrom:
                     secretKeyRef:

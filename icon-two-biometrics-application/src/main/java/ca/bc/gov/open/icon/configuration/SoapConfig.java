@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Properties;
 import javax.xml.soap.SOAPMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +42,12 @@ public class SoapConfig extends WsConfigurerAdapter {
 
     public static final String ACCOUNT_TYPE_FIVE = "5";
 
+    @Value("${icon.username}")
+    private String username;
+
+    @Value("${icon.password}")
+    private String password;
+
     @Bean
     public SoapFaultMappingExceptionResolver exceptionResolver() {
         SoapFaultMappingExceptionResolver exceptionResolver =
@@ -68,8 +76,8 @@ public class SoapConfig extends WsConfigurerAdapter {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+        var restTemplate = restTemplateBuilder.basicAuthentication(username, password).build();
         restTemplate.getMessageConverters().add(0, createMappingJacksonHttpMessageConverter());
         return restTemplate;
     }
