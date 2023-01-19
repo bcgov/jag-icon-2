@@ -94,9 +94,21 @@ public class EnrollmentController {
 
             // The response is wrapped in 2 objects. Here we are doing the correct cast to receive
             // the object and then doing the unwrapping at the same time
-            RegisterIndividualResponse registerIndividualResponse =
-                    (RegisterIndividualResponse)
-                            soapTemplate.marshalSendAndReceive(iisHost, iisReq);
+            RegisterIndividualResponse registerIndividualResponse = null;
+            try {
+                registerIndividualResponse =
+                        (RegisterIndividualResponse)
+                                soapTemplate.marshalSendAndReceive(iisHost, iisReq);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "startEnrollment",
+                                        ex.getMessage(),
+                                        iisReq)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!registerIndividualResponse
                     .getRegisterIndividualResult()
@@ -123,8 +135,19 @@ public class EnrollmentController {
             ipsLink.setRequest(ipsLinkInner);
 
             //      We do nothing with the response so ignored
-            LinkResponse linkResponse =
-                    (LinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, ipsLink);
+            LinkResponse linkResponse = null;
+            try {
+                linkResponse = (LinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, ipsLink);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "startEnrollment",
+                                        ex.getMessage(),
+                                        ipsLink)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!linkResponse.getLinkResult().getCode().equals(ResponseCode.SUCCESS)) {
                 throw new APIThrownException(
@@ -142,8 +165,20 @@ public class EnrollmentController {
 
             getIdRef.setRequest(getIdRefInner);
 
-            GetIdRefResponse idRefResponse =
-                    (GetIdRefResponse) soapTemplate.marshalSendAndReceive(ipsHost, getIdRef);
+            GetIdRefResponse idRefResponse = null;
+            try {
+                idRefResponse =
+                        (GetIdRefResponse) soapTemplate.marshalSendAndReceive(ipsHost, getIdRef);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "startEnrollment",
+                                        ex.getMessage(),
+                                        getIdRef)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!idRefResponse.getGetIdRefResult().getCode().equals(ResponseCode.SUCCESS)) {
                 throw new APIThrownException(
@@ -165,9 +200,22 @@ public class EnrollmentController {
 
             startEnrollmentBCSRequest.setRequest(bcsReqInner);
 
-            ca.bc.gov.open.icon.bcs.StartEnrollmentResponse bcsResp =
-                    (ca.bc.gov.open.icon.bcs.StartEnrollmentResponse)
-                            soapTemplate.marshalSendAndReceive(bcsHost, startEnrollmentBCSRequest);
+            ca.bc.gov.open.icon.bcs.StartEnrollmentResponse bcsResp = null;
+            try {
+                bcsResp =
+                        (ca.bc.gov.open.icon.bcs.StartEnrollmentResponse)
+                                soapTemplate.marshalSendAndReceive(
+                                        bcsHost, startEnrollmentBCSRequest);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "startEnrollment",
+                                        ex.getMessage(),
+                                        startEnrollmentBCSRequest)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!bcsResp.getStartEnrollmentResult()
                     .getCode()

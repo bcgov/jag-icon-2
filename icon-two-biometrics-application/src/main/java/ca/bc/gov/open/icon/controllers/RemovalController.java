@@ -89,9 +89,21 @@ public class RemovalController {
                     BCeIDAccountTypeCode.fromValue(move.getRequestorType()));
             registerIndividual.setRequest(registerIndividualRequest);
 
-            RegisterIndividualResponse registerIndividualResponse =
-                    (RegisterIndividualResponse)
-                            soapTemplate.marshalSendAndReceive(iisHost, registerIndividual);
+            RegisterIndividualResponse registerIndividualResponse = null;
+            try {
+                registerIndividualResponse =
+                        (RegisterIndividualResponse)
+                                soapTemplate.marshalSendAndReceive(iisHost, registerIndividual);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "move",
+                                        ex.getMessage(),
+                                        registerIndividual)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!registerIndividualResponse
                     .getRegisterIndividualResult()
@@ -117,8 +129,19 @@ public class RemovalController {
                             move.getRequestorType()));
             link.setRequest(linkRequest);
 
-            LinkResponse linkResponse =
-                    (LinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, link);
+            LinkResponse linkResponse = null;
+            try {
+                linkResponse = (LinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, link);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "move",
+                                        ex.getMessage(),
+                                        link)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!linkResponse
                     .getLinkResult()
@@ -141,9 +164,21 @@ public class RemovalController {
             rebindCredentialRequest.setCredentialReference(move.getCredentialRefFrom());
             rebindCredential.setRequest(rebindCredentialRequest);
 
-            RebindCredentialResponse rebindCredentialResponse =
-                    (RebindCredentialResponse)
-                            soapTemplate.marshalSendAndReceive(bcsHost, rebindCredential);
+            RebindCredentialResponse rebindCredentialResponse = null;
+            try {
+                rebindCredentialResponse =
+                        (RebindCredentialResponse)
+                                soapTemplate.marshalSendAndReceive(bcsHost, rebindCredential);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "move",
+                                        ex.getMessage(),
+                                        rebindCredential)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!rebindCredentialResponse
                     .getRebindCredentialResult()
@@ -188,9 +223,21 @@ public class RemovalController {
             removeIndividual.setRequest(removeIndividualRequest);
             removeIndividual.setIssuance(issuanceToken);
 
-            RemoveIndividualResponse removeIndividualResponse =
-                    (RemoveIndividualResponse)
-                            soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
+            RemoveIndividualResponse removeIndividualResponse = null;
+            try {
+                removeIndividualResponse =
+                        (RemoveIndividualResponse)
+                                soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "move",
+                                        ex.getMessage(),
+                                        removeIndividual)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!removeIndividualResponse
                     .getRemoveIndividualResult()
@@ -221,8 +268,20 @@ public class RemovalController {
             unlink.setIssuance(issuanceTokenIPS);
             unlink.setRequest(unlinkRequest);
 
-            UnlinkResponse unlinkResponse =
-                    (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
+            UnlinkResponse unlinkResponse = null;
+            try {
+                unlinkResponse =
+                        (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "move",
+                                        ex.getMessage(),
+                                        unlink)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!unlinkResponse
                     .getUnlinkResult()
@@ -265,9 +324,21 @@ public class RemovalController {
             destroyCredential.setRequest(destroyCredentialRequest);
             destroyCredential.setIssuance(issuanceToken);
 
-            DestroyCredentialResponse destroyCredentialResponse =
-                    (DestroyCredentialResponse)
-                            soapTemplate.marshalSendAndReceive(bcsHost, destroyCredential);
+            DestroyCredentialResponse destroyCredentialResponse = null;
+            try {
+                destroyCredentialResponse =
+                        (DestroyCredentialResponse)
+                                soapTemplate.marshalSendAndReceive(bcsHost, destroyCredential);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "remove",
+                                        ex.getMessage(),
+                                        destroyCredential)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!destroyCredentialResponse
                     .getDestroyCredentialResult()
@@ -308,9 +379,21 @@ public class RemovalController {
             removeIndividual.setRequest(removeIndividualRequest);
             removeIndividual.setIssuance(issuanceTokenRemoval);
 
-            RemoveIndividualResponse removeIndividualResponse =
-                    (RemoveIndividualResponse)
-                            soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
+            RemoveIndividualResponse removeIndividualResponse = null;
+            try {
+                removeIndividualResponse =
+                        (RemoveIndividualResponse)
+                                soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "remove",
+                                        ex.getMessage(),
+                                        removeIndividual)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!removeIndividualResponse
                     .getRemoveIndividualResult()
@@ -337,8 +420,20 @@ public class RemovalController {
             unlink.setIssuance(issuanceTokenUnlink);
             unlink.setRequest(unlinkRequest);
 
-            UnlinkResponse unlinkResponse =
-                    (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
+            UnlinkResponse unlinkResponse = null;
+            try {
+                unlinkResponse =
+                        (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "remove",
+                                        ex.getMessage(),
+                                        unlink)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!unlinkResponse
                     .getUnlinkResult()
@@ -403,9 +498,21 @@ public class RemovalController {
             removeIndividual.setRequest(removeIndividualRequest);
             removeIndividual.setIssuance(issuanceTokenRemoval);
 
-            RemoveIndividualResponse removeIndividualResponse =
-                    (RemoveIndividualResponse)
-                            soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
+            RemoveIndividualResponse removeIndividualResponse = null;
+            try {
+                removeIndividualResponse =
+                        (RemoveIndividualResponse)
+                                soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "removeIdentity",
+                                        ex.getMessage(),
+                                        removeIndividual)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
 
             if (!removeIndividualResponse
                     .getRemoveIndividualResult()
@@ -437,8 +544,21 @@ public class RemovalController {
             unlink.setIssuance(issuanceTokenUnlink);
             unlink.setRequest(unlinkRequest);
 
-            UnlinkResponse unlinkResponse =
-                    (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
+            UnlinkResponse unlinkResponse = null;
+            try {
+                unlinkResponse =
+                        (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
+            } catch (Exception ex) {
+                log.error(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "removeIdentity",
+                                        ex.getMessage(),
+                                        unlink)));
+                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+            }
+
             if (!unlinkResponse
                     .getUnlinkResult()
                     .getCode()
@@ -490,7 +610,6 @@ public class RemovalController {
             DestroyCredentialResponse destroyCredentialResponse =
                     (DestroyCredentialResponse)
                             soapTemplate.marshalSendAndReceive(bcsHost, destroyCredential);
-
             if (!destroyCredentialResponse
                     .getDestroyCredentialResult()
                     .getCode()
@@ -519,7 +638,8 @@ public class RemovalController {
         }
     }
 
-    private String getRefId(String requesterId, String did, String type) {
+    private String getRefId(String requesterId, String did, String type)
+            throws JsonProcessingException {
         GetIdRef getIdRef = new GetIdRef();
         GetIdRefRequest getIdRefRequest = new GetIdRefRequest();
         getIdRefRequest.setRequesterUserId(requesterId);
@@ -531,8 +651,20 @@ public class RemovalController {
                         : ca.bc.gov.open.icon.ips.BCeIDAccountTypeCode.VOID);
         getIdRef.setRequest(getIdRefRequest);
 
-        GetIdRefResponse getIdRefResponse =
-                (GetIdRefResponse) soapTemplate.marshalSendAndReceive(ipsHost, getIdRef);
+        GetIdRefResponse getIdRefResponse = null;
+        try {
+            getIdRefResponse =
+                    (GetIdRefResponse) soapTemplate.marshalSendAndReceive(ipsHost, getIdRef);
+        } catch (Exception ex) {
+            log.error(
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from WebService - IPS Service",
+                                    "getRefId",
+                                    ex.getMessage(),
+                                    getIdRef)));
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+        }
 
         if (!getIdRefResponse
                 .getGetIdRefResult()
