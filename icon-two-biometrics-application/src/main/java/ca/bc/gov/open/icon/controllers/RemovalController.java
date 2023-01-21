@@ -95,25 +95,34 @@ public class RemovalController {
                         (RegisterIndividualResponse)
                                 soapTemplate.marshalSendAndReceive(iisHost, registerIndividual);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - IIS Service",
                                         "move",
                                         ex.getMessage(),
-                                        registerIndividual)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        registerIndividual)),
+                        ex.getMessage());
             }
 
             if (!registerIndividualResponse
                     .getRegisterIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to register individual "
                                 + registerIndividualResponse
                                         .getRegisterIndividualResult()
-                                        .getMessage());
+                                        .getMessage();
+
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "move",
+                                        exception,
+                                        registerIndividual)),
+                        exception);
             }
 
             String idRef = registerIndividualResponse.getRegisterIndividualResult().getIdRef();
@@ -133,22 +142,29 @@ public class RemovalController {
             try {
                 linkResponse = (LinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, link);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - IPS Service",
                                         "move",
                                         ex.getMessage(),
-                                        link)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        link)),
+                        ex.getMessage());
             }
 
             if (!linkResponse
                     .getLinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
+                var exception = "Failed to link ips " + linkResponse.getLinkResult().getMessage();
                 throw new APIThrownException(
-                        "Failed to link ips " + linkResponse.getLinkResult().getMessage());
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "move",
+                                        exception,
+                                        link)),
+                        exception);
             }
 
             idRef = getRefId(move.getRequestorUserId(), did, null);
@@ -170,25 +186,31 @@ public class RemovalController {
                         (RebindCredentialResponse)
                                 soapTemplate.marshalSendAndReceive(bcsHost, rebindCredential);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - BCS Service",
                                         "move",
                                         ex.getMessage(),
-                                        rebindCredential)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        rebindCredential)),
+                        ex.getMessage());
             }
 
             if (!rebindCredentialResponse
                     .getRebindCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to rebind bcs "
-                                + rebindCredentialResponse
-                                        .getRebindCredentialResult()
-                                        .getMessage());
+                                + rebindCredentialResponse.getRebindCredentialResult().getMessage();
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "move",
+                                        exception,
+                                        rebindCredential)),
+                        exception);
             }
 
             // Grab the did with the from number to start clean up
@@ -229,25 +251,32 @@ public class RemovalController {
                         (RemoveIndividualResponse)
                                 soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - IIS Service",
                                         "move",
                                         ex.getMessage(),
-                                        removeIndividual)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        removeIndividual)),
+                        ex.getMessage());
             }
 
             if (!removeIndividualResponse
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to remove individual "
-                                + removeIndividualResponse
-                                        .getRemoveIndividualResult()
-                                        .getMessage());
+                                + removeIndividualResponse.getRemoveIndividualResult().getMessage();
+
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "move",
+                                        exception,
+                                        removeIndividual)),
+                        exception);
             }
 
             Unlink unlink = new Unlink();
@@ -273,22 +302,29 @@ public class RemovalController {
                 unlinkResponse =
                         (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - IPS Service",
                                         "move",
                                         ex.getMessage(),
-                                        unlink)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        unlink)),
+                        ex.getMessage());
             }
 
             if (!unlinkResponse
                     .getUnlinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
+                var exception = "Failed to unlink " + unlinkResponse.getUnlinkResult().getMessage();
                 throw new APIThrownException(
-                        "Failed to unlink " + unlinkResponse.getUnlinkResult().getMessage());
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "move",
+                                        exception,
+                                        unlink)),
+                        exception);
             }
 
             log.info(
@@ -296,6 +332,9 @@ public class RemovalController {
                             new RequestSuccessLog("Request Success", "move")));
 
             return new MoveResponse();
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -330,25 +369,33 @@ public class RemovalController {
                         (DestroyCredentialResponse)
                                 soapTemplate.marshalSendAndReceive(bcsHost, destroyCredential);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - BCS Service",
                                         "remove",
                                         ex.getMessage(),
-                                        destroyCredential)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        destroyCredential)),
+                        ex.getMessage());
             }
 
             if (!destroyCredentialResponse
                     .getDestroyCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to destroy credential "
                                 + destroyCredentialResponse
                                         .getDestroyCredentialResult()
-                                        .getMessage());
+                                        .getMessage();
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "remove",
+                                        exception,
+                                        destroyCredential)),
+                        exception);
             }
 
             UriComponentsBuilder builder =
@@ -385,25 +432,32 @@ public class RemovalController {
                         (RemoveIndividualResponse)
                                 soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - IIS Service",
                                         "remove",
                                         ex.getMessage(),
-                                        removeIndividual)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        removeIndividual)),
+                        ex.getMessage());
             }
 
             if (!removeIndividualResponse
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to remove individual "
-                                + removeIndividualResponse
-                                        .getRemoveIndividualResult()
-                                        .getMessage());
+                                + removeIndividualResponse.getRemoveIndividualResult().getMessage();
+
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "remove",
+                                        exception,
+                                        removeIndividual)),
+                        exception);
             }
 
             Unlink unlink = new Unlink();
@@ -425,22 +479,30 @@ public class RemovalController {
                 unlinkResponse =
                         (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - IPS Service",
                                         "remove",
                                         ex.getMessage(),
-                                        unlink)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        unlink)),
+                        ex.getMessage());
             }
 
             if (!unlinkResponse
                     .getUnlinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
-                throw new RuntimeException(
-                        "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage());
+                var exception =
+                        "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage();
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "remove",
+                                        exception,
+                                        unlink)),
+                        exception);
             }
 
             log.info(
@@ -448,6 +510,9 @@ public class RemovalController {
                             new RequestSuccessLog("Request Success", "remove")));
 
             return new RemoveResponse();
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -504,25 +569,32 @@ public class RemovalController {
                         (RemoveIndividualResponse)
                                 soapTemplate.marshalSendAndReceive(iisHost, removeIndividual);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - IIS Service",
                                         "removeIdentity",
                                         ex.getMessage(),
-                                        removeIndividual)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        removeIndividual)),
+                        ex.getMessage());
             }
 
             if (!removeIndividualResponse
                     .getRemoveIndividualResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to remove individual "
-                                + removeIndividualResponse
-                                        .getRemoveIndividualResult()
-                                        .getMessage());
+                                + removeIndividualResponse.getRemoveIndividualResult().getMessage();
+
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IIS Service",
+                                        "removeIdentity",
+                                        exception,
+                                        removeIndividual)),
+                        exception);
             }
 
             Unlink unlink = new Unlink();
@@ -549,22 +621,30 @@ public class RemovalController {
                 unlinkResponse =
                         (UnlinkResponse) soapTemplate.marshalSendAndReceive(ipsHost, unlink);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - IPS Service",
                                         "removeIdentity",
                                         ex.getMessage(),
-                                        unlink)));
-                throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                        unlink)),
+                        ex.getMessage());
             }
 
             if (!unlinkResponse
                     .getUnlinkResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
+                var exception =
+                        "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage();
                 throw new APIThrownException(
-                        "Failed to unlink ips " + unlinkResponse.getUnlinkResult().getMessage());
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "removeIdentity",
+                                        exception,
+                                        unlink)),
+                        exception);
             }
 
             log.info(
@@ -572,6 +652,9 @@ public class RemovalController {
                             new RequestSuccessLog("Request Success", "removeIdentity")));
 
             return new RemoveIdentityResponse();
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -607,18 +690,40 @@ public class RemovalController {
             destroyCredential.setRequest(destroyCredentialRequest);
             destroyCredential.setIssuance(issuanceToken);
 
-            DestroyCredentialResponse destroyCredentialResponse =
-                    (DestroyCredentialResponse)
-                            soapTemplate.marshalSendAndReceive(bcsHost, destroyCredential);
+            DestroyCredentialResponse destroyCredentialResponse = null;
+            try {
+                destroyCredentialResponse =
+                        (DestroyCredentialResponse)
+                                soapTemplate.marshalSendAndReceive(bcsHost, destroyCredential);
+            } catch (Exception ex) {
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "removeTemplate",
+                                        ex.getMessage(),
+                                        destroyCredential)),
+                        ex.getMessage());
+            }
+
             if (!destroyCredentialResponse
                     .getDestroyCredentialResult()
                     .getCode()
                     .equals(ca.bc.gov.open.icon.bcs.ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to destroy credential "
                                 + destroyCredentialResponse
                                         .getDestroyCredentialResult()
-                                        .getMessage());
+                                        .getMessage();
+
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "removeTemplate",
+                                        exception,
+                                        destroyCredential)),
+                        exception);
             }
 
             log.info(
@@ -626,6 +731,9 @@ public class RemovalController {
                             new RequestSuccessLog("Request Success", "removeTemplate")));
 
             return new RemoveTemplateResponse();
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -656,22 +764,30 @@ public class RemovalController {
             getIdRefResponse =
                     (GetIdRefResponse) soapTemplate.marshalSendAndReceive(ipsHost, getIdRef);
         } catch (Exception ex) {
-            log.error(
+            throw new APIThrownException(
                     objectMapper.writeValueAsString(
                             new OrdsErrorLog(
                                     "Error received from WebService - IPS Service",
                                     "getRefId",
                                     ex.getMessage(),
-                                    getIdRef)));
-            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
+                                    getIdRef)),
+                    ex.getMessage());
         }
 
         if (!getIdRefResponse
                 .getGetIdRefResult()
                 .getCode()
                 .equals(ca.bc.gov.open.icon.ips.ResponseCode.SUCCESS)) {
+            var exception =
+                    "Failed to get RefId " + getIdRefResponse.getGetIdRefResult().getMessage();
             throw new APIThrownException(
-                    "Failed to get RefId " + getIdRefResponse.getGetIdRefResult().getMessage());
+                    objectMapper.writeValueAsString(
+                            new OrdsErrorLog(
+                                    "Error received from WebService - IPS Service",
+                                    "getRefId",
+                                    exception,
+                                    getIdRef)),
+                    exception);
         }
         return getIdRefResponse.getGetIdRefResult().getIdRef();
     }

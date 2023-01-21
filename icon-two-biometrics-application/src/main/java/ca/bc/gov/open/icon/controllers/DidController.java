@@ -53,13 +53,33 @@ public class DidController {
 
             getDIDIPS.setRequest(getDIDRequest);
 
-            ca.bc.gov.open.icon.ips.GetDIDResponse getDIDResponse =
-                    (ca.bc.gov.open.icon.ips.GetDIDResponse)
-                            soapTemplate.marshalSendAndReceive(ipsHost, getDIDIPS);
+            ca.bc.gov.open.icon.ips.GetDIDResponse getDIDResponse = null;
+            try {
+                getDIDResponse =
+                        (ca.bc.gov.open.icon.ips.GetDIDResponse)
+                                soapTemplate.marshalSendAndReceive(ipsHost, getDIDIPS);
+            } catch (Exception ex) {
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "getDid",
+                                        ex.getMessage(),
+                                        getDIDIPS)),
+                        ex.getMessage());
+            }
 
             if (!getDIDResponse.getGetDIDResult().getCode().equals(ResponseCode.SUCCESS)) {
+                var exception =
+                        "Failed to get did " + getDIDResponse.getGetDIDResult().getMessage();
                 throw new APIThrownException(
-                        "Failed to get did " + getDIDResponse.getGetDIDResult().getMessage());
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - IPS Service",
+                                        "getDid",
+                                        exception,
+                                        getDIDIPS)),
+                        exception);
             }
 
             GetDIDResponse out = new GetDIDResponse();
@@ -70,6 +90,9 @@ public class DidController {
                             new RequestSuccessLog("Request Success", "getDid")));
 
             return out;
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(

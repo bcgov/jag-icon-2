@@ -160,8 +160,15 @@ public class HealthController {
             String isAllowed = Objects.requireNonNull(resp.getBody()).getOrDefault("isAllowed", "");
 
             if (isAllowed.equals("0")) {
+                var exception = "The requested CSNumber does not have access to this function.";
                 throw new APIThrownException(
-                        "The requested CSNumber does not have access to this function.");
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received",
+                                        "getHealthServiceRequestHistory",
+                                        exception,
+                                        getHealthServiceRequestHistory)),
+                        exception);
             }
 
             var csNumber = getHealthServiceRequestHistoryDocument.getHealthService().getCsNum();
@@ -185,14 +192,14 @@ public class HealthController {
                                 soapTemplate.marshalSendAndReceive(
                                         hsrServiceUrl, healthServiceRequestSummary);
             } catch (Exception ex) {
-                log.error(
+                throw new APIThrownException(
                         objectMapper.writeValueAsString(
                                 new OrdsErrorLog(
                                         "Error received from WebService - HSR Service",
                                         "getHealthServiceRequestHistory",
                                         ex.getMessage(),
-                                        healthServiceRequestSummary)));
-                throw handleError(ex, new ca.bc.gov.open.icon.hsr.Error());
+                                        healthServiceRequestSummary)),
+                        ex.getMessage());
             }
 
             GetHealthServiceRequestHistoryResponse getHealthServiceRequestHistoryResponse =
@@ -248,6 +255,9 @@ public class HealthController {
                                     "Request Success", "getHealthServiceRequestHistory")));
 
             return getHealthServiceRequestHistoryResponse;
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.hsr.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
