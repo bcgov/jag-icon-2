@@ -53,19 +53,40 @@ public class ActivationController {
                     BCeIDAccountTypeCode.fromValue(reactivate.getRequestorType()));
             reactivateCredential.setRequest(reactivateCredentialRequest);
 
-            ReactivateCredentialResponse reactivateCredentialResponse =
-                    (ReactivateCredentialResponse)
-                            soapTemplate.marshalSendAndReceive(bcsHost, reactivateCredential);
+            ReactivateCredentialResponse reactivateCredentialResponse = null;
+            try {
+                reactivateCredentialResponse =
+                        (ReactivateCredentialResponse)
+                                soapTemplate.marshalSendAndReceive(bcsHost, reactivateCredential);
+            } catch (Exception ex) {
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "reactivate",
+                                        ex.getMessage(),
+                                        reactivateCredential)),
+                        ex.getMessage());
+            }
 
             if (!reactivateCredentialResponse
                     .getReactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to reactivate credential "
                                 + reactivateCredentialResponse
                                         .getReactivateCredentialResult()
-                                        .getMessage());
+                                        .getMessage();
+
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "reactivate",
+                                        exception,
+                                        reactivateCredential)),
+                        exception);
             }
 
             log.info(
@@ -73,6 +94,9 @@ public class ActivationController {
                             new RequestSuccessLog("Request Success", "reactivate")));
 
             return new ReactivateResponse();
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -101,19 +125,40 @@ public class ActivationController {
             deactivateCredentialRequest.setCredentialReference(deactivate.getCredentialRef());
             deactivateCredential.setRequest(deactivateCredentialRequest);
 
-            DeactivateCredentialResponse deactivateCredentialResponse =
-                    (DeactivateCredentialResponse)
-                            soapTemplate.marshalSendAndReceive(bcsHost, deactivateCredential);
+            DeactivateCredentialResponse deactivateCredentialResponse = null;
+            try {
+                deactivateCredentialResponse =
+                        (DeactivateCredentialResponse)
+                                soapTemplate.marshalSendAndReceive(bcsHost, deactivateCredential);
+            } catch (Exception ex) {
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "deactivate",
+                                        ex.getMessage(),
+                                        deactivateCredential)),
+                        ex.getMessage());
+            }
 
             if (!deactivateCredentialResponse
                     .getDeactivateCredentialResult()
                     .getCode()
                     .equals(ResponseCode.SUCCESS)) {
-                throw new APIThrownException(
+                var exception =
                         "Failed to destroy credential "
                                 + deactivateCredentialResponse
                                         .getDeactivateCredentialResult()
-                                        .getMessage());
+                                        .getMessage();
+
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "deactivate",
+                                        exception,
+                                        deactivateCredential)),
+                        exception);
             }
 
             log.info(
@@ -121,6 +166,9 @@ public class ActivationController {
                             new RequestSuccessLog("Request Success", "deactivate")));
 
             return new DeactivateResponse();
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(

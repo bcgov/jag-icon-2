@@ -56,14 +56,34 @@ public class SearchController {
 
             startSearchBCS.setRequest(startSearchRequest);
 
-            ca.bc.gov.open.icon.bcs.StartSearchResponse bcsResp =
-                    (ca.bc.gov.open.icon.bcs.StartSearchResponse)
-                            soapTemplate.marshalSendAndReceive(bcsHost, startSearchBCS);
+            ca.bc.gov.open.icon.bcs.StartSearchResponse bcsResp = null;
+            try {
+                bcsResp =
+                        (ca.bc.gov.open.icon.bcs.StartSearchResponse)
+                                soapTemplate.marshalSendAndReceive(bcsHost, startSearchBCS);
+            } catch (Exception ex) {
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "startSearch",
+                                        ex.getMessage(),
+                                        startSearchBCS)),
+                        ex.getMessage());
+            }
 
             if (!bcsResp.getStartSearchResult().getCode().equals(ResponseCode.SUCCESS)) {
+                var exception =
+                        "Failed to start BCS search " + bcsResp.getStartSearchResult().getMessage();
+
                 throw new APIThrownException(
-                        "Failed to start BCS search "
-                                + bcsResp.getStartSearchResult().getMessage());
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "startSearch",
+                                        exception,
+                                        startSearchBCS)),
+                        exception);
             }
 
             ca.bc.gov.open.icon.biometrics.StartSearchResponse out =
@@ -79,6 +99,9 @@ public class SearchController {
                             new RequestSuccessLog("Request Success", "startSearch")));
 
             return out;
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -108,13 +131,33 @@ public class SearchController {
 
             finishSearchBCS.setRequest(finishSearchRequest);
 
-            FinishSearchResponse bcsResp =
-                    (FinishSearchResponse)
-                            soapTemplate.marshalSendAndReceive(bcsHost, finishSearchBCS);
+            FinishSearchResponse bcsResp = null;
+            try {
+                bcsResp =
+                        (FinishSearchResponse)
+                                soapTemplate.marshalSendAndReceive(bcsHost, finishSearchBCS);
+            } catch (Exception ex) {
+                throw new APIThrownException(
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "finishSearch",
+                                        ex.getMessage(),
+                                        finishSearch)),
+                        ex.getMessage());
+            }
 
             if (!bcsResp.getFinishSearchResult().getCode().equals(ResponseCode.SUCCESS)) {
+                var exception =
+                        "Failed to finish search " + bcsResp.getFinishSearchResult().getMessage();
                 throw new APIThrownException(
-                        "Failed to finish search " + bcsResp.getFinishSearchResult().getMessage());
+                        objectMapper.writeValueAsString(
+                                new OrdsErrorLog(
+                                        "Error received from WebService - BCS Service",
+                                        "finishSearch",
+                                        exception,
+                                        finishSearch)),
+                        exception);
             }
 
             ca.bc.gov.open.icon.biometrics.FinishSearchResponse out =
@@ -128,6 +171,9 @@ public class SearchController {
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "finishSearch")));
             return out;
+        } catch (APIThrownException ex) {
+            log.error(ex.getLog());
+            throw handleError(ex, new ca.bc.gov.open.icon.biometrics.Error());
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
