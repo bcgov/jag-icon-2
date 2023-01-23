@@ -209,13 +209,13 @@
     <xsd:complexType name="movement">
         <xsd:sequence>
             <xsd:element name="movementCode" nillable="true" type="xsd:string"/>
-            <xsd:element name="movementDescription" type="xsd:string"/>
+            <xsd:element name="movementDescription" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="movementReason">
         <xsd:sequence>
-            <xsd:element name="movementReasonCode" type="xsd:string"/>
+            <xsd:element name="movementReasonCode" nillable="true" type="xsd:string"/>
             <xsd:element name="movementReasonDescription" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
@@ -259,7 +259,7 @@
 
     <xsd:complexType name="sentenceLength">
         <xsd:sequence>
-            <xsd:element name="sentenceLengthCode" type="xsd:string"/>
+            <xsd:element name="sentenceLengthCode" nillable="true" type="xsd:string"/>
             <xsd:element name="sentenceLengthDescription" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
