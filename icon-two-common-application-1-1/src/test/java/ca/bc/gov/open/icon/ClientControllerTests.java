@@ -76,7 +76,6 @@ public class ClientControllerTests {
     public void testGetTrustAccount() throws JsonProcessingException {
         TrustAccount trustAccount = new TrustAccount();
         trustAccount.setCsNum("A");
-        trustAccount.setBusinessRole("A");
         trustAccount.setFundsAvailable("A");
         trustAccount.setTotalFunds("A");
         trustAccount.setFundsOnHold("A");
