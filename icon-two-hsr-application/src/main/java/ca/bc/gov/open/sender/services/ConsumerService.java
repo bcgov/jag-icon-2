@@ -30,7 +30,6 @@ public class ConsumerService {
             throws IOException, InterruptedException {
         try {
             hsrService.processHSR(message.getPayload());
-            log.info("processed successfully");
         } catch (Exception ignored) {
             log.error("ERROR: " + message + " not processed successfully");
         }
