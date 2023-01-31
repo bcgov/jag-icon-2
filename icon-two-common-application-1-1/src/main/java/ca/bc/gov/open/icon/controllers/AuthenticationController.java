@@ -41,10 +41,14 @@ public class AuthenticationController {
             @RequestPayload ReauthenticationFailed reauthenticationFailed)
             throws JsonProcessingException {
 
+        var inner =
+                reauthenticationFailed.getReauthentication() != null
+                        ? reauthenticationFailed.getReauthentication()
+                        : new Reauthentication();
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "auth/reauthentication-failed");
-        HttpEntity<ReauthenticationFailed> payload =
-                new HttpEntity<>(reauthenticationFailed, new HttpHeaders());
+        HttpEntity<Reauthentication> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -63,7 +67,7 @@ public class AuthenticationController {
                                     "Error received from ORDS",
                                     "reauthenticationFailed",
                                     ex.getMessage(),
-                                    reauthenticationFailed)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
@@ -139,7 +143,7 @@ public class AuthenticationController {
                                     "Error received from ORDS",
                                     "logoutExecuted",
                                     ex.getMessage(),
-                                    logoutExecuted)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
@@ -175,7 +179,7 @@ public class AuthenticationController {
                                     "Error received from ORDS",
                                     "idleTimeoutExecuted",
                                     ex.getMessage(),
-                                    idleTimeoutExecuted)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
@@ -215,7 +219,7 @@ public class AuthenticationController {
                                     "Error received from ORDS",
                                     "primaryAuthentication",
                                     ex.getMessage(),
-                                    primaryAuthentication)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
