@@ -76,6 +76,7 @@ public class CustomizedXMLStreamWriter implements XMLStreamWriter {
     @Override
     public void writeAttribute(String prefix, String namespaceURI, String localName, String value)
             throws XMLStreamException {
+        if (localName.equals("nil")) return;
         xmlStreamWriter.writeAttribute(prefix, namespaceURI, localName, value);
     }
 
