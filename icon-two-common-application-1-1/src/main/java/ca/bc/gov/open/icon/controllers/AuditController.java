@@ -45,10 +45,14 @@ public class AuditController {
     public EServiceAccessedResponse eServiceAccessed(
             @RequestPayload EServiceAccessed eServiceAccessed) throws JsonProcessingException {
 
+        var inner =
+                eServiceAccessed.getEService() != null
+                        ? eServiceAccessed.getEService()
+                        : new EService();
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-accessed");
-        HttpEntity<EServiceAccessed> payload =
-                new HttpEntity<>(eServiceAccessed, new HttpHeaders());
+        HttpEntity<EService> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -67,7 +71,7 @@ public class AuditController {
                                     "Error received from ORDS",
                                     "eServiceAccessed",
                                     ex.getMessage(),
-                                    eServiceAccessed)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
@@ -77,10 +81,14 @@ public class AuditController {
     public HomeScreenAccessedResponse homeScreenAccessed(
             @RequestPayload HomeScreenAccessed homeScreenAccessed) throws JsonProcessingException {
 
+        var inner =
+                homeScreenAccessed.getHomeScreen() != null
+                        ? homeScreenAccessed.getHomeScreen()
+                        : new HomeScreen();
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/home-screen-accessed");
-        HttpEntity<HomeScreenAccessed> payload =
-                new HttpEntity<>(homeScreenAccessed, new HttpHeaders());
+        HttpEntity<HomeScreen> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -99,7 +107,7 @@ public class AuditController {
                                     "Error received from ORDS",
                                     "homeScreenAccessed",
                                     ex.getMessage(),
-                                    homeScreenAccessed)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
@@ -110,10 +118,14 @@ public class AuditController {
             @RequestPayload SessionTimeoutExecuted sessionTimeoutExecuted)
             throws JsonProcessingException {
 
+        var inner =
+                sessionTimeoutExecuted.getSessionTimeout() != null
+                        ? sessionTimeoutExecuted.getSessionTimeout()
+                        : new SessionTimeout();
+
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/session-timeout");
-        HttpEntity<SessionTimeoutExecuted> payload =
-                new HttpEntity<>(sessionTimeoutExecuted, new HttpHeaders());
+        HttpEntity<SessionTimeout> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -132,7 +144,7 @@ public class AuditController {
                                     "Error received from ORDS",
                                     "sessionTimeoutExecuted",
                                     ex.getMessage(),
-                                    sessionTimeoutExecuted)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
@@ -143,10 +155,13 @@ public class AuditController {
             @RequestPayload EServiceFunctionAccessed eServiceFunctionAccessed)
             throws JsonProcessingException {
 
+        var inner =
+                eServiceFunctionAccessed.getEServiceFunction() != null
+                        ? eServiceFunctionAccessed.getEServiceFunction()
+                        : new EServiceFunction();
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl(host + "audit/eservice-function-accessed");
-        HttpEntity<EServiceFunctionAccessed> payload =
-                new HttpEntity<>(eServiceFunctionAccessed, new HttpHeaders());
+        HttpEntity<EServiceFunction> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -165,7 +180,7 @@ public class AuditController {
                                     "Error received from ORDS",
                                     "eServiceFunctionAccessed",
                                     ex.getMessage(),
-                                    eServiceFunctionAccessed)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }

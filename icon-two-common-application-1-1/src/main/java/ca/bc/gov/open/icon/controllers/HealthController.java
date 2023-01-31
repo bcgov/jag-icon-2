@@ -120,7 +120,7 @@ public class HealthController {
                                     "Error received from ORDS",
                                     "healthServiceRequestSubmitted",
                                     ex.getMessage(),
-                                    healthServiceRequestSubmitted)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }

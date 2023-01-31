@@ -2,8 +2,7 @@ package ca.bc.gov.open.icon.controllers;
 
 import static ca.bc.gov.open.icon.exceptions.ServiceFaultException.handleError;
 
-import ca.bc.gov.open.icon.audit.MessageAccessed;
-import ca.bc.gov.open.icon.audit.MessageAccessedResponse;
+import ca.bc.gov.open.icon.audit.*;
 import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.ereporting.*;
 import ca.bc.gov.open.icon.message.*;
@@ -47,8 +46,10 @@ public class MessageController {
     public MessageAccessedResponse messageAccessed(@RequestPayload MessageAccessed messageAccessed)
             throws JsonProcessingException {
 
+        var inner =
+                messageAccessed.getMessage() != null ? messageAccessed.getMessage() : new Message();
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + "message/accessed");
-        HttpEntity<MessageAccessed> payload = new HttpEntity<>(messageAccessed, new HttpHeaders());
+        HttpEntity<Message> payload = new HttpEntity<>(inner, new HttpHeaders());
 
         try {
             HttpEntity<Status> resp =
@@ -67,7 +68,7 @@ public class MessageController {
                                     "Error received from ORDS",
                                     "messageAccessed",
                                     ex.getMessage(),
-                                    messageAccessed)));
+                                    inner)));
             throw handleError(ex, new ca.bc.gov.open.icon.audit.Error());
         }
     }
