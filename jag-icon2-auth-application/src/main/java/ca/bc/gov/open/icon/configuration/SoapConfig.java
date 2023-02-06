@@ -68,7 +68,7 @@ public class SoapConfig extends WsConfigurerAdapter {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
         servlet.setApplicationContext(applicationContext);
         servlet.setTransformWsdlLocations(true);
-        return new ServletRegistrationBean<>(servlet, "/common-1-2/*");
+        return new ServletRegistrationBean<>(servlet, "/auth/*");
     }
 
     @Bean
