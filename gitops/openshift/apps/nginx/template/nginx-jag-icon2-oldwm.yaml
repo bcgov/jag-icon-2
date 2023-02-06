@@ -50,7 +50,7 @@ objects:
           access_log off;
         }
 
-        location /common-1-1/Audit {
+        location /common/Audit {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -65,7 +65,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/Audit;
         }
-        location /common-1-1/EReporting {
+        location /common/EReporting {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -80,7 +80,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/EReporting;
         }
-        location /common-1-1/HSR {
+        location /common/HSR {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -95,7 +95,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/HSR;
         }
-        location /common-1-1/Message {
+        location /common/Message {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -110,7 +110,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/Message;
         }
-        location /common-1-1/MyInfo {
+        location /common/MyInfo {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -125,7 +125,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/MyInfo;
         }
-        location /common-1-1/VisitSchedule {
+        location /common/VisitSchedule {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -140,7 +140,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/VisitSchedule;
         }
-        location /common-1-1/TrustAccount {
+        location /common/TrustAccount {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -155,7 +155,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/TrustAccount;
         }
-        location /common-1-1/TombStoneInfo {
+        location /common/TombStoneInfo {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -170,7 +170,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/TombStoneInfo;
         }
-        location /common-1-1/SessionParameter {
+        location /common/SessionParameter {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -185,7 +185,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/Common;
         }
-        location /common-1-1/ErrorHandling {
+        location /common/ErrorHandling {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;
@@ -200,7 +200,7 @@ objects:
           proxy_pass_request_headers on;
           proxy_pass https://wsgw.dev.jag.gov.bc.ca/icon2/dev/ocp/ErrorHandling;
         }
-        location /common-1-2 {
+        location /auth {
           client_max_body_size 100m;
           proxy_read_timeout 240s;
           proxy_send_timeout 80s;

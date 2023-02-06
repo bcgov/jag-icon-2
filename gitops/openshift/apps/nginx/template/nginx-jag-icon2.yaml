@@ -44,12 +44,12 @@ parameters:
   - name: ENDPOINT2
     description: The target endpoint
     required: false
-    value: jag-icon2-common-1-1
+    value: jag-icon2-common
   
   - name: ENDPOINT3
     description: The target endpoint
     required: false
-    value: jag-icon2-common-1-2
+    value: jag-icon2-auth
   
   - name: ENDPOINT4
     description: The target endpoint
@@ -59,7 +59,7 @@ parameters:
   - name: ENDPOINT5
     description: The target endpoint
     required: false
-    value: jag-icon2-rabbitconsumer
+    value: jag-icon2-hsr
 
   - name: ENDPOINT6
     description: The target endpoint
@@ -193,7 +193,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-audit/common-1-1/Audit;
+          proxy_pass http://splitter-audit/common/Audit;
         }
         location /api/common-1-1/EReporting {
           client_max_body_size 100m;
@@ -208,7 +208,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-ereporting/common-1-1/EReporting;
+          proxy_pass http://splitter-ereporting/common/EReporting;
         }
         location /api/common-1-1/HSR {
           client_max_body_size 100m;
@@ -223,7 +223,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-hsr/common-1-1/HSR;
+          proxy_pass http://splitter-hsr/common/HSR;
         }
         location /api/common-1-1/Message {
           client_max_body_size 100m;
@@ -238,7 +238,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-message/common-1-1/Message;
+          proxy_pass http://splitter-message/common/Message;
         }
         location /api/common-1-1/MyInfo {
           client_max_body_size 100m;
@@ -253,7 +253,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-myinfo/common-1-1/MyInfo;
+          proxy_pass http://splitter-myinfo/common/MyInfo;
         }
         location /api/common-1-1/VisitSchedule {
           client_max_body_size 100m;
@@ -268,7 +268,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-visitschedule/common-1-1/VisitSchedule;
+          proxy_pass http://splitter-visitschedule/common/VisitSchedule;
         }
         location /api/common-1-1/TrustAccount {
           client_max_body_size 100m;
@@ -283,7 +283,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-trustaccount/common-1-1/TrustAccount;
+          proxy_pass http://splitter-trustaccount/common/TrustAccount;
         }
         location /api/common-1-1/TombStoneInfo {
           client_max_body_size 100m;
@@ -298,7 +298,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-tombstoneinfo/common-1-1/TombStoneInfo;
+          proxy_pass http://splitter-tombstoneinfo/common/TombStoneInfo;
         }
         location /api/common-1-1/SessionParameter {
           client_max_body_size 100m;
@@ -313,7 +313,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-sessionparameter/common-1-1/SessionParameter;
+          proxy_pass http://splitter-sessionparameter/common/SessionParameter;
         }
         location /api/common-1-1/ErrorHandling {
           client_max_body_size 100m;
@@ -328,7 +328,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-errorhandling/common-1-1/ErrorHandling;
+          proxy_pass http://splitter-errorhandling/common/ErrorHandling;
         }
         location /api/common-1-2 {
           client_max_body_size 100m;
@@ -343,7 +343,7 @@ objects:
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Host $server_name;
           proxy_pass_request_headers on;
-          proxy_pass http://splitter-common-1-2/common-1-2;
+          proxy_pass http://splitter-auth/auth;
         }
         location /api/Biometrics {
           client_max_body_size 100m;
@@ -385,57 +385,57 @@ objects:
     data:
       nginx-upstream.conf: |-
         upstream splitter-audit {
-          server jag-icon2-common-1-1;
+          server jag-icon2-common;
           #server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-ereporting {
-          server jag-icon2-common-1-1;
+          server jag-icon2-common;
           #server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-hsr {
-          server jag-icon2-common-1-1;
+          server jag-icon2-common;
           #server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-message {
-          #server jag-icon2-common-1-1;
+          #server jag-icon2-common;
           server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-myinfo {
-          server jag-icon2-common-1-1;
+          server jag-icon2-common;
           #server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-visitschedule {
-          #server jag-icon2-common-1-1;
+          #server jag-icon2-common;
           server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-trustaccount {
-          #server jag-icon2-common-1-1;
+          #server jag-icon2-common;
           server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-tombstoneinfo {
-          server jag-icon2-common-1-1;
+          server jag-icon2-common;
           #server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-sessionparameter {
-          #server jag-icon2-common-1-1;
+          #server jag-icon2-common;
           server nginx-jag-icon2-oldwm;
         }
 
         upstream splitter-errorhandling {
-          server jag-icon2-common-1-1;
+          server jag-icon2-common;
           #server nginx-jag-icon2-oldwm;
         }
 
-        upstream splitter-common-1-2 {
-          #server jag-icon2-common-1-2;
+        upstream splitter-auth {
+          #server jag-icon2-auth;
           server nginx-jag-icon2-oldwm;
         }
 
