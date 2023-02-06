@@ -100,7 +100,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-common-application-1-1
+          CONTEXT: ./jag-icon2-common-application
         run: |
           docker build -t ${{github.event.inputs.app1}}:${{env.gitsha}} ${CONTEXT}
       
@@ -109,7 +109,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-common-application-1-2
+          CONTEXT: ./jag-icon2-auth-application
         run: |
           docker build -t ${{github.event.inputs.app2}}:${{env.gitsha}} ${CONTEXT}
       
@@ -118,7 +118,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-biometrics-application
+          CONTEXT: ./jag-icon2-biometrics-application
         run: |
           docker build -t ${{github.event.inputs.app3}}:${{env.gitsha}} ${CONTEXT}
       
@@ -127,7 +127,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-myfiles-application
+          CONTEXT: ./jag-icon2-myfiles-application
         run: |
           docker build -t ${{github.event.inputs.app4}}:${{env.gitsha}} ${CONTEXT}
       
@@ -136,7 +136,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-hsr-application
+          CONTEXT: ./jag-icon2-hsr-application
         run: |
           docker build -t ${{github.event.inputs.app5}}:${{env.gitsha}} ${CONTEXT}
 

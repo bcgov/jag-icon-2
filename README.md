@@ -111,7 +111,7 @@ before they can be pushed to.
 ### Building the Application
 1) Make sure using java 11 for the project modals and sdk
 2) Run ```mvn compile```
-3) Make sure ```icon-two-common-models``` and ```icon-two-hsr-models``` are marked as generated sources roots (xjc)
+3) Make sure ```icon2-common-models``` and ```icon2-hsr-models``` are marked as generated sources roots (xjc)
 
 ### Pre-running the application
 Run ```docker run -p 5672:5672 -p 15672:15672 rabbitmq:management```
@@ -121,16 +121,16 @@ Option A) Intellij
 1) Set env variables.
 2) Run the application
 
-Option B) Jar, e.g., to run 'icon-two-common-application-1-1' application
+Option B) Jar, e.g., to run 'jag-icon2-common-application' application
 1) Run ```mvn package```
-2) Run ```cd icon-two-common-application-1-1```
-3) Run ```java -jar ./target/icon-two-common-application-1-1.jar $ENV_VAR$```  (Note that $ENV_VAR$ are environment variables)
+2) Run ```cd jag-icon2-common-application```
+3) Run ```java -jar ./target/jag-icon2-common-application.jar $ENV_VAR$```  (Note that $ENV_VAR$ are environment variables)
 
-Option C) Docker, e.g., to run 'icon-two-common-application-1-1' application
+Option C) Docker, e.g., to run 'jag-icon2-common-application' application
 1) Run ```mvn package```
-2) Run ```cd icon-two-common-application-1-1```
-3) Run ```docker build -t icon-two-common-application-1-1 .``` from root folder
-4) Run ```docker run -p 8080:8080 icon-two-common-application-1-1 $ENV_VAR$```  (Note that $ENV_VAR$ are environment variables)
+2) Run ```cd jag-icon2-common-application```
+3) Run ```docker build -t jag-icon2-common-application .``` from root folder
+4) Run ```docker run -p 8080:8080 jag-icon2-common-application $ENV_VAR$```  (Note that $ENV_VAR$ are environment variables)
 
 ### Running RabbitMQ
 * http://localhost:15672/

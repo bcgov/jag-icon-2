@@ -8,7 +8,7 @@
 
     <artifactId>AutomatedTests</artifactId>
     <parent>
-        <artifactId>jag-icon-two</artifactId>
+        <artifactId>jag-icon2</artifactId>
         <groupId>ca.bc.gov.open</groupId>
         <version>1.0.0</version>
     </parent>

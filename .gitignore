@@ -39,8 +39,8 @@ cc-test-reporter
 /soapui.log
 /soapui-errors.log
 /global-groovy.log
-/icon-two-comparison-tool-1-1/results/*.txt
-/icon-two-comparison-tool-1-2/results/*.txt
+/icon2-comparison-tool-myfiles/results/*.txt
+/icon2-comparison-tool-auth/results/*.txt
 /TestErrors.zip
 /ICON2Audit-soapui-project.xml
 /ICON2HSR-soapui-project.xml

@@ -82,17 +82,17 @@ jobs:
         run: mvn -ntp verify
 
       - name: Fix Jacoco Report Format for CC
-        run: sed -e 's/<[\/]\?group[^>]*>//g' icon-two-code-coverage/target/site/jacoco-aggregate/jacoco.xml > icon-two-code-coverage/target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml
+        run: sed -e 's/<[\/]\?group[^>]*>//g' icon2-code-coverage/target/site/jacoco-aggregate/jacoco.xml > icon2-code-coverage/target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml
 
         # Formatting the Code Coverage Report
       - name: Format the coverage report
-        run: JACOCO_SOURCE_PATH="icon-two-biometrics-application/src/main/java icon-two-common-models/target/generated-sources/xjc icon-two-hsr-models/target/generated-sources/xjc icon-two-common-application-1-1/src/main/java icon-two-common-application-1-2/src/main/java icon-two-myfiles-application/src/main/java icon-two-hsr-application/src/main/java" ./cc-test-reporter format-coverage icon-two-code-coverage/target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml --input-type jacoco -o ./target/site/jacoco/codeclimate.json
+        run: JACOCO_SOURCE_PATH="jag-icon2-biometrics-application/src/main/java icon2-common-models/target/generated-sources/xjc icon2-hsr-models/target/generated-sources/xjc jag-icon2-common-application/src/main/java jag-icon2-auth-application/src/main/java jag-icon2-myfiles-application/src/main/java jag-icon2-hsr-application/src/main/java" ./cc-test-reporter format-coverage icon2-code-coverage/target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml --input-type jacoco -o ./target/site/jacoco/codeclimate.json
 
 # Upload JSON for debugging purposes
       - name: Upload JSON for debugging purposes
         uses: actions/upload-artifact@v3.1.1
         with:
-          name: icon-two-coverage-report
+          name: icon2-coverage-report
           path: ./target/site/jacoco/codeclimate.json
 
       # Upload total coverage report to Code Climate
