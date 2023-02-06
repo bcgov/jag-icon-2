@@ -79,52 +79,11 @@ objects:
               imagePullPolicy: Always
               ports:
                 - containerPort: 8080
-              env:
-                - name: BASIC_AUTH_USER
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-myfiles-application-secrets
-                      key: BASIC_AUTH_USER
-                - name: BASIC_AUTH_PASS
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-myfiles-application-secrets
-                      key: BASIC_AUTH_PASS
-                - name: ORDS_HOST
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-myfiles-application-secrets
-                      key: ORDS_HOST
-                - name: ORDS_USERNAME
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-myfiles-application-secrets
-                      key: ORDS_USERNAME
-                - name: ORDS_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-myfiles-application-secrets
-                      key: ORDS_PASSWORD
-                - name: SPRING_PROFILES_ACTIVE
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-splunk-config
-                      key: SPRING_PROFILE
-                - name: SPLUNK_HTTP_URL
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-splunk-config
-                      key: SPLUNK_HTTP_URL
-                - name: SPLUNK_TOKEN
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-splunk-config
-                      key: SPLUNK_TOKEN
-                - name: SPLUNK_INDEX
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-splunk-config
-                      key: SPLUNK_INDEX
+              envFrom:
+                - secretRef:
+                    name: jag-icon2-myfiles-application-secrets
+                - secretRef:
+                    name: jag-icon2-splunk-config
               resources:
                 limits:
                   cpu: 100m

@@ -2,7 +2,7 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   name: ${APP_NAME}
-  description: Deployment template for the JAG-ICON2-RABBITCONSUMER
+  description: Deployment template for the jag-icon2-common
 
 labels:
   app: ${APP_NAME}
@@ -20,7 +20,7 @@ parameters:
   - name: COMPONENT_NAME
     description: The application name that each component is part of
     required: false
-    value: jag-icon2-rabbitconsumer
+    value: jag-icon2-common
 
   - name: OC_NAMESPACE
     description: The OpenShift namespace prefix
@@ -50,7 +50,7 @@ parameters:
 
 objects:
 
-  ### JAG-ICON2-RABBITCONSUMER Deployment Config ###
+  ### jag-icon2-common Deployment Config ###
   - apiVersion: apps.openshift.io/v1
     kind: DeploymentConfig
     metadata:
@@ -79,82 +79,11 @@ objects:
               imagePullPolicy: Always
               ports:
                 - containerPort: 8080
-              env:
-                - name: BASIC_AUTH_USER
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: BASIC_AUTH_USER
-                - name: BASIC_AUTH_PASS
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: BASIC_AUTH_PASS
-                - name: HSR_QUEUE_NAME
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: HSR_QUEUE_NAME
-                - name: HSR_SERVICE_URL
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: HSR_SERVICE_URL
-                - name: ORDS_HOST
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: ORDS_HOST
-                - name: ORDS_USERNAME
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: ORDS_USERNAME
-                - name: ORDS_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: ORDS_PASSWORD
-                - name: PING_QUEUE_NAME
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: PING_QUEUE_NAME
-                - name: RABBIT_MQ_HOST
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-rabbitconsumer-application-secrets
-                      key: RABBIT_MQ_HOST
-                - name: RABBIT_MQ_USERNAME
-                  valueFrom:
-                    secretKeyRef:
-                      name: rabbitmq-cluster-secret
-                      key: username
-                - name: RABBIT_MQ_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: rabbitmq-cluster-secret
-                      key: password
-                - name: SPRING_PROFILES_ACTIVE
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-splunk-config
-                      key: SPRING_PROFILE
-                - name: SPLUNK_HTTP_URL
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-splunk-config
-                      key: SPLUNK_HTTP_URL
-                - name: SPLUNK_TOKEN
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-splunk-config
-                      key: SPLUNK_TOKEN
-                - name: SPLUNK_INDEX
-                  valueFrom:
-                    secretKeyRef:
-                      name: jag-icon2-splunk-config
-                      key: SPLUNK_INDEX
+              envFrom:
+                - secretRef:
+                    name: jag-icon2-common-application-secrets
+                - secretRef:
+                    name: jag-icon2-splunk-config
               resources:
                 limits:
                   cpu: 100m
@@ -201,7 +130,7 @@ objects:
               name: ${COMPONENT_NAME}:${OC_ENV}
     status: {}
 
-  ### JAG-ICON2-RABBITCONSUMER Service ###
+  ### jag-icon2-common Service ###
   - apiVersion: v1
     kind: Service
     metadata:
@@ -218,7 +147,7 @@ objects:
       sessionAffinity: None
       type: ClusterIP
 
-  ### JAG-ICON2-RABBITCONSUMER route ###
+  ### jag-icon2-common route ###
   - apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
