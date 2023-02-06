@@ -9,7 +9,7 @@ WORKDIR /build
 
 ## for the lack at a COPY --patern */pom.xml, we have to declare all the pom files manually
 COPY ./pom.xml pom.xml
-COPY ./bom/icon-two-starters-bom/pom.xml bom/icon-two-starters-bom/pom.xml
+COPY ./bom/icon2-starters-bom/pom.xml bom/icon2-starters-bom/pom.xml
 COPY ./AutomatedTests/pom.xml AutomatedTests/pom.xml
 COPY ./jag-icon2-biometrics-application/pom.xml jag-icon2-biometrics-application/pom.xml
 COPY ./icon2-comparison-tool-auth/pom.xml icon2-comparison-tool-auth/pom.xml

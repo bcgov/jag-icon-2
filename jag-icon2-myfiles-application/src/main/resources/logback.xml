@@ -19,7 +19,7 @@
         <token>${SPLUNK_TOKEN}</token>
         <index>${SPLUNK_INDEX}</index>
         <source>jag-icon2-myfiles-application</source>
-        <sourcetype>icon-two-logs</sourcetype>
+        <sourcetype>icon2-logs</sourcetype>
         <disableCertificateValidation>true</disableCertificateValidation>
         <batch_size_count>1</batch_size_count>
         <connectTimeout>5000</connectTimeout>

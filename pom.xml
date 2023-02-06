@@ -10,10 +10,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ca.bc.gov.open</groupId>
-    <artifactId>jag-icon-two</artifactId>
+    <artifactId>jag-icon2</artifactId>
     <version>1.0.0</version>
-    <name>jag-icon-two</name>
-    <description>jag-icon-two Application</description>
+    <name>jag-icon2</name>
+    <description>jag-icon2 Application</description>
     <properties>
         <java.version>11</java.version>
         <log4j2.version>2.17.1</log4j2.version>
@@ -36,7 +36,7 @@
                 all
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>jag-icon2-myfiles-application</module>
                 <module>jag-icon2-biometrics-application</module>
                 <module>icon2-common-models</module>
@@ -60,7 +60,7 @@
                 AutomatedTests
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>AutomatedTests</module>
             </modules>
         </profile>
@@ -69,7 +69,7 @@
                 jag-icon2-biometrics-application
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>icon2-common-models</module>
                 <module>jag-icon2-biometrics-application</module>
             </modules>
@@ -79,7 +79,7 @@
                 jag-icon2-common-application
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>icon2-common-models</module>
                 <module>icon2-hsr-models</module>
                 <module>jag-icon2-common-application</module>
@@ -90,7 +90,7 @@
                 jag-icon2-auth-application
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>icon2-common-models</module>
                 <module>jag-icon2-auth-application</module>
             </modules>
@@ -100,7 +100,7 @@
                 icon2-comparison-tool-myfiles
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>icon2-common-models</module>
                 <module>icon2-hsr-models</module>
                 <module>icon2-comparison-tool-myfiles</module>
@@ -111,7 +111,7 @@
                 icon2-comparison-tool-auth
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>icon2-common-models</module>
                 <module>icon2-comparison-tool-auth</module>
             </modules>
@@ -121,7 +121,7 @@
                 jag-icon2-myfiles-application
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>icon2-common-models</module>
                 <module>jag-icon2-myfiles-application</module>
             </modules>
@@ -131,7 +131,7 @@
                 jag-icon2-hsr-application
             </id>
             <modules>
-                <module>bom/icon-two-starters-bom</module>
+                <module>bom/icon2-starters-bom</module>
                 <module>icon2-common-models</module>
                 <module>icon2-hsr-models</module>
                 <module>jag-icon2-hsr-application</module>

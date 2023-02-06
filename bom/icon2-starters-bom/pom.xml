@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ca.bc.gov.open</groupId>
-    <artifactId>icon-two-starters-bom</artifactId>
+    <artifactId>icon2-starters-bom</artifactId>
     <version>0.2.2</version>
 
     <properties>
