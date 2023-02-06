@@ -179,7 +179,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>icon-two-myfile-application</finalName>
+        <finalName>jag-icon2-myfile-application</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
