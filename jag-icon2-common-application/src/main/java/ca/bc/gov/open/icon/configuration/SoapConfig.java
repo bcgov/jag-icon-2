@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 import javax.xml.soap.SOAPMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -45,6 +46,8 @@ public class SoapConfig extends WsConfigurerAdapter {
 
     @Value("${icon.password}")
     private String password;
+
+    @Autowired private WebServiceSenderWithAuth webServiceSenderWithAuth;
 
     @Bean
     public SoapFaultMappingExceptionResolver exceptionResolver() {
@@ -104,6 +107,7 @@ public class SoapConfig extends WsConfigurerAdapter {
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
         webServiceTemplate.setMessageFactory(messageFactory());
+        webServiceTemplate.setMessageSender(webServiceSenderWithAuth);
         jaxb2Marshaller.setContextPaths("ca.bc.gov.open.icon.hsrservice");
         webServiceTemplate.setMarshaller(jaxb2Marshaller);
         webServiceTemplate.setUnmarshaller(jaxb2Marshaller);

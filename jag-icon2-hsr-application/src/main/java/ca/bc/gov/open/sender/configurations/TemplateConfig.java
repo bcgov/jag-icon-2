@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.xml.soap.SOAPMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,8 @@ public class TemplateConfig {
 
     @Value("${icon.password}")
     private String password;
+
+    @Autowired private WebServiceSenderWithAuth webServiceSenderWithAuth;
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
@@ -63,6 +66,7 @@ public class TemplateConfig {
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
         webServiceTemplate.setMessageFactory(messageFactory());
+        webServiceTemplate.setMessageSender(webServiceSenderWithAuth);
         jaxb2Marshaller.setContextPaths("ca.bc.gov.open.icon.hsrservice");
         webServiceTemplate.setMarshaller(jaxb2Marshaller);
         webServiceTemplate.setUnmarshaller(jaxb2Marshaller);

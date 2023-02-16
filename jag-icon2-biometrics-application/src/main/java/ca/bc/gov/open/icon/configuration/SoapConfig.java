@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Properties;
 import javax.xml.soap.SOAPMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -39,6 +40,8 @@ public class SoapConfig extends WsConfigurerAdapter {
 
     public static final String SOAP_NAMESPACE =
             "http://brooks/ICON2_Biometrics.Source.Biometrics.ws.provider:Biometrics";
+
+    @Autowired private WebServiceSenderWithAuth webServiceSenderWithAuth;
 
     public static final String ACCOUNT_TYPE_FIVE = "5";
 
@@ -102,6 +105,7 @@ public class SoapConfig extends WsConfigurerAdapter {
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
         webServiceTemplate.setMessageFactory(messageFactory12());
+        webServiceTemplate.setMessageSender(webServiceSenderWithAuth);
         jaxb2Marshaller.setContextPaths(
                 "ca.bc.gov.open.icon.iis", "ca.bc.gov.open.icon.ips", "ca.bc.gov.open.icon.bcs");
         webServiceTemplate.setMarshaller(jaxb2Marshaller);
