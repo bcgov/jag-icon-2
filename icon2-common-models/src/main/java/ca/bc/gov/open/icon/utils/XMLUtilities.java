@@ -22,7 +22,6 @@ public final class XMLUtilities {
                     (JAXBElement<T>) unmarshaller.unmarshal(source, obj.getClass());
             return jaxbElement.getValue();
         } catch (JAXBException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -46,7 +45,6 @@ public final class XMLUtilities {
 
             return stringWriter.toString();
         } catch (JAXBException | XMLStreamException e) {
-            e.printStackTrace();
             return null;
         }
     }
