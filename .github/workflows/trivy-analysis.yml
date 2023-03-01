@@ -49,11 +49,10 @@ jobs:
         with:
           scan-type: image
           image-ref: jag-icon2-common-application:${{ github.sha }}
-          format: table
-          # format: template
-          # template: '@/contrib/sarif.tpl'
-          # output: trivy-results.sarif
-          exit-code: 0
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
           ignore-unfixed: true
           severity: HIGH,CRITICAL
       
@@ -72,11 +71,10 @@ jobs:
         with:
           scan-type: image
           image-ref: jag-icon2-auth-application:${{ github.sha }}
-          format: table
-          # format: template
-          # template: '@/contrib/sarif.tpl'
-          # output: trivy-results.sarif
-          exit-code: 0
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
           ignore-unfixed: true
           severity: HIGH,CRITICAL
 
@@ -95,11 +93,10 @@ jobs:
         with:
           scan-type: image
           image-ref: jag-icon2-biometrics-application:${{ github.sha }}
-          format: table
-          # format: template
-          # template: '@/contrib/sarif.tpl'
-          # output: trivy-results.sarif
-          exit-code: 0
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
           ignore-unfixed: true
           severity: HIGH,CRITICAL
       
@@ -118,11 +115,10 @@ jobs:
         with:
           scan-type: image
           image-ref: jag-icon2-myfiles-application:${{ github.sha }}
-          format: table
-          # format: template
-          # template: '@/contrib/sarif.tpl'
-          # output: trivy-results.sarif
-          exit-code: 0
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
           ignore-unfixed: true
           severity: HIGH,CRITICAL
       
@@ -141,18 +137,17 @@ jobs:
         with:
           scan-type: image
           image-ref: jag-icon2-hsr-application:${{ github.sha }}
-          format: table
-          # format: template
-          # template: '@/contrib/sarif.tpl'
-          # output: trivy-results.sarif
-          exit-code: 0
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results.sarif
+          exit-code: 1
           ignore-unfixed: true
           severity: HIGH,CRITICAL
 
       #Upload results to the Github security tab.
-      # - name: Upload Trivy scan results to GitHub Security tab
-      #   uses: github/codeql-action/upload-sarif@v1
-      #   if: always()
-      #   with:
-      #     sarif_file: trivy-results.sarif
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
           
