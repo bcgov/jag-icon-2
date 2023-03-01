@@ -19,23 +19,23 @@
         <fi.solita.clamav>1.0.1</fi.solita.clamav>
         <xmlschema-core.version>2.2.5</xmlschema-core.version>
         <xmlschema.version>1.4.7</xmlschema.version>
-        <spring.actuator.version>2.7.5</spring.actuator.version>
-        <spring.security.version>2.7.5</spring.security.version>
-        <spring.validation.version>2.7.5</spring.validation.version>
+        <spring.actuator.version>2.7.9</spring.actuator.version>
+        <spring.security.version>2.7.9</spring.security.version>
+        <spring.validation.version>2.7.9</spring.validation.version>
         <spring.ws.test.version>3.1.2</spring.ws.test.version>
-        <spring.devtools.version>2.7.5</spring.devtools.version>
-        <spring.configuration.processor.version>2.7.5</spring.configuration.processor.version>
+        <spring.devtools.version>2.7.9</spring.devtools.version>
+        <spring.configuration.processor.version>2.7.9</spring.configuration.processor.version>
         <lombok.version>1.18.24</lombok.version>
-        <spring.starter.test.version>2.7.5</spring.starter.test.version>
+        <spring.starter.test.version>2.7.9</spring.starter.test.version>
         <spring.security.test.version>5.7.3</spring.security.test.version>
-        <spring.logging.version>2.7.5</spring.logging.version>
+        <spring.logging.version>2.7.9</spring.logging.version>
         <jackson.datatype.jsr310.version>2.13.4</jackson.datatype.jsr310.version>
         <jackson.databind.version>2.12.7.1</jackson.databind.version>
         <splunk.javalogging.version>1.11.1</splunk.javalogging.version>
         <logback.classic.version>1.2.11</logback.classic.version>
         <logback.core.version>1.2.11</logback.core.version>
-        <spring.starter.web.version>2.7.5</spring.starter.web.version>
-        <spring.starter.web-services.version>2.7.4</spring.starter.web-services.version>
+        <spring.starter.web.version>2.7.9</spring.starter.web.version>
+        <spring.starter.web-services.version>2.7.9</spring.starter.web-services.version>
         <spring-context.support.version>5.3.23</spring-context.support.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
         <jaxb-runtime.version>4.0.1</jaxb-runtime.version>
