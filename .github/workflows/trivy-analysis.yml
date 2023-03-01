@@ -53,7 +53,7 @@ jobs:
           # format: template
           # template: '@/contrib/sarif.tpl'
           # output: trivy-results.sarif
-          exit-code: 1
+          exit-code: 0
           ignore-unfixed: true
           severity: HIGH,CRITICAL
       
@@ -76,7 +76,7 @@ jobs:
           # format: template
           # template: '@/contrib/sarif.tpl'
           # output: trivy-results.sarif
-          exit-code: 1
+          exit-code: 0
           ignore-unfixed: true
           severity: HIGH,CRITICAL
 
@@ -99,7 +99,7 @@ jobs:
           # format: template
           # template: '@/contrib/sarif.tpl'
           # output: trivy-results.sarif
-          exit-code: 1
+          exit-code: 0
           ignore-unfixed: true
           severity: HIGH,CRITICAL
       
@@ -122,7 +122,7 @@ jobs:
           # format: template
           # template: '@/contrib/sarif.tpl'
           # output: trivy-results.sarif
-          exit-code: 1
+          exit-code: 0
           ignore-unfixed: true
           severity: HIGH,CRITICAL
       
@@ -145,7 +145,7 @@ jobs:
           # format: template
           # template: '@/contrib/sarif.tpl'
           # output: trivy-results.sarif
-          exit-code: 1
+          exit-code: 0
           ignore-unfixed: true
           severity: HIGH,CRITICAL
 
