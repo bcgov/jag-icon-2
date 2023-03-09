@@ -80,7 +80,9 @@ public class HSRService {
                 }
                 Thread.sleep(PAUSE);
             }
-            break;
+            if (!appErr && !hsrFail) {
+                break;
+            }
         }
 
         // Record HSR
