@@ -67,6 +67,7 @@ public class HSRService {
                         (SubmitHealthServiceRequestResponse)
                                 webServiceTemplate.marshalSendAndReceive(
                                         hsrServiceUrl, submitHealthServiceRequest);
+                break;
             } catch (WebServiceIOException ex) {
                 // Connection Error
                 appErr = false;
@@ -79,9 +80,6 @@ public class HSRService {
                     break;
                 }
                 Thread.sleep(PAUSE);
-            }
-            if (!appErr && !hsrFail) {
-                break;
             }
         }
 
