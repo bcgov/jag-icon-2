@@ -67,6 +67,9 @@ public class HSRService {
                         (SubmitHealthServiceRequestResponse)
                                 webServiceTemplate.marshalSendAndReceive(
                                         hsrServiceUrl, submitHealthServiceRequest);
+                log.info(
+                        objectMapper.writeValueAsString(
+                                new RequestSuccessLog("Request Success", "submitHSR")));
                 break;
             } catch (WebServiceIOException ex) {
                 // Connection Error
