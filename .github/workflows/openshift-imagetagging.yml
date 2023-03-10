@@ -88,15 +88,26 @@ jobs:
           echo "Release Git Sha: ${{env.gitsha}}"
 
         #Login to Openshift using OC Tools SA and Token for image stream tagging changes - Kamloops (OC PROD)
-      - name: Authenticate OC Tools SA - Kamloops (OC PROD)
+      # - name: Authenticate OC Tools SA - Kamloops (OC PROD)
+      #   uses: redhat-actions/oc-login@v1
+      #   env:
+      #     OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
+      #     OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_TOOLS_DEPLOYER_NAME}}
+      #   with:
+      #     openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+      #     openshift_token: ${{secrets.OPENSHIFT_SA_TOOLS_DEPLOYER_TOKEN}}
+      #     namespace: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
+
+        #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Kamloops (OC PROD)
+      - name: Authenticate OC Env Specific SA - Kamloops (OC PROD)
         uses: redhat-actions/oc-login@v1
         env:
-          OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
-          OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_TOOLS_DEPLOYER_NAME}}
+          OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.imageTargetEnv }}
+          OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_Env_DEPLOYER_NAME}}
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_SA_TOOLS_DEPLOYER_TOKEN}}
-          namespace: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
+          openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
+          namespace: ${OPENSHIFT_NAMESPACE}
         
         # Re-Tag latest dev (source) jag-icon2-common image to other env to trigger openshift deployment via DeploymentConfig
         # It also creates a tag with release version number to use it in case of rollback..
