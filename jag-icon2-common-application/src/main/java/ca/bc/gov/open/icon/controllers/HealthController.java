@@ -15,7 +15,6 @@ import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
 import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequest;
 import ca.bc.gov.open.icon.hsrservice.SubmitHealthServiceRequestResponse;
 import ca.bc.gov.open.icon.models.*;
-import ca.bc.gov.open.icon.models.serializers.InstantSoapConverter;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -378,14 +377,16 @@ public class HealthController {
             SubmitHealthServiceRequest submitHealthServiceRequest =
                     new SubmitHealthServiceRequest();
             submitHealthServiceRequest.setCsNumber(pub.getCsNum());
-            submitHealthServiceRequest.setSubmissionDate(
-                    String.valueOf(InstantSoapConverter.parse(pub.getRequestDate())));
+            submitHealthServiceRequest.setSubmissionDate(String.valueOf(pub.getRequestDate()));
             submitHealthServiceRequest.setCentre(pub.getLocation());
             submitHealthServiceRequest.setDetails(pub.getHealthRequest());
             SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =
                     (SubmitHealthServiceRequestResponse)
                             soapTemplate.marshalSendAndReceive(
                                     hsrServiceUrl, submitHealthServiceRequest);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "sendHSR")));
             return submitHealthServiceRequestResponse;
         } catch (Exception ex) {
             log.error(
@@ -407,6 +408,9 @@ public class HealthController {
             resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, resp, HealthServicePub.class);
+            log.info(
+                    objectMapper.writeValueAsString(
+                            new RequestSuccessLog("Request Success", "updateHSR")));
             return resp.getBody().getHsrId();
         } catch (Exception ex) {
             log.error(
