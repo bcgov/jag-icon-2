@@ -8,13 +8,13 @@ on:
   workflow_dispatch:
     inputs:
       app1:
-        description: 'App Name (jag-icon2-common-1-1)'    
+        description: 'App Name (jag-icon2-common)'    
         required: true
-        default: 'jag-icon2-common-1-1'
+        default: 'jag-icon2-common'
       app2:
-        description: 'App Name (jag-icon2-common-1-2)'    
+        description: 'App Name (jag-icon2-auth)'    
         required: true
-        default: 'jag-icon2-common-1-2'
+        default: 'jag-icon2-auth'
       app3:
         description: 'App Name (jag-icon2-biometrics)'    
         required: true
@@ -24,9 +24,9 @@ on:
         required: true
         default: 'jag-icon2-myfiles'
       app5:
-        description: 'App Name (jag-icon2-rabbitconsumer)'    
+        description: 'App Name (jag-icon2-hsr)'    
         required: true
-        default: 'jag-icon2-rabbitconsumer'
+        default: 'jag-icon2-hsr'
       env:
         type: choice
         description: Image Target environment
@@ -95,21 +95,21 @@ jobs:
       - name: Maven Spotless Check
         run: mvn -ntp spotless:check
 
-      #Build image jag-icon2-common-1-1
-      - name: Build image jag-icon2-common-1-1
+      #Build image jag-icon2-common
+      - name: Build image jag-icon2-common
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-common-application-1-1
+          CONTEXT: ./jag-icon2-common-application
         run: |
           docker build -t ${{github.event.inputs.app1}}:${{env.gitsha}} ${CONTEXT}
       
-      #Build image jag-icon2-common-1-2
-      - name: Build image jag-icon2-common-1-2
+      #Build image jag-icon2-auth
+      - name: Build image jag-icon2-auth
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-common-application-1-2
+          CONTEXT: ./jag-icon2-auth-application
         run: |
           docker build -t ${{github.event.inputs.app2}}:${{env.gitsha}} ${CONTEXT}
       
@@ -118,7 +118,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-biometrics-application
+          CONTEXT: ./jag-icon2-biometrics-application
         run: |
           docker build -t ${{github.event.inputs.app3}}:${{env.gitsha}} ${CONTEXT}
       
@@ -127,16 +127,16 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-myfiles-application
+          CONTEXT: ./jag-icon2-myfiles-application
         run: |
           docker build -t ${{github.event.inputs.app4}}:${{env.gitsha}} ${CONTEXT}
       
-      #Build image jag-icon2-rabbitconsumer
-      - name: Build image jag-icon2-rabbitconsumer
+      #Build image jag-icon2-hsr
+      - name: Build image jag-icon2-hsr
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          CONTEXT: ./icon-two-hsr-application
+          CONTEXT: ./jag-icon2-hsr-application
         run: |
           docker build -t ${{github.event.inputs.app5}}:${{env.gitsha}} ${CONTEXT}
 
@@ -147,46 +147,6 @@ jobs:
           registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_SA_USERNAME}}
           password: ${{secrets.OPENSHIFT_SA_PASSWORD}}
-
-      #Push image jag-icon2-common-1-1 to OpenShift Image stream - Kamloops (OC GOLD)
-      - name: Push Image jag-icon2-common-1-1 to Openshift Image Stream - Kamloops (OC GOLD)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app1}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app1}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-common-1-2 to OpenShift Image stream - Kamloops (OC GOLD)
-      - name: Push Image jag-icon2-common-1-2 to Openshift Image Stream - Kamloops (OC GOLD)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app2}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app2}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-biometrics to OpenShift Image stream - Kamloops (OC GOLD)
-      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Kamloops (OC GOLD)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app3}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app3}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-myfiles to OpenShift Image stream - Kamloops (OC GOLD)
-      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Kamloops (OC GOLD)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app4}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app4}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-rabbitconsumer to OpenShift Image stream - Kamloops (OC GOLD)
-      - name: Push Image jag-icon2-rabbitconsumer to Openshift Image Stream - Kamloops (OC GOLD)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app5}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
       
       #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Kamloops (OC GOLD)
       - name: Authenticate OC Env Specific SA - Kamloops (OC GOLD)
@@ -198,26 +158,42 @@ jobs:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
           namespace: ${OPENSHIFT_NAMESPACE}
-        
-      # Labels the deployment config of the application jag-icon2-common-1-1 with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
-      - name: Labelling DC of jag-icon2-common-1-1 to release version - Kamloops (OC GOLD)
-        env:
-          releaseVersion: ${{ env.releaseVersion }}
-          appName: ${{github.event.inputs.app1}}
-          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
-        run: |
-          oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
-      
-      # Wait to DC rollout of jag-icon2-common-1-1 to get completed before proceeding next stage - Kamloops (OC GOLD)
-      - name: Wait for DC rollout of jag-icon2-common-1-1 - Kamloops (OC GOLD)
-        env:
-          appName: ${{github.event.inputs.app1}}
-          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
-        run: |
-          oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
 
-      # Labels the deployment config of the application jag-icon2-common-1-2 with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
-      - name: Labelling DC of jag-icon2-common-1-2 to release version - Kamloops (OC GOLD)
+      #Push image jag-icon2-common to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-common to Openshift Image Stream - Kamloops (OC GOLD)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app1}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app1}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      # Labels the deployment config of the application jag-icon2-common with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
+      - name: Labelling DC of jag-icon2-common to release version - Kamloops (OC GOLD)
+        env:
+          releaseVersion: ${{ env.releaseVersion }}
+          appName: ${{github.event.inputs.app1}}
+          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+        run: |
+          oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
+      
+      # Wait to DC rollout of jag-icon2-common to get completed before proceeding next stage - Kamloops (OC GOLD)
+      - name: Wait for DC rollout of jag-icon2-common - Kamloops (OC GOLD)
+        env:
+          appName: ${{github.event.inputs.app1}}
+          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+        run: |
+          oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
+      
+      #Push image jag-icon2-auth to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-auth to Openshift Image Stream - Kamloops (OC GOLD)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app2}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app2}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      # Labels the deployment config of the application jag-icon2-auth with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
+      - name: Labelling DC of jag-icon2-auth to release version - Kamloops (OC GOLD)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app2}}
@@ -225,13 +201,21 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-common-1-2 to get completed before proceeding next stage - Kamloops (OC GOLD)
-      - name: Wait for DC rollout of jag-icon2-common-1-2 - Kamloops (OC GOLD)
+      # Wait to DC rollout of jag-icon2-auth to get completed before proceeding next stage - Kamloops (OC GOLD)
+      - name: Wait for DC rollout of jag-icon2-auth - Kamloops (OC GOLD)
         env:
           appName: ${{github.event.inputs.app2}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
+      
+      #Push image jag-icon2-biometrics to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Kamloops (OC GOLD)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app3}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app3}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
       
       # Labels the deployment config of the application jag-icon2-biometrics with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
       - name: Labelling DC of jag-icon2-biometrics to release version - Kamloops (OC GOLD)
@@ -250,6 +234,14 @@ jobs:
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
+      #Push image jag-icon2-myfiles to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Kamloops (OC GOLD)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app4}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app4}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
       # Labels the deployment config of the application jag-icon2-myfiles with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
       - name: Labelling DC of jag-icon2-myfiles to release version - Kamloops (OC GOLD)
         env:
@@ -267,8 +259,16 @@ jobs:
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      # Labels the deployment config of the application jag-icon2-rabbitconsumer with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
-      - name: Labelling DC of jag-icon2-rabbitconsumer to release version - Kamloops (OC GOLD)
+      #Push image jag-icon2-hsr to OpenShift Image stream - Kamloops (OC GOLD)
+      - name: Push Image jag-icon2-hsr to Openshift Image Stream - Kamloops (OC GOLD)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app5}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      # Labels the deployment config of the application jag-icon2-hsr with release version number to spin up the pods labelled in same version - Kamloops (OC GOLD)
+      - name: Labelling DC of jag-icon2-hsr to release version - Kamloops (OC GOLD)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app5}}
@@ -276,8 +276,8 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-rabbitconsumer to get completed before proceeding next stage - Kamloops (OC GOLD)
-      - name: Wait for DC rollout of jag-icon2-rabbitconsumer - Kamloops (OC GOLD)
+      # Wait to DC rollout of jag-icon2-hsr to get completed before proceeding next stage - Kamloops (OC GOLD)
+      - name: Wait for DC rollout of jag-icon2-hsr - Kamloops (OC GOLD)
         env:
           appName: ${{github.event.inputs.app5}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
@@ -291,47 +291,7 @@ jobs:
           registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}
           username: ${{secrets.OPENSHIFT_SA_USERNAME}}
           password: ${{secrets.OPENSHIFT_SA_PASSWORD_DR}}
-
-      #Push image jag-icon2-common-1-1 to OpenShift Image stream - Calgary (OC GOLDDR)
-      - name: Push Image jag-icon2-common-1-1 to Openshift Image Stream - Calgary (OC GOLDDR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app1}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app1}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
       
-      #Push image jag-icon2-common-1-2 to OpenShift Image stream - Calgary (OC GOLDDR)
-      - name: Push Image jag-icon2-common-1-2 to Openshift Image Stream - Calgary (OC GOLDDR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app2}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app2}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-biometrics to OpenShift Image stream - Calgary (OC GOLDDR)
-      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Calgary (OC GOLDDR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app3}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app3}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-myfiles to OpenShift Image stream - Calgary (OC GOLDDR)
-      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Calgary (OC GOLDDR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app4}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app4}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-      
-      #Push image jag-icon2-rabbitconsumer to OpenShift Image stream - Calgary (OC GOLDDR)
-      - name: Push Image jag-icon2-rabbitconsumer to Openshift Image Stream - Calgary (OC GOLDDR)
-        env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app5}}:${{secrets.OPENSHIFT_ENV_TAG}}
-        run: |
-          docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
-          docker push ${IMAGE}
-
       #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Calgary (OC GOLDDR)
       - name: Authenticate OC Env Specific SA - Calgary (OC GOLDDR)
         uses: redhat-actions/oc-login@v1
@@ -342,26 +302,42 @@ jobs:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL_DR}}
           openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN_DR}}
           namespace: ${OPENSHIFT_NAMESPACE}
-        
-      # Labels the deployment config of the application jag-icon2-common-1-1 with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
-      - name: Labelling DC of jag-icon2-common-1-1 to release version - Calgary (OC GOLDDR)
-        env:
-          releaseVersion: ${{ env.releaseVersion }}
-          appName: ${{github.event.inputs.app1}}
-          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
-        run: |
-          oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
-      
-      # Wait to DC rollout of jag-icon2-common-1-1 to get completed before proceeding next stage - Calgary (OC GOLDDR)
-      - name: Wait for DC rollout of jag-icon2-common-1-1 - Calgary (OC GOLDDR)
-        env:
-          appName: ${{github.event.inputs.app1}}
-          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
-        run: |
-          oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
 
-      # Labels the deployment config of the application jag-icon2-common-1-2 with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
-      - name: Labelling DC of jag-icon2-common-1-2 to release version - Calgary (OC GOLDDR)
+      #Push image jag-icon2-common to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-common to Openshift Image Stream - Calgary (OC GOLDDR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app1}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app1}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      # Labels the deployment config of the application jag-icon2-common with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
+      - name: Labelling DC of jag-icon2-common to release version - Calgary (OC GOLDDR)
+        env:
+          releaseVersion: ${{ env.releaseVersion }}
+          appName: ${{github.event.inputs.app1}}
+          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+        run: |
+          oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
+      
+      # Wait to DC rollout of jag-icon2-common to get completed before proceeding next stage - Calgary (OC GOLDDR)
+      - name: Wait for DC rollout of jag-icon2-common - Calgary (OC GOLDDR)
+        env:
+          appName: ${{github.event.inputs.app1}}
+          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+        run: |
+          oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
+      
+      #Push image jag-icon2-auth to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-auth to Openshift Image Stream - Calgary (OC GOLDDR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app2}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app2}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      # Labels the deployment config of the application jag-icon2-auth with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
+      - name: Labelling DC of jag-icon2-auth to release version - Calgary (OC GOLDDR)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app2}}
@@ -369,13 +345,21 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-common-1-2 to get completed before proceeding next stage - Calgary (OC GOLDDR)
-      - name: Wait for DC rollout of jag-icon2-common-1-2 - Calgary (OC GOLDDR)
+      # Wait to DC rollout of jag-icon2-auth to get completed before proceeding next stage - Calgary (OC GOLDDR)
+      - name: Wait for DC rollout of jag-icon2-auth - Calgary (OC GOLDDR)
         env:
           appName: ${{github.event.inputs.app2}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
+      
+      #Push image jag-icon2-biometrics to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-biometrics to Openshift Image Stream - Calgary (OC GOLDDR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app3}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app3}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
       
       # Labels the deployment config of the application jag-icon2-biometrics with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
       - name: Labelling DC of jag-icon2-biometrics to release version - Calgary (OC GOLDDR)
@@ -394,6 +378,14 @@ jobs:
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
+      #Push image jag-icon2-myfiles to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-myfiles to Openshift Image Stream - Calgary (OC GOLDDR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app4}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app4}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
       # Labels the deployment config of the application jag-icon2-myfiles with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
       - name: Labelling DC of jag-icon2-myfiles to release version - Calgary (OC GOLDDR)
         env:
@@ -411,8 +403,16 @@ jobs:
         run: |
           oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
       
-      # Labels the deployment config of the application jag-icon2-rabbitconsumer with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
-      - name: Labelling DC of jag-icon2-rabbitconsumer to release version - Calgary (OC GOLDDR)
+      #Push image jag-icon2-hsr to OpenShift Image stream - Calgary (OC GOLDDR)
+      - name: Push Image jag-icon2-hsr to Openshift Image Stream - Calgary (OC GOLDDR)
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY_DR}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app5}}:${{secrets.OPENSHIFT_ENV_TAG}}
+        run: |
+          docker tag ${{github.event.inputs.app5}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      # Labels the deployment config of the application jag-icon2-hsr with release version number to spin up the pods labelled in same version - Calgary (OC GOLDDR)
+      - name: Labelling DC of jag-icon2-hsr to release version - Calgary (OC GOLDDR)
         env:
           releaseVersion: ${{ env.releaseVersion }}
           appName: ${{github.event.inputs.app5}}
@@ -420,8 +420,8 @@ jobs:
         run: |
           oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.releaseVersion }}.${{ env.gitsha }}"}}}}}'
       
-      # Wait to DC rollout of jag-icon2-rabbitconsumer to get completed before proceeding next stage - Calgary (OC GOLDDR)
-      - name: Wait for DC rollout of jag-icon2-rabbitconsumer - Calgary (OC GOLDDR)
+      # Wait to DC rollout of jag-icon2-hsr to get completed before proceeding next stage - Calgary (OC GOLDDR)
+      - name: Wait for DC rollout of jag-icon2-hsr - Calgary (OC GOLDDR)
         env:
           appName: ${{github.event.inputs.app5}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
