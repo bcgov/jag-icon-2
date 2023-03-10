@@ -67,6 +67,10 @@ public class HSRService {
                         (SubmitHealthServiceRequestResponse)
                                 webServiceTemplate.marshalSendAndReceive(
                                         hsrServiceUrl, submitHealthServiceRequest);
+                publishHSR.setPacId(
+                        String.valueOf(
+                                submitHealthServiceRequestResponse
+                                        .getSubmitHealthServiceRequestReturn()));
                 log.info(
                         objectMapper.writeValueAsString(
                                 new RequestSuccessLog("Request Success", "submitHSR")));
