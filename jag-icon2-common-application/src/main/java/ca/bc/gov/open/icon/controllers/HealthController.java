@@ -405,7 +405,10 @@ public class HealthController {
         try {
             resp =
                     restTemplate.exchange(
-                            builder.toUriString(), HttpMethod.POST, resp, HealthServicePub.class);
+                            builder.toUriString(),
+                            HttpMethod.POST,
+                            new HttpEntity<>(pub, new HttpHeaders()),
+                            HealthServicePub.class);
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "updateHSR")));
