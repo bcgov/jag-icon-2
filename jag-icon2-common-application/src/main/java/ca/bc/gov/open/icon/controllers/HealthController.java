@@ -318,9 +318,8 @@ public class HealthController {
 
         // Go through all health service requests
         for (var pub : resp.getBody()) {
-            // submitHealthServiceRequestReturn is never used
-            SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse = sendHSR(pub);
-
+            // submitHealthServiceRequestReturn is pacId
+            pub.setPacId(String.valueOf(sendHSR(pub)));
             pub.setHsrId(updateHSR(pub));
 
             // Publish HSR only if pacId is empty or null
