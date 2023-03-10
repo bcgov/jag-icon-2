@@ -369,8 +369,7 @@ public class HealthController {
         return publishHSRResponse;
     }
 
-    private SubmitHealthServiceRequestResponse sendHSR(HealthServicePub pub)
-            throws JsonProcessingException {
+    private int sendHSR(HealthServicePub pub) throws JsonProcessingException {
         // Invoke SOAP Service - SubmitHealthServiceRequest (SendHSR)
         try {
             SubmitHealthServiceRequest submitHealthServiceRequest =
@@ -386,7 +385,7 @@ public class HealthController {
             log.info(
                     objectMapper.writeValueAsString(
                             new RequestSuccessLog("Request Success", "sendHSR")));
-            return submitHealthServiceRequestResponse;
+            return submitHealthServiceRequestResponse.getSubmitHealthServiceRequestReturn();
         } catch (Exception ex) {
             log.error(
                     objectMapper.writeValueAsString(
@@ -395,7 +394,7 @@ public class HealthController {
                                     "sendHSR",
                                     ex.getMessage(),
                                     pub)));
-            return null;
+            throw ex;
         }
     }
 

@@ -10,10 +10,7 @@ import ca.bc.gov.open.icon.audit.Status;
 import ca.bc.gov.open.icon.configuration.QueueConfig;
 import ca.bc.gov.open.icon.controllers.*;
 import ca.bc.gov.open.icon.hsr.*;
-import ca.bc.gov.open.icon.hsrservice.ArrayOfHealthServiceRequest;
-import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummary;
-import ca.bc.gov.open.icon.hsrservice.GetHealthServiceRequestSummaryResponse;
-import ca.bc.gov.open.icon.hsrservice.HealthServiceRequestBundle;
+import ca.bc.gov.open.icon.hsrservice.*;
 import ca.bc.gov.open.icon.models.HealthServicePub;
 import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -232,6 +229,12 @@ public class HealthControllerTests {
                         Mockito.<Class<HealthServicePub>>any()))
                 .thenReturn(responseEntity);
 
+        SubmitHealthServiceRequestResponse submitHealthServiceRequestResponse =
+                new SubmitHealthServiceRequestResponse();
+        submitHealthServiceRequestResponse.setSubmitHealthServiceRequestReturn(0);
+        when(webServiceTemplate.marshalSendAndReceive(
+                        anyString(), Mockito.any(SubmitHealthServiceRequest.class)))
+                .thenReturn(submitHealthServiceRequestResponse);
         var resp = healthController.publishHSR(req);
         Assertions.assertNotNull(resp);
     }
