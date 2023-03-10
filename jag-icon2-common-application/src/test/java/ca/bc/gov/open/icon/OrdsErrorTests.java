@@ -12,6 +12,7 @@ import ca.bc.gov.open.icon.exceptions.ServiceFaultException;
 import ca.bc.gov.open.icon.hsr.GetHSRCount;
 import ca.bc.gov.open.icon.hsr.GetHealthServiceRequestHistory;
 import ca.bc.gov.open.icon.hsr.PublishHSR;
+import ca.bc.gov.open.icon.hsr.PublishHSRDocument;
 import ca.bc.gov.open.icon.message.GetMessageDetails;
 import ca.bc.gov.open.icon.message.GetMessages;
 import ca.bc.gov.open.icon.message.SetMessageDetails;
@@ -262,6 +263,14 @@ public class OrdsErrorTests {
         PublishHSR publishHSR = new PublishHSR();
         publishHSR.setXMLString("A");
         publishHSR.setUserTokenString("A");
+
+        // Set up to mock ords response
+        when(restTemplate.exchange(
+                        Mockito.any(String.class),
+                        Mockito.eq(HttpMethod.POST),
+                        Mockito.<HttpEntity<PublishHSRDocument>>any(),
+                        Mockito.<ParameterizedTypeReference<Map<String, String>>>any()))
+                .thenThrow(new ORDSException());
         Assertions.assertThrows(ORDSException.class, () -> healthController.publishHSR(publishHSR));
     }
 
