@@ -67,6 +67,7 @@ public class HealthCheckController {
 
     @GetMapping(value = "ping")
     public GetPingResponse getPing() throws JsonProcessingException {
+        log.info("Successful Ping");
         return new GetPingResponse("Success");
     }
 }
