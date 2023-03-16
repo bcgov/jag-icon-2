@@ -20,9 +20,18 @@ public final class XMLUtilities {
                 xml =
                         new StringBuilder(
                                 xmlString
-                                        .replaceAll("<CsNumber>|<csNumber>|<csNum>", "<CSNumber>")
+                                        .replaceAll("<CsNumber>|<csNumber>", "<CSNumber>")
+                                        .replaceAll("</CsNumber>|</csNumber>", "</CSNumber>")
                                         .replaceAll(
-                                                "</CsNumber>|</csNumber>|</csNum>", "</CSNumber>"));
+                                                "<SiteMinderSessionId>", "<SiteMinderSessionID>")
+                                        .replaceAll(
+                                                "</SiteMinderSessionId>", "</SiteMinderSessionID>")
+                                        .replaceAll(
+                                                "<SiteMinderTransactionId>",
+                                                "<SiteMinderTransactionID>")
+                                        .replaceAll(
+                                                "</SiteMinderTransactionId>",
+                                                "</SiteMinderTransactionID>"));
             }
 
             JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
