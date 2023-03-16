@@ -105,9 +105,9 @@ public class ClientControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetTrustAccountDocument doc = new GetTrustAccountDocument();
         doc.setTrustAccount(trustAccount);
@@ -158,9 +158,9 @@ public class ClientControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetVisitScheduleDocument doc = new GetVisitScheduleDocument();
         doc.setVisitSchedule(visitSchedule);

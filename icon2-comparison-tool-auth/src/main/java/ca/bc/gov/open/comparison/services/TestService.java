@@ -185,7 +185,7 @@ public class TestService {
                     line[eHasFunctionalAbility.AuthoritativePartyIdentifier.ordinal()]);
             userToken.setBiometricsSignature(
                     line[eHasFunctionalAbility.BiometricsSignature.ordinal()]);
-            userToken.setCSNumber(line[eHasFunctionalAbility.csNum.ordinal()]);
+            userToken.setCsNumber(line[eHasFunctionalAbility.csNum.ordinal()]);
 
             System.out.format(
                     "\nINFO: getHasFunctionalAbility_Compare with csNum: %s, serviceCd: %s,  functionCd: %s,  AuthoritativePartyIdentifier: %s, BiometricsSignature: %s, CSNumber: %s\n",

@@ -79,9 +79,9 @@ public class AuthenticationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetHasFunctionalAbilityDocument getHasFunctionalAbilityDocument =
                 new GetHasFunctionalAbilityDocument();

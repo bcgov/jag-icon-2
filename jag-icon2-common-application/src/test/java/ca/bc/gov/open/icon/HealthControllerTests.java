@@ -124,9 +124,9 @@ public class HealthControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
         req.setUserTokenString(XMLUtilities.serializeXmlStr(userToken));
 
         Map<String, String> out = new HashMap<>();
@@ -206,9 +206,9 @@ public class HealthControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
         req.setUserTokenString(XMLUtilities.serializeXmlStr(userToken));
 
         // Set up to mock ords response
@@ -252,9 +252,9 @@ public class HealthControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
         req.setUserTokenString(XMLUtilities.serializeXmlStr(userToken));
 
         var hsrCount = new HealthServiceCount();

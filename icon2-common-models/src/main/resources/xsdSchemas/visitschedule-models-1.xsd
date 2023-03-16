@@ -54,9 +54,9 @@
             <xsd:element name="UserIdentifier" nillable="true" type="xsd:string"/>
             <xsd:element name="AuthoritativePartyIdentifier" nillable="true" type="xsd:string"/>
             <xsd:element name="BiometricsSignature" nillable="true" type="xsd:string"/>
-            <xsd:element name="CSNumber" nillable="true" type="xsd:string"/>
-            <xsd:element name="SiteMinderSessionID" nillable="true" type="xsd:string"/>
-            <xsd:element name="SiteMinderTransactionID" nillable="true" type="xsd:string"/>
+            <xsd:element name="CsNumber" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderSessionId" nillable="true" type="xsd:string"/>
+            <xsd:element name="SiteMinderTransactionId" nillable="true" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 

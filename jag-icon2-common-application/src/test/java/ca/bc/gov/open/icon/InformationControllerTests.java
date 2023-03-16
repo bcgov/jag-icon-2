@@ -58,9 +58,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         req.setXMLString("A");
         req.setUserTokenString("A");
@@ -128,9 +128,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         req.setXMLString("A");
         req.setUserTokenString("A");
@@ -190,9 +190,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetLocationsDocument getLocationsDocument = new GetLocationsDocument();
         getLocationsDocument.setLocations(locations);
@@ -242,9 +242,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetConditionsDocument getConditionsDocument = new GetConditionsDocument();
         getConditionsDocument.setConditions(conditions);
@@ -298,9 +298,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         var ordersConditionsDetails = new OrdersConditionsDetails();
         detailsList.add(ordersConditionsDetails);
@@ -389,9 +389,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetDatesDocument getDatesDocument = new GetDatesDocument();
         getDatesDocument.setDates(dates);
@@ -465,9 +465,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetClientHistoryDocument getClientHistoryDocument = new GetClientHistoryDocument();
         getClientHistoryDocument.setClientHistory(clientHistory);

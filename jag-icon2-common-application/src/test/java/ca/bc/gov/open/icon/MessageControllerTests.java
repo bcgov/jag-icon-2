@@ -84,9 +84,9 @@ public class MessageControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         req.setUserTokenString("A");
 
@@ -125,9 +125,9 @@ public class MessageControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         req.setUserTokenString("A");
 
@@ -195,9 +195,9 @@ public class MessageControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         SetMessageDetails req = new SetMessageDetails();
         SetMessageDetailsDocument setMessageDetailsDocument = new SetMessageDetailsDocument();
@@ -269,9 +269,9 @@ public class MessageControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetMessages req = new GetMessages();
         GetMessagesDocument getMessagesDocument = new GetMessagesDocument();
@@ -342,9 +342,9 @@ public class MessageControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetMessageDetails req = new GetMessageDetails();
         GetMessagesDocument getMessagesDocument = new GetMessagesDocument();

@@ -75,9 +75,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetUserInfoDocument getUserInfoDocument = new GetUserInfoDocument();
         getUserInfoDocument.setUserInfo(userInfo);
@@ -126,9 +126,9 @@ public class InformationControllerTests {
         userToken.setUserIdentifier("A");
         userToken.setAuthoritativePartyIdentifier("A");
         userToken.setBiometricsSignature("A");
-        userToken.setCSNumber("A");
-        userToken.setSiteMinderSessionID("A");
-        userToken.setSiteMinderTransactionID("A");
+        userToken.setCsNumber("A");
+        userToken.setSiteMinderSessionId("A");
+        userToken.setSiteMinderTransactionId("A");
 
         GetDeviceInfoDocument getDeviceInfoDocument = new GetDeviceInfoDocument();
         getDeviceInfoDocument.setDeviceInfo(deviceInfo);
