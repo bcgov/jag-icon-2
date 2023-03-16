@@ -43,7 +43,8 @@ public final class XMLUtilities {
                 || obj instanceof ca.bc.gov.open.icon.message.UserToken
                 || obj instanceof ca.bc.gov.open.icon.myinfo.UserToken
                 || obj instanceof ca.bc.gov.open.icon.trustaccount.UserToken
-                || obj instanceof ca.bc.gov.open.icon.visitschedule.UserToken);
+                || obj instanceof ca.bc.gov.open.icon.visitschedule.UserToken
+                || obj instanceof ca.bc.gov.open.icon.auth.UserToken);
     }
 
     public static <T> String serializeXmlStr(T obj) {
