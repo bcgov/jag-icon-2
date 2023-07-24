@@ -9,7 +9,7 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ main, release/*]
   workflow_dispatch:
-    branches: [ main, release/* ]
+    branches: [ main, release/*]
 jobs:
   build-scan-image:
     name: Build & Scan Image
@@ -147,7 +147,7 @@ jobs:
 
       #Upload results to the Github security tab.
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
           sarif_file: trivy-results.sarif
