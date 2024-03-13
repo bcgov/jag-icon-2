@@ -43,8 +43,6 @@
                 <module>jag-icon2-common-application</module>
                 <module>jag-icon2-auth-application</module>
                 <module>icon2-hsr-models</module>
-                <module>icon2-comparison-tool-myfiles</module>
-                <module>icon2-comparison-tool-auth</module>
                 <module>jag-icon2-hsr-application</module>
                 <module>AutomatedTests</module>
                 <module>icon2-code-coverage</module>
@@ -93,27 +91,6 @@
                 <module>bom/icon2-starters-bom</module>
                 <module>icon2-common-models</module>
                 <module>jag-icon2-auth-application</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>
-                icon2-comparison-tool-myfiles
-            </id>
-            <modules>
-                <module>bom/icon2-starters-bom</module>
-                <module>icon2-common-models</module>
-                <module>icon2-hsr-models</module>
-                <module>icon2-comparison-tool-myfiles</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>
-                icon2-comparison-tool-auth
-            </id>
-            <modules>
-                <module>bom/icon2-starters-bom</module>
-                <module>icon2-common-models</module>
-                <module>icon2-comparison-tool-auth</module>
             </modules>
         </profile>
         <profile>
