@@ -13,6 +13,12 @@
 	<version>1.0.0</version>
 	<name>jag-icon2-hsr-application</name>
 	<description>jag-icon2-hsr-application</description>
+
+	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

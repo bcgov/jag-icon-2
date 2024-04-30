@@ -1,7 +1,7 @@
 package ca.bc.gov.open.icon.models.serializers;
 
 import java.time.Instant;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class InstantSoapConverterAdapter extends XmlAdapter<String, Instant> {
     public Instant unmarshal(String value) {

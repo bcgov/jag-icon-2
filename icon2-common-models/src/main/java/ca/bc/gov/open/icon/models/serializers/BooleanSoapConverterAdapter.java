@@ -1,6 +1,6 @@
 package ca.bc.gov.open.icon.models.serializers;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class BooleanSoapConverterAdapter extends XmlAdapter<String, Boolean> {
 

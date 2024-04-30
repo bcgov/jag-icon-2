@@ -19,22 +19,13 @@
         <fi.solita.clamav>1.0.1</fi.solita.clamav>
         <xmlschema-core.version>2.2.5</xmlschema-core.version>
         <xmlschema.version>1.4.7</xmlschema.version>
-        <spring.actuator.version>2.7.5</spring.actuator.version>
-        <spring.security.version>2.7.5</spring.security.version>
-        <spring.validation.version>2.7.5</spring.validation.version>
-        <spring.ws.test.version>3.1.2</spring.ws.test.version>
-        <spring.devtools.version>2.7.5</spring.devtools.version>
-        <spring.configuration.processor.version>2.7.5</spring.configuration.processor.version>
         <lombok.version>1.18.24</lombok.version>
-        <spring.starter.test.version>2.7.5</spring.starter.test.version>
         <spring.security.test.version>5.7.3</spring.security.test.version>
-        <spring.logging.version>2.7.5</spring.logging.version>
-        <jackson.datatype.jsr310.version>2.13.4</jackson.datatype.jsr310.version>
-        <jackson.databind.version>2.12.7.1</jackson.databind.version>
+        <jackson.datatype.jsr310.version>2.14.1</jackson.datatype.jsr310.version>
+        <jackson.databind.version>2.14.3</jackson.databind.version>
         <splunk.javalogging.version>1.11.1</splunk.javalogging.version>
         <logback.classic.version>1.2.11</logback.classic.version>
         <logback.core.version>1.2.11</logback.core.version>
-        <spring.starter.web.version>2.7.5</spring.starter.web.version>
         <spring.starter.web-services.version>2.7.4</spring.starter.web-services.version>
         <spring-context.support.version>5.3.23</spring-context.support.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
@@ -124,40 +115,6 @@
                 <version>${xmlschema.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${spring.actuator.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-security</artifactId>
-                <version>${spring.security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-validation</artifactId>
-                <version>${spring.validation.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.ws</groupId>
-                <artifactId>spring-ws-test</artifactId>
-                <scope>test</scope>
-                <version>${spring.ws.test.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-devtools</artifactId>
-                <scope>runtime</scope>
-                <optional>true</optional>
-                <version>${spring.devtools.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-configuration-processor</artifactId>
-                <optional>true</optional>
-                <version>${spring.configuration.processor.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <optional>true</optional>
@@ -169,21 +126,10 @@
                 <version>${spring-context.support.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <scope>test</scope>
-                <version>${spring.starter.test.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-test</artifactId>
                 <scope>test</scope>
                 <version>${spring.security.test.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-logging</artifactId>
-                <version>${spring.logging.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -214,11 +160,6 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
                 <version>${logback.core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring.starter.web.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

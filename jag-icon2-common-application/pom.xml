@@ -11,6 +11,12 @@
 
     <artifactId>jag-icon2-common-application</artifactId>
     <version>1.0.0</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
     <name>jag-icon2-common-application</name>
     <description>jag-icon2-common-application</description>
     <repositories>

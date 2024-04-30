@@ -77,10 +77,6 @@ ORDS_PASSWORD: credential of ORDS_HOST.
 8) RABBIT_MQ_USERNAME: RabbitMQ host username
 9) RABBIT_MQ_PASSWORD: RabbitMQ host password
 
-* common-Comparison-Tool-1-1/Common-Comparison-Tool-1-2:
-1) API_HOST: Spring Boot API url
-2) WM_HOST: webMethods url
-
 * hsr-application:
 1) HSR_QUEUE_NAME: RabbitMQ queue name for hsr messages, up to 255 bytes of UTF-8 characters.
 2) HSR_SERVICE_URL: A HealthServiceRequest web service url
