@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -111,11 +111,9 @@ public class ReportingControllerTests {
             throws JsonProcessingException, JAXBException, UnsupportedEncodingException {
         var req = new GetLocations();
         var locations = new Locations();
-        List<Location> draftl = new ArrayList<>();
         var Location = new Location();
         Location.setLocationCd("A");
-        draftl.add(Location);
-        locations.setLocation(draftl);
+        locations.getLocation().add(Location);
         req.setXMLString("A");
 
         req.setUserTokenString("A");
@@ -154,19 +152,15 @@ public class ReportingControllerTests {
         report.setDeviceNo("A");
         report.setEventID("A");
         report.setState("A");
-        List<Question> Questions = new ArrayList<>();
-        var Question = new Question();
-        Question.setStandardQuestionID("A");
-        Question.setStandardText("A");
-        Question.setAdditionalText("A");
-        List<Answer> Answers = new ArrayList<>();
-        var Answer = new Answer();
-        Answer.setCode("A");
-        Answer.setDescription("A");
-        Answers.add(Answer);
-        Question.setAnswer(Answers);
-        Questions.add(Question);
-        report.setQuestion(Questions);
+        var question = new Question();
+        question.setStandardQuestionID("A");
+        question.setStandardText("A");
+        question.setAdditionalText("A");
+        var answer = new Answer();
+        answer.setCode("A");
+        answer.setDescription("A");
+        question.getAnswer().add(answer);
+        report.getQuestion().add(question);
 
         userToken.setRemoteClientBrowserType("A");
         userToken.setRemoteClientHostName("A");
@@ -246,19 +240,15 @@ public class ReportingControllerTests {
         report.setDeviceNo("A");
         report.setEventID("A");
         report.setState("A");
-        List<Question> questions = new ArrayList<>();
         var question = new Question();
         question.setStandardQuestionID("A");
         question.setStandardText("A");
         question.setAdditionalText("A");
-        List<Answer> answers = new ArrayList<>();
         var answer = new Answer();
         answer.setCode("A");
         answer.setDescription("A");
-        answers.add(answer);
-        question.setAnswer(answers);
-        questions.add(question);
-        report.setQuestion(questions);
+        question.getAnswer().add(answer);
+        report.getQuestion().add(question);
 
         req.setUserTokenString("A");
 

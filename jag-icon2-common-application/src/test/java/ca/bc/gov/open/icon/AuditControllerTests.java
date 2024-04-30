@@ -181,12 +181,10 @@ public class AuditControllerTests {
         GetSessionParametersDocument getSessionParametersDocument =
                 new GetSessionParametersDocument();
         SessionParameters sessionParameters = new SessionParameters();
-        List<SessionParameter> sessionParameterList = new ArrayList<>();
         SessionParameter sessionParameter = new SessionParameter();
         sessionParameter.setParameterCd("A");
         sessionParameter.setValue("A");
-        sessionParameterList.add(sessionParameter);
-        sessionParameters.setSessionParameter(sessionParameterList);
+        sessionParameters.getSessionParameter().add(sessionParameter);
         getSessionParametersDocument.setSessionParameters(sessionParameters);
 
         GetSessionParameters req = new GetSessionParameters();
