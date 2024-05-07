@@ -55,6 +55,7 @@ jobs:
           output: trivy-results.sarif
           exit-code: 1
           ignore-unfixed: true
+          limit-severities-for-sarif: true
           severity: HIGH,CRITICAL
       
       #Build image for scanning
@@ -77,6 +78,7 @@ jobs:
           output: trivy-results.sarif
           exit-code: 1
           ignore-unfixed: true
+          limit-severities-for-sarif: true
           severity: HIGH,CRITICAL
 
       #Build image for scanning
@@ -99,6 +101,7 @@ jobs:
           output: trivy-results.sarif
           exit-code: 1
           ignore-unfixed: true
+          limit-severities-for-sarif: true
           severity: HIGH,CRITICAL
       
       #Build image for scanning
@@ -121,6 +124,7 @@ jobs:
           output: trivy-results.sarif
           exit-code: 1
           ignore-unfixed: true
+          limit-severities-for-sarif: true
           severity: HIGH,CRITICAL
       
       #Build image for scanning
@@ -143,6 +147,7 @@ jobs:
           output: trivy-results.sarif
           exit-code: 1
           ignore-unfixed: true
+          limit-severities-for-sarif: true
           severity: HIGH,CRITICAL
 
       #Upload results to the Github security tab.
