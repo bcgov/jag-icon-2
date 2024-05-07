@@ -8,7 +8,7 @@
 * Intellij
 * Docker
 * Maven
-* Java 11
+* Java 17
 * Lombok
 * RabbitMQ
 
@@ -105,7 +105,7 @@ SPLUNK_INDEX: The index that the application will push logs to. The index must b
 before they can be pushed to.
 
 ### Building the Application
-1) Make sure using java 11 for the project modals and sdk
+1) Make sure using java 17 for the project modals and sdk
 2) Run ```mvn compile```
 3) Make sure ```icon2-common-models``` and ```icon2-hsr-models``` are marked as generated sources roots (xjc)
 
