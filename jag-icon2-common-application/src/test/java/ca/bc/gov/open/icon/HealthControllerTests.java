@@ -147,13 +147,11 @@ public class HealthControllerTests {
                 new GetHealthServiceRequestSummaryResponse();
         var healthServiceRequestBundle = new HealthServiceRequestBundle();
         var arrayOfHealthServiceRequest = new ArrayOfHealthServiceRequest();
-        List<ca.bc.gov.open.icon.hsrservice.HealthServiceRequest> hsrs = new ArrayList<>();
         var hsr = new ca.bc.gov.open.icon.hsrservice.HealthServiceRequest();
         hsr.setDetailsTxt("A");
         hsr.setSubmittedDtm("A");
         hsr.setId(1);
-        hsrs.add(hsr);
-        arrayOfHealthServiceRequest.setRequests(hsrs);
+        arrayOfHealthServiceRequest.getRequests().add(hsr);
         healthServiceRequestBundle.setTotalRequestCount(1);
         healthServiceRequestBundle.setRequests(arrayOfHealthServiceRequest);
         soapResp.setGetHealthServiceRequestSummaryReturn(healthServiceRequestBundle);

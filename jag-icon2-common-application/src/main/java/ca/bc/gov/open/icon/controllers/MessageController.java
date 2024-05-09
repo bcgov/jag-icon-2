@@ -26,6 +26,8 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.util.List;
+
 @Endpoint
 @Slf4j
 public class MessageController {
@@ -249,7 +251,7 @@ public class MessageController {
             if (!resp.getBody().getMessageDetails().isEmpty()) {
                 getMessagesDocument
                         .getMessages()
-                        .setMessageDetails(resp.getBody().getMessageDetails());
+                        .getMessageDetails().addAll(resp.getBody().getMessageDetails());
             }
             getMessagesResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(getMessagesDocument.getMessages()));
@@ -298,7 +300,7 @@ public class MessageController {
             if (!resp.getBody().getMessageDetails().isEmpty()) {
                 getMessagesDocument
                         .getMessages()
-                        .setMessageDetails(resp.getBody().getMessageDetails());
+                        .getMessageDetails().addAll(resp.getBody().getMessageDetails());
             }
             getMessageDetailsResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(getMessagesDocument.getMessages()));

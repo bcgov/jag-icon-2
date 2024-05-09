@@ -49,9 +49,6 @@ public class InformationControllerTests {
         functionalAbility.setFunctionCd("A");
         functionalAbility.setServiceCd("A");
 
-        List<FunctionalAbility> functionalAbilityList = new ArrayList<>();
-        functionalAbilityList.add(functionalAbility);
-
         SessionInfo sessionInfo = new SessionInfo();
         sessionInfo.setSessionLimit("A");
         sessionInfo.setIdleTimeout("A");
@@ -59,13 +56,11 @@ public class InformationControllerTests {
         ServiceInfo serviceInfo = new ServiceInfo();
         serviceInfo.setSessionInfo(sessionInfo);
         serviceInfo.setDescription("A");
-        serviceInfo.setFunctionalAbility(functionalAbilityList);
+        serviceInfo.getFunctionalAbility().add(functionalAbility);
         serviceInfo.setName("A");
         serviceInfo.setUrn("A");
 
-        List<ServiceInfo> serviceInfoList = new ArrayList<>();
-        serviceInfoList.add(serviceInfo);
-        userInfo.setServiceInfo(serviceInfoList);
+        userInfo.getServiceInfo().add(serviceInfo);
         userInfo.setSessionInfo(sessionInfo);
 
         UserToken userToken = new UserToken();
@@ -115,9 +110,7 @@ public class InformationControllerTests {
 
         ServiceCodes serviceCodes = new ServiceCodes();
         serviceCodes.setServiceCd("A");
-        List<ServiceCodes> serviceCodesList = new ArrayList<>();
-        serviceCodesList.add(serviceCodes);
-        deviceInfo.setServiceCodes(serviceCodesList);
+        deviceInfo.getServiceCodes().add(serviceCodes);
 
         UserToken userToken = new UserToken();
         userToken.setRemoteClientBrowserType("A");

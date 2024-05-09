@@ -157,7 +157,6 @@ public class MessageControllerTests {
         row.setEnd("2");
         row.setTotal("3");
         messages.setRow(row);
-        List<MessageDetails> messageDetailsList = new ArrayList<>();
         MessageDetails messageDetails = new MessageDetails();
         messageDetails.setId("A");
         messageDetails.setUnread("A");
@@ -168,11 +167,10 @@ public class MessageControllerTests {
         messageDetails.setMessageType(messageType);
         messageDetails.setText("A");
         Sender Sender = new Sender();
-        List<Relationships> relationships = new ArrayList<>();
+
         Relationships relationship = new Relationships();
         relationship.setCode("A");
         relationship.setDescription("A");
-        relationships.add(relationship);
         Application Application = new Application();
         Application.setCode("A");
         Application.setDescription("A");
@@ -180,12 +178,11 @@ public class MessageControllerTests {
         Individual individual = new Individual();
         individual.setFirstName("A");
         individual.setLastName("A");
-        individual.setRelationships(relationships);
+        individual.getRelationships().add(relationship);
         Sender.setIndividual(individual);
         messageDetails.setSender(Sender);
         messageDetails.setHasDisclosureSet("A");
-        messageDetailsList.add(messageDetails);
-        messages.setMessageDetails(messageDetailsList);
+        messages.getMessageDetails().add(messageDetails);
 
         ca.bc.gov.open.icon.message.UserToken userToken =
                 new ca.bc.gov.open.icon.message.UserToken();
@@ -230,8 +227,6 @@ public class MessageControllerTests {
         row.setStart("1");
         row.setEnd("2");
         row.setTotal("3");
-        messages.setRow(row);
-        List<MessageDetails> messageDetailsList = new ArrayList<>();
         MessageDetails messageDetails = new MessageDetails();
         messageDetails.setId("A");
         messageDetails.setUnread("A");
@@ -242,11 +237,9 @@ public class MessageControllerTests {
         messageDetails.setMessageType(messageType);
         messageDetails.setText("A");
         Sender Sender = new Sender();
-        List<Relationships> relationshipsList = new ArrayList<>();
         Relationships relationships = new Relationships();
         relationships.setCode("A");
         relationships.setDescription("A");
-        relationshipsList.add(relationships);
         Application application = new Application();
         application.setCode("Application");
         application.setDescription("A");
@@ -254,12 +247,11 @@ public class MessageControllerTests {
         Individual individual = new Individual();
         individual.setFirstName("A");
         individual.setLastName("A");
-        individual.setRelationships(relationshipsList);
+        individual.getRelationships().add(relationships);
         Sender.setIndividual(individual);
         messageDetails.setSender(Sender);
         messageDetails.setHasDisclosureSet("A");
-        messageDetailsList.add(messageDetails);
-        messages.setMessageDetails(messageDetailsList);
+        messages.getMessageDetails().add(messageDetails);
 
         ca.bc.gov.open.icon.message.UserToken userToken =
                 new ca.bc.gov.open.icon.message.UserToken();
@@ -304,7 +296,6 @@ public class MessageControllerTests {
         row.setEnd("2");
         row.setTotal("3");
         messages.setRow(row);
-        List<MessageDetails> messageDetailsList = new ArrayList<>();
         MessageDetails messageDetails = new MessageDetails();
         messageDetails.setId("A");
         messageDetails.setUnread("A");
@@ -315,11 +306,9 @@ public class MessageControllerTests {
         messageDetails.setMessageType(messageType);
         messageDetails.setText("A");
         Sender Sender = new Sender();
-        List<Relationships> relationshipsList = new ArrayList<>();
         Relationships relationships = new Relationships();
         relationships.setCode("A");
         relationships.setDescription("A");
-        relationshipsList.add(relationships);
         Application application = new Application();
         application.setCode("Application");
         application.setDescription("A");
@@ -327,12 +316,11 @@ public class MessageControllerTests {
         Individual individual = new Individual();
         individual.setFirstName("A");
         individual.setLastName("A");
-        individual.setRelationships(relationshipsList);
+        individual.getRelationships().add(relationships);
         Sender.setIndividual(individual);
         messageDetails.setSender(Sender);
         messageDetails.setHasDisclosureSet("A");
-        messageDetailsList.add(messageDetails);
-        messages.setMessageDetails(messageDetailsList);
+        messages.getMessageDetails().add(messageDetails);
 
         ca.bc.gov.open.icon.message.UserToken userToken =
                 new ca.bc.gov.open.icon.message.UserToken();

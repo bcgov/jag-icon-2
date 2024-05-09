@@ -39,7 +39,6 @@ public class InformationControllerTests {
         var req = new GetOrders();
         var orders = new Orders();
         GetOrdersDocument ordersDocument = new GetOrdersDocument();
-        List<OrdersInfo> ordersInfoList = new ArrayList<>();
         var OrdersInfo = new OrdersInfo();
         OrdersInfo.setAudoId("A");
         OrdersInfo.setDescription("A");
@@ -47,8 +46,7 @@ public class InformationControllerTests {
         OrdersInfo.setOrderNum("A");
         OrdersInfo.setStartDate("A");
         OrdersInfo.setEndDate("A");
-        ordersInfoList.add(OrdersInfo);
-        orders.setOrdersInfo(ordersInfoList);
+        orders.getOrdersInfo().add(OrdersInfo);
         orders.setCsNum("A");
 
         var userToken = new UserToken();
@@ -101,8 +99,6 @@ public class InformationControllerTests {
         Location.setPhone("A");
         Location.setFax("A");
         var address = new Address();
-        List<Address> addresses = new ArrayList<>();
-        addresses.add(address);
         address.setType("A");
         address.setLine1("A");
         address.setLine2("A");
@@ -110,16 +106,14 @@ public class InformationControllerTests {
         address.setCity("A");
         address.setProvince("A");
         address.setPostalCode("A");
-        Location.setAddress(addresses);
-        List<ProgramInfo> programInfoList = new ArrayList<>();
+        Location.getAddress().add(address);
         var ProgramInfo = new ProgramInfo();
         ProgramInfo.setInstCommStatus("A");
         ProgramInfo.setProgramName("A");
         ProgramInfo.setLocation(Location);
         ProgramInfo.setEndDate("A");
         ProgramInfo.setOutcome("A");
-        programInfoList.add(ProgramInfo);
-        programs.setProgramInfo(programInfoList);
+        programs.getProgramInfo().add(ProgramInfo);
 
         var userToken = new UserToken();
         userToken.setRemoteClientBrowserType("A");
@@ -157,8 +151,6 @@ public class InformationControllerTests {
         var req = new GetLocations();
         var locations = new Locations();
         var address = new Address();
-        List<Address> addresses = new ArrayList<>();
-        addresses.add(address);
         address.setType("A");
         address.setLine1("A");
         address.setLine2("A");
@@ -167,15 +159,13 @@ public class InformationControllerTests {
         address.setProvince("A");
         address.setPostalCode("A");
         var location = new Location();
-        location.setAddress(addresses);
+        location.getAddress().add(address);
         location.setCode("A");
         location.setDescription("A");
         location.setFax("A");
         location.setInstCommType("A");
         location.setPhone("A");
-        List<Location> locationList = new ArrayList<>();
-        locationList.add(location);
-        locations.setLocation(locationList);
+        locations.getLocation().add(location);
         locations.setCsNum("A");
         var ParoleOfficer = new ParoleOfficer();
         ParoleOfficer.setLastname("A");
@@ -228,12 +218,10 @@ public class InformationControllerTests {
         row.setEnd("3");
         row.setTotal("3");
         conditions.setRow(row);
-        List<ConditionsDetails> conditionsDetailsList = new ArrayList<>();
         var ConditionsDetails = new ConditionsDetails();
         ConditionsDetails.setCondition("A");
         ConditionsDetails.setDetails("A");
-        conditionsDetailsList.add(ConditionsDetails);
-        conditions.setConditionsDetails(conditionsDetailsList);
+        conditions.getConditionsDetails().add(ConditionsDetails);
 
         var userToken = new UserToken();
         userToken.setRemoteClientBrowserType("A");
@@ -270,7 +258,6 @@ public class InformationControllerTests {
     public void testOrdersConditions() throws JsonProcessingException {
         var req = new GetOrdersConditions();
         var ordersConditions = new OrdersConditions();
-        List<OrdersConditionsDetails> ordersConditionsDetailsList = new ArrayList<>();
         var OrdersConditionsDetails = new OrdersConditionsDetails();
         OrdersConditionsDetails.setAudoId("A");
         OrdersConditionsDetails.setDescription("A");
@@ -278,18 +265,13 @@ public class InformationControllerTests {
         OrdersConditionsDetails.setOrderNum("A");
         OrdersConditionsDetails.setStartDate("A");
         OrdersConditionsDetails.setEndDate("A");
-        List<ConditionDetails> ConditionDetails = new ArrayList<>();
         var ConditionDetail = new ConditionDetails();
         ConditionDetail.setCondition("A");
         ConditionDetail.setDetails("A");
-        ConditionDetails.add(ConditionDetail);
-        OrdersConditionsDetails.setConditionDetails(ConditionDetails);
-        ordersConditionsDetailsList.add(OrdersConditionsDetails);
-        ordersConditions.setOrdersConditionsDetails(ordersConditionsDetailsList);
+        OrdersConditionsDetails.getConditionDetails().add(ConditionDetail);
+        ordersConditions.getOrdersConditionsDetails().add(OrdersConditionsDetails);
         ordersConditions.setCsNum("A");
-
-        List<OrdersConditionsDetails> detailsList = new ArrayList<>();
-        ordersConditions.setOrdersConditionsDetails(detailsList);
+        ordersConditions.getOrdersConditionsDetails().add(OrdersConditionsDetails);
 
         var userToken = new UserToken();
         userToken.setRemoteClientBrowserType("A");
@@ -303,8 +285,6 @@ public class InformationControllerTests {
         userToken.setSiteMinderTransactionID("A");
 
         var ordersConditionsDetails = new OrdersConditionsDetails();
-        detailsList.add(ordersConditionsDetails);
-
         ordersConditionsDetails.setAudoId("A");
         ordersConditionsDetails.setDescription("A");
         ordersConditionsDetails.setAdultYouth("A");
@@ -312,12 +292,10 @@ public class InformationControllerTests {
         ordersConditionsDetails.setStartDate("A");
         ordersConditionsDetails.setEndDate("A");
 
-        List<ConditionDetails> conditionDetailList = new ArrayList<>();
         var conditionDetails = new ConditionDetails();
         conditionDetails.setCondition("A");
         conditionDetails.setCondition("A");
-        conditionDetailList.add(conditionDetails);
-        ordersConditionsDetails.setConditionDetails(conditionDetailList);
+        ordersConditionsDetails.getConditionDetails().add(conditionDetails);
 
         GetOrdersConditionsDocument getOrdersConditionsDocument = new GetOrdersConditionsDocument();
         getOrdersConditionsDocument.setOrdersConditions(ordersConditions);
@@ -354,9 +332,7 @@ public class InformationControllerTests {
         row.setTotal("3");
         dates.setRow(row);
 
-        List<FutureCourtDates> futureCourtDates = new ArrayList<>();
         var futureCourtDate = new FutureCourtDates();
-        futureCourtDates.add(futureCourtDate);
         futureCourtDate.setCourtAppearanceDate("A");
         futureCourtDate.setAppearanceReason("A");
         futureCourtDate.setVideoCourt("A");
@@ -364,8 +340,6 @@ public class InformationControllerTests {
 
         var location = new Location();
         var address = new Address();
-        List<Address> addresses = new ArrayList<>();
-        addresses.add(address);
         address.setType("A");
         address.setLine1("A");
         address.setLine2("A");
@@ -373,14 +347,14 @@ public class InformationControllerTests {
         address.setCity("A");
         address.setProvince("A");
         address.setPostalCode("A");
-        location.setAddress(addresses);
+        location.getAddress().add(address);
         location.setCode("A");
         location.setDescription("A");
         location.setFax("A");
         location.setInstCommType("A");
         location.setPhone("A");
         futureCourtDate.setLocation(location);
-        dates.setFutureCourtDates(futureCourtDates);
+        dates.getFutureCourtDates().add(futureCourtDate);
 
         var userToken = new UserToken();
         userToken.setRemoteClientBrowserType("A");
@@ -424,7 +398,6 @@ public class InformationControllerTests {
         row.setEnd("A");
         row.setTotal("A");
         clientHistory.setRow(row);
-        List<ClientHistoryDetails> clientHistoryDetailsList = new ArrayList<>();
         ClientHistoryDetails clientHistoryDetails = new ClientHistoryDetails();
         clientHistoryDetails.setDate("A");
         Court court = new Court();
@@ -455,8 +428,7 @@ public class InformationControllerTests {
         movementReason.setMovementReasonCode("A");
         movementReason.setMovementReasonDescription("A");
         clientHistoryDetails.setMovementReason(movementReason);
-        clientHistoryDetailsList.add(clientHistoryDetails);
-        clientHistory.setClientHistoryDetails(clientHistoryDetailsList);
+        clientHistory.getClientHistoryDetails().add(clientHistoryDetails);
 
         var userToken = new UserToken();
         userToken.setRemoteClientBrowserType("A");

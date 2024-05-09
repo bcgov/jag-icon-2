@@ -86,7 +86,6 @@ public class ClientControllerTests {
         row.setTotal("A");
         trustAccount.setRow(row);
 
-        List<TransactionDetails> transactionDetailsList = new ArrayList<>();
         TransactionDetails transactionDetails = new TransactionDetails();
         transactionDetails.setComment("A");
         transactionDetails.setDate("A");
@@ -95,8 +94,7 @@ public class ClientControllerTests {
         transactionDetails.setId("A");
         transactionDetails.setWithdrawal("A");
         transactionDetails.setOnHold("A");
-        transactionDetailsList.add(transactionDetails);
-        trustAccount.setTransactionDetails(transactionDetailsList);
+        trustAccount.getTransactionDetails().add(transactionDetails);
 
         var userToken = new UserToken();
         userToken.setRemoteClientBrowserType("A");
@@ -142,14 +140,12 @@ public class ClientControllerTests {
         row.setStart("A");
         visitSchedule.setRow(row);
 
-        List<VisitScheduleDetails> visitScheduleDetailsList = new ArrayList<>();
         VisitScheduleDetails details = new VisitScheduleDetails();
         details.setDate("A");
         details.setStartTime("A");
         details.setEndTime("A");
         details.setWeekDay("A");
-        visitScheduleDetailsList.add(details);
-        visitSchedule.setVisitScheduleDetails(visitScheduleDetailsList);
+        visitSchedule.getVisitScheduleDetails().add(details);
 
         var userToken = new ca.bc.gov.open.icon.visitschedule.UserToken();
         userToken.setRemoteClientBrowserType("A");

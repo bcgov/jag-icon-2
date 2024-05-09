@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.13</version>
+        <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ca.bc.gov.open</groupId>
@@ -15,12 +15,10 @@
     <name>jag-icon2</name>
     <description>jag-icon2 Application</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <log4j2.version>2.17.1</log4j2.version>
         <snakeyaml.version>2.0</snakeyaml.version>
         <jackson-bom.version>2.13.4.20221013</jackson-bom.version>
-        <spring-security.version>5.7.5</spring-security.version>
-        <spring-security-test.version>5.7.5</spring-security-test.version>
     </properties>
     <repositories>
         <repository>
@@ -43,8 +41,6 @@
                 <module>jag-icon2-common-application</module>
                 <module>jag-icon2-auth-application</module>
                 <module>icon2-hsr-models</module>
-                <module>icon2-comparison-tool-myfiles</module>
-                <module>icon2-comparison-tool-auth</module>
                 <module>jag-icon2-hsr-application</module>
                 <module>AutomatedTests</module>
                 <module>icon2-code-coverage</module>
@@ -97,27 +93,6 @@
         </profile>
         <profile>
             <id>
-                icon2-comparison-tool-myfiles
-            </id>
-            <modules>
-                <module>bom/icon2-starters-bom</module>
-                <module>icon2-common-models</module>
-                <module>icon2-hsr-models</module>
-                <module>icon2-comparison-tool-myfiles</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>
-                icon2-comparison-tool-auth
-            </id>
-            <modules>
-                <module>bom/icon2-starters-bom</module>
-                <module>icon2-common-models</module>
-                <module>icon2-comparison-tool-auth</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>
                 jag-icon2-myfiles-application
             </id>
             <modules>
@@ -163,19 +138,12 @@
                             </indent>
                         </format>
                     </formats>
-                    <!-- define a language-specific format -->
-                    <java>
-                        <googleJavaFormat>
-                            <version>1.8</version>
-                            <style>AOSP</style>
-                        </googleJavaFormat>
-                    </java>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>0.8.10</version>
                 <executions>
                     <execution>
                         <goals>

@@ -13,7 +13,7 @@ import ca.bc.gov.open.icon.utils.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -317,7 +317,7 @@ public class ReportingController {
                             builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
 
             GetQuestionsResponse getQuestionsResponse = new GetQuestionsResponse();
-            getQuestionsDocument.getEReport().setQuestion(resp.getBody().getQuestion());
+            getQuestionsDocument.getEReport().getQuestion().addAll(resp.getBody().getQuestion());
             getQuestionsResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(getQuestionsDocument.getEReport()));
 
