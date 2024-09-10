@@ -248,6 +248,9 @@ public class MessageController {
             getMessagesDocument
                     .getMessages()
                     .setUnreadMessageCount(resp.getBody().getUnreadMessageCount());
+            getMessagesDocument
+                    .getMessages()
+                    .getMessageDetails().clear();
             if (!resp.getBody().getMessageDetails().isEmpty()) {
                 getMessagesDocument
                         .getMessages()
@@ -295,6 +298,10 @@ public class MessageController {
             HttpEntity<Messages> resp =
                     restTemplate.exchange(
                             builder.toUriString(), HttpMethod.POST, payload, Messages.class);
+
+            getMessagesDocument
+                    .getMessages()
+                    .getMessageDetails().clear();
 
             GetMessageDetailsResponse getMessageDetailsResponse = new GetMessageDetailsResponse();
             if (!resp.getBody().getMessageDetails().isEmpty()) {
