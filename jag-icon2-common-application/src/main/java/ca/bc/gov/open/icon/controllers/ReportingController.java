@@ -317,6 +317,7 @@ public class ReportingController {
                             builder.toUriString(), HttpMethod.POST, payload, Ereport.class);
 
             GetQuestionsResponse getQuestionsResponse = new GetQuestionsResponse();
+            getQuestionsDocument.getEReport().getQuestion().clear();
             getQuestionsDocument.getEReport().getQuestion().addAll(resp.getBody().getQuestion());
             getQuestionsResponse.setXMLString(
                     XMLUtilities.serializeXmlStr(getQuestionsDocument.getEReport()));
