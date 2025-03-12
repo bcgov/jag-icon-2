@@ -63,9 +63,7 @@ public class FileControllerTests {
         req.setEndDate("A");
 
         var getCsNumsByDateResponse = new GetCsNumsByDateResponse();
-        List<String> draftl = new ArrayList<>();
-        draftl.add("A");
-        getCsNumsByDateResponse.setCsNums(draftl);
+        getCsNumsByDateResponse.getCsNums().add("A");
         ResponseEntity<GetCsNumsByDateResponse> responseEntity =
                 new ResponseEntity<>(getCsNumsByDateResponse, HttpStatus.OK);
 
@@ -90,7 +88,6 @@ public class FileControllerTests {
         var agencyFile = new AgencyFile();
         agencyFile.setAgencyIdCd("A");
         agencyFile.setAgencyFileNo("A");
-        List<CourtFile> draftl = new ArrayList<>();
 
         var CourtFile = new CourtFile();
         var FileNumber = new FileNumber();
@@ -101,7 +98,6 @@ public class FileControllerTests {
         FileNumber.setRefType("A");
         CourtFile.setFileNumber(FileNumber);
 
-        List<Participant> draftl1 = new ArrayList<>();
         var Participant = new Participant();
         Participant.setParticipantId("A");
         Participant.setParticipantSeqNo("A");
@@ -113,10 +109,8 @@ public class FileControllerTests {
         Participant.setInCustody("A");
         Participant.setActiveSupervision("A");
         Participant.setFacilityLocation("A");
-        draftl1.add(Participant);
-        CourtFile.setParticipants(draftl1);
-        draftl.add(CourtFile);
-        agencyFile.setCourtFiles(draftl);
+        CourtFile.getParticipants().add(Participant);
+        agencyFile.getCourtFiles().add(CourtFile);
         agencyFile.setRccDecisionDate("A");
         agencyFile.setRccDecisionCode("A");
 

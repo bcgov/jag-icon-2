@@ -19,7 +19,7 @@ import ca.bc.gov.open.icon.utils.XMLUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpAdmin;
@@ -238,10 +238,9 @@ public class HealthController {
                 request.setHealthRequest(service.getDetailsTxt());
                 request.setHsrId(String.valueOf(service.getId()));
 
-                healthServiceRequests.add(request);
+                healthService.getHealthServiceRequest().add(request);
             }
 
-            healthService.setHealthServiceRequest(healthServiceRequests);
             healthService.setRow(row);
 
             getHealthServiceRequestHistoryDocument.setHealthService(healthService);
@@ -317,6 +316,10 @@ public class HealthController {
                 new ArrayList<>();
 
         // Go through all health service requests
+        // Compose response body
+        PublishHSRResponse publishHSRResponse = new PublishHSRResponse();
+        HealthService healthService = new HealthService();
+
         for (var pub : resp.getBody()) {
             // submitHealthServiceRequestReturn is pacId
             pub.setPacId(String.valueOf(sendHSR(pub)));
@@ -348,14 +351,10 @@ public class HealthController {
             healthServiceRequest.setLocation(pub.getLocation());
             healthServiceRequest.setRequestDate(pub.getRequestDate());
             healthServiceRequest.setHealthRequest(pub.getHealthRequest());
-            healthServiceRequests.add(healthServiceRequest);
+            healthService.getHealthServiceRequest().add(healthServiceRequest);
         }
 
-        // Compose response body
-        PublishHSRResponse publishHSRResponse = new PublishHSRResponse();
-        HealthService healthService = new HealthService();
         healthService.setCsNum(publishHSRDocument.getHealthService().getCsNum());
-        healthService.setHealthServiceRequest(healthServiceRequests);
         healthService.setRow(publishHSRDocument.getHealthService().getRow());
 
         publishHSRDocument.setHealthService(healthService);

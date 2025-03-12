@@ -211,7 +211,7 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    .
+
     <xsd:element name="PrimaryAuthenticationCompleted">
         <xsd:complexType>
             <xsd:sequence>

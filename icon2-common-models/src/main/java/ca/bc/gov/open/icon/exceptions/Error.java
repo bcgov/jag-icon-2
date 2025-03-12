@@ -1,6 +1,6 @@
 package ca.bc.gov.open.icon.exceptions;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(

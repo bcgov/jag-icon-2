@@ -1,7 +1,7 @@
 package ca.bc.gov.open.icon.utils;
 
 import java.io.*;
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;

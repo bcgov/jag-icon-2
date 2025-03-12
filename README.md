@@ -8,7 +8,7 @@
 * Intellij
 * Docker
 * Maven
-* Java 11
+* Java 17
 * Lombok
 * RabbitMQ
 
@@ -77,10 +77,6 @@ ORDS_PASSWORD: credential of ORDS_HOST.
 8) RABBIT_MQ_USERNAME: RabbitMQ host username
 9) RABBIT_MQ_PASSWORD: RabbitMQ host password
 
-* common-Comparison-Tool-1-1/Common-Comparison-Tool-1-2:
-1) API_HOST: Spring Boot API url
-2) WM_HOST: webMethods url
-
 * hsr-application:
 1) HSR_QUEUE_NAME: RabbitMQ queue name for hsr messages, up to 255 bytes of UTF-8 characters.
 2) HSR_SERVICE_URL: A HealthServiceRequest web service url
@@ -109,7 +105,7 @@ SPLUNK_INDEX: The index that the application will push logs to. The index must b
 before they can be pushed to.
 
 ### Building the Application
-1) Make sure using java 11 for the project modals and sdk
+1) Make sure using java 17 for the project modals and sdk
 2) Run ```mvn compile```
 3) Make sure ```icon2-common-models``` and ```icon2-hsr-models``` are marked as generated sources roots (xjc)
 
