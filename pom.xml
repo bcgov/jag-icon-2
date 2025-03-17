@@ -42,7 +42,6 @@
                 <module>jag-icon2-auth-application</module>
                 <module>icon2-hsr-models</module>
                 <module>jag-icon2-hsr-application</module>
-                <module>AutomatedTests</module>
                 <module>icon2-code-coverage</module>
             </modules>
             <activation>
@@ -50,15 +49,6 @@
                     true
                 </activeByDefault>
             </activation>
-        </profile>
-        <profile>
-            <id>
-                AutomatedTests
-            </id>
-            <modules>
-                <module>bom/icon2-starters-bom</module>
-                <module>AutomatedTests</module>
-            </modules>
         </profile>
         <profile>
             <id>
