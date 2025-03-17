@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17-jre-alpine
 
-RUN apk upgrade expat  # Fix for CVE-2022-43680
+RUN apk update && apk add --upgrade --no-cache expat  # fix CVE-2024-8176
 
 COPY ./target/jag-icon2-biometrics-application.jar jag-icon2-biometrics-application.jar
 
