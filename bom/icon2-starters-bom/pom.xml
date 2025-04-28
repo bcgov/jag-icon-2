@@ -20,7 +20,6 @@
         <xmlschema-core.version>2.2.5</xmlschema-core.version>
         <xmlschema.version>1.4.7</xmlschema.version>
         <lombok.version>1.18.24</lombok.version>
-        <spring.security.test.version>5.7.3</spring.security.test.version>
         <jackson.datatype.jsr310.version>2.14.1</jackson.datatype.jsr310.version>
         <jackson.databind.version>2.14.3</jackson.databind.version>
         <splunk.javalogging.version>1.11.1</splunk.javalogging.version>
@@ -122,12 +121,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring-context.support.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-test</artifactId>
-                <scope>test</scope>
-                <version>${spring.security.test.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
