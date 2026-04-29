@@ -1,7 +1,7 @@
 ##############################################################################################
 #### Stage where the maven dependencies are cached                                         ###
 ##############################################################################################
-FROM maven:3.8-eclipse-temurin-17 as dependencies-cache
+FROM maven:3.8.3-openjdk-17 AS dependencies-cache
 
 ARG MVN_PROFILE
 
@@ -30,7 +30,7 @@ RUN  mvn dependency:go-offline \
 ##############################################################################################
 #### Stage where the application is built                                                  ###
 ##############################################################################################
-FROM dependencies-cache as build
+FROM dependencies-cache AS build
 
 ARG MVN_PROFILE
 
@@ -56,7 +56,7 @@ RUN  mvn clean package \
 ##############################################################################################
 #### Stage where Docker is running a java process to run a service built in previous stage ###
 ##############################################################################################
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:17-jre-alpine
 
 ARG MVN_PROFILE
 
