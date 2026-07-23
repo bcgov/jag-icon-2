@@ -10,8 +10,8 @@
     <version>0.2.2</version>
 
     <properties>
-        <org.apache.cxf.version>3.3.7</org.apache.cxf.version>
-        <com.fasterxml.jackson.core.version>2.11.2</com.fasterxml.jackson.core.version>
+        <org.apache.cxf.version>4.1.1</org.apache.cxf.version>
+        <com.fasterxml.jackson.core.version>2.18.8</com.fasterxml.jackson.core.version>
         <javax.xml.bind.version>2.3.1</javax.xml.bind.version>
         <commons.io.version>2.16.1</commons.io.version>
         <joda-time.version>2.10.6</joda-time.version>
@@ -20,9 +20,8 @@
         <xmlschema-core.version>2.2.5</xmlschema-core.version>
         <xmlschema.version>1.4.7</xmlschema.version>
         <lombok.version>1.18.24</lombok.version>
-        <spring.security.test.version>5.7.3</spring.security.test.version>
-        <jackson.datatype.jsr310.version>2.14.1</jackson.datatype.jsr310.version>
-        <jackson.databind.version>2.14.3</jackson.databind.version>
+        <jackson.datatype.jsr310.version>2.18.8</jackson.datatype.jsr310.version>
+        <jackson.databind.version>2.18.8</jackson.databind.version>
         <splunk.javalogging.version>1.11.1</splunk.javalogging.version>
         <spring.starter.web-services.version>2.7.4</spring.starter.web-services.version>
         <spring-context.support.version>5.3.23</spring-context.support.version>
@@ -34,7 +33,7 @@
         <gson.version>2.8.9</gson.version>
         <gson-fire.version>1.8.5</gson-fire.version>
         <apache.common.collections.version>3.2.2</apache.common.collections.version>
-        <apache.common.beanutils.version>1.9.4</apache.common.beanutils.version>
+        <apache.common.beanutils.version>1.11.0</apache.common.beanutils.version>
         <jaxb2-commons.lang.version>2.4</jaxb2-commons.lang.version>
         <jaxb2-commons.basics.version>1.11.1</jaxb2-commons.basics.version>
         <junit.version>4.13.2</junit.version>
@@ -122,12 +121,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring-context.support.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-test</artifactId>
-                <scope>test</scope>
-                <version>${spring.security.test.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>

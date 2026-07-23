@@ -40,7 +40,7 @@ jobs:
   # This workflow contains a single job called "build"
   build-push-image:
     # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     env:
       BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
@@ -147,6 +147,11 @@ jobs:
           registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_SA_USERNAME}}
           password: ${{secrets.OPENSHIFT_SA_PASSWORD}}
+
+      - name: Install oc
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: latest
       
       #Login to Openshift using OC SA and Token of respective env. for Pod labelling - Kamloops (OC GOLD)
       - name: Authenticate OC Env Specific SA - Kamloops (OC GOLD)
@@ -448,7 +453,7 @@ jobs:
       #    fi
 
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v4.6.1
         if: failure()
         with:
           name: integration-tests-report

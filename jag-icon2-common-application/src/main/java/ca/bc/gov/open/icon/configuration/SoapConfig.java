@@ -160,7 +160,7 @@ public class SoapConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
-    @Bean(name = "ICON2.Source.HealthServiceRequest.ws.provider:HSR")
+    @Bean(name = "ICON2.Source.HealthServiceRequest.ws.provider:HSRService")
     public Wsdl11Definition HSRServiceWSDL() {
         SimpleWsdl11Definition wsdl11Definition = new SimpleWsdl11Definition();
         wsdl11Definition.setWsdl(new ClassPathResource("wsdl/HSRService.wsdl"));

@@ -1,0 +1,19 @@
+##############################################################################################
+#### Stage where the maven dependencies are cached                                         ###
+##############################################################################################
+FROM maven:3.8.3-openjdk-17 AS build
+
+RUN  mvn clean package \
+     -P$jag-icon2-common-application \
+     -DskipTests=true
+
+##############################################################################################
+#### Stage where Docker is running a java process to run a service built in previous stage ###
+##############################################################################################
+FROM eclipse-temurin:17-jre-alpine
+
+RUN apk update && apk add --upgrade --no-cache expat  # fix CVE-2024-8176
+
+COPY ./jag-icon2-common-application/target/jag-icon2-common-application.jar jag-icon2-common-application.jar
+
+ENTRYPOINT ["java", "-jar","/jag-icon2-common-application.jar"]
