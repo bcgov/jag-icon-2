@@ -22,6 +22,9 @@
         <tomcat.version>10.1.55</tomcat.version>
         <spring-framework.version>6.2.19</spring-framework.version>
         <spring-security.version>6.5.9</spring-security.version>
+        <micrometer.version>1.15.12</micrometer.version>
+        <spring-ws.version>4.1.4</spring-ws.version>
+        <rabbit-amqp-client.version>5.34.0</rabbit-amqp-client.version>
     </properties>
     <repositories>
         <repository>
