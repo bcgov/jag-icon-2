@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17-jre-alpine
 
-RUN apk update && apk add --upgrade --no-cache expat  # fix CVE-2024-8176
+RUN apk update && apk upgrade --no-cache
 
 WORKDIR /app
 RUN chgrp -R 0 /app && \

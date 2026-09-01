@@ -60,7 +60,7 @@ FROM eclipse-temurin:17-jre-alpine
 
 ARG MVN_PROFILE
 
-RUN apk update && apk add --upgrade --no-cache expat p11-kit  # fix CVE-2024-8176 (expat), CVE-2026-2100 (p11-kit)
+RUN apk update && apk upgrade --no-cache
 
 COPY --from=build /build/${MVN_PROFILE}/target/${MVN_PROFILE}*.jar /app/application.jar
 
