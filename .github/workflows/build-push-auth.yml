@@ -5,7 +5,7 @@ permissions:
 
 on:
   push:
-    branches: [actions]
+    branches: [main]
     paths:
       - jag-icon2-auth-application/**
       - .github/workflows/build-push-auth.yaml
