@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>jag-icon2</artifactId>
 		<groupId>ca.bc.gov.open</groupId>
-		<version>2.0.2-SNAPSHOT</version>
+		<version>2.0.2</version>
 	</parent>
 
 	<artifactId>jag-icon2-hsr-application</artifactId>
-	<version>2.0.2-SNAPSHOT</version>
+	<version>2.0.2</version>
 	<name>jag-icon2-hsr-application</name>
 	<description>jag-icon2-hsr-application</description>
 
@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>ca.bc.gov.open</groupId>
 			<artifactId>icon2-hsr-models</artifactId>
-			<version>2.0.2-SNAPSHOT</version>
+			<version>2.0.2</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>ca.bc.gov.open</groupId>
 			<artifactId>icon2-common-models</artifactId>
-			<version>2.0.2-SNAPSHOT</version>
+			<version>2.0.2</version>
 			<scope>compile</scope>
 		</dependency>
 		<!-- Splunk logging -->
