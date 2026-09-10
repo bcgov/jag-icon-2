@@ -8,7 +8,7 @@ on:
     branches: [main]
     paths:
       - jag-icon2-myfiles-application/**
-      - .github/workflows/build-push-myfiles.yaml
+      - .github/workflows/build-push-myfiles.yml
   workflow_dispatch:
 
 env:
