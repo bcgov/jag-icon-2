@@ -8,7 +8,7 @@ on:
     branches: [main]
     paths:
       - jag-icon2-auth-application/**
-      - .github/workflows/build-push-auth.yaml
+      - .github/workflows/build-push-auth.yml
   workflow_dispatch:
 
 env:
