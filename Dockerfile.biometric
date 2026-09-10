@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 RUN  mvn clean package \
-     -P$jag-icon2-auth-application \
+     -P$jag-icon2-biometrics-application \
      -DskipTests=true
 
 ##############################################################################################
